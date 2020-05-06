@@ -30,7 +30,7 @@ namespace TAIGridControl2
     // 
     // Version 2.0.0.0 First Version in C#
 
-   
+
     public class TAIGridControl : UserControl
     {
         public bool _LoggingEnabled = false;
@@ -313,11 +313,11 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Denotes the form of action necessary to be taken to have a cell in editmode actually have its value
-    /// change. Fireing the cell edited event. Either having the user press the enter/return key or having the
-    /// user shift focus to another control or cell in the grid itself.
-    /// </summary>
-    /// <remarks></remarks>
+        /// Denotes the form of action necessary to be taken to have a cell in editmode actually have its value
+        /// change. Fireing the cell edited event. Either having the user press the enter/return key or having the
+        /// user shift focus to another control or cell in the grid itself.
+        /// </summary>
+        /// <remarks></remarks>
         public enum GridEditModes
         {
             KeyReturn = 0,
@@ -3051,12 +3051,12 @@ namespace TAIGridControl2
 
         // CellClicked
         /// <summary>
-    /// Raised whenever a cell is clicked. Coordinates designated by RowClicked/ColumnClicked
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="RowClicked"></param>
-    /// <param name="ColumnClicked"></param>
-    /// <remarks></remarks>
+        /// Raised whenever a cell is clicked. Coordinates designated by RowClicked/ColumnClicked
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="RowClicked"></param>
+        /// <param name="ColumnClicked"></param>
+        /// <remarks></remarks>
         [Description("Raised whenever a cell is clicked designated by RowClicked, ColumnClicked")]
         public event CellClickedEventHandler CellClicked;
 
@@ -3064,12 +3064,12 @@ namespace TAIGridControl2
 
         // CellDoubleClicked
         /// <summary>
-    /// Raised whenever a cell is doubleclicked. Coordinates designated by RowClicked/ColumnClicked
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="RowClicked"></param>
-    /// <param name="ColumnClicked"></param>
-    /// <remarks></remarks>
+        /// Raised whenever a cell is doubleclicked. Coordinates designated by RowClicked/ColumnClicked
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="RowClicked"></param>
+        /// <param name="ColumnClicked"></param>
+        /// <remarks></remarks>
         [Description("Raised whenever a cell is doubleclicked designated by RowClicked, ColumnClicked")]
         public event CellDoubleClickedEventHandler CellDoubleClicked;
 
@@ -3077,16 +3077,16 @@ namespace TAIGridControl2
 
         // CellEdited
         /// <summary>
-    /// Raised whenever a cell is edited by the user, if cell editing is turned on correctly.
-    /// RowClicked/ColumnClicked designated which cell was edited. oldval/newval designated the previous contents and
-    /// the new contents respectively
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="RowClicked"></param>
-    /// <param name="ColumnClicked"></param>
-    /// <param name="oldval"></param>
-    /// <param name="newval"></param>
-    /// <remarks></remarks>
+        /// Raised whenever a cell is edited by the user, if cell editing is turned on correctly.
+        /// RowClicked/ColumnClicked designated which cell was edited. oldval/newval designated the previous contents and
+        /// the new contents respectively
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="RowClicked"></param>
+        /// <param name="ColumnClicked"></param>
+        /// <param name="oldval"></param>
+        /// <param name="newval"></param>
+        /// <remarks></remarks>
         [Description("Raised whenever a cell Edited by the user")]
         public event CellEditedEventHandler CellEdited;
 
@@ -3094,11 +3094,11 @@ namespace TAIGridControl2
 
         // RowSelected
         /// <summary>
-    /// Raised whenever a row is selected with the mouse or the keyboard. RowSelected designated which row.
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="RowSelected"></param>
-    /// <remarks></remarks>
+        /// Raised whenever a row is selected with the mouse or the keyboard. RowSelected designated which row.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="RowSelected"></param>
+        /// <remarks></remarks>
         [Description("Raised whenever a row is selected with mouse or keyboard. Rowselected is returned")]
         public event RowSelectedEventHandler RowSelected;
 
@@ -3106,11 +3106,11 @@ namespace TAIGridControl2
 
         // RowDeSelected
         /// <summary>
-    /// Raised whenever a row is deselected with the mouse or the kayboard. RowDeselected designated which row
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="RowDeselected"></param>
-    /// <remarks></remarks>
+        /// Raised whenever a row is deselected with the mouse or the kayboard. RowDeselected designated which row
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="RowDeselected"></param>
+        /// <remarks></remarks>
         [Description("Raised whenever a row is deselected with mouse or keyboard. RowSelected is returned")]
         public event RowDeSelectedEventHandler RowDeSelected;
 
@@ -3118,10 +3118,10 @@ namespace TAIGridControl2
 
         // PartialSelection
         /// <summary>
-    /// Raised whenever a populategrid from database call exceeded the set threshold of records
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <remarks></remarks>
+        /// Raised whenever a populategrid from database call exceeded the set threshold of records
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <remarks></remarks>
         [Description("Raised whenever a populategrid from database exceeds a set threshold of records")]
         public event PartialSelectionEventHandler PartialSelection;
 
@@ -3129,11 +3129,11 @@ namespace TAIGridControl2
 
         // TooManyRecords
         /// <summary>
-    /// Raised whenever a populategrid from database call gets to many records that the grid cannot handle. After the rewrite
-    /// in 2005 this event is exceedintgly difficult to fire as the grid can now handle millions of records at a time.
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <remarks></remarks>
+        /// Raised whenever a populategrid from database call gets to many records that the grid cannot handle. After the rewrite
+        /// in 2005 this event is exceedintgly difficult to fire as the grid can now handle millions of records at a time.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <remarks></remarks>
         [Description("Raised whenever a populategrid from database gets so many records that the bitmap becomes to big")]
         public event TooManyRecordsEventHandler TooManyRecords;
 
@@ -3141,11 +3141,11 @@ namespace TAIGridControl2
 
         // TooManyFields
         /// <summary>
-    /// Raised whenever a populategrid from database call gets to many records that the grid cannot handle. After the rewrite
-    /// in 2005 this event is exceedintgly difficult to fire as the grid can now handle millions of records at a time.
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <remarks></remarks>
+        /// Raised whenever a populategrid from database call gets to many records that the grid cannot handle. After the rewrite
+        /// in 2005 this event is exceedintgly difficult to fire as the grid can now handle millions of records at a time.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <remarks></remarks>
         [Description("Raised whenever a populategrid from database gets so many records that the bitmap becomes to big")]
         public event TooManyFieldsEventHandler TooManyFields;
 
@@ -3153,10 +3153,10 @@ namespace TAIGridControl2
 
         // StartedDatabasePopulateOperation
         /// <summary>
-    /// Raised when the grid starts a PopulateGridWData call from a supported data source (SQL,OLE,ODBC,DATATABLE etc.)
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <remarks></remarks>
+        /// Raised when the grid starts a PopulateGridWData call from a supported data source (SQL,OLE,ODBC,DATATABLE etc.)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <remarks></remarks>
         [Description("Raised whenever the grid is starting to PopulateGridWData")]
         public event StartedDatabasePopulateOperationEventHandler StartedDatabasePopulateOperation;
 
@@ -3164,10 +3164,10 @@ namespace TAIGridControl2
 
         // FinishedDatabasePopulateOperation
         /// <summary>
-    /// Raised when the grid finishes a PopulateGridWData call from a supported data source (SQL,OLE,ODBC,DATATABLE etc.)
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <remarks></remarks>
+        /// Raised when the grid finishes a PopulateGridWData call from a supported data source (SQL,OLE,ODBC,DATATABLE etc.)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <remarks></remarks>
         [Description("Raised when the grid is finished PopulatingGridWData")]
         public event FinishedDatabasePopulateOperationEventHandler FinishedDatabasePopulateOperation;
 
@@ -3175,11 +3175,11 @@ namespace TAIGridControl2
 
         // Column Resized
         /// <summary>
-    /// Raised when the user resizes a column using the mouse. ColumnIndex designated the column being resized
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="ColumnIndex"></param>
-    /// <remarks></remarks>
+        /// Raised when the user resizes a column using the mouse. ColumnIndex designated the column being resized
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="ColumnIndex"></param>
+        /// <remarks></remarks>
         [Description("Raised when the user Resizes as column using the mouse")]
         public event ColumnResizedEventHandler ColumnResized;
 
@@ -3187,11 +3187,11 @@ namespace TAIGridControl2
 
         // Column Selected
         /// <summary>
-    /// Raised when the user selectes a column using the mouse. ColumnIndex designated the column being resized
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="ColumnIndex"></param>
-    /// <remarks></remarks>
+        /// Raised when the user selectes a column using the mouse. ColumnIndex designated the column being resized
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="ColumnIndex"></param>
+        /// <remarks></remarks>
         [Description("Raised when the user selects as column using the mouse")]
         public event ColumnSelectedEventHandler ColumnSelected;
 
@@ -3199,11 +3199,11 @@ namespace TAIGridControl2
 
         // Column DeSelected
         /// <summary>
-    /// Raised when the user selectes a column using the mouse. ColumnIndex designated the column being resized
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="OldColumnIndex"></param>
-    /// <remarks></remarks>
+        /// Raised when the user selectes a column using the mouse. ColumnIndex designated the column being resized
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="OldColumnIndex"></param>
+        /// <remarks></remarks>
         [Description("Raised when the user deselects as column using the mouse")]
         public event ColumnDeSelectedEventHandler ColumnDeSelected;
 
@@ -3212,11 +3212,11 @@ namespace TAIGridControl2
 
         // GridResorted
         /// <summary>
-    /// Raised when the user resorts the grids contents on a chosen column index. ColumnIndex is the chosen column.
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="ColumnIndex"></param>
-    /// <remarks></remarks>
+        /// Raised when the user resorts the grids contents on a chosen column index. ColumnIndex is the chosen column.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="ColumnIndex"></param>
+        /// <remarks></remarks>
         [Description("Raised when the user Sorts the grid on a given column ColumnIndex is that column")]
         public event GridResortedEventHandler GridResorted;
 
@@ -3224,12 +3224,12 @@ namespace TAIGridControl2
 
         // KeypressedInGrid
         /// <summary>
-    /// Raised when the user presses a key on the keyboard while the grid has focus and a cell is not being edited.
-    /// The Keycode parameter is of the type Keys
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="keyCode"></param>
-    /// <remarks></remarks>
+        /// Raised when the user presses a key on the keyboard while the grid has focus and a cell is not being edited.
+        /// The Keycode parameter is of the type Keys
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="keyCode"></param>
+        /// <remarks></remarks>
         [Description("Raised when the user Presses any keyboard key returns a type of Keys")]
         public event KeyPressedInGridEventHandler KeyPressedInGrid;
 
@@ -3237,11 +3237,11 @@ namespace TAIGridControl2
 
         // RightMouseButtonInGrid
         /// <summary>
-    /// Raised when the user presses the rightmousebutton in the grid and the grid is not doing any of its Popup context
-    /// menus.
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <remarks></remarks>
+        /// Raised when the user presses the rightmousebutton in the grid and the grid is not doing any of its Popup context
+        /// menus.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <remarks></remarks>
         [Description("Raised when the user selects the rightmousebutton in a grid and the grid is NOT doing POPUP menus")]
         public event RightMouseButtonInGridEventHandler RightMouseButtonInGrid;
 
@@ -3249,14 +3249,14 @@ namespace TAIGridControl2
 
         // GridHover
         /// <summary>
-    /// Raised as the user loiters over the rendered grid contents with the mouse. Row/Col esignated the cell being
-    /// hovered over, Item indicates the contents of 6the cell being hovered over.
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="row"></param>
-    /// <param name="col"></param>
-    /// <param name="Item"></param>
-    /// <remarks></remarks>
+        /// Raised as the user loiters over the rendered grid contents with the mouse. Row/Col esignated the cell being
+        /// hovered over, Item indicates the contents of 6the cell being hovered over.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="row"></param>
+        /// <param name="col"></param>
+        /// <param name="Item"></param>
+        /// <remarks></remarks>
         [Description("Raised when the user is hovering over the grid itself Not the grid container just the rendered grid")]
         public event GridHoverEventHandler GridHover;
 
@@ -3264,10 +3264,10 @@ namespace TAIGridControl2
 
         // GridHoverLeave
         /// <summary>
-    /// Raised as the user moved the mouse off of the grid rendered contens after hovering over those contents previously
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <remarks></remarks>
+        /// Raised as the user moved the mouse off of the grid rendered contens after hovering over those contents previously
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <remarks></remarks>
         [Description("Raised when the user is hovering over the grid itself Not the grid container just the rendered grid")]
         public event GridHoverleaveEventHandler GridHoverleave;
 
@@ -3275,9 +3275,9 @@ namespace TAIGridControl2
 
 
         /// <summary>
-    /// Enmeration for selecting preset color schemes used to configures the theme of the grids display
-    /// </summary>
-    /// <remarks></remarks>
+        /// Enmeration for selecting preset color schemes used to configures the theme of the grids display
+        /// </summary>
+        /// <remarks></remarks>
         public enum TaiGridColorSchemes : int
         {
             _Default = 0,
@@ -3292,14 +3292,14 @@ namespace TAIGridControl2
 
         // AllowTearAwayFunctionality
         /// <summary>
-    /// Allow or Disallow the tearaway a column functionality within the grid itself.
-    /// Column tearaways allow for removing a columns contents to a seperate window that floats outside the
-    /// boundarys of the grids containers. This functionality might prove useful in some circumstances but may
-    /// also confuse the display for some users. This setting will turn on or off the availability of this function.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Allow or Disallow the tearaway a column functionality within the grid itself.
+        /// Column tearaways allow for removing a columns contents to a seperate window that floats outside the
+        /// boundarys of the grids containers. This functionality might prove useful in some circumstances but may
+        /// also confuse the display for some users. This setting will turn on or off the availability of this function.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Will allow/disallow the Tearaway menu items of the builtin context menu")]
         [DefaultValue(typeof(bool), "True")]
         public bool AllowTearAwayFunctionality
@@ -3316,14 +3316,14 @@ namespace TAIGridControl2
 
         // AllowExcelFunctionality
         /// <summary>
-    /// Allow or disallow the ability to export the grids contents to excel via the Context menu.
-    /// Heavily used with some reporting applications where numerics are displayed in aggregate,
-    /// other uses of the grid in items where personal data are displayed might
-    /// necessitate turning the functionality off for privacy/Hipaa reasons.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Allow or disallow the ability to export the grids contents to excel via the Context menu.
+        /// Heavily used with some reporting applications where numerics are displayed in aggregate,
+        /// other uses of the grid in items where personal data are displayed might
+        /// necessitate turning the functionality off for privacy/Hipaa reasons.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Will allow/disallow the Excel menu of the builtin context menu")]
         [DefaultValue(typeof(bool), "True")]
         public bool AllowExcelFunctionality
@@ -3340,11 +3340,11 @@ namespace TAIGridControl2
 
         // AllowTextFunctionality
         /// <summary>
-    /// Allows or disallows the text menu functionality of the grids context menu.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Allows or disallows the text menu functionality of the grids context menu.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Will allow/disallow the Text menu of the builtin context menu")]
         [DefaultValue(typeof(bool), "True")]
         public bool AllowTextFunctionality
@@ -3361,11 +3361,11 @@ namespace TAIGridControl2
 
         // AllowHTMLFunctionality
         /// <summary>
-    /// Allows or disallows the HTML menu on the grids context menu.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Allows or disallows the HTML menu on the grids context menu.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Will allow/disallow the HTML menu of the builtin context menu")]
         [DefaultValue(typeof(bool), "True")]
         public bool AllowHTMLFunctionality
@@ -3382,11 +3382,11 @@ namespace TAIGridControl2
 
         // AllowSQLFunctionality
         /// <summary>
-    /// Allows or disallows the SQL menu off of the grids context menu.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Allows or disallows the SQL menu off of the grids context menu.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Will allow/disallow the SQL menu of the builtin context menu")]
         [DefaultValue(typeof(bool), "True")]
         public bool AllowSQLFunctionality
@@ -3403,11 +3403,11 @@ namespace TAIGridControl2
 
         // AllowMathFunctionality
         /// <summary>
-    /// Allows or disallows the Math submenu off of the grids context menu.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Allows or disallows the Math submenu off of the grids context menu.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Will allow/disallow the Math menu of the builtin context menu")]
         [DefaultValue(typeof(bool), "True")]
         public bool AllowMathFunctionality
@@ -3424,11 +3424,11 @@ namespace TAIGridControl2
 
         // AllowFormatFunctionality
         /// <summary>
-    /// Allows or disallows the Format submenu off of the grids context menu.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Allows or disallows the Format submenu off of the grids context menu.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Will allow/disallow the Format menu of the builtin context menu")]
         [DefaultValue(typeof(bool), "True")]
         public bool AllowFormatFunctionality
@@ -3445,11 +3445,11 @@ namespace TAIGridControl2
 
         // AllowSettingsFunctionality
         /// <summary>
-    /// Allows or disallows the settings submenu off of the grids context menu.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Allows or disallows the settings submenu off of the grids context menu.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Will allow/disallow the Settings menu of the builtin context menu")]
         [DefaultValue(typeof(bool), "True")]
         public bool AllowSettingsFunctionality
@@ -3466,11 +3466,11 @@ namespace TAIGridControl2
 
         // AllowSortFunctionality
         /// <summary>
-    /// Allows or disallows the Sort submenu off of the grids context menu.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Allows or disallows the Sort submenu off of the grids context menu.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Will allow/disallow the Sort menu of the builtin context menu")]
         [DefaultValue(typeof(bool), "True")]
         public bool AllowSortFunctionality
@@ -3487,11 +3487,11 @@ namespace TAIGridControl2
 
         // AllowColumnSelection
         /// <summary>
-    /// Allows or disallows the selection of a column by clicking the header of a column with the mouse
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Allows or disallows the selection of a column by clicking the header of a column with the mouse
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Will allow/disallow selection of a column visually by single clicking on the header of that column")]
         [DefaultValue(typeof(bool), "True")]
         public bool AllowColumnSelection
@@ -3510,13 +3510,13 @@ namespace TAIGridControl2
 
         // AllowControlKeyMenuPopup
         /// <summary>
-    /// Allows or disallows the pulling up of the grids context menu my pressintg the ctrl key while right mousebuttoning
-    /// over the grid itself. This allows programs that are hosting the grids to create their own context menus but to
-    /// still have the grids context menus available via the ctrl/right mousebutton combination.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Allows or disallows the pulling up of the grids context menu my pressintg the ctrl key while right mousebuttoning
+        /// over the grid itself. This allows programs that are hosting the grids to create their own context menus but to
+        /// still have the grids context menus available via the ctrl/right mousebutton combination.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Will allow/disallow the menu from poping up on a CTRL menubutton.")]
         [DefaultValue(typeof(bool), "True")]
         public bool AllowControlKeyMenuPopup
@@ -3535,13 +3535,13 @@ namespace TAIGridControl2
 
         // AllowInGridEdits
         /// <summary>
-    /// Allows or disallows the editing of grids contents. This is not an all or nothing process. The developer hase to turn this
-    /// on and explicitly set the columns where they want to allow editing in order for in grid edits to function.
-    /// Alternately they might elect to restrict editing of a cells contents to s list of available selections
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Allows or disallows the editing of grids contents. This is not an all or nothing process. The developer hase to turn this
+        /// on and explicitly set the columns where they want to allow editing in order for in grid edits to function.
+        /// Alternately they might elect to restrict editing of a cells contents to s list of available selections
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Will allow/disallow the editing of the grid contents at the column level")]
         [DefaultValue(typeof(bool), "False")]
         public bool AllowInGridEdits
@@ -3558,13 +3558,13 @@ namespace TAIGridControl2
 
         // AllowMultipleRowSelections
         /// <summary>
-    /// Allows or disallows the ability of the user to select more than a single row in the grid at one time
-    /// via the standard CTRL/SHIFT key click mechanism used in the Windows OS. The rows selected will then
-    /// be exposed via the <c>SelectedRows</c> collection
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Allows or disallows the ability of the user to select more than a single row in the grid at one time
+        /// via the standard CTRL/SHIFT key click mechanism used in the Windows OS. The rows selected will then
+        /// be exposed via the <c>SelectedRows</c> collection
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Will allow/disallow the selection of Multiple rows in the grid with the CTRL key ")]
         [DefaultValue(typeof(bool), "True")]
         public bool AllowMultipleRowSelections
@@ -3581,11 +3581,11 @@ namespace TAIGridControl2
 
         // AllowPopupMenu
         /// <summary>
-    /// Allow or disallow the grids own context menu to appear via the right mousebutton
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Allow or disallow the grids own context menu to appear via the right mousebutton
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Will allow/disallow the builtin popup menu for font selection and sizing to occur")]
         [DefaultValue(typeof(bool), "True")]
         public bool AllowPopupMenu
@@ -3602,11 +3602,11 @@ namespace TAIGridControl2
 
         // AllowRowSelection
         /// <summary>
-    /// Allow or disallow the ability to select a single or multiple rows in the grid with the mouse,
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Allow or disallow the ability to select a single or multiple rows in the grid with the mouse,
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Will allow/disallow selection of a Row or Multiple Rows visually by single clicking in the Row itself")]
         [DefaultValue(typeof(bool), "True")]
         public bool AllowRowSelection
@@ -3625,11 +3625,11 @@ namespace TAIGridControl2
 
         // AllowWhiteSpaceInCells
         /// <summary>
-    /// Will allow/disallow Whitespace in cells (newlines and what not)
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Will allow/disallow Whitespace in cells (newlines and what not)
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Will allow/disallow Whitespace in cells (newlines and what not)")]
         [DefaultValue(typeof(bool), "True")]
         public bool AllowWhiteSpaceInCells
@@ -3649,11 +3649,11 @@ namespace TAIGridControl2
 
         // AllowUserColumnResizing
         /// <summary>
-    /// Allow or disallow user column resizing with the mouse
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Allow or disallow user column resizing with the mouse
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Will allow/disallow the user to resize a column")]
         [DefaultValue(typeof(bool), "True")]
         public bool AllowUserColumnResizing
@@ -3670,12 +3670,12 @@ namespace TAIGridControl2
 
         // AlternateColoration
         /// <summary>
-    /// Turns on or off the Alternate coloration mode of the grids display where it will alternate the background
-    /// color of the rows inserted between <c>AlternateColorationAltColor</c> and <c>AlternateColorationBaseColor</c>
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Turns on or off the Alternate coloration mode of the grids display where it will alternate the background
+        /// color of the rows inserted between <c>AlternateColorationAltColor</c> and <c>AlternateColorationBaseColor</c>
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Will trun on/off the alternate coloration mode of the grid. Rows will alternate between defined backcolor and the defined alternatecolor")]
         public bool AlternateColoration
         {
@@ -3691,11 +3691,11 @@ namespace TAIGridControl2
 
         // AlternateColorationAltColor
         /// <summary>
-    /// One of the colors used when the grid is rendering in AlternateColoration mode
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// One of the colors used when the grid is rendering in AlternateColoration mode
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Sets the alternate color for the alternate Coloration mode of operation")]
         public Color AlternateColorationAltColor
         {
@@ -3711,11 +3711,11 @@ namespace TAIGridControl2
 
         // AlternateColorationBaseColor
         /// <summary>
-    /// One of the colors used when the grid is rendering in AlternateColoration mode
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// One of the colors used when the grid is rendering in AlternateColoration mode
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Sets the base color for the alternate Coloration mode of operation")]
         public Color AlternateColorationBaseColor
         {
@@ -3731,11 +3731,11 @@ namespace TAIGridControl2
 
         // Antialias
         /// <summary>
-    /// Turns on or off the smoothing mode of the grids textual rendering engine
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Turns on or off the smoothing mode of the grids textual rendering engine
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Turns on/off the antialias mode of the grids rendering engine")]
         [DefaultValue(typeof(bool), "False")]
         public bool Antialias
@@ -3754,12 +3754,12 @@ namespace TAIGridControl2
 
         // AutoSizeCellsToContents
         /// <summary>
-    /// Allows or disallows the grids rendering engine to automagically resize the grids row and column metrics
-    /// to accomodate the contents being inserted into the grid manually or via one of the PopulateFromDatabase calls.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Allows or disallows the grids rendering engine to automagically resize the grids row and column metrics
+        /// to accomodate the contents being inserted into the grid manually or via one of the PopulateFromDatabase calls.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Will allow/disallow the grid to automatically adjust the grid cells heigh and width to match the textual contents of the cells")]
         [DefaultValue(typeof(bool), "False")]
         public bool AutoSizeCellsToContents
@@ -3783,11 +3783,11 @@ namespace TAIGridControl2
 
         // AutoFocus
         /// <summary>
-    /// Allows or disallows the grids ability to automagically gain focus as the user mouses over the grid
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Allows or disallows the grids ability to automagically gain focus as the user mouses over the grid
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Will allow/disallow the grid to automatically gain focus on mouseover")]
         [DefaultValue(typeof(bool), "False")]
         public bool AutoFocus
@@ -3803,11 +3803,11 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Gets or Sets the background color for the control
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or Sets the background color for the control
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Gets or Sets the background color for the control")]
         [DefaultValue(typeof(Color), "GradientActiveCaption")]
         public override Color BackColor
@@ -3824,11 +3824,11 @@ namespace TAIGridControl2
 
         // BorderColor
         /// <summary>
-    /// The color used to render the border of the grid itself when <c>BorderStyle</c> = something
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// The color used to render the border of the grid itself when <c>BorderStyle</c> = something
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Sets the border color for the drawn border on Borderstyle = something")]
         public Color BorderColor
         {
@@ -3844,11 +3844,11 @@ namespace TAIGridControl2
 
         // BorderStyle
         /// <summary>
-    /// The border style use to draw the grid border itself
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// The border style use to draw the grid border itself
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Sets the border style for the grids container object or frame")]
         public new BorderStyle BorderStyle
         {
@@ -3864,12 +3864,12 @@ namespace TAIGridControl2
 
         // ShowProgressBar
         /// <summary>
-    /// Allows or disallows the display f the progress bar across the top of the grid itself when long database population
-    /// processes are underway.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Allows or disallows the display f the progress bar across the top of the grid itself when long database population
+        /// processes are underway.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Will allow the grid to show a small progress bar along its top edges on long database populate methods")]
         [DefaultValue(typeof(bool), "True")]
         public bool ShowProgressBar
@@ -3886,17 +3886,17 @@ namespace TAIGridControl2
 
         // ShowExcelExportMessage
         /// <summary>
-    /// Allows or disallows the display of a topmost windows signaling to the end users that the grid
-    /// is sending it's content to excel. Because messaging excel is sometime a lengthy process the display of
-    /// the dialog might prove useful in those situations. Messaging excel though is an inherantly messy process
-    /// where a user interacting with a different instance of excel might confuse the system and make the
-    /// export process fail. In these cases the dialog might also prove useful in that the user can be instructed
-    /// 'Hands off' with the dialog is visable. It can however be confusing when this dialog is on top of everything.
-    /// As always its use might prove useful or it might not depending on environmental factors.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Allows or disallows the display of a topmost windows signaling to the end users that the grid
+        /// is sending it's content to excel. Because messaging excel is sometime a lengthy process the display of
+        /// the dialog might prove useful in those situations. Messaging excel though is an inherantly messy process
+        /// where a user interacting with a different instance of excel might confuse the system and make the
+        /// export process fail. In these cases the dialog might also prove useful in that the user can be instructed
+        /// 'Hands off' with the dialog is visable. It can however be confusing when this dialog is on top of everything.
+        /// As always its use might prove useful or it might not depending on environmental factors.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Will allow the grid to show a small window topmost on exporting to excel with status information")]
         [DefaultValue(typeof(bool), "True")]
         public bool ShowExcelExportMessage
@@ -3913,11 +3913,11 @@ namespace TAIGridControl2
 
         // Cols
         /// <summary>
-    /// Get or Sets the number of columns in the grid itself
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Get or Sets the number of columns in the grid itself
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("How many columns are in the current grid")]
         public int Cols
         {
@@ -3934,13 +3934,13 @@ namespace TAIGridControl2
 
         // CellAlignment
         /// <summary>
-    /// Get or sets the alignment of the textual element contained at Grid coordinates R (row) and C (col)
-    /// </summary>
-    /// <param name="r"></param>
-    /// <param name="c"></param>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Get or sets the alignment of the textual element contained at Grid coordinates R (row) and C (col)
+        /// </summary>
+        /// <param name="r"></param>
+        /// <param name="c"></param>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public StringFormat get_CellAlignment(int r, int c)
         {
             if (r > _rows - 1 | c > _cols - 1 | r < 0 | c < 0)
@@ -3963,13 +3963,13 @@ namespace TAIGridControl2
 
         // CellBackColor
         /// <summary>
-    /// Gets or sets the background color of the specificied cell at R (row) and C (col)
-    /// </summary>
-    /// <param name="r"></param>
-    /// <param name="c"></param>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the background color of the specificied cell at R (row) and C (col)
+        /// </summary>
+        /// <param name="r"></param>
+        /// <param name="c"></param>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public Brush get_CellBackColor(int r, int c)
         {
             if (r > _rows - 1 | c > _cols - 1 | r < 0 | c < 0)
@@ -3992,11 +3992,11 @@ namespace TAIGridControl2
 
         // ColBackColorEdit
         /// <summary>
-    /// Gets or sets the background color used to render a cell when that cell is in edit mode
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the background color used to render a cell when that cell is in edit mode
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Sets the background color for the cell when its being edited")]
         public Color ColBackColorEdit
         {
@@ -4013,14 +4013,14 @@ namespace TAIGridControl2
 
         // CellFont
         /// <summary>
-    /// Gets or sets the font used to render a the cells contents. The cell is designated by
-    /// its cordinates R (row) and C (col)
-    /// </summary>
-    /// <param name="r"></param>
-    /// <param name="c"></param>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the font used to render a the cells contents. The cell is designated by
+        /// its cordinates R (row) and C (col)
+        /// </summary>
+        /// <param name="r"></param>
+        /// <param name="c"></param>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public Font get_CellFont(int r, int c)
         {
             if (r > _rows - 1 | c > _cols - 1 | r < 0 | c < 0)
@@ -4043,13 +4043,13 @@ namespace TAIGridControl2
 
         // CellForeColor
         /// <summary>
-    /// Gets or sets the foreground color used to render a cell at coordinated R (row) and C (col)
-    /// </summary>
-    /// <param name="r"></param>
-    /// <param name="c"></param>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the foreground color used to render a cell at coordinated R (row) and C (col)
+        /// </summary>
+        /// <param name="r"></param>
+        /// <param name="c"></param>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public Pen get_CellForeColor(int r, int c)
         {
             if (r > _rows - 1 | c > _cols - 1 | r < 0 | c < 0)
@@ -4072,11 +4072,11 @@ namespace TAIGridControl2
 
         // CellOutlines
         /// <summary>
-    /// Allows or disallows the rendering engins outlining of cells as it draws their contents
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Allows or disallows the rendering engins outlining of cells as it draws their contents
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Turns Cell outlining on or off")]
         public bool CellOutlines
         {
@@ -4093,17 +4093,17 @@ namespace TAIGridControl2
 
         // ColCheckBox
         /// <summary>
-    /// Gets or sets the columns status as a boolean value where it will interpret the contents of a column
-    /// as boolean values. 1,True,Y,y,Yes,yes and other variations will be rendered as a check checkbok
-    /// 0,False,n,N,No,no and other variatons will be rendered as unchecked checkboxes. ALl other values will
-    /// be rendered as disabled checkboxes that are unchecked. If the column is editable then the grid will
-    /// manage checkbox state for you toggling the contents as the user interacts with the cells contents via
-    /// the mouse.
-    /// </summary>
-    /// <param name="idx"></param>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the columns status as a boolean value where it will interpret the contents of a column
+        /// as boolean values. 1,True,Y,y,Yes,yes and other variations will be rendered as a check checkbok
+        /// 0,False,n,N,No,no and other variatons will be rendered as unchecked checkboxes. ALl other values will
+        /// be rendered as disabled checkboxes that are unchecked. If the column is editable then the grid will
+        /// manage checkbox state for you toggling the contents as the user interacts with the cells contents via
+        /// the mouse.
+        /// </summary>
+        /// <param name="idx"></param>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public bool get_ColCheckBox(int idx)
         {
             if (idx < 0 | idx > _cols)
@@ -4123,12 +4123,12 @@ namespace TAIGridControl2
 
         // ColEditable
         /// <summary>
-    /// Gets or sets the editable status of a column at index idx.
-    /// </summary>
-    /// <param name="idx"></param>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the editable status of a column at index idx.
+        /// </summary>
+        /// <param name="idx"></param>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public bool get_ColEditable(int idx)
         {
             if (idx < 0 | idx > _cols)
@@ -4148,12 +4148,12 @@ namespace TAIGridControl2
 
         // RowEditable
         /// <summary>
-    /// Gets or sets the editable status of a Row at index idx.
-    /// </summary>
-    /// <param name="idx"></param>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the editable status of a Row at index idx.
+        /// </summary>
+        /// <param name="idx"></param>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public bool get_RowEditable(int idx)
         {
             if (idx < 0 | idx > _cols)
@@ -4173,12 +4173,12 @@ namespace TAIGridControl2
 
         // ColWidth
         /// <summary>
-    /// Gets or sets the width of a column at index idx in pixels
-    /// </summary>
-    /// <param name="idx"></param>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the width of a column at index idx in pixels
+        /// </summary>
+        /// <param name="idx"></param>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public int get_ColWidth(int idx)
         {
             if (idx < 0 | idx > _cols)
@@ -4202,12 +4202,12 @@ namespace TAIGridControl2
 
         // ColPassword
         /// <summary>
-    /// Gets or sets the rendering text to be used for a column at index idx to be set as a password column.
-    /// </summary>
-    /// <param name="idx"></param>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the rendering text to be used for a column at index idx to be set as a password column.
+        /// </summary>
+        /// <param name="idx"></param>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public string get_ColPassword(int idx)
         {
             if (idx < 0 | idx > _cols)
@@ -4230,13 +4230,13 @@ namespace TAIGridControl2
 
         // ColMaxCharacters
         /// <summary>
-    /// Gets or sets the number of characters that a clumn at index idx will display before the rendering engine will
-    /// display the elipsis ... characters at the end.
-    /// </summary>
-    /// <param name="idx"></param>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the number of characters that a clumn at index idx will display before the rendering engine will
+        /// display the elipsis ... characters at the end.
+        /// </summary>
+        /// <param name="idx"></param>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public int get_ColMaxCharacters(int idx)
         {
             if (idx < 0 | idx > _cols)
@@ -4267,11 +4267,11 @@ namespace TAIGridControl2
 
         // DataBaseTimeOut
         /// <summary>
-    /// Gets or sets the time in seconds for a global database timeout value for all the Populate with database calls
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the time in seconds for a global database timeout value for all the Populate with database calls
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Sets the database timeout value associated with the various populate from database methods of the grid")]
         [DefaultValue(typeof(int), "500")]
         public int DataBaseTimeOut
@@ -4288,11 +4288,11 @@ namespace TAIGridControl2
 
         // DefaultCellFont
         /// <summary>
-    /// Gets or sets the default font used to render cells.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the default font used to render cells.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Gets or Sets the font used for cell additions by default")]
         public Font DefaultCellFont
         {
@@ -4308,11 +4308,11 @@ namespace TAIGridControl2
 
         // DefaultBackColor
         /// <summary>
-    /// Gets or sets the default background color used to render cells
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the default background color used to render cells
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Gets or Sets the Background color use by default Cells in the grid")]
         public Color DefaultBackgroundColor
         {
@@ -4329,11 +4329,11 @@ namespace TAIGridControl2
 
         // DefaultForeColor
         /// <summary>
-    /// Gets or sets the default foreground color user to render cells
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the default foreground color user to render cells
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Gets or Sets the color use by default for text added to grid")]
         public Color DefaultForegroundColor
         {
@@ -4350,11 +4350,11 @@ namespace TAIGridControl2
 
         // Delimiter
         /// <summary>
-    /// Gets or sets the default field delimiter used for the export to text methods
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the default field delimiter used for the export to text methods
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Gets or Sets the field delimiter for export to text methods")]
         public string Delimiter
         {
@@ -4370,12 +4370,12 @@ namespace TAIGridControl2
 
         // GridEditMode
         /// <summary>
-    /// Gets or sets the field forcing a return key on an edited cell to edit its contents or just losing focus will fire
-    /// a cell edited event.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the field forcing a return key on an edited cell to edit its contents or just losing focus will fire
+        /// a cell edited event.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Gets or Sets the field forcing a return key to edit or kist losing focus to edit")]
         public GridEditModes GridEditMode
         {
@@ -4390,11 +4390,11 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// When the grid is in editmode this is the column that is currently being edited
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// When the grid is in editmode this is the column that is currently being edited
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public int EditModeCol
         {
             get
@@ -4407,11 +4407,11 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// When the grid is in editmode this is the row currently being edited
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// When the grid is in editmode this is the row currently being edited
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public int EditModeRow
         {
             get
@@ -4424,11 +4424,11 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// When the grid is maintaining i set of tearaway columns this will return True false otherwise
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// When the grid is maintaining i set of tearaway columns this will return True false otherwise
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public bool GridDoingTearAwayWork
         {
             get
@@ -4438,11 +4438,11 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// When the user brings up the context menu this will retiurn the column they were over when the menu was called up
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// When the user brings up the context menu this will retiurn the column they were over when the menu was called up
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public int ColOverOnMenuButton
         {
             get
@@ -4452,11 +4452,11 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// When the user brings up the context menu this will return the row they were over when the menu was called up
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// When the user brings up the context menu this will return the row they were over when the menu was called up
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public int RowOverOnMenuButton
         {
             get
@@ -4467,11 +4467,11 @@ namespace TAIGridControl2
 
         // GridHeaderFont
         /// <summary>
-    /// Gets or sets the font used to render the column header
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the font used to render the column header
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Gets or Sets the font used for the Grid Header by default")]
         public Font GridHeaderFont
         {
@@ -4487,11 +4487,11 @@ namespace TAIGridControl2
 
         // GridHeaderStringFormat
         /// <summary>
-    /// Gets or sets the formatting characteristics of the grid header line. (left,right,centered etc.)
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the formatting characteristics of the grid header line. (left,right,centered etc.)
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Gets or Sets the stringformat object used for the Grid Header by default")]
         public StringFormat GridHeaderStringFormat
         {
@@ -4508,11 +4508,11 @@ namespace TAIGridControl2
 
         // GridHeaderVisible
         /// <summary>
-    /// Allows or disallows the display of the grid header line
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Allows or disallows the display of the grid header line
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("is the Gridheader visible or not")]
         public bool GridheaderVisible
         {
@@ -4529,11 +4529,11 @@ namespace TAIGridControl2
 
         // GridHeaderHeight
         /// <summary>
-    /// Gets or sets the height of the grids header in pixels
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the height of the grids header in pixels
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Gets or Sets how hight the grid header is drawn in pixels")]
         public int GridHeaderHeight
         {
@@ -4550,11 +4550,11 @@ namespace TAIGridControl2
 
         // GridHeaderBackColor
         /// <summary>
-    /// Gets or sets the background color used to render the grids header
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the background color used to render the grids header
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Gets or Sets the color used for the Grid Header background")]
         public Color GridHeaderBackColor
         {
@@ -4571,11 +4571,11 @@ namespace TAIGridControl2
 
         // GridHeaderForeColor
         /// <summary>
-    /// Gets or sets the foreground color useed to render the grids header
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the foreground color useed to render the grids header
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Gets or Sets the foreground color used to draw the grid header")]
         public Color GridHeaderForeColor
         {
@@ -4592,11 +4592,11 @@ namespace TAIGridControl2
 
         // GridReportOrientLandscape
         /// <summary>
-    /// Gets or sets the grids output for reporting to be landscape mode or not.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the grids output for reporting to be landscape mode or not.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Will set grid auto report output to landscape mode")]
         [DefaultValue(typeof(bool), "False")]
         public bool GridReportOrientLandscape
@@ -4613,11 +4613,11 @@ namespace TAIGridControl2
 
         // GridReportOutlineCells
         /// <summary>
-    /// Gets or sets the grids reporting engine to outline cells or not
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the grids reporting engine to outline cells or not
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Will set grid auto report to outline printed cells")]
         [DefaultValue(typeof(bool), "True")]
         public bool GridReportOutlineCells
@@ -4634,11 +4634,11 @@ namespace TAIGridControl2
 
         // GridReportNumberPages
         /// <summary>
-    /// Gets or sets the grids reporting engine to number the output pages or not
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the grids reporting engine to number the output pages or not
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Will set grid auto report generation to number pages")]
         [DefaultValue(typeof(bool), "True")]
         public bool GridReportNumberPages
@@ -4655,14 +4655,14 @@ namespace TAIGridControl2
 
         // GridReportMatchColors
         /// <summary>
-    /// Gets or sets the grids reporting engine to attempt to match reported output coloration with the onscreen
-    /// display engines coloration scheme. Some on-screen colors dont look all that well when printed to paper,
-    /// this is especially true wjen the printer is a black and white printer and the screen representation is
-    /// full of various colors.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the grids reporting engine to attempt to match reported output coloration with the onscreen
+        /// display engines coloration scheme. Some on-screen colors dont look all that well when printed to paper,
+        /// this is especially true wjen the printer is a black and white printer and the screen representation is
+        /// full of various colors.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Will set grid auto report generation to match grid colors")]
         [DefaultValue(typeof(bool), "True")]
         public bool GridReportMatchColors
@@ -4679,11 +4679,11 @@ namespace TAIGridControl2
 
         // GridReportTitle
         /// <summary>
-    /// Gets or sets the textual tile to apply to reported output
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the textual tile to apply to reported output
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Will set grid auto report generation Title")]
         [DefaultValue(typeof(string), "")]
         public string GridReportTitle
@@ -4700,11 +4700,11 @@ namespace TAIGridControl2
 
         // GridReportPreviewFirst
         /// <summary>
-    /// Allows or disallows the preview display when printing output from the grid
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Allows or disallows the preview display when printing output from the grid
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Will set grid auto report generation to preview output first")]
         [DefaultValue(typeof(bool), "True")]
         public bool GridReportPreviewFirst
@@ -4722,11 +4722,11 @@ namespace TAIGridControl2
 
         // AutoFitColumn
         /// <summary>
-    /// Allows or disallows the export to excel engines resizing excel columns to fit the contents
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Allows or disallows the export to excel engines resizing excel columns to fit the contents
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Gets or Sets the field that controls whether the columns are autosized")]
         public bool ExcelAutoFitColumn
         {
@@ -4742,11 +4742,11 @@ namespace TAIGridControl2
 
         // AutoFitRow
         /// <summary>
-    /// Allows or disallows the export to excel engins resize rows to fit the contents
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Allows or disallows the export to excel engins resize rows to fit the contents
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Gets or Sets the field that controls whether the rows are autosized")]
         public bool ExcelAutoFitRow
         {
@@ -4762,12 +4762,12 @@ namespace TAIGridControl2
 
         // ExcelAlternateColoration
         /// <summary>
-    /// Gets or sets the color used to decorate alternate rows on the excel output when matching grid color
-    /// scheme is turned off.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the color used to decorate alternate rows on the excel output when matching grid color
+        /// scheme is turned off.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Gets or Sets the Color used by the to populoate each alternate row on exports to excel ")]
         public Color ExcelAlternateColoration
         {
@@ -4783,14 +4783,14 @@ namespace TAIGridControl2
 
         // ExcelMatchGridColorScheme
         /// <summary>
-    /// Allows or disallows the export to excel engine ability to attemt to color the excel output to match the
-    /// colors used on the onscreen grid. Not all screen colors convert to excel cleanly, and different versions
-    /// of excel interpret colors differently. The export engine attempts to match but those matches are not always
-    /// perfect.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Allows or disallows the export to excel engine ability to attemt to color the excel output to match the
+        /// colors used on the onscreen grid. Not all screen colors convert to excel cleanly, and different versions
+        /// of excel interpret colors differently. The export engine attempts to match but those matches are not always
+        /// perfect.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Forces the Export to Excel function to attempt to match the grids color scheme on export ")]
         public bool ExcelMatchGridColorScheme
         {
@@ -4806,11 +4806,11 @@ namespace TAIGridControl2
 
         // Filename
         /// <summary>
-    /// Gets or sets the name of the excel spreadsheet that is generated when the export operation is complete
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the name of the excel spreadsheet that is generated when the export operation is complete
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Gets or Sets the name of the excel spreadsheet")]
         public string ExcelFilename
         {
@@ -4826,11 +4826,11 @@ namespace TAIGridControl2
 
         // IncludeColumnHeaders
         /// <summary>
-    /// Allows or disallows the insertion of the header column of the grid into the excel output.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Allows or disallows the insertion of the header column of the grid into the excel output.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Gets or Sets the field that controls whether the grid column header row is included in the spreadsheet")]
         public bool ExcelIncludeColumnHeaders
         {
@@ -4846,11 +4846,11 @@ namespace TAIGridControl2
 
         // Keep Alive
         /// <summary>
-    /// Gets or sets the setting to keep excell alive and kicking after the grid has been sent to excel.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the setting to keep excell alive and kicking after the grid has been sent to excel.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Gets or Sets the field that controls whether the spreadsheet should remain open after it is filled")]
         public bool ExcelKeepAlive
         {
@@ -4866,12 +4866,12 @@ namespace TAIGridControl2
 
         // Maximized
         /// <summary>
-    /// Gets or sets the making excel opening up maximized or not when its instances and
-    /// messaged during the export process
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the making excel opening up maximized or not when its instances and
+        /// messaged during the export process
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Gets or Sets the field that controls whether the spreadsheet should be maximized")]
         public bool ExcelMaximized
         {
@@ -4887,11 +4887,11 @@ namespace TAIGridControl2
 
         // Page Orientation
         /// <summary>
-    /// Gets or sets the orientation of the excel output for printing
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the orientation of the excel output for printing
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Gets or Sets the field that controls the orientation of the spreadsheet output")]
         public int ExcelPageOrientation
         {
@@ -4908,11 +4908,11 @@ namespace TAIGridControl2
 
         // OutlineCells
         /// <summary>
-    /// Turns on or off the outlining of cells that are populated during the export process
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Turns on or off the outlining of cells that are populated during the export process
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Turns on or off the outlineing of all exported grid cells in a solid line")]
         public bool ExcelOutlineCells
         {
@@ -4928,11 +4928,11 @@ namespace TAIGridControl2
 
         // Show Borders
         /// <summary>
-    /// gets or sets the showborders cetting of cells that are populated during the export to excel process
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// gets or sets the showborders cetting of cells that are populated during the export to excel process
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Gets or Sets the field that controls whether the cells of the spreadsheet should be outlined")]
         public bool ExcelShowBorders
         {
@@ -4948,11 +4948,11 @@ namespace TAIGridControl2
 
         // UseAlternateRowColor
         /// <summary>
-    /// Gets or sets the using of the alternat coloring scheme for excel output
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the using of the alternat coloring scheme for excel output
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Gets or Sets the property which determines if the spreadsheet uses alternating color scheme")]
         public bool ExcelUseAlternateRowColor
         {
@@ -4968,11 +4968,11 @@ namespace TAIGridControl2
 
         // Workbook Name
         /// <summary>
-    /// Gets or sets the name of the worksheet name to be used when the export to excel process is underway
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the name of the worksheet name to be used when the export to excel process is underway
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Gets or Sets the field that controls the name of the sheet")]
         public string ExcelWorksheetName
         {
@@ -4991,13 +4991,13 @@ namespace TAIGridControl2
 
         // MaxrowsperSheet 
         /// <summary>
-    /// Gets or sets the maximum rows to be sent to excel before anoher worksheet will be created to carry the remainder
-    /// of data during the export to excel process. This Add a new worksheet and continue will take place until all the
-    /// data in the grid is sent to excel. Excel has a limit of 65535 rows per worksheet.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the maximum rows to be sent to excel before anoher worksheet will be created to carry the remainder
+        /// of data during the export to excel process. This Add a new worksheet and continue will take place until all the
+        /// data in the grid is sent to excel. Excel has a limit of 65535 rows per worksheet.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Gets or Sets the maximum number of rows that will be put on a single worksheet during excel export")]
         public int ExcelMaxRowsPerSheet
         {
@@ -5019,12 +5019,12 @@ namespace TAIGridControl2
 
         // HealerLabel
         /// <summary>
-    /// Gets or sets the column header label use for the column at index idx
-    /// </summary>
-    /// <param name="columnID"></param>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the column header label use for the column at index idx
+        /// </summary>
+        /// <param name="columnID"></param>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public string get_HeaderLabel(int columnID)
         {
             if (columnID < 0 | columnID > _cols - 1)
@@ -5049,11 +5049,11 @@ namespace TAIGridControl2
 
         // IncludeFieldNames
         /// <summary>
-    /// Allows or disallows the inclusion of the header lable on grids outoput when exporting to text
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Allows or disallows the inclusion of the header lable on grids outoput when exporting to text
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Gets or Sets whether the first row of the grid with the column names should be " + "included in the export to text file")]
         [DefaultValue(typeof(bool), "True")]
         public bool IncludeFieldNames
@@ -5070,11 +5070,11 @@ namespace TAIGridControl2
 
         // IncludeLineTerminator
         /// <summary>
-    /// Allows or disallows the inclusion of line termination characters when exporting the grids contents to text
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Allows or disallows the inclusion of line termination characters when exporting the grids contents to text
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Gets or Sets whether the export should add a line terminator at the end of each row")]
         [DefaultValue(typeof(bool), "True")]
         public bool IncludeLineTerminator
@@ -5091,13 +5091,13 @@ namespace TAIGridControl2
 
         // Item
         /// <summary>
-    /// Gets or sets the contents of the grid cell at row R and col C
-    /// </summary>
-    /// <param name="r"></param>
-    /// <param name="c"></param>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the contents of the grid cell at row R and col C
+        /// </summary>
+        /// <param name="r"></param>
+        /// <param name="c"></param>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public string get_item(int r, int c)
         {
             if (r < 0 | c < 0 | r > _rows - 1 | c > _cols - 1)
@@ -5122,13 +5122,13 @@ namespace TAIGridControl2
 
         // Item
         /// <summary>
-    /// Gets or sets the contents of the grid cell at row R and column name colname
-    /// </summary>
-    /// <param name="r"></param>
-    /// <param name="colname"></param>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the contents of the grid cell at row R and column name colname
+        /// </summary>
+        /// <param name="r"></param>
+        /// <param name="colname"></param>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public string get_item(int r, string colname)
         {
             int c = -1;
@@ -5161,13 +5161,13 @@ namespace TAIGridControl2
 
         // MaxRowsSelected
         /// <summary>
-    /// Gets or sets the maximum number of rows to populate the grid with when using the various database populate
-    /// calls. Set to 0 to have the parameter unbounded. With th rewrite in 2005 the grid can accomodate millions of
-    /// rows of data so this setting is largely unnecessary now.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the maximum number of rows to populate the grid with when using the various database populate
+        /// calls. Set to 0 to have the parameter unbounded. With th rewrite in 2005 the grid can accomodate millions of
+        /// rows of data so this setting is largely unnecessary now.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Sets the limit of the number or rows filled in a grid by the various populate from database methods. Will raise an event if this is set and the database fill operation exceeds this threshold. If set to 0 the ALL rows will be selected and no events will fire")]
         [DefaultValue(typeof(int), "0")]
         public int MaxRowsSelected
@@ -5184,11 +5184,11 @@ namespace TAIGridControl2
 
         // OmitNulls
         /// <summary>
-    /// Allows or disallows the rendering of the work (NULL) on reading nulls from the varous database population methods
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Allows or disallows the rendering of the work (NULL) on reading nulls from the varous database population methods
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Will turn on or off the rendering of the work (NULL) on reading nulls from the database with the various populate from database methods of the grid")]
         [DefaultValue(typeof(bool), "False")]
         public bool OmitNulls
@@ -5205,11 +5205,11 @@ namespace TAIGridControl2
 
         // PaginationSize
         /// <summary>
-    /// Gets or sets the number of rows to scroll up or down on the pageup and pagedown keys
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the number of rows to scroll up or down on the pageup and pagedown keys
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("How many rows to scroll on a Page up or Down")]
         public int PaginationSize
         {
@@ -5225,13 +5225,13 @@ namespace TAIGridControl2
 
         // PageSettings
         /// <summary>
-    /// Gets or sets the PageSettings object used print the grids contents to windows printer devices
-    /// allows for the developer to hand into the grid preconfigured print environments to support their
-    /// special needs.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the PageSettings object used print the grids contents to windows printer devices
+        /// allows for the developer to hand into the grid preconfigured print environments to support their
+        /// special needs.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("The System.Drawing.Printing.PageSettings object used to print the grid to windows printers")]
         public System.Drawing.Printing.PageSettings PageSettings
         {
@@ -5247,11 +5247,11 @@ namespace TAIGridControl2
 
         // Rows
         /// <summary>
-    /// Get to sets the number or rows of data contained in the current grid
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Get to sets the number or rows of data contained in the current grid
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("How many rows in the current grid control")]
         public int Rows
         {
@@ -5268,12 +5268,12 @@ namespace TAIGridControl2
 
         // RowHeight
         /// <summary>
-    /// Gets or sets the height of the row at index idx in pixels
-    /// </summary>
-    /// <param name="idx"></param>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the height of the row at index idx in pixels
+        /// </summary>
+        /// <param name="idx"></param>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public int get_RowHeight(int idx)
         {
             if (idx < 0 | idx > _rows)
@@ -5297,11 +5297,11 @@ namespace TAIGridControl2
 
         // SCrollBarWeight
         /// <summary>
-    /// Gets or sets the height or width of the horizontal and verticle scroll bars on the surface of the grid itself.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the height or width of the horizontal and verticle scroll bars on the surface of the grid itself.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Gets or Sets Height or the Horizontal Scroll Bar or Width of the Vertical Scroll bar in Pixels")]
         [DefaultValue(typeof(int), "14")]
         public int ScrollBarWeight
@@ -5319,11 +5319,11 @@ namespace TAIGridControl2
 
         // ScrollInterval
         /// <summary>
-    /// Gets or sets the amount of screen scroll that the scroll bars will move in pixels
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the amount of screen scroll that the scroll bars will move in pixels
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Sets the amount of screen that a scroll operation will make in Pixels")]
         public int ScrollInterval
         {
@@ -5340,12 +5340,12 @@ namespace TAIGridControl2
 
         // SelectedColumn
         /// <summary>
-    /// Gets or sets the currently selected column ID. If more than one column is selected then the
-    /// <c>SelectedColumns</c> arraylist will contain the set of IDs representative of the selected columns
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the currently selected column ID. If more than one column is selected then the
+        /// <c>SelectedColumns</c> arraylist will contain the set of IDs representative of the selected columns
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Gets or Sets the currently selected Column on the grid control")]
         public int SelectedColumn
         {
@@ -5365,12 +5365,12 @@ namespace TAIGridControl2
 
         // SelectedRow
         /// <summary>
-    /// Gets or sets the currently selected row ID. If more than one row is selected then the <c>SelectedRows</c>
-    /// Arraylist will contain the set of IDs representative of the selected rows
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the currently selected row ID. If more than one row is selected then the <c>SelectedRows</c>
+        /// Arraylist will contain the set of IDs representative of the selected rows
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Gets or Sets the currently selected row on the grid control")]
         public int SelectedRow
         {
@@ -5397,11 +5397,11 @@ namespace TAIGridControl2
 
         // SelectedRows
         /// <summary>
-    /// Gets or sets the currently selected row list in the current grid
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the currently selected row list in the current grid
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Gets or Sets the currently selected row list on the grid control")]
         public ArrayList SelectedRows
         {
@@ -5419,11 +5419,11 @@ namespace TAIGridControl2
 
         // SelectedColBackColor
         /// <summary>
-    /// Gets or sets the background color for the currently selected column in the grid
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the background color for the currently selected column in the grid
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Sets the background color for the highlighted column in the grid")]
         public Color SelectedColBackColor
         {
@@ -5439,11 +5439,11 @@ namespace TAIGridControl2
 
         // SelectedColForeColor
         /// <summary>
-    /// Gets or sets the currently selected column foreground color in the grid
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the currently selected column foreground color in the grid
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Sets the foreground color for the selected column in the grid")]
         public Color SelectedColForeColor
         {
@@ -5459,11 +5459,11 @@ namespace TAIGridControl2
 
         // SelectedRowBackColor
         /// <summary>
-    /// Gets or sets the currently selected row background color
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the currently selected row background color
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Sets the background color for the highlighted row in the grid")]
         public Color SelectedRowBackColor
         {
@@ -5479,11 +5479,11 @@ namespace TAIGridControl2
 
         // SelectedRowForeColor
         /// <summary>
-    /// Gets or sets the currently selected row foreground color
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the currently selected row foreground color
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Sets the foreground color for the selected row in the grid")]
         public Color SelectedRowForeColor
         {
@@ -5499,12 +5499,12 @@ namespace TAIGridControl2
 
         // ShowDatesWithTime
         /// <summary>
-    /// Allows or disallows the display of the time portion of datetime values read from the various database populators
-    /// if disallowed just the date portions of these datatypes will be displayed.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Allows or disallows the display of the time portion of datetime values read from the various database populators
+        /// if disallowed just the date portions of these datatypes will be displayed.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Will Will Turn on or off the expansion of Dates to include time values if they are present")]
         [DefaultValue(typeof(bool), "False")]
         public bool ShowDatesWithTime
@@ -5522,11 +5522,11 @@ namespace TAIGridControl2
 
         // TitleBackColor
         /// <summary>
-    /// Gets or sets the background color of the title bar in the displayed grid control
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the background color of the title bar in the displayed grid control
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Gets or Sets the background color for the title")]
         public Color TitleBackColor
         {
@@ -5543,11 +5543,11 @@ namespace TAIGridControl2
 
         // TitleFont
         /// <summary>
-    /// Gets or sets the font used to display the title of the grid control
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the font used to display the title of the grid control
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Gets or Sets the font for the title")]
         public Font TitleFont
         {
@@ -5565,11 +5565,11 @@ namespace TAIGridControl2
 
         // TitleForeColor
         /// <summary>
-    /// Gets or sets the foreground color used to render the title of the grid control
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the foreground color used to render the title of the grid control
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Gets or Sets the color of the text for the title")]
         public Color TitleForeColor
         {
@@ -5586,11 +5586,11 @@ namespace TAIGridControl2
 
         // TitleText
         /// <summary>
-    /// Gets or sets the actual title text displayed in the grid controls title bar
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the actual title text displayed in the grid controls title bar
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Gets or Sets the text for the title")]
         public string TitleText
         {
@@ -5607,11 +5607,11 @@ namespace TAIGridControl2
 
         // TitleVisible
         /// <summary>
-    /// Allows or disallows the display of the title bar on the grid control itself
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Allows or disallows the display of the title bar on the grid control itself
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Gets or Sets whether the title should be displayed")]
         public bool TitleVisible
         {
@@ -5628,13 +5628,13 @@ namespace TAIGridControl2
 
         // UserColResizeMinimum
         /// <summary>
-    /// Gets or sets the minimum size in pixels the user will be allowed to resize columns to if user column
-    /// resizeing is enabled. This settiing prevents users from resizeing columns to 0 pixels in width making them
-    /// difficult to make visable again.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the minimum size in pixels the user will be allowed to resize columns to if user column
+        /// resizeing is enabled. This settiing prevents users from resizeing columns to 0 pixels in width making them
+        /// difficult to make visable again.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Gets or Sets the Minimum column width for a user to be able to resize a column to in Px.")]
         [DefaultValue(typeof(int), "5")]
         public int UserColResizeMinimum
@@ -5651,12 +5651,12 @@ namespace TAIGridControl2
 
         // VisibleHeight
         /// <summary>
-    /// Gets the height of the grid portion of the visable grid in pixels. Minus the height of the visible scrollbars
-    /// if the scrollbars are visible
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets the height of the grid portion of the visable grid in pixels. Minus the height of the visible scrollbars
+        /// if the scrollbars are visible
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Gets the height of the grid minus the horizontal scrollbars height if its visible")]
         public int VisibleHeight
         {
@@ -5671,11 +5671,11 @@ namespace TAIGridControl2
 
         // VisibleWidth
         /// <summary>
-    /// Gets the width in pixels of the grid area minus the width of the verticle scrollbar if its visible
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets the width in pixels of the grid area minus the width of the verticle scrollbar if its visible
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Gets the width of the grid minus the verticle scrollbars width if its visible")]
         public int VisibleWidth
         {
@@ -5691,11 +5691,11 @@ namespace TAIGridControl2
 
         // XMLDataSetName
         /// <summary>
-    /// Gets or sets he name of the dataset used during the export to XML of the grids contents
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets he name of the dataset used during the export to XML of the grids contents
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Gets or Sets the dataset name used during the export of the grid to XML.")]
         public string XMLDataSetName
         {
@@ -5711,11 +5711,11 @@ namespace TAIGridControl2
 
         // XMLFileName
         /// <summary>
-    /// Gets or sets the filename used to export the contents of the grid to or read from during an XML import operation
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the filename used to export the contents of the grid to or read from during an XML import operation
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Gets or Sets the file name used during the export/import of the grid to XML.")]
         public string XMLFileName
         {
@@ -5731,11 +5731,11 @@ namespace TAIGridControl2
 
         // XMLIncludeSchema
         /// <summary>
-    /// Allows or disallows the exporting of the sceme defination in the resulting xml output
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Allows or disallows the exporting of the sceme defination in the resulting xml output
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Gets or Sets the flag which is used during the export of the grid to XML.")]
         public bool XMLIncludeSchema
         {
@@ -5751,11 +5751,11 @@ namespace TAIGridControl2
 
         // XMLNameSpace
         /// <summary>
-    /// Gets or sets the namespace used to embed the contents of the grid into when exporting to XML
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the namespace used to embed the contents of the grid into when exporting to XML
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Gets or Sets the name space used during the export of the grid to XML.")]
         public string XMLNameSpace
         {
@@ -5771,11 +5771,11 @@ namespace TAIGridControl2
 
         // XMLTableName
         /// <summary>
-    /// Gets or sets the table named used to export the grids content into during xml export
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the table named used to export the grids content into during xml export
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Description("Gets or Sets the table name used during the export of the grid to XML.")]
         public string XMLTableName
         {
@@ -8079,12 +8079,12 @@ namespace TAIGridControl2
 
 
         /// <summary>
-    /// Takes the DelimitedSTringArray string and splits it up on the Delimiter. Then adds a row to the grids contents
-    /// filling the newly added row with the split fields from the DelimitedStringArray.
-    /// </summary>
-    /// <param name="DelimitedStringArray"></param>
-    /// <param name="Delimiter"></param>
-    /// <remarks></remarks>
+        /// Takes the DelimitedSTringArray string and splits it up on the Delimiter. Then adds a row to the grids contents
+        /// filling the newly added row with the split fields from the DelimitedStringArray.
+        /// </summary>
+        /// <param name="DelimitedStringArray"></param>
+        /// <param name="Delimiter"></param>
+        /// <remarks></remarks>
         public void AddRowToGrid(string DelimitedStringArray, string Delimiter)
         {
             bool _oldPainting;
@@ -8136,22 +8136,22 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Takes the DelimitedSTringArray string and splits it up on the default delimiter of '|'.
-    /// Then adds a row to the grids contents filling the newly added row with the split fields
-    /// from the DelimitedStringArray.
-    /// </summary>
-    /// <param name="DelimitedStringArray"></param>
-    /// <remarks></remarks>
+        /// Takes the DelimitedSTringArray string and splits it up on the default delimiter of '|'.
+        /// Then adds a row to the grids contents filling the newly added row with the split fields
+        /// from the DelimitedStringArray.
+        /// </summary>
+        /// <param name="DelimitedStringArray"></param>
+        /// <remarks></remarks>
         public void AddRowToGrid(string DelimitedStringArray)
         {
             AddRowToGrid(DelimitedStringArray, "|");
         }
 
         /// <summary>
-    /// Sets all cells in the grid to be rendered using the Font style specified by fnt
-    /// </summary>
-    /// <param name="fnt"></param>
-    /// <remarks></remarks>
+        /// Sets all cells in the grid to be rendered using the Font style specified by fnt
+        /// </summary>
+        /// <param name="fnt"></param>
+        /// <remarks></remarks>
         public void AllCellsUseThisFont(Font fnt)
         {
             int r, c;
@@ -8181,10 +8181,10 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Sets all cells in the grid to use the forgroundcolor specified by fcol
-    /// </summary>
-    /// <param name="fcol"></param>
-    /// <remarks></remarks>
+        /// Sets all cells in the grid to use the forgroundcolor specified by fcol
+        /// </summary>
+        /// <param name="fcol"></param>
+        /// <remarks></remarks>
         public void AllCellsUseThisForeColor(Color fcol)
         {
             int r, c;
@@ -8203,9 +8203,9 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Will decrease the size of all displayed fonts in the grid by a single point
-    /// </summary>
-    /// <remarks></remarks>
+        /// Will decrease the size of all displayed fonts in the grid by a single point
+        /// </summary>
+        /// <remarks></remarks>
         public void AllFontsSmaller()
         {
             miFontsSmaller_Click(this, new EventArgs());
@@ -8214,9 +8214,9 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Will increase the size of all displayed fonts in the grid by a single point
-    /// </summary>
-    /// <remarks></remarks>
+        /// Will increase the size of all displayed fonts in the grid by a single point
+        /// </summary>
+        /// <remarks></remarks>
         public void AllFontsLarger()
         {
             miFontsLarger_Click(this, new EventArgs());
@@ -8225,10 +8225,10 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Will set all the rows in the grid to use the background color specified by startcolor
-    /// </summary>
-    /// <param name="startcolor"></param>
-    /// <remarks></remarks>
+        /// Will set all the rows in the grid to use the background color specified by startcolor
+        /// </summary>
+        /// <param name="startcolor"></param>
+        /// <remarks></remarks>
         public void AllRowsThisColor(Color startcolor)
         {
             int r, c;
@@ -8248,10 +8248,10 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Will instruct all data represented in the grid to be colored using the specified color Startcolor
-    /// </summary>
-    /// <param name="startcolor"></param>
-    /// <remarks></remarks>
+        /// Will instruct all data represented in the grid to be colored using the specified color Startcolor
+        /// </summary>
+        /// <param name="startcolor"></param>
+        /// <remarks></remarks>
         public void AllTextThisColor(Color startcolor)
         {
             int r, c;
@@ -8271,12 +8271,12 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Will take the parmeters startcolor and alternatecolor and color every other row in the grid using these two
-    /// colors
-    /// </summary>
-    /// <param name="startcolor"></param>
-    /// <param name="alternatecolor"></param>
-    /// <remarks></remarks>
+        /// Will take the parmeters startcolor and alternatecolor and color every other row in the grid using these two
+        /// colors
+        /// </summary>
+        /// <param name="startcolor"></param>
+        /// <param name="alternatecolor"></param>
+        /// <remarks></remarks>
         public void AlternateRowColoration(Color startcolor, Color alternatecolor)
         {
             int r, c;
@@ -8311,21 +8311,21 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// will take the property defined basecolor and altcolor and apply the alternaterowcoloration
-    /// process to the contents of the grid
-    /// </summary>
-    /// <remarks></remarks>
+        /// will take the property defined basecolor and altcolor and apply the alternaterowcoloration
+        /// process to the contents of the grid
+        /// </summary>
+        /// <remarks></remarks>
         public void AlternateRowColoration()
         {
             AlternateRowColoration(_alternateColorationBaseColor, _alternateColorationALTColor);
         }
 
         /// <summary>
-    /// Will iterate through the maintained list of tearaway windows attemptiong to place
-    /// them on the screen so that they dont overlap each other. Simillar to the old windows arrange windows
-    /// menu item from the wfw 1.1 and windows 95/98 days
-    /// </summary>
-    /// <remarks></remarks>
+        /// Will iterate through the maintained list of tearaway windows attemptiong to place
+        /// them on the screen so that they dont overlap each other. Simillar to the old windows arrange windows
+        /// menu item from the wfw 1.1 and windows 95/98 days
+        /// </summary>
+        /// <remarks></remarks>
         public void ArrangeTearAwayWindows()
         {
             int maxy = 0;
@@ -8413,9 +8413,9 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Erase's the contents of the grid and sets it up to contain 1 row and 1 column
-    /// </summary>
-    /// <remarks></remarks>
+        /// Erase's the contents of the grid and sets it up to contain 1 row and 1 column
+        /// </summary>
+        /// <remarks></remarks>
         public void BlankTheGrid()
         {
             Cols = 1;
@@ -8432,9 +8432,9 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// resets all the columns of the grid to not be displaying boolean datatypes ( CheckBoxes )
-    /// </summary>
-    /// <remarks></remarks>
+        /// resets all the columns of the grid to not be displaying boolean datatypes ( CheckBoxes )
+        /// </summary>
+        /// <remarks></remarks>
         public void ClearAllGridCheckboxStates()
         {
             int c;
@@ -8445,9 +8445,9 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Clears the text in the grid but leaves the columns and rows in place
-    /// </summary>
-    /// <remarks></remarks>
+        /// Clears the text in the grid but leaves the columns and rows in place
+        /// </summary>
+        /// <remarks></remarks>
         public void ClearAllText()
         {
             _grid = new string[_rows + 1, _cols + 1];
@@ -8456,20 +8456,20 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Clears the internal column restriction list allows all editable columns to contain any arbritrary
-    /// textual data.
-    /// </summary>
-    /// <remarks></remarks>
+        /// Clears the internal column restriction list allows all editable columns to contain any arbritrary
+        /// textual data.
+        /// </summary>
+        /// <remarks></remarks>
         public void ClearAllColumnEditRestrictionLists()
         {
             _colEditRestrictions.Clear();
         }
 
         /// <summary>
-    /// Removes the column edit restrinctions from the columnid designated by colid
-    /// </summary>
-    /// <param name="colid"></param>
-    /// <remarks></remarks>
+        /// Removes the column edit restrinctions from the columnid designated by colid
+        /// </summary>
+        /// <param name="colid"></param>
+        /// <remarks></remarks>
         public void ClearSpecificColumnEditRestrictionList(int colid)
         {
             foreach (EditColumnRestrictor it in _colEditRestrictions)
@@ -8480,10 +8480,10 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Takes the contents of the grid and copys it to the clipboard as a Tab delimited array of text elements
-    /// suitable for pasting into excel or word.
-    /// </summary>
-    /// <remarks></remarks>
+        /// Takes the contents of the grid and copys it to the clipboard as a Tab delimited array of text elements
+        /// suitable for pasting into excel or word.
+        /// </summary>
+        /// <remarks></remarks>
         public void CopyGridToClipboard()
         {
             int x, y;
@@ -8506,11 +8506,11 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Applys the designated stringformat object sf to the contents of the colum designated as c
-    /// </summary>
-    /// <param name="c"></param>
-    /// <param name="sf"></param>
-    /// <remarks></remarks>
+        /// Applys the designated stringformat object sf to the contents of the colum designated as c
+        /// </summary>
+        /// <param name="c"></param>
+        /// <param name="sf"></param>
+        /// <remarks></remarks>
         public void ColumnFormat(int c, StringFormat sf)
         {
             int r;
@@ -8527,10 +8527,10 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// applys the standard format specification of currency to the designated column at colume id C
-    /// </summary>
-    /// <param name="c"></param>
-    /// <remarks></remarks>
+        /// applys the standard format specification of currency to the designated column at colume id C
+        /// </summary>
+        /// <param name="c"></param>
+        /// <remarks></remarks>
         public void ColumnFormatasMoney(int c)
         {
             int r;
@@ -8558,11 +8558,11 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// applys the standard format specification of numbers to the designated column at colume id C
-    /// </summary>
-    /// <param name="c"></param>
-    /// <param name="sFormat"></param>
-    /// <remarks></remarks>
+        /// applys the standard format specification of numbers to the designated column at colume id C
+        /// </summary>
+        /// <param name="c"></param>
+        /// <param name="sFormat"></param>
+        /// <remarks></remarks>
         public void ColumnFormatasNumber(int c, string sFormat)
         {
             int r;
@@ -8590,10 +8590,10 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// applys the standard format specification of short date to the designated column at colume id C
-    /// </summary>
-    /// <param name="c"></param>
-    /// <remarks></remarks>
+        /// applys the standard format specification of short date to the designated column at colume id C
+        /// </summary>
+        /// <param name="c"></param>
+        /// <remarks></remarks>
         public void ColumnFormatasShortDate(int c)
         {
             int r;
@@ -8613,12 +8613,12 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Will return a string that is representative of an SQL script that will write the gridshape and its contents
-    /// to a table in a database that the resulting script is handed to.
-    /// </summary>
-    /// <param name="tname"></param>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Will return a string that is representative of an SQL script that will write the gridshape and its contents
+        /// to a table in a database that the resulting script is handed to.
+        /// </summary>
+        /// <param name="tname"></param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public string CreatePersistanceScript(string tname)
         {
             string result = "";
@@ -8725,17 +8725,17 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Will return a string containing an HTML table representation of the grids contents
-    /// Borderval is the size parameter of the tables borders
-    /// Matchcolors will turn on or off the attempt to set the colors of the table to match thos of the grid itself
-    /// OmitNulls will have the rendering of empty cells in the grid or not. (creating holes in the resuting
-    /// html output)
-    /// </summary>
-    /// <param name="BorderVal"></param>
-    /// <param name="MatchColors"></param>
-    /// <param name="OmitNulls"></param>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Will return a string containing an HTML table representation of the grids contents
+        /// Borderval is the size parameter of the tables borders
+        /// Matchcolors will turn on or off the attempt to set the colors of the table to match thos of the grid itself
+        /// OmitNulls will have the rendering of empty cells in the grid or not. (creating holes in the resuting
+        /// html output)
+        /// </summary>
+        /// <param name="BorderVal"></param>
+        /// <param name="MatchColors"></param>
+        /// <param name="OmitNulls"></param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public string CreateHTMLTableScript(int BorderVal, bool MatchColors, bool OmitNulls)
         {
             var rb = new StringBuilder();
@@ -8820,10 +8820,10 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Overload that will set the border to 1 pixel, Matchcolors, and omitnulls
-    /// </summary>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Overload that will set the border to 1 pixel, Matchcolors, and omitnulls
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public string CreateHTMLTableScript()
         {
             // Will use the default border of 1
@@ -8834,9 +8834,9 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Will deslect all rows in the grid if any are selected
-    /// </summary>
-    /// <remarks></remarks>
+        /// Will deslect all rows in the grid if any are selected
+        /// </summary>
+        /// <remarks></remarks>
         public void DeSelectAllRows()
         {
             _SelectedRows.Clear();
@@ -8845,11 +8845,11 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Will set the tooltip on the mouse to match the cells contents that its hovering over
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="ttText"></param>
-    /// <remarks></remarks>
+        /// Will set the tooltip on the mouse to match the cells contents that its hovering over
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="ttText"></param>
+        /// <remarks></remarks>
         public void DisplayGridToolTip(object sender, string ttText)
         {
             if (_TearAwayWork)
@@ -8885,9 +8885,9 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Will hide the tooltip on the mouse pointer if its visible
-    /// </summary>
-    /// <remarks></remarks>
+        /// Will hide the tooltip on the mouse pointer if its visible
+        /// </summary>
+        /// <remarks></remarks>
         public void HideGridToolTip()
         {
             if (_TearAwayWork)
@@ -8911,64 +8911,64 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// The <c>DoControlBreakProcessing</c> method will as its name indicates conduct a good oldfasioned sub-total
-    /// and grand-total parse on the contents of the grid using the old style Cobol rules for control break processing.
-    /// <list type="bullet">
-    /// <item>
-    /// <c>BreakColIntArrayList</c> list needs to contain the column IDs that will be looked at to determine
-    /// where to break and subtotal.
-    /// </item>
-    /// <item>
-    /// <c>SumColumnIntegerArrayList</c> a list of column ids on which the sums will
-    /// be calculated.
-    /// </item>
-    /// <item>
-    /// <c>IgnoreCase</c> will insruct the parser to convert everything to uppercase
-    /// before it determines if a transition is occuring and thus a break and subtotal operation is necessary.
-    /// </item>
-    /// <item>
-    /// <c>ColumnToPlaceSubTotalTextIn</c> indicates the column to reiterate the criteria for the break into.
-    /// Think of this as the label to apply to the subtotal rows.
-    /// </item>
-    /// <item>
-    /// <c>SubtotalText</c> is an arbritrary string of text to be appended to the lable defined above.
-    /// </item>
-    /// <item>
-    /// <c>RightAlignSubTotalText</c> will allow or disallow the right aligning of the resulting subtotal lables.
-    /// </item>
-    /// <item>
-    /// <c>ColorForSubTotalRows</c> defines the backgroundcolor to use when inserting a subtotal row into the
-    /// resulting output.
-    /// </item>
-    /// <item>
-    /// <c>BlankSeperateBreaks</c> will allow or disallow the insertion of an additional blank row after a
-    /// subtotal operation.
-    /// </item>
-    /// <item>
-    /// <c>EchoBreakFieldsOnSubTotalLines</c> will allow or disallow the echoing of the criteria for the
-    /// above subtotal operation on the line with the subtotal figures itself.
-    /// </item>
-    /// <item>
-    /// <c>TreatBlanksAsSame</c> will force the parser to treat a blank field in a row to be treated as the
-    /// most recent previous non blank field for the purposes of determining that the break is necessary.
-    /// </item>
-    /// </list>
-    /// Note:
-    /// Because the control break process works from top to bottom on the current contents of the grid
-    /// those contents should be sorted as the results will not have any real meaning if the grids contents
-    /// are not sorted before the call to this method.
-    /// </summary>
-    /// <param name="BreakColIntArrayList"></param>
-    /// <param name="SumColumnIntegerArraylist"></param>
-    /// <param name="IgnoreCase"></param>
-    /// <param name="ColumnToPlaceSubtotalTextIn"></param>
-    /// <param name="SubtotalText"></param>
-    /// <param name="RightAlignSubTotalText"></param>
-    /// <param name="ColorForSubTotalRows"></param>
-    /// <param name="BlankSeperateBreaks"></param>
-    /// <param name="EchoBreakFieldsOnSubtotalLines"></param>
-    /// <param name="TreatBlanksAsSame"></param>
-    /// <remarks></remarks>
+        /// The <c>DoControlBreakProcessing</c> method will as its name indicates conduct a good oldfasioned sub-total
+        /// and grand-total parse on the contents of the grid using the old style Cobol rules for control break processing.
+        /// <list type="bullet">
+        /// <item>
+        /// <c>BreakColIntArrayList</c> list needs to contain the column IDs that will be looked at to determine
+        /// where to break and subtotal.
+        /// </item>
+        /// <item>
+        /// <c>SumColumnIntegerArrayList</c> a list of column ids on which the sums will
+        /// be calculated.
+        /// </item>
+        /// <item>
+        /// <c>IgnoreCase</c> will insruct the parser to convert everything to uppercase
+        /// before it determines if a transition is occuring and thus a break and subtotal operation is necessary.
+        /// </item>
+        /// <item>
+        /// <c>ColumnToPlaceSubTotalTextIn</c> indicates the column to reiterate the criteria for the break into.
+        /// Think of this as the label to apply to the subtotal rows.
+        /// </item>
+        /// <item>
+        /// <c>SubtotalText</c> is an arbritrary string of text to be appended to the lable defined above.
+        /// </item>
+        /// <item>
+        /// <c>RightAlignSubTotalText</c> will allow or disallow the right aligning of the resulting subtotal lables.
+        /// </item>
+        /// <item>
+        /// <c>ColorForSubTotalRows</c> defines the backgroundcolor to use when inserting a subtotal row into the
+        /// resulting output.
+        /// </item>
+        /// <item>
+        /// <c>BlankSeperateBreaks</c> will allow or disallow the insertion of an additional blank row after a
+        /// subtotal operation.
+        /// </item>
+        /// <item>
+        /// <c>EchoBreakFieldsOnSubTotalLines</c> will allow or disallow the echoing of the criteria for the
+        /// above subtotal operation on the line with the subtotal figures itself.
+        /// </item>
+        /// <item>
+        /// <c>TreatBlanksAsSame</c> will force the parser to treat a blank field in a row to be treated as the
+        /// most recent previous non blank field for the purposes of determining that the break is necessary.
+        /// </item>
+        /// </list>
+        /// Note:
+        /// Because the control break process works from top to bottom on the current contents of the grid
+        /// those contents should be sorted as the results will not have any real meaning if the grids contents
+        /// are not sorted before the call to this method.
+        /// </summary>
+        /// <param name="BreakColIntArrayList"></param>
+        /// <param name="SumColumnIntegerArraylist"></param>
+        /// <param name="IgnoreCase"></param>
+        /// <param name="ColumnToPlaceSubtotalTextIn"></param>
+        /// <param name="SubtotalText"></param>
+        /// <param name="RightAlignSubTotalText"></param>
+        /// <param name="ColorForSubTotalRows"></param>
+        /// <param name="BlankSeperateBreaks"></param>
+        /// <param name="EchoBreakFieldsOnSubtotalLines"></param>
+        /// <param name="TreatBlanksAsSame"></param>
+        /// <remarks></remarks>
         public void DoControlBreakProcessing(ArrayList BreakColIntArrayList, ArrayList SumColumnIntegerArraylist, bool IgnoreCase, int ColumnToPlaceSubtotalTextIn, string SubtotalText, bool RightAlignSubTotalText, Color ColorForSubTotalRows, bool BlankSeperateBreaks, bool EchoBreakFieldsOnSubtotalLines, bool TreatBlanksAsSame)
         {
             string breakstring = "";
@@ -9228,60 +9228,60 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// The <c>DoControlBreakProcessing</c> method will as its name indicates conduct a good oldfasioned sub-total
-    /// and grand-total parse on the contents of the grid using the old style Cobol rules for control break processing.
-    /// <list type="bullet">
-    /// <item>
-    /// <c>BreakColIntArrayList</c> list needs to contain the column IDs that will be looked at to determine
-    /// where to break and subtotal.
-    /// </item>
-    /// <item>
-    /// <c>SumColumnIntegerArrayList</c> a list of column ids on which the sums will
-    /// be calculated.
-    /// </item>
-    /// <item>
-    /// <c>IgnoreCase</c> will insruct the parser to convert everything to uppercase
-    /// before it determines if a transition is occuring and thus a break and subtotal operation is necessary.
-    /// </item>
-    /// <item>
-    /// <c>ColumnToPlaceSubTotalTextIn</c> indicates the column to reiterate the criteria for the break into.
-    /// Think of this as the label to apply to the subtotal rows.
-    /// </item>
-    /// <item>
-    /// <c>SubtotalText</c> is an arbritrary string of text to be appended to the lable defined above.
-    /// </item>
-    /// <item>
-    /// <c>RightAlignSubTotalText</c> will allow or disallow the right aligning of the resulting subtotal lables.
-    /// </item>
-    /// <item>
-    /// <c>ColorForSubTotalRows</c> defines the backgroundcolor to use when inserting a subtotal row into the
-    /// resulting output.
-    /// </item>
-    /// <item>
-    /// <c>BlankSeperateBreaks</c> will allow or disallow the insertion of an additional blank row after a
-    /// subtotal operation.
-    /// </item>
-    /// <item>
-    /// <c>EchoBreakFieldsOnSubTotalLines</c> will allow or disallow the echoing of the criteria for the
-    /// above subtotal operation on the line with the subtotal figures itself.
-    /// </item>
-    /// 
-    /// </list>
-    /// Note:
-    /// Because the control break process works from top to bottom on the current contents of the grid
-    /// those contents should be sorted as the results will not have any real meaning if the grids contents
-    /// are not sorted before the call to this method.
-    /// </summary>
-    /// <param name="BreakColIntArrayList"></param>
-    /// <param name="SumColumnIntegerArraylist"></param>
-    /// <param name="IgnoreCase"></param>
-    /// <param name="ColumnToPlaceSubtotalTextIn"></param>
-    /// <param name="SubtotalText"></param>
-    /// <param name="RightAlignSubTotalText"></param>
-    /// <param name="ColorForSubTotalRows"></param>
-    /// <param name="BlankSeperateBreaks"></param>
-    /// <param name="EchoBreakFieldsOnSubtotalLines"></param>
-    /// <remarks></remarks>
+        /// The <c>DoControlBreakProcessing</c> method will as its name indicates conduct a good oldfasioned sub-total
+        /// and grand-total parse on the contents of the grid using the old style Cobol rules for control break processing.
+        /// <list type="bullet">
+        /// <item>
+        /// <c>BreakColIntArrayList</c> list needs to contain the column IDs that will be looked at to determine
+        /// where to break and subtotal.
+        /// </item>
+        /// <item>
+        /// <c>SumColumnIntegerArrayList</c> a list of column ids on which the sums will
+        /// be calculated.
+        /// </item>
+        /// <item>
+        /// <c>IgnoreCase</c> will insruct the parser to convert everything to uppercase
+        /// before it determines if a transition is occuring and thus a break and subtotal operation is necessary.
+        /// </item>
+        /// <item>
+        /// <c>ColumnToPlaceSubTotalTextIn</c> indicates the column to reiterate the criteria for the break into.
+        /// Think of this as the label to apply to the subtotal rows.
+        /// </item>
+        /// <item>
+        /// <c>SubtotalText</c> is an arbritrary string of text to be appended to the lable defined above.
+        /// </item>
+        /// <item>
+        /// <c>RightAlignSubTotalText</c> will allow or disallow the right aligning of the resulting subtotal lables.
+        /// </item>
+        /// <item>
+        /// <c>ColorForSubTotalRows</c> defines the backgroundcolor to use when inserting a subtotal row into the
+        /// resulting output.
+        /// </item>
+        /// <item>
+        /// <c>BlankSeperateBreaks</c> will allow or disallow the insertion of an additional blank row after a
+        /// subtotal operation.
+        /// </item>
+        /// <item>
+        /// <c>EchoBreakFieldsOnSubTotalLines</c> will allow or disallow the echoing of the criteria for the
+        /// above subtotal operation on the line with the subtotal figures itself.
+        /// </item>
+        /// 
+        /// </list>
+        /// Note:
+        /// Because the control break process works from top to bottom on the current contents of the grid
+        /// those contents should be sorted as the results will not have any real meaning if the grids contents
+        /// are not sorted before the call to this method.
+        /// </summary>
+        /// <param name="BreakColIntArrayList"></param>
+        /// <param name="SumColumnIntegerArraylist"></param>
+        /// <param name="IgnoreCase"></param>
+        /// <param name="ColumnToPlaceSubtotalTextIn"></param>
+        /// <param name="SubtotalText"></param>
+        /// <param name="RightAlignSubTotalText"></param>
+        /// <param name="ColorForSubTotalRows"></param>
+        /// <param name="BlankSeperateBreaks"></param>
+        /// <param name="EchoBreakFieldsOnSubtotalLines"></param>
+        /// <remarks></remarks>
         public void DoControlBreakProcessing(ArrayList BreakColIntArrayList, ArrayList SumColumnIntegerArraylist, bool IgnoreCase, int ColumnToPlaceSubtotalTextIn, string SubtotalText, bool RightAlignSubTotalText, Color ColorForSubTotalRows, bool BlankSeperateBreaks, bool EchoBreakFieldsOnSubtotalLines)
         {
             string breakstring = "";
@@ -9507,14 +9507,14 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// This will take the supplied <c>BreakColIntArrayList</c> and do a cell colorization operation
-    /// on the current grids contents alternating between <c>StartColor</c> and <c>AltColor</c> on a change
-    /// in the cols id'd in the supplied arraylist.
-    /// </summary>
-    /// <param name="BreakColIntArrayList"></param>
-    /// <param name="StartColor"></param>
-    /// <param name="AltColor"></param>
-    /// <remarks></remarks>
+        /// This will take the supplied <c>BreakColIntArrayList</c> and do a cell colorization operation
+        /// on the current grids contents alternating between <c>StartColor</c> and <c>AltColor</c> on a change
+        /// in the cols id'd in the supplied arraylist.
+        /// </summary>
+        /// <param name="BreakColIntArrayList"></param>
+        /// <param name="StartColor"></param>
+        /// <param name="AltColor"></param>
+        /// <remarks></remarks>
         public void DoControlBreakColorization(ArrayList BreakColIntArrayList, Color StartColor, Color AltColor)
         {
             bool start = false;
@@ -9551,42 +9551,42 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Another control break process,
-    /// <list type="bullet">
-    /// <item>
-    /// <c>BreakColIntArrayValues</c> list needs to contain the column IDs that will be looked at to determine
-    /// where to break and subtotal.
-    /// </item>
-    /// <item>
-    /// <c>IgnoreCase</c> will insruct the parser to convert everything to uppercase
-    /// before it determines if a transition is occuring and thus a break and subtotal operation is necessary.
-    /// </item>
-    /// <item>
-    /// <c>SumColumnIntegerArrayList</c> a list of column ids on which the sums will
-    /// be calculated.
-    /// </item>
-    /// <item>
-    /// <c>ColorForBreakSubtotals</c> defines the backgroundcolor to use when inserting a subtotal row into the
-    /// resulting output.
-    /// </item>
-    /// <item>
-    /// <c>CutoffRow</c> The maximum row to search for in the grid for processing.
-    /// will stop processing at <c>CutoffRow</c>
-    /// </item>
-    /// 
-    /// </list>
-    /// Note:
-    /// Because the control break process works from top to bottom on the current contents of the grid
-    /// those contents should be sorted as the results will not have any real meaning if the grids contents
-    /// are not sorted before the call to this method.
-    /// </summary>
-    /// <param name="BreakColArrayValues"></param>
-    /// <param name="ColToFindValues"></param>
-    /// <param name="IgnoreCase"></param>
-    /// <param name="SumColumnIntegerArrayList"></param>
-    /// <param name="ColorForBreakSubtotals"></param>
-    /// <param name="CutoffRow"></param>
-    /// <remarks></remarks>
+        /// Another control break process,
+        /// <list type="bullet">
+        /// <item>
+        /// <c>BreakColIntArrayValues</c> list needs to contain the column IDs that will be looked at to determine
+        /// where to break and subtotal.
+        /// </item>
+        /// <item>
+        /// <c>IgnoreCase</c> will insruct the parser to convert everything to uppercase
+        /// before it determines if a transition is occuring and thus a break and subtotal operation is necessary.
+        /// </item>
+        /// <item>
+        /// <c>SumColumnIntegerArrayList</c> a list of column ids on which the sums will
+        /// be calculated.
+        /// </item>
+        /// <item>
+        /// <c>ColorForBreakSubtotals</c> defines the backgroundcolor to use when inserting a subtotal row into the
+        /// resulting output.
+        /// </item>
+        /// <item>
+        /// <c>CutoffRow</c> The maximum row to search for in the grid for processing.
+        /// will stop processing at <c>CutoffRow</c>
+        /// </item>
+        /// 
+        /// </list>
+        /// Note:
+        /// Because the control break process works from top to bottom on the current contents of the grid
+        /// those contents should be sorted as the results will not have any real meaning if the grids contents
+        /// are not sorted before the call to this method.
+        /// </summary>
+        /// <param name="BreakColArrayValues"></param>
+        /// <param name="ColToFindValues"></param>
+        /// <param name="IgnoreCase"></param>
+        /// <param name="SumColumnIntegerArrayList"></param>
+        /// <param name="ColorForBreakSubtotals"></param>
+        /// <param name="CutoffRow"></param>
+        /// <remarks></remarks>
         public void DoControlBreakSubTotals(ArrayList BreakColArrayValues, int ColToFindValues, bool IgnoreCase, ArrayList SumColumnIntegerArrayList, Color ColorForBreakSubtotals, int CutoffRow)
         {
             int r = _rows + 1;
@@ -9655,10 +9655,10 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Will select and highlight the indicated rownum as if the user had selected it with the mouse
-    /// </summary>
-    /// <param name="rownum"></param>
-    /// <remarks></remarks>
+        /// Will select and highlight the indicated rownum as if the user had selected it with the mouse
+        /// </summary>
+        /// <param name="rownum"></param>
+        /// <remarks></remarks>
         public void DoSelectedRowHighlight(int rownum)
         {
             if (rownum < 0 | rownum >= _rows)
@@ -9675,9 +9675,9 @@ namespace TAIGridControl2
 
 
         /// <summary>
-    /// Will instance Microsoft excel and place the contents of the grid on the first worksheet in the excel application
-    /// </summary>
-    /// <remarks></remarks>
+        /// Will instance Microsoft excel and place the contents of the grid on the first worksheet in the excel application
+        /// </summary>
+        /// <remarks></remarks>
         public void ExportToExcel()
         {
             Excel.Application _excel;
@@ -9702,13 +9702,13 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Will take the supplied instance of Microsoft excel <c>_excel</c> and place the contents of the grid on the
-    /// worksheet named <c>wsname</c> in the supplied workbook <c>_Workbook</c>
-    /// </summary>
-    /// <param name="_excel"></param>
-    /// <param name="_WorkBook"></param>
-    /// <param name="wsname"></param>
-    /// <remarks></remarks>
+        /// Will take the supplied instance of Microsoft excel <c>_excel</c> and place the contents of the grid on the
+        /// worksheet named <c>wsname</c> in the supplied workbook <c>_Workbook</c>
+        /// </summary>
+        /// <param name="_excel"></param>
+        /// <param name="_WorkBook"></param>
+        /// <param name="wsname"></param>
+        /// <remarks></remarks>
         public void ExportToExcel(Excel.Application _excel, Excel.Workbook _WorkBook, string wsname)
         {
             var frm = new frmExportingToExcelWorking();
@@ -9764,7 +9764,7 @@ namespace TAIGridControl2
                         Excel.Worksheet sheet = (Excel.Worksheet)_WorkBook.Worksheets["Sheet1"];
 
                         sheet.Name = lastsheetname;
-                        
+
                         sh = (Excel.Worksheet)_WorkBook.ActiveSheet;
                     }
                     else
@@ -9887,7 +9887,7 @@ namespace TAIGridControl2
 
                     if (_excelIncludeColumnHeaders)
                     {
-                        
+
                         sh.Range["1:1"].Font.Bold = true;
                         sh.Range["1:1"].HorizontalAlignment = xlCenter;
                     }
@@ -9959,9 +9959,9 @@ namespace TAIGridControl2
                     // sh.Range(rng).EntireColumn.Autofit()
                     // End If
 
-                    sh.PageSetup.Orientation =  (Excel.XlPageOrientation)_excelPageOrientation;
+                    sh.PageSetup.Orientation = (Excel.XlPageOrientation)_excelPageOrientation;
 
-                    _excel.ActiveWindow.WindowState = Excel.XlWindowState.xlMaximized ;
+                    _excel.ActiveWindow.WindowState = Excel.XlWindowState.xlMaximized;
 
                     // save the spreadsheet
                     _excel.AlertBeforeOverwriting = false;
@@ -10009,12 +10009,12 @@ namespace TAIGridControl2
 
 
         /// <summary>
-    /// Will open the internal export filename dialog querying the user for the filename to export to
-    /// Will then export the contents of the grid to a textfile employing the properties setup by
-    /// displayed dialog, Filename, Include column headers as fieldname, the field terminator, and the line
-    /// terminator...
-    /// </summary>
-    /// <remarks></remarks>
+        /// Will open the internal export filename dialog querying the user for the filename to export to
+        /// Will then export the contents of the grid to a textfile employing the properties setup by
+        /// displayed dialog, Filename, Include column headers as fieldname, the field terminator, and the line
+        /// terminator...
+        /// </summary>
+        /// <remarks></remarks>
         public void ExportToText()
         {
             try
@@ -10041,11 +10041,11 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Will export the contents of the grid to the supplied filename <c>sFilename</c> employing the internally set properties
-    /// to control the field delimiters, line terminators, and inclusion of column headers as field names...
-    /// </summary>
-    /// <param name="sFilename"></param>
-    /// <remarks></remarks>
+        /// Will export the contents of the grid to the supplied filename <c>sFilename</c> employing the internally set properties
+        /// to control the field delimiters, line terminators, and inclusion of column headers as field names...
+        /// </summary>
+        /// <param name="sFilename"></param>
+        /// <remarks></remarks>
         public void ExportToText(string sFilename)
         {
             try
@@ -10059,13 +10059,13 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Will export the contens of the grid to a file named <c>sFilename</c> with the field delimiters of <c>sDelimiter</c>
-    /// The internal properties will control the inclusion of column headers as field names and the characters used to terminate
-    /// the lines of output
-    /// </summary>
-    /// <param name="sFilename"></param>
-    /// <param name="sDelimiter"></param>
-    /// <remarks></remarks>
+        /// Will export the contens of the grid to a file named <c>sFilename</c> with the field delimiters of <c>sDelimiter</c>
+        /// The internal properties will control the inclusion of column headers as field names and the characters used to terminate
+        /// the lines of output
+        /// </summary>
+        /// <param name="sFilename"></param>
+        /// <param name="sDelimiter"></param>
+        /// <remarks></remarks>
         public void ExportToText(string sFilename, string sDelimiter)
         {
             try
@@ -10079,14 +10079,14 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Will export the contents of the grid to a textfile name <c>sFilename</c> using <c>sDelimiter</c> for
-    /// field delimiters and using <c>bIncludeFieldNames</c> to control inclusion of the column headers as field names
-    /// the interna;l property for the end of the lines termination will be employed.
-    /// </summary>
-    /// <param name="sFilename"></param>
-    /// <param name="sDelimiter"></param>
-    /// <param name="bIncludeFieldNames"></param>
-    /// <remarks></remarks>
+        /// Will export the contents of the grid to a textfile name <c>sFilename</c> using <c>sDelimiter</c> for
+        /// field delimiters and using <c>bIncludeFieldNames</c> to control inclusion of the column headers as field names
+        /// the interna;l property for the end of the lines termination will be employed.
+        /// </summary>
+        /// <param name="sFilename"></param>
+        /// <param name="sDelimiter"></param>
+        /// <param name="bIncludeFieldNames"></param>
+        /// <remarks></remarks>
         public void ExportToText(string sFilename, string sDelimiter, bool bIncludeFieldNames)
         {
             try
@@ -10100,15 +10100,15 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Will export the contents of the grid to <c>sFilename</c> employing <c>sDelimiter</c> for the field delimiters
-    /// <c>bIncludeFieldNames</c> to control inclusion of the column headers as field names, and the <c>bIncludeLineTerminator</c>
-    /// to control the CRLF at the end of the lines of output
-    /// </summary>
-    /// <param name="sFileName"></param>
-    /// <param name="sDelimiter"></param>
-    /// <param name="bIncludeFieldNames"></param>
-    /// <param name="bIncludeLineTerminator"></param>
-    /// <remarks></remarks>
+        /// Will export the contents of the grid to <c>sFilename</c> employing <c>sDelimiter</c> for the field delimiters
+        /// <c>bIncludeFieldNames</c> to control inclusion of the column headers as field names, and the <c>bIncludeLineTerminator</c>
+        /// to control the CRLF at the end of the lines of output
+        /// </summary>
+        /// <param name="sFileName"></param>
+        /// <param name="sDelimiter"></param>
+        /// <param name="bIncludeFieldNames"></param>
+        /// <param name="bIncludeLineTerminator"></param>
+        /// <remarks></remarks>
         public void ExportToText(string sFileName, string sDelimiter, bool bIncludeFieldNames, bool bIncludeLineTerminator)
         {
             try
@@ -10186,11 +10186,11 @@ namespace TAIGridControl2
 
 
         /// <summary>
-    /// Will return a list(of string) of the unique values contained in ColId of the current grid contents
-    /// </summary>
-    /// <param name="ColId"></param>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Will return a list(of string) of the unique values contained in ColId of the current grid contents
+        /// </summary>
+        /// <param name="ColId"></param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public List<string> DistinctInColumn(int ColId)
         {
             var ret = new List<string>();
@@ -10207,14 +10207,14 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// will do a case insensitive rip through grid col colvalue searching for strvalue
-    /// on finding it will return id value of the row where the search was successful
-    /// -1 otherwise
-    /// </summary>
-    /// <param name="strValue"></param>
-    /// <param name="colvalue"></param>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// will do a case insensitive rip through grid col colvalue searching for strvalue
+        /// on finding it will return id value of the row where the search was successful
+        /// -1 otherwise
+        /// </summary>
+        /// <param name="strValue"></param>
+        /// <param name="colvalue"></param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public int FindInColumn(string strValue, int colvalue)
         {
             // will do a case insensative rip through grid col colvalue searching for strvalue
@@ -10241,16 +10241,16 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// will do a case insensative or sensitive  (depending on the CaseSensitive parameter)
-    /// rip through grid col colvalue searching for strvalue
-    /// on finding it will return id value of the row where the search was successful
-    /// -1 otherwise
-    /// </summary>
-    /// <param name="strValue"></param>
-    /// <param name="colvalue"></param>
-    /// <param name="CaseSensitive"></param>
-    /// <returns>Will return the first row ID of the search or -1 if the search is unsuccessful</returns>
-    /// <remarks></remarks>
+        /// will do a case insensative or sensitive  (depending on the CaseSensitive parameter)
+        /// rip through grid col colvalue searching for strvalue
+        /// on finding it will return id value of the row where the search was successful
+        /// -1 otherwise
+        /// </summary>
+        /// <param name="strValue"></param>
+        /// <param name="colvalue"></param>
+        /// <param name="CaseSensitive"></param>
+        /// <returns>Will return the first row ID of the search or -1 if the search is unsuccessful</returns>
+        /// <remarks></remarks>
         public int FindInColumn(string strValue, int colvalue, bool CaseSensitive)
         {
             // will do a eithyer a case insensative  or case sensative rip through grid col colvalue searching for strvalue
@@ -10282,22 +10282,22 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// will free the memory associated with the internal captured image of the grids contents
-    /// </summary>
-    /// <remarks></remarks>
+        /// will free the memory associated with the internal captured image of the grids contents
+        /// </summary>
+        /// <remarks></remarks>
         public void FreeGridContentImage()
         {
             _image.Dispose();
         }
 
         /// <summary>
-    /// Will return the column ID of the first column matching name. CaseSensative will toggle the search matching
-    /// the case of the searched name.
-    /// </summary>
-    /// <param name="name"></param>
-    /// <param name="CaseSensitive"></param>
-    /// <returns>Column ID of the first match, -1 if not found</returns>
-    /// <remarks></remarks>
+        /// Will return the column ID of the first column matching name. CaseSensative will toggle the search matching
+        /// the case of the searched name.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="CaseSensitive"></param>
+        /// <returns>Column ID of the first match, -1 if not found</returns>
+        /// <remarks></remarks>
         public int GetColumnIDByName(string name, bool CaseSensitive)
         {
             // returns column ID of NAME string from current grid contents
@@ -10325,11 +10325,11 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Will return the column ID of the first column matching name. The search is not case sensative.
-    /// </summary>
-    /// <param name="name"></param>
-    /// <returns>Column ID of the first match, -1 if not found</returns>
-    /// <remarks></remarks>
+        /// Will return the column ID of the first column matching name. The search is not case sensative.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns>Column ID of the first match, -1 if not found</returns>
+        /// <remarks></remarks>
         public int GetColumnIDByName(string name)
         {
             // returns column ID of NAME string from current grid contents
@@ -10352,12 +10352,12 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Will return an ArrayList of distinct values contained in a given Column within the grids
-    /// current contents. Column searched indicated by colid. Search will ignore case differences.
-    /// </summary>
-    /// <param name="colid"></param>
-    /// <returns>ArrayList of distinct values sorted</returns>
-    /// <remarks></remarks>
+        /// Will return an ArrayList of distinct values contained in a given Column within the grids
+        /// current contents. Column searched indicated by colid. Search will ignore case differences.
+        /// </summary>
+        /// <param name="colid"></param>
+        /// <returns>ArrayList of distinct values sorted</returns>
+        /// <remarks></remarks>
         public ArrayList GetDistinctColumnEntries(int colid)
         {
             var exl = new ArrayList();
@@ -10366,14 +10366,14 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Will return an ArrayList of distinct values contained in a given Column within the grids
-    /// current contents. Column searched indicated by colid. The ignorecase parameter will
-    /// allow or disallow the differences in case to be taken into account.
-    /// </summary>
-    /// <param name="colid"></param>
-    /// <param name="ignorecase"></param>
-    /// <returns>ArrayList of distinct values sorted</returns>
-    /// <remarks></remarks>
+        /// Will return an ArrayList of distinct values contained in a given Column within the grids
+        /// current contents. Column searched indicated by colid. The ignorecase parameter will
+        /// allow or disallow the differences in case to be taken into account.
+        /// </summary>
+        /// <param name="colid"></param>
+        /// <param name="ignorecase"></param>
+        /// <returns>ArrayList of distinct values sorted</returns>
+        /// <remarks></remarks>
         public ArrayList GetDistinctColumnEntries(int colid, bool ignorecase)
         {
             var exl = new ArrayList();
@@ -10382,16 +10382,16 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Will return an ArrayList of distinct values contained in a given Column within the grids
-    /// current contents. Column searched indicated by colid. The parameter for the Exclusionlist will
-    /// contain any values you wish to omit from the results. The ignorecase parameter will
-    /// allow or disallow the differences in case to be taken into account.
-    /// </summary>
-    /// <param name="colid"></param>
-    /// <param name="exclusionlist"></param>
-    /// <param name="ignorecase"></param>
-    /// <returns>ArrayList of distinct values sorted</returns>
-    /// <remarks></remarks>
+        /// Will return an ArrayList of distinct values contained in a given Column within the grids
+        /// current contents. Column searched indicated by colid. The parameter for the Exclusionlist will
+        /// contain any values you wish to omit from the results. The ignorecase parameter will
+        /// allow or disallow the differences in case to be taken into account.
+        /// </summary>
+        /// <param name="colid"></param>
+        /// <param name="exclusionlist"></param>
+        /// <param name="ignorecase"></param>
+        /// <returns>ArrayList of distinct values sorted</returns>
+        /// <remarks></remarks>
         public ArrayList GetDistinctColumnEntries(int colid, ArrayList exclusionlist, bool ignorecase)
         {
             var retval = new ArrayList();
@@ -10430,10 +10430,10 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Returns the grids contents as a two dimensional array of string values
-    /// </summary>
-    /// <returns>2 dimensional array of strings representative of the ccurrent contents of the grid</returns>
-    /// <remarks></remarks>
+        /// Returns the grids contents as a two dimensional array of string values
+        /// </summary>
+        /// <returns>2 dimensional array of strings representative of the ccurrent contents of the grid</returns>
+        /// <remarks></remarks>
         public string[,] GetGridAsArray()
         {
             var result = new string[_rows + 1, _cols];
@@ -10453,12 +10453,12 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Scans ColID for Values in ColVals and colors each row where ColID contains ColVal with corresponding ColorVal
-    /// </summary>
-    /// <param name="Colid"></param>
-    /// <param name="Colvals"></param>
-    /// <param name="ColorVals"></param>
-    /// <remarks></remarks>
+        /// Scans ColID for Values in ColVals and colors each row where ColID contains ColVal with corresponding ColorVal
+        /// </summary>
+        /// <param name="Colid"></param>
+        /// <param name="Colvals"></param>
+        /// <param name="ColorVals"></param>
+        /// <remarks></remarks>
         public void SetRowBackgroundsBasedOnValue(int Colid, List<string> Colvals, List<Color> ColorVals)
         {
             int t;
@@ -10481,12 +10481,12 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Returns the contents of the grid as a 24 bit bitmat System.Drawing.Bitmap
-    /// Useful for when the contents of the grid need to be image mapped onto another
-    /// surface like a 3D rotating cube (believe it or not) or perhaps a printer page context.
-    /// </summary>
-    /// <returns>24 Bit System.Drawing.Bitmap</returns>
-    /// <remarks></remarks>
+        /// Returns the contents of the grid as a 24 bit bitmat System.Drawing.Bitmap
+        /// Useful for when the contents of the grid need to be image mapped onto another
+        /// surface like a 3D rotating cube (believe it or not) or perhaps a printer page context.
+        /// </summary>
+        /// <returns>24 Bit System.Drawing.Bitmap</returns>
+        /// <remarks></remarks>
         public Image GetGridContentsAsImage()
         {
 
@@ -10520,11 +10520,11 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Will return a row in the grid as a string with '|' character delimitring the columns.
-    /// </summary>
-    /// <param name="rowid"></param>
-    /// <returns>String representation of the row in the grid at rowid with '|' characters between the fields</returns>
-    /// <remarks></remarks>
+        /// Will return a row in the grid as a string with '|' character delimitring the columns.
+        /// </summary>
+        /// <param name="rowid"></param>
+        /// <returns>String representation of the row in the grid at rowid with '|' characters between the fields</returns>
+        /// <remarks></remarks>
         public string GetRowAsString(int rowid)
         {
             int c = 0;
@@ -10545,11 +10545,11 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Will return the indicated column at col as an Arraylist of values
-    /// </summary>
-    /// <param name="col"></param>
-    /// <returns>ArrayList indicating the contents of the column at col</returns>
-    /// <remarks></remarks>
+        /// Will return the indicated column at col as an Arraylist of values
+        /// </summary>
+        /// <param name="col"></param>
+        /// <returns>ArrayList indicating the contents of the column at col</returns>
+        /// <remarks></remarks>
         public ArrayList GetColAsArrayList(int col)
         {
             // if col is illegal then will return an empty arraylist
@@ -10566,14 +10566,14 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Will return the indicated column at col as an Arraylist of values. The values will be cleaned
-    /// of specific formatting prior to being returned. Dollar values will have the $() and ,'s removed
-    /// numeric values will be converted represent the numeric string representation. This is useful to
-    /// subsequent insertion into an excel spreadsheet for example.
-    /// </summary>
-    /// <param name="col"></param>
-    /// <returns>ArrayList indicating the contents of the column at col</returns>
-    /// <remarks></remarks>
+        /// Will return the indicated column at col as an Arraylist of values. The values will be cleaned
+        /// of specific formatting prior to being returned. Dollar values will have the $() and ,'s removed
+        /// numeric values will be converted represent the numeric string representation. This is useful to
+        /// subsequent insertion into an excel spreadsheet for example.
+        /// </summary>
+        /// <param name="col"></param>
+        /// <returns>ArrayList indicating the contents of the column at col</returns>
+        /// <remarks></remarks>
         public ArrayList GetColAsCleanedArrayList(int col)
         {
             // if col is illegal then will return an empty arraylist
@@ -10610,11 +10610,11 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Will return the indicated row as an arraylist of values
-    /// </summary>
-    /// <param name="row"></param>
-    /// <returns>Arraylist of values at row</returns>
-    /// <remarks></remarks>
+        /// Will return the indicated row as an arraylist of values
+        /// </summary>
+        /// <param name="row"></param>
+        /// <returns>Arraylist of values at row</returns>
+        /// <remarks></remarks>
         public ArrayList GetRowAsArrayList(int row)
         {
             // if row is illegal then will return an empty arraylist
@@ -10631,11 +10631,11 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Will insert numrows of blank space into the grid at row atrow.
-    /// </summary>
-    /// <param name="atrow"></param>
-    /// <param name="numrows"></param>
-    /// <remarks></remarks>
+        /// Will insert numrows of blank space into the grid at row atrow.
+        /// </summary>
+        /// <param name="atrow"></param>
+        /// <param name="numrows"></param>
+        /// <remarks></remarks>
         public void InsertRowsIntoGridAt(int atrow, int numrows)
         {
             _Painting = true;
@@ -10832,9 +10832,9 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Will close and release all open tearaway windows currentl being maintained by the grid
-    /// </summary>
-    /// <remarks></remarks>
+        /// Will close and release all open tearaway windows currentl being maintained by the grid
+        /// </summary>
+        /// <remarks></remarks>
         public void KillAllTearAwayColumnWindows()
         {
             if (TearAways.Count == 0)
@@ -10850,10 +10850,10 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Will kill any tearaway windows being maintained by the grid for the indicated column it colid
-    /// </summary>
-    /// <param name="colid"></param>
-    /// <remarks></remarks>
+        /// Will kill any tearaway windows being maintained by the grid for the indicated column it colid
+        /// </summary>
+        /// <param name="colid"></param>
+        /// <remarks></remarks>
         public void KillTearAwayColumnWindow(int colid)
         {
             if (colid == -1 | TearAways.Count == 0)
@@ -10871,9 +10871,9 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Will fire the GridHoverleave event if the grid is not maintaining any tearaway windows at the moment
-    /// </summary>
-    /// <remarks></remarks>
+        /// Will fire the GridHoverleave event if the grid is not maintaining any tearaway windows at the moment
+        /// </summary>
+        /// <remarks></remarks>
         public void LowerGridHoverEvents()
         {
             if (!_TearAwayWork)
@@ -10885,15 +10885,15 @@ namespace TAIGridControl2
         // New stuff as of May 31 2005
 
         /// <summary>
-    /// Will populate the grid with the results of a call to the System.Management classes with a properly
-    /// formatted wql query (Windows Query Language) call.
-    /// 
-    /// Example:
-    /// <c>Select * from Win32_Printer</c>
-    /// 
-    /// </summary>
-    /// <param name="wql"></param>
-    /// <remarks></remarks>
+        /// Will populate the grid with the results of a call to the System.Management classes with a properly
+        /// formatted wql query (Windows Query Language) call.
+        /// 
+        /// Example:
+        /// <c>Select * from Win32_Printer</c>
+        /// 
+        /// </summary>
+        /// <param name="wql"></param>
+        /// <remarks></remarks>
         public void PopulateFromWQL(string wql)
         {
             StartedDatabasePopulateOperation?.Invoke(this);
@@ -10994,23 +10994,23 @@ namespace TAIGridControl2
         // All the from Array Calls
 
         /// <summary>
-    /// Will populate the grids contents from an 2 dimensional array of stings <c>arr</c>, employing the supplied parameters
-    /// to control
-    /// <list type="Bullet">
-    /// <item><c>gridfont</c> will employ this font for the cell contents</item>
-    /// <item><c>col</c> will be used as the color for the displays cell items</item>
-    /// <item><c>FirstRowHeader</c> if true will treat the first row in the array as the names for each column header</item>
-    /// <item><c>AutoHeader</c> if true will automatically name each column COLUMN - {ordinal} as it populates the grid</item>
-    /// <item><c>hdr</c> an array of strings that will be used as the column labels if the other column options are False</item>
-    /// </list>
-    /// </summary>
-    /// <param name="arr"></param>
-    /// <param name="gridfont"></param>
-    /// <param name="col"></param>
-    /// <param name="FirstRowHeader"></param>
-    /// <param name="AutoHeader"></param>
-    /// <param name="hdr"></param>
-    /// <remarks></remarks>
+        /// Will populate the grids contents from an 2 dimensional array of stings <c>arr</c>, employing the supplied parameters
+        /// to control
+        /// <list type="Bullet">
+        /// <item><c>gridfont</c> will employ this font for the cell contents</item>
+        /// <item><c>col</c> will be used as the color for the displays cell items</item>
+        /// <item><c>FirstRowHeader</c> if true will treat the first row in the array as the names for each column header</item>
+        /// <item><c>AutoHeader</c> if true will automatically name each column COLUMN - {ordinal} as it populates the grid</item>
+        /// <item><c>hdr</c> an array of strings that will be used as the column labels if the other column options are False</item>
+        /// </list>
+        /// </summary>
+        /// <param name="arr"></param>
+        /// <param name="gridfont"></param>
+        /// <param name="col"></param>
+        /// <param name="FirstRowHeader"></param>
+        /// <param name="AutoHeader"></param>
+        /// <param name="hdr"></param>
+        /// <remarks></remarks>
         private void PopulateGridFromArray(string[,] arr, Font gridfont, Color col, bool FirstRowHeader, bool AutoHeader, string[] hdr)
         {
             int x, y;
@@ -11066,84 +11066,84 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Will populate the grids contents from an 2 dimensional array of stings <c>arr</c>, employing the supplied parameters
-    /// to control
-    /// <list type="Bullet">
-    /// <item><c>gridfont</c> will employ this font for the cell contents</item>
-    /// <item><c>col</c> will be used as the color for the displays cell items</item>
-    /// <item><c>FirstRowHeader</c> if true will treat the first row in the array as the names for each column header
-    /// if its false the columns will be automatically named</item>
-    /// </list>
-    /// </summary>
-    /// <param name="arr"></param>
-    /// <param name="gridfont"></param>
-    /// <param name="col"></param>
-    /// <param name="FirstRowHeader"></param>
-    /// <remarks></remarks>
+        /// Will populate the grids contents from an 2 dimensional array of stings <c>arr</c>, employing the supplied parameters
+        /// to control
+        /// <list type="Bullet">
+        /// <item><c>gridfont</c> will employ this font for the cell contents</item>
+        /// <item><c>col</c> will be used as the color for the displays cell items</item>
+        /// <item><c>FirstRowHeader</c> if true will treat the first row in the array as the names for each column header
+        /// if its false the columns will be automatically named</item>
+        /// </list>
+        /// </summary>
+        /// <param name="arr"></param>
+        /// <param name="gridfont"></param>
+        /// <param name="col"></param>
+        /// <param name="FirstRowHeader"></param>
+        /// <remarks></remarks>
         public void PopulateGridFromArray(string[,] arr, Font gridfont, Color col, bool FirstRowHeader)
         {
             PopulateGridFromArray(arr, gridfont, col, FirstRowHeader, true, _GridHeader);
         }
 
         /// <summary>
-    /// Will populate the grids contents from an 2 dimensional array of stings <c>arr</c>, using the first row of values
-    /// to named each column
-    /// </summary>
-    /// <param name="arr"></param>
-    /// <remarks></remarks>
+        /// Will populate the grids contents from an 2 dimensional array of stings <c>arr</c>, using the first row of values
+        /// to named each column
+        /// </summary>
+        /// <param name="arr"></param>
+        /// <remarks></remarks>
         public void PopulateGridFromArray(string[,] arr)
         {
             PopulateGridFromArray(arr, _DefaultCellFont, _DefaultForeColor, true);
         }
 
         /// <summary>
-    /// Will populate the grids contents from an 2 dimensional array of stings <c>arr</c>, using the first row of values
-    /// to name each column each cell will be displayed the the supplied <c>cellfont</c>
-    /// </summary>
-    /// <param name="arr"></param>
-    /// <param name="CellFont"></param>
-    /// <remarks></remarks>
+        /// Will populate the grids contents from an 2 dimensional array of stings <c>arr</c>, using the first row of values
+        /// to name each column each cell will be displayed the the supplied <c>cellfont</c>
+        /// </summary>
+        /// <param name="arr"></param>
+        /// <param name="CellFont"></param>
+        /// <remarks></remarks>
         public void PopulateGridFromArray(string[,] arr, Font CellFont)
         {
             PopulateGridFromArray(arr, CellFont, _DefaultForeColor, true);
         }
 
         /// <summary>
-    /// Will populate the grids contents from an 2 dimensional array of stings <c>arr</c>, using the first row of values
-    /// to name each column each cell will be displayed the the supplied <c>Forecolor</c>
-    /// </summary>
-    /// <param name="arr"></param>
-    /// <param name="Forecolor"></param>
-    /// <remarks></remarks>
+        /// Will populate the grids contents from an 2 dimensional array of stings <c>arr</c>, using the first row of values
+        /// to name each column each cell will be displayed the the supplied <c>Forecolor</c>
+        /// </summary>
+        /// <param name="arr"></param>
+        /// <param name="Forecolor"></param>
+        /// <remarks></remarks>
         public void PopulateGridFromArray(string[,] arr, Color Forecolor)
         {
             PopulateGridFromArray(arr, _DefaultCellFont, Forecolor, true);
         }
 
         /// <summary>
-    /// Will populate the grids contents from an 2 dimensional array of stings <c>arr</c>, using the first row of values
-    /// to name each column each cell will be displayed the the supplied <c>cellfont</c> and <c>Forecolor</c>
-    /// </summary>
-    /// <param name="arr"></param>
-    /// <param name="Cellfont"></param>
-    /// <param name="ForeColor"></param>
-    /// <remarks></remarks>
+        /// Will populate the grids contents from an 2 dimensional array of stings <c>arr</c>, using the first row of values
+        /// to name each column each cell will be displayed the the supplied <c>cellfont</c> and <c>Forecolor</c>
+        /// </summary>
+        /// <param name="arr"></param>
+        /// <param name="Cellfont"></param>
+        /// <param name="ForeColor"></param>
+        /// <remarks></remarks>
         public void PopulateGridFromArray(string[,] arr, Font Cellfont, Color ForeColor)
         {
             PopulateGridFromArray(arr, Cellfont, ForeColor, true);
         }
 
         /// <summary>
-    /// Will populate the grids contents from an 2 dimensional array of stings <c>arr</c>, using the first row of values
-    /// to name each column each cell will be displayed the the supplied <c>gridfont</c> and <c>col</c> color and
-    /// if <c>FirstRowHeader</c> is true will use the first row to label each column, if not, then the first row will be auto
-    /// labled with Column - {ordinal}
-    /// </summary>
-    /// <param name="arr"></param>
-    /// <param name="gridfont"></param>
-    /// <param name="col"></param>
-    /// <param name="FirstRowHeader"></param>
-    /// <remarks></remarks>
+        /// Will populate the grids contents from an 2 dimensional array of stings <c>arr</c>, using the first row of values
+        /// to name each column each cell will be displayed the the supplied <c>gridfont</c> and <c>col</c> color and
+        /// if <c>FirstRowHeader</c> is true will use the first row to label each column, if not, then the first row will be auto
+        /// labled with Column - {ordinal}
+        /// </summary>
+        /// <param name="arr"></param>
+        /// <param name="gridfont"></param>
+        /// <param name="col"></param>
+        /// <param name="FirstRowHeader"></param>
+        /// <remarks></remarks>
         public void PopulateGridFromArray(int[,] arr, Font gridfont, Color col, bool FirstRowHeader)
         {
             int x, y;
@@ -11193,65 +11193,65 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Will populate the grids contents from an 2 dimensional array of integers <c>arr</c> converted to strings, using the first row of values
-    /// to name each column
-    /// </summary>
-    /// <param name="arr"></param>
-    /// <remarks></remarks>
+        /// Will populate the grids contents from an 2 dimensional array of integers <c>arr</c> converted to strings, using the first row of values
+        /// to name each column
+        /// </summary>
+        /// <param name="arr"></param>
+        /// <remarks></remarks>
         public void PopulateGridFromArray(int[,] arr)
         {
             PopulateGridFromArray(arr, _DefaultCellFont, _DefaultForeColor, true);
         }
 
         /// <summary>
-    /// Will populate the grids contents from an 2 dimensional array of integers <c>arr</c> converted to strings, using the first row of values
-    /// to name each column. <c>Cellfont</c> will be used as the font for each new cell
-    /// </summary>
-    /// <param name="arr"></param>
-    /// <param name="CellFont"></param>
-    /// <remarks></remarks>
+        /// Will populate the grids contents from an 2 dimensional array of integers <c>arr</c> converted to strings, using the first row of values
+        /// to name each column. <c>Cellfont</c> will be used as the font for each new cell
+        /// </summary>
+        /// <param name="arr"></param>
+        /// <param name="CellFont"></param>
+        /// <remarks></remarks>
         public void PopulateGridFromArray(int[,] arr, Font CellFont)
         {
             PopulateGridFromArray(arr, CellFont, _DefaultForeColor, true);
         }
 
         /// <summary>
-    /// Will populate the grids contents from an 2 dimensional array of integers <c>arr</c> converted to strings, using the first row of values
-    /// to name each column. <c>Forecolor</c> will be used as the foreground color for each new cell
-    /// </summary>
-    /// <param name="arr"></param>
-    /// <param name="Forecolor"></param>
-    /// <remarks></remarks>
+        /// Will populate the grids contents from an 2 dimensional array of integers <c>arr</c> converted to strings, using the first row of values
+        /// to name each column. <c>Forecolor</c> will be used as the foreground color for each new cell
+        /// </summary>
+        /// <param name="arr"></param>
+        /// <param name="Forecolor"></param>
+        /// <remarks></remarks>
         public void PopulateGridFromArray(int[,] arr, Color Forecolor)
         {
             PopulateGridFromArray(arr, _DefaultCellFont, Forecolor, true);
         }
 
         /// <summary>
-    /// Will populate the grids contents from an 2 dimensional array of integers <c>arr</c> converted to strings, using the first row of values
-    /// to name each column. <c>Forecolor</c> will be used as the foreground color for each new cell and <c>Cellfont</c> will be used
-    /// for each new cells font
-    /// </summary>
-    /// <param name="arr"></param>
-    /// <param name="Cellfont"></param>
-    /// <param name="ForeColor"></param>
-    /// <remarks></remarks>
+        /// Will populate the grids contents from an 2 dimensional array of integers <c>arr</c> converted to strings, using the first row of values
+        /// to name each column. <c>Forecolor</c> will be used as the foreground color for each new cell and <c>Cellfont</c> will be used
+        /// for each new cells font
+        /// </summary>
+        /// <param name="arr"></param>
+        /// <param name="Cellfont"></param>
+        /// <param name="ForeColor"></param>
+        /// <remarks></remarks>
         public void PopulateGridFromArray(int[,] arr, Font Cellfont, Color ForeColor)
         {
             PopulateGridFromArray(arr, Cellfont, ForeColor, true);
         }
 
         /// <summary>
-    /// Will populate the grids contents from an 2 dimensional array of longs <c>arr</c> converted to strings, using the first row of values
-    /// to name each column. <c>col</c> will be used as the foreground color for each new cell and <c>gridfont</c> will be used if
-    /// <c>FirstRowHeader</c> is true the first row of data in the array will be used to name each column otherwise the columns will be
-    /// named Column - {ordinal}
-    /// </summary>
-    /// <param name="arr"></param>
-    /// <param name="gridfont"></param>
-    /// <param name="col"></param>
-    /// <param name="FirstRowHeader"></param>
-    /// <remarks></remarks>
+        /// Will populate the grids contents from an 2 dimensional array of longs <c>arr</c> converted to strings, using the first row of values
+        /// to name each column. <c>col</c> will be used as the foreground color for each new cell and <c>gridfont</c> will be used if
+        /// <c>FirstRowHeader</c> is true the first row of data in the array will be used to name each column otherwise the columns will be
+        /// named Column - {ordinal}
+        /// </summary>
+        /// <param name="arr"></param>
+        /// <param name="gridfont"></param>
+        /// <param name="col"></param>
+        /// <param name="FirstRowHeader"></param>
+        /// <remarks></remarks>
         public void PopulateGridFromArray(long[,] arr, Font gridfont, Color col, bool FirstRowHeader)
         {
             int x, y;
@@ -11301,65 +11301,65 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Will populate the grids contents from an 2 dimensional array of longs <c>arr</c> converted to strings, using the first row of values
-    /// to name each column
-    /// </summary>
-    /// <param name="arr"></param>
-    /// <remarks></remarks>
+        /// Will populate the grids contents from an 2 dimensional array of longs <c>arr</c> converted to strings, using the first row of values
+        /// to name each column
+        /// </summary>
+        /// <param name="arr"></param>
+        /// <remarks></remarks>
         public void PopulateGridFromArray(long[,] arr)
         {
             PopulateGridFromArray(arr, _DefaultCellFont, _DefaultForeColor, true);
         }
 
         /// <summary>
-    /// Will populate the grids contents from an 2 dimensional array of longs <c>arr</c> converted to strings, using the first row of values
-    /// to name each column. <c>Cellfont</c> will be used as the font for each new cell
-    /// </summary>
-    /// <param name="arr"></param>
-    /// <param name="CellFont"></param>
-    /// <remarks></remarks>
+        /// Will populate the grids contents from an 2 dimensional array of longs <c>arr</c> converted to strings, using the first row of values
+        /// to name each column. <c>Cellfont</c> will be used as the font for each new cell
+        /// </summary>
+        /// <param name="arr"></param>
+        /// <param name="CellFont"></param>
+        /// <remarks></remarks>
         public void PopulateGridFromArray(long[,] arr, Font CellFont)
         {
             PopulateGridFromArray(arr, CellFont, _DefaultForeColor, true);
         }
 
         /// <summary>
-    /// Will populate the grids contents from an 2 dimensional array of longs <c>arr</c> converted to strings, using the first row of values
-    /// to name each column. <c>Forecolor</c> will be used as the foreground color for each new cell
-    /// </summary>
-    /// <param name="arr"></param>
-    /// <param name="Forecolor"></param>
-    /// <remarks></remarks>
+        /// Will populate the grids contents from an 2 dimensional array of longs <c>arr</c> converted to strings, using the first row of values
+        /// to name each column. <c>Forecolor</c> will be used as the foreground color for each new cell
+        /// </summary>
+        /// <param name="arr"></param>
+        /// <param name="Forecolor"></param>
+        /// <remarks></remarks>
         public void PopulateGridFromArray(long[,] arr, Color Forecolor)
         {
             PopulateGridFromArray(arr, _DefaultCellFont, Forecolor, true);
         }
 
         /// <summary>
-    /// Will populate the grids contents from an 2 dimensional array of longs <c>arr</c> converted to strings, using the first row of values
-    /// to name each column. <c>Forecolor</c> will be used as the foreground color for each new cell and <c>Cellfont</c> will be used
-    /// for each new cells font
-    /// </summary>
-    /// <param name="arr"></param>
-    /// <param name="Cellfont"></param>
-    /// <param name="ForeColor"></param>
-    /// <remarks></remarks>
+        /// Will populate the grids contents from an 2 dimensional array of longs <c>arr</c> converted to strings, using the first row of values
+        /// to name each column. <c>Forecolor</c> will be used as the foreground color for each new cell and <c>Cellfont</c> will be used
+        /// for each new cells font
+        /// </summary>
+        /// <param name="arr"></param>
+        /// <param name="Cellfont"></param>
+        /// <param name="ForeColor"></param>
+        /// <remarks></remarks>
         public void PopulateGridFromArray(long[,] arr, Font Cellfont, Color ForeColor)
         {
             PopulateGridFromArray(arr, Cellfont, ForeColor, true);
         }
 
         /// <summary>
-    /// Will populate the grids contents from an 2 dimensional array of doubles <c>arr</c> converted to strings, using the first row of values
-    /// to name each column. <c>col</c> will be used as the foreground color for each new cell and <c>gridfont</c> will be used if
-    /// <c>FirstRowHeader</c> is true the first row of data in the array will be used to name each column otherwise the columns will be
-    /// named Column - {ordinal}
-    /// </summary>
-    /// <param name="arr"></param>
-    /// <param name="gridfont"></param>
-    /// <param name="col"></param>
-    /// <param name="FirstRowHeader"></param>
-    /// <remarks></remarks>
+        /// Will populate the grids contents from an 2 dimensional array of doubles <c>arr</c> converted to strings, using the first row of values
+        /// to name each column. <c>col</c> will be used as the foreground color for each new cell and <c>gridfont</c> will be used if
+        /// <c>FirstRowHeader</c> is true the first row of data in the array will be used to name each column otherwise the columns will be
+        /// named Column - {ordinal}
+        /// </summary>
+        /// <param name="arr"></param>
+        /// <param name="gridfont"></param>
+        /// <param name="col"></param>
+        /// <param name="FirstRowHeader"></param>
+        /// <remarks></remarks>
         public void PopulateGridFromArray(double[,] arr, Font gridfont, Color col, bool FirstRowHeader)
         {
             int x, y;
@@ -11409,49 +11409,49 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Will populate the grids contents from an 2 dimensional array of Doubles <c>arr</c> converted to strings, using the first row of values
-    /// to name each column
-    /// </summary>
-    /// <param name="arr"></param>
-    /// <remarks></remarks>
+        /// Will populate the grids contents from an 2 dimensional array of Doubles <c>arr</c> converted to strings, using the first row of values
+        /// to name each column
+        /// </summary>
+        /// <param name="arr"></param>
+        /// <remarks></remarks>
         public void PopulateGridFromArray(double[,] arr)
         {
             PopulateGridFromArray(arr, _DefaultCellFont, _DefaultForeColor, true);
         }
 
         /// <summary>
-    /// Will populate the grids contents from an 2 dimensional array of Doubles <c>arr</c> converted to strings, using the first row of values
-    /// to name each column. <c>Cellfont</c> will be used as the font for each new cell
-    /// </summary>
-    /// <param name="arr"></param>
-    /// <param name="CellFont"></param>
-    /// <remarks></remarks>
+        /// Will populate the grids contents from an 2 dimensional array of Doubles <c>arr</c> converted to strings, using the first row of values
+        /// to name each column. <c>Cellfont</c> will be used as the font for each new cell
+        /// </summary>
+        /// <param name="arr"></param>
+        /// <param name="CellFont"></param>
+        /// <remarks></remarks>
         public void PopulateGridFromArray(double[,] arr, Font CellFont)
         {
             PopulateGridFromArray(arr, CellFont, _DefaultForeColor, true);
         }
 
         /// <summary>
-    /// Will populate the grids contents from an 2 dimensional array of Doubles <c>arr</c> converted to strings, using the first row of values
-    /// to name each column. <c>Forecolor</c> will be used as the foreground color for each new cell
-    /// </summary>
-    /// <param name="arr"></param>
-    /// <param name="Forecolor"></param>
-    /// <remarks></remarks>
+        /// Will populate the grids contents from an 2 dimensional array of Doubles <c>arr</c> converted to strings, using the first row of values
+        /// to name each column. <c>Forecolor</c> will be used as the foreground color for each new cell
+        /// </summary>
+        /// <param name="arr"></param>
+        /// <param name="Forecolor"></param>
+        /// <remarks></remarks>
         public void PopulateGridFromArray(double[,] arr, Color Forecolor)
         {
             PopulateGridFromArray(arr, _DefaultCellFont, Forecolor, true);
         }
 
         /// <summary>
-    /// Will populate the grids contents from an 2 dimensional array of Doubles <c>arr</c> converted to strings, using the first row of values
-    /// to name each column. <c>Forecolor</c> will be used as the foreground color for each new cell and <c>Cellfont</c> will be used
-    /// for each new cells font
-    /// </summary>
-    /// <param name="arr"></param>
-    /// <param name="Cellfont"></param>
-    /// <param name="ForeColor"></param>
-    /// <remarks></remarks>
+        /// Will populate the grids contents from an 2 dimensional array of Doubles <c>arr</c> converted to strings, using the first row of values
+        /// to name each column. <c>Forecolor</c> will be used as the foreground color for each new cell and <c>Cellfont</c> will be used
+        /// for each new cells font
+        /// </summary>
+        /// <param name="arr"></param>
+        /// <param name="Cellfont"></param>
+        /// <param name="ForeColor"></param>
+        /// <remarks></remarks>
         public void PopulateGridFromArray(double[,] arr, Font Cellfont, Color ForeColor)
         {
             PopulateGridFromArray(arr, Cellfont, ForeColor, true);
@@ -11460,25 +11460,25 @@ namespace TAIGridControl2
 
 
         /// <summary>
-    /// Will allow a database populate of a grid within an already populated grid of data.
-    /// The effect will be to insert data from a carefully crafted query into a rectangular region of an
-    /// existing grid of data.
-    /// <list type="Bullet">
-    /// <item><c>ConnectionString</c> the database connection to be employed</item>
-    /// <item><c>Sql</c> the sql code to be used to retrieve the data to be inserted</item>
-    /// <item><c>AtRow</c> the integer offset row to start populating the data at</item>
-    /// <item><c>newbackcolor</c> the color to be used to setup the background of the cells for the new data</item>
-    /// <item><c>newheadercolor</c> the color to use for the header that will be created from the queried data</item>
-    /// <item><c>ColOffset</c> the column offset from the edge to start populating</item>
-    /// </list>
-    /// </summary>
-    /// <param name="ConnectionString"></param>
-    /// <param name="Sql"></param>
-    /// <param name="Atrow"></param>
-    /// <param name="newbackcolor"></param>
-    /// <param name="newheadercolor"></param>
-    /// <param name="ColOffSet"></param>
-    /// <remarks></remarks>
+        /// Will allow a database populate of a grid within an already populated grid of data.
+        /// The effect will be to insert data from a carefully crafted query into a rectangular region of an
+        /// existing grid of data.
+        /// <list type="Bullet">
+        /// <item><c>ConnectionString</c> the database connection to be employed</item>
+        /// <item><c>Sql</c> the sql code to be used to retrieve the data to be inserted</item>
+        /// <item><c>AtRow</c> the integer offset row to start populating the data at</item>
+        /// <item><c>newbackcolor</c> the color to be used to setup the background of the cells for the new data</item>
+        /// <item><c>newheadercolor</c> the color to use for the header that will be created from the queried data</item>
+        /// <item><c>ColOffset</c> the column offset from the edge to start populating</item>
+        /// </list>
+        /// </summary>
+        /// <param name="ConnectionString"></param>
+        /// <param name="Sql"></param>
+        /// <param name="Atrow"></param>
+        /// <param name="newbackcolor"></param>
+        /// <param name="newheadercolor"></param>
+        /// <param name="ColOffSet"></param>
+        /// <remarks></remarks>
         public void PolulateGridWithDataAt(string ConnectionString, string Sql, int Atrow, Color newbackcolor, Color newheadercolor, int ColOffSet)
         {
             var cn = new System.Data.SqlClient.SqlConnection(ConnectionString);
@@ -11579,7 +11579,7 @@ namespace TAIGridControl2
                                 _grid[Conversions.ToInteger(t), x + ColOffSet] = "{NULL}";
                         }
                         else
-                            // here we need to do some work on items of certain types
+                        // here we need to do some work on items of certain types
                         if ((dbr[x].ToString() ?? "") == "System.Byte[]")
                             _grid[Conversions.ToInteger(t), x + ColOffSet] = ReturnByteArrayAsHexString((byte[])dbr[x]);
                         else
@@ -11628,23 +11628,23 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Will allow a database populate of a grid within an already populated grid of data.
-    /// The effect will be to insert data from a carefully crafted query into a rectangular region of an
-    /// existing grid of data.
-    /// <list type="Bullet">
-    /// <item><c>ConnectionString</c> the database connection to be employed</item>
-    /// <item><c>Sql</c> the sql code to be used to retrieve the data to be inserted</item>
-    /// <item><c>AtRow</c> the integer offset row to start populating the data at</item>
-    /// <item><c>newbackcolor</c> the color to be used to setup the background of the cells for the new data</item>
-    /// <item><c>newheadercolor</c> the color to use for the header that will be created from the queried data</item>
-    /// </list>
-    /// </summary>
-    /// <param name="ConnectionString"></param>
-    /// <param name="Sql"></param>
-    /// <param name="Atrow"></param>
-    /// <param name="newbackcolor"></param>
-    /// <param name="newheadercolor"></param>
-    /// <remarks></remarks>
+        /// Will allow a database populate of a grid within an already populated grid of data.
+        /// The effect will be to insert data from a carefully crafted query into a rectangular region of an
+        /// existing grid of data.
+        /// <list type="Bullet">
+        /// <item><c>ConnectionString</c> the database connection to be employed</item>
+        /// <item><c>Sql</c> the sql code to be used to retrieve the data to be inserted</item>
+        /// <item><c>AtRow</c> the integer offset row to start populating the data at</item>
+        /// <item><c>newbackcolor</c> the color to be used to setup the background of the cells for the new data</item>
+        /// <item><c>newheadercolor</c> the color to use for the header that will be created from the queried data</item>
+        /// </list>
+        /// </summary>
+        /// <param name="ConnectionString"></param>
+        /// <param name="Sql"></param>
+        /// <param name="Atrow"></param>
+        /// <param name="newbackcolor"></param>
+        /// <param name="newheadercolor"></param>
+        /// <remarks></remarks>
         public void PolulateGridWithDataAt(string ConnectionString, string Sql, int Atrow, Color newbackcolor, Color newheadercolor)
         {
             var cn = new System.Data.SqlClient.SqlConnection(ConnectionString);
@@ -11794,44 +11794,44 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Will allow a database populate of a grid within an already populated grid of data.
-    /// The effect will be to insert data from a carefully crafted query into a rectangular region of an
-    /// existing grid of data. this call will omit the header for the inserted result...
-    /// <list type="Bullet">
-    /// <item><c>ConnectionString</c> the database connection to be employed</item>
-    /// <item><c>Sql</c> the sql code to be used to retrieve the data to be inserted</item>
-    /// <item><c>AtRow</c> the integer offset row to start populating the data at</item>
-    /// <item><c>newbackcolor</c> the color to be used to setup the background of the cells for the new data</item>
-    /// </list>
-    /// </summary>
-    /// <param name="ConnectionString"></param>
-    /// <param name="Sql"></param>
-    /// <param name="Atrow"></param>
-    /// <param name="newbackcolor"></param>
-    /// <remarks></remarks>
+        /// Will allow a database populate of a grid within an already populated grid of data.
+        /// The effect will be to insert data from a carefully crafted query into a rectangular region of an
+        /// existing grid of data. this call will omit the header for the inserted result...
+        /// <list type="Bullet">
+        /// <item><c>ConnectionString</c> the database connection to be employed</item>
+        /// <item><c>Sql</c> the sql code to be used to retrieve the data to be inserted</item>
+        /// <item><c>AtRow</c> the integer offset row to start populating the data at</item>
+        /// <item><c>newbackcolor</c> the color to be used to setup the background of the cells for the new data</item>
+        /// </list>
+        /// </summary>
+        /// <param name="ConnectionString"></param>
+        /// <param name="Sql"></param>
+        /// <param name="Atrow"></param>
+        /// <param name="newbackcolor"></param>
+        /// <remarks></remarks>
         public void PolulateGridWithDataAt(string ConnectionString, string Sql, int Atrow, Color newbackcolor)
         {
             PolulateGridWithDataAt(ConnectionString, Sql, Atrow, newbackcolor, true);
         }
 
         /// <summary>
-    /// Will allow a database populate of a grid within an already populated grid of data.
-    /// The effect will be to insert data from a carefully crafted query into a rectangular region of an
-    /// existing grid of data. this call will omit the header for the inserted result...
-    /// <list type="Bullet">
-    /// <item><c>ConnectionString</c> the database connection to be employed</item>
-    /// <item><c>Sql</c> the sql code to be used to retrieve the data to be inserted</item>
-    /// <item><c>AtRow</c> the integer offset row to start populating the data at</item>
-    /// <item><c>newbackcolor</c> the color to be used to setup the background of the cells for the new data</item>
-    /// <item><c>allowDups></c> Will not insert any rows that already exist in the grid if set to false</item>
-    /// </list>
-    /// </summary>
-    /// <param name="ConnectionString"></param>
-    /// <param name="Sql"></param>
-    /// <param name="Atrow"></param>
-    /// <param name="newbackcolor"></param>
-    /// <param name="allowDups"></param>
-    /// <remarks></remarks>
+        /// Will allow a database populate of a grid within an already populated grid of data.
+        /// The effect will be to insert data from a carefully crafted query into a rectangular region of an
+        /// existing grid of data. this call will omit the header for the inserted result...
+        /// <list type="Bullet">
+        /// <item><c>ConnectionString</c> the database connection to be employed</item>
+        /// <item><c>Sql</c> the sql code to be used to retrieve the data to be inserted</item>
+        /// <item><c>AtRow</c> the integer offset row to start populating the data at</item>
+        /// <item><c>newbackcolor</c> the color to be used to setup the background of the cells for the new data</item>
+        /// <item><c>allowDups></c> Will not insert any rows that already exist in the grid if set to false</item>
+        /// </list>
+        /// </summary>
+        /// <param name="ConnectionString"></param>
+        /// <param name="Sql"></param>
+        /// <param name="Atrow"></param>
+        /// <param name="newbackcolor"></param>
+        /// <param name="allowDups"></param>
+        /// <remarks></remarks>
         public void PolulateGridWithDataAt(string ConnectionString, string Sql, int Atrow, Color newbackcolor, bool allowDups)
         {
             var cn = new System.Data.SqlClient.SqlConnection(ConnectionString);
@@ -12117,13 +12117,13 @@ namespace TAIGridControl2
         // SQL Populate Data Calls
 
         /// <summary>
-    /// Will take the supplied SQLDataReader <c>SQLDR</c> and will automatically populate the grid with its contents using
-    /// <c>col</c> for the foreground color and <c>gridfont</c> for the cells font style
-    /// </summary>
-    /// <param name="SQLDR"></param>
-    /// <param name="col"></param>
-    /// <param name="gridfont"></param>
-    /// <remarks></remarks>
+        /// Will take the supplied SQLDataReader <c>SQLDR</c> and will automatically populate the grid with its contents using
+        /// <c>col</c> for the foreground color and <c>gridfont</c> for the cells font style
+        /// </summary>
+        /// <param name="SQLDR"></param>
+        /// <param name="col"></param>
+        /// <param name="gridfont"></param>
+        /// <remarks></remarks>
         public void PopulateGridWithData(ref System.Data.SqlClient.SqlDataReader SQLDR, Color col, Font gridfont)
         {
             int x, numrows;
@@ -12167,7 +12167,7 @@ namespace TAIGridControl2
                         if ((SQLDR[x].ToString() ?? "") == "System.Byte[]")
                             _grid[numrows - 1, x] = ReturnByteArrayAsHexString((byte[])SQLDR[x]);
                         else
-                            // Console.WriteLine(SQLDR.Item(x).GetType.ToString())
+                        // Console.WriteLine(SQLDR.Item(x).GetType.ToString())
                         if ((SQLDR[x].GetType().ToString().ToUpper() ?? "") == "SYSTEM.DATETIME")
                         {
                             if (_ShowDatesWithTime)
@@ -12212,49 +12212,49 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Will take the supplied SQLDataReader <c>SQLDR</c> and will automatically populate the grid with its contents using
-    /// the grids default coloring and fonts for the cells content (settable using the propertries of the grid itself
-    /// </summary>
-    /// <param name="SQLDR"></param>
-    /// <remarks></remarks>
+        /// Will take the supplied SQLDataReader <c>SQLDR</c> and will automatically populate the grid with its contents using
+        /// the grids default coloring and fonts for the cells content (settable using the propertries of the grid itself
+        /// </summary>
+        /// <param name="SQLDR"></param>
+        /// <remarks></remarks>
         public void PopulateGridWithData(ref System.Data.SqlClient.SqlDataReader SQLDR)
         {
             PopulateGridWithData(ref SQLDR, _DefaultForeColor, _DefaultCellFont);
         }
 
         /// <summary>
-    /// Will take the supplied SQLDataReader <c>SQLDR</c> and will automatically populate the grid with its contents using
-    /// <c>ForeColor</c> for the foreground color and <c>gridfont</c> for the cells font style
-    /// </summary>
-    /// <param name="SQLDR"></param>
-    /// <param name="ForeColor"></param>
-    /// <remarks></remarks>
+        /// Will take the supplied SQLDataReader <c>SQLDR</c> and will automatically populate the grid with its contents using
+        /// <c>ForeColor</c> for the foreground color and <c>gridfont</c> for the cells font style
+        /// </summary>
+        /// <param name="SQLDR"></param>
+        /// <param name="ForeColor"></param>
+        /// <remarks></remarks>
         public void PopulateGridWithData(ref System.Data.SqlClient.SqlDataReader SQLDR, Color ForeColor)
         {
             PopulateGridWithData(ref SQLDR, ForeColor, _DefaultCellFont);
         }
 
         /// <summary>
-    /// Will take the supplied SQLDataReader <c>SQLDR</c> and will automatically populate the grid with its contents using
-    /// <c>GridFont</c> for the cells font style
-    /// </summary>
-    /// <param name="SQLDR"></param>
-    /// <param name="GridFont"></param>
-    /// <remarks></remarks>
+        /// Will take the supplied SQLDataReader <c>SQLDR</c> and will automatically populate the grid with its contents using
+        /// <c>GridFont</c> for the cells font style
+        /// </summary>
+        /// <param name="SQLDR"></param>
+        /// <param name="GridFont"></param>
+        /// <remarks></remarks>
         public void PopulateGridWithData(ref System.Data.SqlClient.SqlDataReader SQLDR, Font GridFont)
         {
             PopulateGridWithData(ref SQLDR, _DefaultForeColor, GridFont);
         }
 
         /// <summary>
-    /// Will take the supplied <c>ConnectionString</c> and <c>Sql</c> code and query the database gathering the results and populaating the grid
-    /// with those results. <c>GridFont</c> and <c>col</c> be used to generate the font and the foreground color for the cell contents
-    /// </summary>
-    /// <param name="ConnectionString"></param>
-    /// <param name="Sql"></param>
-    /// <param name="Gridfont"></param>
-    /// <param name="col"></param>
-    /// <remarks></remarks>
+        /// Will take the supplied <c>ConnectionString</c> and <c>Sql</c> code and query the database gathering the results and populaating the grid
+        /// with those results. <c>GridFont</c> and <c>col</c> be used to generate the font and the foreground color for the cell contents
+        /// </summary>
+        /// <param name="ConnectionString"></param>
+        /// <param name="Sql"></param>
+        /// <param name="Gridfont"></param>
+        /// <param name="col"></param>
+        /// <remarks></remarks>
         public void PopulateGridWithData(string ConnectionString, string Sql, Font Gridfont, Color col)
         {
             System.Data.SqlClient.SqlCommand dbc;
@@ -12415,132 +12415,132 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Will take the supplied <c>ConnectionString</c> and <c>Sql</c> code and query the database gathering the results and populaating the grid
-    /// the grids defauls will be used for the cells fonts and coloring characteristics
-    /// </summary>
-    /// <param name="ConnectionString"></param>
-    /// <param name="Sql"></param>
-    /// <remarks></remarks>
+        /// Will take the supplied <c>ConnectionString</c> and <c>Sql</c> code and query the database gathering the results and populaating the grid
+        /// the grids defauls will be used for the cells fonts and coloring characteristics
+        /// </summary>
+        /// <param name="ConnectionString"></param>
+        /// <param name="Sql"></param>
+        /// <remarks></remarks>
         public void PopulateGridWithData(string ConnectionString, string Sql)
         {
             PopulateGridWithData(ConnectionString, Sql, _DefaultCellFont, _DefaultForeColor);
         }
 
         /// <summary>
-    /// Will take the supplied <c>ConnectionString</c> and <c>Sql</c> code and query the database gathering the results and populaating the grid
-    /// the <c>col</c> parameter wwill be used for the cell foreground coloring
-    /// the grids defauls will be used for the cells fonts and other coloring characteristics
-    /// </summary>
-    /// <param name="ConnectionString"></param>
-    /// <param name="Sql"></param>
-    /// <param name="Col"></param>
-    /// <remarks></remarks>
+        /// Will take the supplied <c>ConnectionString</c> and <c>Sql</c> code and query the database gathering the results and populaating the grid
+        /// the <c>col</c> parameter wwill be used for the cell foreground coloring
+        /// the grids defauls will be used for the cells fonts and other coloring characteristics
+        /// </summary>
+        /// <param name="ConnectionString"></param>
+        /// <param name="Sql"></param>
+        /// <param name="Col"></param>
+        /// <remarks></remarks>
         public void PopulateGridWithData(string ConnectionString, string Sql, Color Col)
         {
             PopulateGridWithData(ConnectionString, Sql, _DefaultCellFont, Col);
         }
 
         /// <summary>
-    /// Will take the supplied <c>ConnectionString</c> and <c>Sql</c> code and query the database gathering the results and populaating the grid
-    /// the <c>fnt</c> parameter wwill be used for the cell fonts
-    /// the grids defauls will be used for the cells other coloring characteristics
-    /// </summary>
-    /// <param name="ConnectionString"></param>
-    /// <param name="Sql"></param>
-    /// <param name="fnt"></param>
-    /// <remarks></remarks>
+        /// Will take the supplied <c>ConnectionString</c> and <c>Sql</c> code and query the database gathering the results and populaating the grid
+        /// the <c>fnt</c> parameter wwill be used for the cell fonts
+        /// the grids defauls will be used for the cells other coloring characteristics
+        /// </summary>
+        /// <param name="ConnectionString"></param>
+        /// <param name="Sql"></param>
+        /// <param name="fnt"></param>
+        /// <remarks></remarks>
         public void PopulateGridWithData(string ConnectionString, string Sql, Font fnt)
         {
             PopulateGridWithData(ConnectionString, Sql, fnt, _DefaultForeColor);
         }
 
         /// <summary>
-    /// A synonym for the PopulateGridWithData method of the same signature
-    /// </summary>
-    /// <param name="SQLDR"></param>
-    /// <param name="col"></param>
-    /// <param name="gridfont"></param>
-    /// <remarks></remarks>
+        /// A synonym for the PopulateGridWithData method of the same signature
+        /// </summary>
+        /// <param name="SQLDR"></param>
+        /// <param name="col"></param>
+        /// <param name="gridfont"></param>
+        /// <remarks></remarks>
         public void SQLPopulateGridWithData(ref System.Data.SqlClient.SqlDataReader SQLDR, Color col, Font gridfont)
         {
             PopulateGridWithData(ref SQLDR, col, gridfont);
         }
 
         /// <summary>
-    /// A synonym for the PopulateGridWithData method of the same signature
-    /// </summary>
-    /// <param name="SQLDR"></param>
-    /// <remarks></remarks>
+        /// A synonym for the PopulateGridWithData method of the same signature
+        /// </summary>
+        /// <param name="SQLDR"></param>
+        /// <remarks></remarks>
         public void SQLPopulateGridWithData(ref System.Data.SqlClient.SqlDataReader SQLDR)
         {
             PopulateGridWithData(ref SQLDR, _DefaultForeColor, _DefaultCellFont);
         }
 
         /// <summary>
-    /// A synonym for the PopulateGridWithData method of the same signature
-    /// </summary>
-    /// <param name="SQLDR"></param>
-    /// <param name="ForeColor"></param>
-    /// <remarks></remarks>
+        /// A synonym for the PopulateGridWithData method of the same signature
+        /// </summary>
+        /// <param name="SQLDR"></param>
+        /// <param name="ForeColor"></param>
+        /// <remarks></remarks>
         public void SQLPopulateGridWithData(ref System.Data.SqlClient.SqlDataReader SQLDR, Color ForeColor)
         {
             PopulateGridWithData(ref SQLDR, ForeColor, _DefaultCellFont);
         }
 
         /// <summary>
-    /// A synonym for the PopulateGridWithData method of the same signature
-    /// </summary>
-    /// <param name="SQLDR"></param>
-    /// <param name="GridFont"></param>
-    /// <remarks></remarks>
+        /// A synonym for the PopulateGridWithData method of the same signature
+        /// </summary>
+        /// <param name="SQLDR"></param>
+        /// <param name="GridFont"></param>
+        /// <remarks></remarks>
         public void SQLPopulateGridWithData(ref System.Data.SqlClient.SqlDataReader SQLDR, Font GridFont)
         {
             PopulateGridWithData(ref SQLDR, _DefaultForeColor, GridFont);
         }
 
         /// <summary>
-    /// A synonym for the PopulateGridWithData method of the same signature
-    /// </summary>
-    /// <param name="ConnectionString"></param>
-    /// <param name="Sql"></param>
-    /// <param name="Gridfont"></param>
-    /// <param name="col"></param>
-    /// <remarks></remarks>
+        /// A synonym for the PopulateGridWithData method of the same signature
+        /// </summary>
+        /// <param name="ConnectionString"></param>
+        /// <param name="Sql"></param>
+        /// <param name="Gridfont"></param>
+        /// <param name="col"></param>
+        /// <remarks></remarks>
         public void SQLPopulateGridWithData(string ConnectionString, string Sql, Font Gridfont, Color col)
         {
             PopulateGridWithData(ConnectionString, Sql, Gridfont, col);
         }
 
         /// <summary>
-    /// A synonym for the PopulateGridWithData method of the same signature
-    /// </summary>
-    /// <param name="ConnectionString"></param>
-    /// <param name="Sql"></param>
-    /// <remarks></remarks>
+        /// A synonym for the PopulateGridWithData method of the same signature
+        /// </summary>
+        /// <param name="ConnectionString"></param>
+        /// <param name="Sql"></param>
+        /// <remarks></remarks>
         public void SQLPopulateGridWithData(string ConnectionString, string Sql)
         {
             PopulateGridWithData(ConnectionString, Sql, _DefaultCellFont, _DefaultForeColor);
         }
 
         /// <summary>
-    /// A synonym for the PopulateGridWithData method of the same signature
-    /// </summary>
-    /// <param name="ConnectionString"></param>
-    /// <param name="Sql"></param>
-    /// <param name="Col"></param>
-    /// <remarks></remarks>
+        /// A synonym for the PopulateGridWithData method of the same signature
+        /// </summary>
+        /// <param name="ConnectionString"></param>
+        /// <param name="Sql"></param>
+        /// <param name="Col"></param>
+        /// <remarks></remarks>
         public void SQLPopulateGridWithData(string ConnectionString, string Sql, Color Col)
         {
             PopulateGridWithData(ConnectionString, Sql, _DefaultCellFont, Col);
         }
 
         /// <summary>
-    /// A synonym for the PopulateGridWithData method of the same signature
-    /// </summary>
-    /// <param name="ConnectionString"></param>
-    /// <param name="Sql"></param>
-    /// <param name="fnt"></param>
-    /// <remarks></remarks>
+        /// A synonym for the PopulateGridWithData method of the same signature
+        /// </summary>
+        /// <param name="ConnectionString"></param>
+        /// <param name="Sql"></param>
+        /// <param name="fnt"></param>
+        /// <remarks></remarks>
         public void SQLPopulateGridWithData(string ConnectionString, string Sql, Font fnt)
         {
             PopulateGridWithData(ConnectionString, Sql, fnt, _DefaultForeColor);
@@ -12551,12 +12551,12 @@ namespace TAIGridControl2
         // OLE Populate Data Calls
 
         /// <summary>
-    /// As the PopulateGridWithData method of the same signature but uses an OleDbDataReader <c>OLEDR</c> instead
-    /// </summary>
-    /// <param name="OLEDR"></param>
-    /// <param name="col"></param>
-    /// <param name="gridfont"></param>
-    /// <remarks></remarks>
+        /// As the PopulateGridWithData method of the same signature but uses an OleDbDataReader <c>OLEDR</c> instead
+        /// </summary>
+        /// <param name="OLEDR"></param>
+        /// <param name="col"></param>
+        /// <param name="gridfont"></param>
+        /// <remarks></remarks>
         public void OLEPopulateGridWithData(ref System.Data.OleDb.OleDbDataReader OLEDR, Color col, Font gridfont)
         {
             int x, numrows;
@@ -12640,46 +12640,46 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// As the PopulateGridWithData method of the same signature but uses an OleDbDataReader <c>OLEDR</c> instead
-    /// </summary>
-    /// <param name="OLEDR"></param>
-    /// <remarks></remarks>
+        /// As the PopulateGridWithData method of the same signature but uses an OleDbDataReader <c>OLEDR</c> instead
+        /// </summary>
+        /// <param name="OLEDR"></param>
+        /// <remarks></remarks>
         public void OLEPopulateGridWithData(ref System.Data.OleDb.OleDbDataReader OLEDR)
         {
             OLEPopulateGridWithData(ref OLEDR, _DefaultForeColor, _DefaultCellFont);
         }
 
         /// <summary>
-    /// As the PopulateGridWithData method of the same signature but uses an OleDbDataReader <c>OLEDR</c> instead
-    /// </summary>
-    /// <param name="OLEDR"></param>
-    /// <param name="ForeColor"></param>
-    /// <remarks></remarks>
+        /// As the PopulateGridWithData method of the same signature but uses an OleDbDataReader <c>OLEDR</c> instead
+        /// </summary>
+        /// <param name="OLEDR"></param>
+        /// <param name="ForeColor"></param>
+        /// <remarks></remarks>
         public void OLEPopulateGridWithData(ref System.Data.OleDb.OleDbDataReader OLEDR, Color ForeColor)
         {
             OLEPopulateGridWithData(ref OLEDR, ForeColor, _DefaultCellFont);
         }
 
         /// <summary>
-    /// As the PopulateGridWithData method of the same signature but uses an OleDbDataReader <c>OLEDR</c> instead
-    /// </summary>
-    /// <param name="OLEDR"></param>
-    /// <param name="GridFont"></param>
-    /// <remarks></remarks>
+        /// As the PopulateGridWithData method of the same signature but uses an OleDbDataReader <c>OLEDR</c> instead
+        /// </summary>
+        /// <param name="OLEDR"></param>
+        /// <param name="GridFont"></param>
+        /// <remarks></remarks>
         public void OLEPopulateGridWithData(ref System.Data.OleDb.OleDbDataReader OLEDR, Font GridFont)
         {
             OLEPopulateGridWithData(ref OLEDR, _DefaultForeColor, GridFont);
         }
 
         /// <summary>
-    /// As the PopulateGridWithData method of the same signature but <c>ConnectionString</c> parameter must be in the correct
-    /// syntax for OLE data access
-    /// </summary>
-    /// <param name="ConnectionString"></param>
-    /// <param name="Sql"></param>
-    /// <param name="Gridfont"></param>
-    /// <param name="col"></param>
-    /// <remarks></remarks>
+        /// As the PopulateGridWithData method of the same signature but <c>ConnectionString</c> parameter must be in the correct
+        /// syntax for OLE data access
+        /// </summary>
+        /// <param name="ConnectionString"></param>
+        /// <param name="Sql"></param>
+        /// <param name="Gridfont"></param>
+        /// <param name="col"></param>
+        /// <remarks></remarks>
         public void OLEPopulateGridWithData(string ConnectionString, string Sql, Font Gridfont, Color col)
         {
             var cn = new System.Data.OleDb.OleDbConnection(ConnectionString);
@@ -12835,38 +12835,38 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// As the PopulateGridWithData method of the same signature but <c>ConnectionString</c> parameter must be in the correct
-    /// syntax for OLE data access
-    /// </summary>
-    /// <param name="ConnectionString"></param>
-    /// <param name="Sql"></param>
-    /// <remarks></remarks>
+        /// As the PopulateGridWithData method of the same signature but <c>ConnectionString</c> parameter must be in the correct
+        /// syntax for OLE data access
+        /// </summary>
+        /// <param name="ConnectionString"></param>
+        /// <param name="Sql"></param>
+        /// <remarks></remarks>
         public void OLEPopulateGridWithData(string ConnectionString, string Sql)
         {
             OLEPopulateGridWithData(ConnectionString, Sql, _DefaultCellFont, _DefaultForeColor);
         }
 
         /// <summary>
-    /// As the PopulateGridWithData method of the same signature but <c>ConnectionString</c> parameter must be in the correct
-    /// syntax for OLE data access
-    /// </summary>
-    /// <param name="ConnectionString"></param>
-    /// <param name="Sql"></param>
-    /// <param name="Col"></param>
-    /// <remarks></remarks>
+        /// As the PopulateGridWithData method of the same signature but <c>ConnectionString</c> parameter must be in the correct
+        /// syntax for OLE data access
+        /// </summary>
+        /// <param name="ConnectionString"></param>
+        /// <param name="Sql"></param>
+        /// <param name="Col"></param>
+        /// <remarks></remarks>
         public void OLEPopulateGridWithData(string ConnectionString, string Sql, Color Col)
         {
             OLEPopulateGridWithData(ConnectionString, Sql, _DefaultCellFont, Col);
         }
 
         /// <summary>
-    /// As the PopulateGridWithData method of the same signature but <c>ConnectionString</c> parameter must be in the correct
-    /// syntax for OLE data access
-    /// </summary>
-    /// <param name="ConnectionString"></param>
-    /// <param name="Sql"></param>
-    /// <param name="fnt"></param>
-    /// <remarks></remarks>
+        /// As the PopulateGridWithData method of the same signature but <c>ConnectionString</c> parameter must be in the correct
+        /// syntax for OLE data access
+        /// </summary>
+        /// <param name="ConnectionString"></param>
+        /// <param name="Sql"></param>
+        /// <param name="fnt"></param>
+        /// <remarks></remarks>
         public void OLEPopulateGridWithData(string ConnectionString, string Sql, Font fnt)
         {
             OLEPopulateGridWithData(ConnectionString, Sql, fnt, _DefaultForeColor);
@@ -12878,12 +12878,12 @@ namespace TAIGridControl2
         // ODBC Populate Data Calls
 
         /// <summary>
-    /// As the PopulateGridWithData method of the same signature but uses an OdbcDataReader <c>OdbcDR</c> instead
-    /// </summary>
-    /// <param name="OdbcDR"></param>
-    /// <param name="col"></param>
-    /// <param name="gridfont"></param>
-    /// <remarks></remarks>
+        /// As the PopulateGridWithData method of the same signature but uses an OdbcDataReader <c>OdbcDR</c> instead
+        /// </summary>
+        /// <param name="OdbcDR"></param>
+        /// <param name="col"></param>
+        /// <param name="gridfont"></param>
+        /// <remarks></remarks>
         public void ODBCPopulateGridWithData(ref System.Data.Odbc.OdbcDataReader OdbcDR, Color col, Font gridfont)
         {
             int x, numrows;
@@ -12967,46 +12967,46 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// As the PopulateGridWithData method of the same signature but uses an OdbcDataReader <c>OdbcDR</c> instead
-    /// </summary>
-    /// <param name="OdbcDR"></param>
-    /// <remarks></remarks>
+        /// As the PopulateGridWithData method of the same signature but uses an OdbcDataReader <c>OdbcDR</c> instead
+        /// </summary>
+        /// <param name="OdbcDR"></param>
+        /// <remarks></remarks>
         public void ODBCPopulateGridWithData(ref System.Data.Odbc.OdbcDataReader OdbcDR)
         {
             ODBCPopulateGridWithData(ref OdbcDR, _DefaultForeColor, _DefaultCellFont);
         }
 
         /// <summary>
-    /// As the PopulateGridWithData method of the same signature but uses an OdbcDataReader <c>OdbcDR</c> instead
-    /// </summary>
-    /// <param name="OdbcDR"></param>
-    /// <param name="ForeColor"></param>
-    /// <remarks></remarks>
+        /// As the PopulateGridWithData method of the same signature but uses an OdbcDataReader <c>OdbcDR</c> instead
+        /// </summary>
+        /// <param name="OdbcDR"></param>
+        /// <param name="ForeColor"></param>
+        /// <remarks></remarks>
         public void ODBCPopulateGridWithData(ref System.Data.Odbc.OdbcDataReader OdbcDR, Color ForeColor)
         {
             ODBCPopulateGridWithData(ref OdbcDR, ForeColor, _DefaultCellFont);
         }
 
         /// <summary>
-    /// As the PopulateGridWithData method of the same signature but uses an OdbcDataReader <c>OdbcDR</c> instead
-    /// </summary>
-    /// <param name="OdbcDR"></param>
-    /// <param name="GridFont"></param>
-    /// <remarks></remarks>
+        /// As the PopulateGridWithData method of the same signature but uses an OdbcDataReader <c>OdbcDR</c> instead
+        /// </summary>
+        /// <param name="OdbcDR"></param>
+        /// <param name="GridFont"></param>
+        /// <remarks></remarks>
         public void ODBCPopulateGridWithData(ref System.Data.Odbc.OdbcDataReader OdbcDR, Font GridFont)
         {
             ODBCPopulateGridWithData(ref OdbcDR, _DefaultForeColor, GridFont);
         }
 
         /// <summary>
-    /// As the PopulateGridWithData method of the same signature but <c>ConnectionString</c> parameter must be in the correct
-    /// syntax for ODBC data access
-    /// </summary>
-    /// <param name="ConnectionString"></param>
-    /// <param name="Sql"></param>
-    /// <param name="Gridfont"></param>
-    /// <param name="col"></param>
-    /// <remarks></remarks>
+        /// As the PopulateGridWithData method of the same signature but <c>ConnectionString</c> parameter must be in the correct
+        /// syntax for ODBC data access
+        /// </summary>
+        /// <param name="ConnectionString"></param>
+        /// <param name="Sql"></param>
+        /// <param name="Gridfont"></param>
+        /// <param name="col"></param>
+        /// <remarks></remarks>
         public void ODBCPopulateGridWithData(string ConnectionString, string Sql, Font Gridfont, Color col)
         {
             var cn = new System.Data.Odbc.OdbcConnection(ConnectionString);
@@ -13161,38 +13161,38 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// As the PopulateGridWithData method of the same signature but <c>ConnectionString</c> parameter must be in the correct
-    /// syntax for ODBC data access
-    /// </summary>
-    /// <param name="ConnectionString"></param>
-    /// <param name="Sql"></param>
-    /// <remarks></remarks>
+        /// As the PopulateGridWithData method of the same signature but <c>ConnectionString</c> parameter must be in the correct
+        /// syntax for ODBC data access
+        /// </summary>
+        /// <param name="ConnectionString"></param>
+        /// <param name="Sql"></param>
+        /// <remarks></remarks>
         public void ODBCPopulateGridWithData(string ConnectionString, string Sql)
         {
             ODBCPopulateGridWithData(ConnectionString, Sql, _DefaultCellFont, _DefaultForeColor);
         }
 
         /// <summary>
-    /// As the PopulateGridWithData method of the same signature but <c>ConnectionString</c> parameter must be in the correct
-    /// syntax for ODBC data access
-    /// </summary>
-    /// <param name="ConnectionString"></param>
-    /// <param name="Sql"></param>
-    /// <param name="Col"></param>
-    /// <remarks></remarks>
+        /// As the PopulateGridWithData method of the same signature but <c>ConnectionString</c> parameter must be in the correct
+        /// syntax for ODBC data access
+        /// </summary>
+        /// <param name="ConnectionString"></param>
+        /// <param name="Sql"></param>
+        /// <param name="Col"></param>
+        /// <remarks></remarks>
         public void ODBCPopulateGridWithData(string ConnectionString, string Sql, Color Col)
         {
             ODBCPopulateGridWithData(ConnectionString, Sql, _DefaultCellFont, Col);
         }
 
         /// <summary>
-    /// As the PopulateGridWithData method of the same signature but <c>ConnectionString</c> parameter must be in the correct
-    /// syntax for ODBC data access
-    /// </summary>
-    /// <param name="ConnectionString"></param>
-    /// <param name="Sql"></param>
-    /// <param name="fnt"></param>
-    /// <remarks></remarks>
+        /// As the PopulateGridWithData method of the same signature but <c>ConnectionString</c> parameter must be in the correct
+        /// syntax for ODBC data access
+        /// </summary>
+        /// <param name="ConnectionString"></param>
+        /// <param name="Sql"></param>
+        /// <param name="fnt"></param>
+        /// <remarks></remarks>
         public void ODBCPopulateGridWithData(string ConnectionString, string Sql, Font fnt)
         {
             ODBCPopulateGridWithData(ConnectionString, Sql, fnt, _DefaultForeColor);
@@ -13203,60 +13203,60 @@ namespace TAIGridControl2
         // webservice populate calls
 
         /// <summary>
-    /// The Webservice set of populators actually are forms of populators from formatted string similar to populat from text files
-    /// The difference being that defines webservices were returning these formatted strings of text. Back before the days of being
-    /// able to send complex data types across the HTTP wire. Carefully crafted webservices could spit out their results as streams
-    /// of delimited text. These methods would then parse that text and rehydrate the results into the grid for viuual presentation.
-    /// the TAIClient Time Tracking tool employes this technique. The various parameters are self explanitory
-    /// </summary>
-    /// <param name="WebServiceResults"></param>
-    /// <remarks></remarks>
+        /// The Webservice set of populators actually are forms of populators from formatted string similar to populat from text files
+        /// The difference being that defines webservices were returning these formatted strings of text. Back before the days of being
+        /// able to send complex data types across the HTTP wire. Carefully crafted webservices could spit out their results as streams
+        /// of delimited text. These methods would then parse that text and rehydrate the results into the grid for viuual presentation.
+        /// the TAIClient Time Tracking tool employes this technique. The various parameters are self explanitory
+        /// </summary>
+        /// <param name="WebServiceResults"></param>
+        /// <remarks></remarks>
         public void PopulateViaWebServiceString(string WebServiceResults)
         {
             PopulateViaWebServiceString(WebServiceResults, _DefaultForeColor, _DefaultCellFont);
         }
 
         /// <summary>
-    /// The Webservice set of populators actually are forms of populators from formatted string similar to populat from text files
-    /// The difference being that defines webservices were returning these formatted strings of text. Back before the days of being
-    /// able to send complex data types across the HTTP wire. Carefully crafted webservices could spit out their results as streams
-    /// of delimited text. These methods would then parse that text and rehydrate the results into the grid for viuual presentation.
-    /// the TAIClient Time Tracking tool employes this technique. The various parameters are self explanitory
-    /// </summary>
-    /// <param name="WebServiceResults"></param>
-    /// <param name="col"></param>
-    /// <remarks></remarks>
+        /// The Webservice set of populators actually are forms of populators from formatted string similar to populat from text files
+        /// The difference being that defines webservices were returning these formatted strings of text. Back before the days of being
+        /// able to send complex data types across the HTTP wire. Carefully crafted webservices could spit out their results as streams
+        /// of delimited text. These methods would then parse that text and rehydrate the results into the grid for viuual presentation.
+        /// the TAIClient Time Tracking tool employes this technique. The various parameters are self explanitory
+        /// </summary>
+        /// <param name="WebServiceResults"></param>
+        /// <param name="col"></param>
+        /// <remarks></remarks>
         public void PopulateViaWebServiceString(string WebServiceResults, Color col)
         {
             PopulateViaWebServiceString(WebServiceResults, col, _DefaultCellFont);
         }
 
         /// <summary>
-    /// The Webservice set of populators actually are forms of populators from formatted string similar to populat from text files
-    /// The difference being that defines webservices were returning these formatted strings of text. Back before the days of being
-    /// able to send complex data types across the HTTP wire. Carefully crafted webservices could spit out their results as streams
-    /// of delimited text. These methods would then parse that text and rehydrate the results into the grid for viuual presentation.
-    /// the TAIClient Time Tracking tool employes this technique. The various parameters are self explanitory
-    /// </summary>
-    /// <param name="WebServiceResults"></param>
-    /// <param name="fnt"></param>
-    /// <remarks></remarks>
+        /// The Webservice set of populators actually are forms of populators from formatted string similar to populat from text files
+        /// The difference being that defines webservices were returning these formatted strings of text. Back before the days of being
+        /// able to send complex data types across the HTTP wire. Carefully crafted webservices could spit out their results as streams
+        /// of delimited text. These methods would then parse that text and rehydrate the results into the grid for viuual presentation.
+        /// the TAIClient Time Tracking tool employes this technique. The various parameters are self explanitory
+        /// </summary>
+        /// <param name="WebServiceResults"></param>
+        /// <param name="fnt"></param>
+        /// <remarks></remarks>
         public void PopulateViaWebServiceString(string WebServiceResults, Font fnt)
         {
             PopulateViaWebServiceString(WebServiceResults, _DefaultForeColor, fnt);
         }
 
         /// <summary>
-    /// The Webservice set of populators actually are forms of populators from formatted string similar to populat from text files
-    /// The difference being that defines webservices were returning these formatted strings of text. Back before the days of being
-    /// able to send complex data types across the HTTP wire. Carefully crafted webservices could spit out their results as streams
-    /// of delimited text. These methods would then parse that text and rehydrate the results into the grid for viuual presentation.
-    /// the TAIClient Time Tracking tool employes this technique. The various parameters are self explanitory
-    /// </summary>
-    /// <param name="WebServiceResults"></param>
-    /// <param name="col"></param>
-    /// <param name="fnt"></param>
-    /// <remarks></remarks>
+        /// The Webservice set of populators actually are forms of populators from formatted string similar to populat from text files
+        /// The difference being that defines webservices were returning these formatted strings of text. Back before the days of being
+        /// able to send complex data types across the HTTP wire. Carefully crafted webservices could spit out their results as streams
+        /// of delimited text. These methods would then parse that text and rehydrate the results into the grid for viuual presentation.
+        /// the TAIClient Time Tracking tool employes this technique. The various parameters are self explanitory
+        /// </summary>
+        /// <param name="WebServiceResults"></param>
+        /// <param name="col"></param>
+        /// <param name="fnt"></param>
+        /// <remarks></remarks>
         public void PopulateViaWebServiceString(string WebServiceResults, Color col, Font fnt)
         {
             var argarray = WebServiceResults.Split('|');
@@ -13306,64 +13306,64 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// The Webservice set of populators actually are forms of populators from formatted string similar to populat from text files
-    /// The difference being that defines webservices were returning these formatted strings of text. Back before the days of being
-    /// able to send complex data types across the HTTP wire. Carefully crafted webservices could spit out their results as streams
-    /// of delimited text. These methods would then parse that text and rehydrate the results into the grid for viuual presentation.
-    /// the TAIClient Time Tracking tool employes this technique. The various parameters are self explanitory
-    /// </summary>
-    /// <param name="WebServiceResults"></param>
-    /// <param name="delimiter"></param>
-    /// <remarks></remarks>
+        /// The Webservice set of populators actually are forms of populators from formatted string similar to populat from text files
+        /// The difference being that defines webservices were returning these formatted strings of text. Back before the days of being
+        /// able to send complex data types across the HTTP wire. Carefully crafted webservices could spit out their results as streams
+        /// of delimited text. These methods would then parse that text and rehydrate the results into the grid for viuual presentation.
+        /// the TAIClient Time Tracking tool employes this technique. The various parameters are self explanitory
+        /// </summary>
+        /// <param name="WebServiceResults"></param>
+        /// <param name="delimiter"></param>
+        /// <remarks></remarks>
         public void PopulateViaWebServiceString(string WebServiceResults, string delimiter)
         {
             PopulateViaWebServiceString(WebServiceResults, delimiter, _DefaultForeColor, _DefaultCellFont);
         }
 
         /// <summary>
-    /// The Webservice set of populators actually are forms of populators from formatted string similar to populat from text files
-    /// The difference being that defines webservices were returning these formatted strings of text. Back before the days of being
-    /// able to send complex data types across the HTTP wire. Carefully crafted webservices could spit out their results as streams
-    /// of delimited text. These methods would then parse that text and rehydrate the results into the grid for viuual presentation.
-    /// the TAIClient Time Tracking tool employes this technique. The various parameters are self explanitory
-    /// </summary>
-    /// <param name="WebServiceResults"></param>
-    /// <param name="delimiter"></param>
-    /// <param name="col"></param>
-    /// <remarks></remarks>
+        /// The Webservice set of populators actually are forms of populators from formatted string similar to populat from text files
+        /// The difference being that defines webservices were returning these formatted strings of text. Back before the days of being
+        /// able to send complex data types across the HTTP wire. Carefully crafted webservices could spit out their results as streams
+        /// of delimited text. These methods would then parse that text and rehydrate the results into the grid for viuual presentation.
+        /// the TAIClient Time Tracking tool employes this technique. The various parameters are self explanitory
+        /// </summary>
+        /// <param name="WebServiceResults"></param>
+        /// <param name="delimiter"></param>
+        /// <param name="col"></param>
+        /// <remarks></remarks>
         public void PopulateViaWebServiceString(string WebServiceResults, string delimiter, Color col)
         {
             PopulateViaWebServiceString(WebServiceResults, delimiter, col, _DefaultCellFont);
         }
 
         /// <summary>
-    /// The Webservice set of populators actually are forms of populators from formatted string similar to populat from text files
-    /// The difference being that defines webservices were returning these formatted strings of text. Back before the days of being
-    /// able to send complex data types across the HTTP wire. Carefully crafted webservices could spit out their results as streams
-    /// of delimited text. These methods would then parse that text and rehydrate the results into the grid for viuual presentation.
-    /// the TAIClient Time Tracking tool employes this technique. The various parameters are self explanitory
-    /// </summary>
-    /// <param name="WebServiceResults"></param>
-    /// <param name="delimiter"></param>
-    /// <param name="fnt"></param>
-    /// <remarks></remarks>
+        /// The Webservice set of populators actually are forms of populators from formatted string similar to populat from text files
+        /// The difference being that defines webservices were returning these formatted strings of text. Back before the days of being
+        /// able to send complex data types across the HTTP wire. Carefully crafted webservices could spit out their results as streams
+        /// of delimited text. These methods would then parse that text and rehydrate the results into the grid for viuual presentation.
+        /// the TAIClient Time Tracking tool employes this technique. The various parameters are self explanitory
+        /// </summary>
+        /// <param name="WebServiceResults"></param>
+        /// <param name="delimiter"></param>
+        /// <param name="fnt"></param>
+        /// <remarks></remarks>
         public void PopulateViaWebServiceString(string WebServiceResults, string delimiter, Font fnt)
         {
             PopulateViaWebServiceString(WebServiceResults, delimiter, _DefaultForeColor, fnt);
         }
 
         /// <summary>
-    /// The Webservice set of populators actually are forms of populators from formatted string similar to populat from text files
-    /// The difference being that defines webservices were returning these formatted strings of text. Back before the days of being
-    /// able to send complex data types across the HTTP wire. Carefully crafted webservices could spit out their results as streams
-    /// of delimited text. These methods would then parse that text and rehydrate the results into the grid for viuual presentation.
-    /// the TAIClient Time Tracking tool employes this technique. The various parameters are self explanitory
-    /// </summary>
-    /// <param name="WebServiceResults"></param>
-    /// <param name="Delimiter"></param>
-    /// <param name="col"></param>
-    /// <param name="fnt"></param>
-    /// <remarks></remarks>
+        /// The Webservice set of populators actually are forms of populators from formatted string similar to populat from text files
+        /// The difference being that defines webservices were returning these formatted strings of text. Back before the days of being
+        /// able to send complex data types across the HTTP wire. Carefully crafted webservices could spit out their results as streams
+        /// of delimited text. These methods would then parse that text and rehydrate the results into the grid for viuual presentation.
+        /// the TAIClient Time Tracking tool employes this technique. The various parameters are self explanitory
+        /// </summary>
+        /// <param name="WebServiceResults"></param>
+        /// <param name="Delimiter"></param>
+        /// <param name="col"></param>
+        /// <param name="fnt"></param>
+        /// <remarks></remarks>
         public void PopulateViaWebServiceString(string WebServiceResults, string Delimiter, Color col, Font fnt)
         {
             // parse the rows and colmuns off the string
@@ -13374,7 +13374,7 @@ namespace TAIGridControl2
 
             //string[,] argarray = ReturnDelimitedStringAsArray(WebServiceResults, cols, rows, Delimiter);
 
-           string[,] argarray = (string[,])ReturnDelimitedStringAsArray(WebServiceResults, cols, rows, Delimiter);
+            string[,] argarray = (string[,])ReturnDelimitedStringAsArray(WebServiceResults, cols, rows, Delimiter);
 
             InitializeTheGrid(rows - 1, cols);
             int x, y;
@@ -13419,17 +13419,17 @@ namespace TAIGridControl2
         // Pivot Populate Calls
 
         /// <summary>
-    /// The pivot populate calls simulate pivot table functionality in excel.
-    /// The instance grid that the pethod is called on will be populated with data from a source grid <c>sgrid</c>
-    /// The defined <c>xcol</c> and <c>ycol</c> parameters will be used to search the source grid for unique values
-    /// then for each unique value set in each of the two columns the
-    /// </summary>
-    /// <param name="sgrid"></param>
-    /// <param name="xcol"></param>
-    /// <param name="ycol"></param>
-    /// <param name="scol"></param>
-    /// <param name="FormatSpec"></param>
-    /// <remarks></remarks>
+        /// The pivot populate calls simulate pivot table functionality in excel.
+        /// The instance grid that the pethod is called on will be populated with data from a source grid <c>sgrid</c>
+        /// The defined <c>xcol</c> and <c>ycol</c> parameters will be used to search the source grid for unique values
+        /// then for each unique value set in each of the two columns the
+        /// </summary>
+        /// <param name="sgrid"></param>
+        /// <param name="xcol"></param>
+        /// <param name="ycol"></param>
+        /// <param name="scol"></param>
+        /// <param name="FormatSpec"></param>
+        /// <remarks></remarks>
         public void PivotPopulate(TAIGridControl sgrid, int xcol, int ycol, int scol, string FormatSpec)
         {
             PivotPopulate(sgrid, xcol, ycol, scol, FormatSpec, _DefaultForeColor, _DefaultCellFont);
@@ -13588,21 +13588,21 @@ namespace TAIGridControl2
         // Populate from a datatable
 
         /// <summary>
-    /// Will take the supplied dataSet and extract the first table from that dataset and populate the grid with the
-    /// contents of that datatable
-    /// </summary>
-    /// <param name="dset"></param>
-    /// <remarks></remarks>
+        /// Will take the supplied dataSet and extract the first table from that dataset and populate the grid with the
+        /// contents of that datatable
+        /// </summary>
+        /// <param name="dset"></param>
+        /// <remarks></remarks>
         public void PopulateGridWithADataTable(DataSet dset)
         {
             PopulateGridWithADataTable(dset.Tables[0]);
         }
 
         /// <summary>
-    /// Will take thge supplied datatable and populate the grid with the contents oif that datatable
-    /// </summary>
-    /// <param name="dt"></param>
-    /// <remarks></remarks>
+        /// Will take thge supplied datatable and populate the grid with the contents oif that datatable
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <remarks></remarks>
         public void PopulateGridWithADataTable(DataTable dt)
         {
             int t = 0;
@@ -13675,98 +13675,98 @@ namespace TAIGridControl2
 
 
         /// <summary>
-    /// Will open the directory specified by <c>Dirname</c> and will enumerate its contents.
-    /// The grid will then be cleared and the results enumerated in the grids
-    /// contents showing the FileName, Last Update Time, and physical size.
-    /// </summary>
-    /// <param name="Dirname"></param>
-    /// <remarks></remarks>
+        /// Will open the directory specified by <c>Dirname</c> and will enumerate its contents.
+        /// The grid will then be cleared and the results enumerated in the grids
+        /// contents showing the FileName, Last Update Time, and physical size.
+        /// </summary>
+        /// <param name="Dirname"></param>
+        /// <remarks></remarks>
         public void PopulateFromADirectory(string Dirname)
         {
             PopulateFromADirectory(Dirname, _DefaultCellFont, _DefaultForeColor, "*");
         }
 
         /// <summary>
-    /// Will open the directory specified by <c>Dirname</c> and will enumerate its contents.
-    /// The grid will then be cleared and the results enumerated in the grids
-    /// contents showing the FileName, Last Update Time, and physical size. The supplied
-    /// <c>gridfont</c> font will be used to show the content generated.
-    /// </summary>
-    /// <param name="Dirname"></param>
-    /// <param name="Gridfont"></param>
-    /// <remarks></remarks>
+        /// Will open the directory specified by <c>Dirname</c> and will enumerate its contents.
+        /// The grid will then be cleared and the results enumerated in the grids
+        /// contents showing the FileName, Last Update Time, and physical size. The supplied
+        /// <c>gridfont</c> font will be used to show the content generated.
+        /// </summary>
+        /// <param name="Dirname"></param>
+        /// <param name="Gridfont"></param>
+        /// <remarks></remarks>
         public void PopulateFromADirectory(string Dirname, Font Gridfont)
         {
             PopulateFromADirectory(Dirname, Gridfont, _DefaultForeColor, "*");
         }
 
         /// <summary>
-    /// Will open the directory specified by <c>Dirname</c> and will enumerate its contents.
-    /// The grid will then be cleared and the results enumerated in the grids
-    /// contents showing the FileName, Last Update Time, and physical size. The supplied
-    /// <c>col</c> color will be used to show the content generated.
-    /// </summary>
-    /// <param name="Dirname"></param>
-    /// <param name="col"></param>
-    /// <remarks></remarks>
+        /// Will open the directory specified by <c>Dirname</c> and will enumerate its contents.
+        /// The grid will then be cleared and the results enumerated in the grids
+        /// contents showing the FileName, Last Update Time, and physical size. The supplied
+        /// <c>col</c> color will be used to show the content generated.
+        /// </summary>
+        /// <param name="Dirname"></param>
+        /// <param name="col"></param>
+        /// <remarks></remarks>
         public void PopulateFromADirectory(string Dirname, Color col)
         {
             PopulateFromADirectory(Dirname, _DefaultCellFont, col, "*");
         }
 
         /// <summary>
-    /// Will open the directory specified by <c>Dirname</c> and will enumerate its contents.
-    /// The grid will then be cleared and the results enumerated in the grids
-    /// contents showing the FileName, Last Update Time, and physical size. The supplied
-    /// <c>col</c> color and <c>gridfont</c> font will be used to show the content generated.
-    /// </summary>
-    /// <param name="Dirname"></param>
-    /// <param name="Gridfont"></param>
-    /// <param name="col"></param>
-    /// <remarks></remarks>
+        /// Will open the directory specified by <c>Dirname</c> and will enumerate its contents.
+        /// The grid will then be cleared and the results enumerated in the grids
+        /// contents showing the FileName, Last Update Time, and physical size. The supplied
+        /// <c>col</c> color and <c>gridfont</c> font will be used to show the content generated.
+        /// </summary>
+        /// <param name="Dirname"></param>
+        /// <param name="Gridfont"></param>
+        /// <param name="col"></param>
+        /// <remarks></remarks>
         public void PopulateFromADirectory(string Dirname, Font Gridfont, Color col)
         {
             PopulateFromADirectory(Dirname, Gridfont, col, "*");
         }
 
         /// <summary>
-    /// Will open the directory specified by <c>Dirname</c> and will enumerate its contents via the supplied
-    /// pattern <c>Pattern</c>. The grid will then be clears and the results enumerated in the grids
-    /// contents showing the FileName, Last Update Time, and physical size.
-    /// </summary>
-    /// <param name="Dirname"></param>
-    /// <param name="Pattern"></param>
-    /// <remarks></remarks>
+        /// Will open the directory specified by <c>Dirname</c> and will enumerate its contents via the supplied
+        /// pattern <c>Pattern</c>. The grid will then be clears and the results enumerated in the grids
+        /// contents showing the FileName, Last Update Time, and physical size.
+        /// </summary>
+        /// <param name="Dirname"></param>
+        /// <param name="Pattern"></param>
+        /// <remarks></remarks>
         public void PopulateFromADirectory(string Dirname, string Pattern)
         {
             PopulateFromADirectory(Dirname, _DefaultCellFont, _DefaultForeColor, Pattern);
         }
 
         /// <summary>
-    /// Will open the directory specified by <c>Dirname</c> and will enumerate its contents via the supplied
-    /// pattern <c>Pattern</c>. The grid will then be clears and the results enumerated in the grids
-    /// contents showing the FileName, Last Update Time, and physical size. The supplied
-    /// <c>gridfont</c> font will be used to show the content generated.
-    /// </summary>
-    /// <param name="Dirname"></param>
-    /// <param name="Gridfont"></param>
-    /// <param name="Pattern"></param>
-    /// <remarks></remarks>
+        /// Will open the directory specified by <c>Dirname</c> and will enumerate its contents via the supplied
+        /// pattern <c>Pattern</c>. The grid will then be clears and the results enumerated in the grids
+        /// contents showing the FileName, Last Update Time, and physical size. The supplied
+        /// <c>gridfont</c> font will be used to show the content generated.
+        /// </summary>
+        /// <param name="Dirname"></param>
+        /// <param name="Gridfont"></param>
+        /// <param name="Pattern"></param>
+        /// <remarks></remarks>
         public void PopulateFromADirectory(string Dirname, Font Gridfont, string Pattern)
         {
             PopulateFromADirectory(Dirname, Gridfont, _DefaultForeColor, Pattern);
         }
 
         /// <summary>
-    /// Will open the directory specified by <c>Dirname</c> and will enumerate its contents via the supplied
-    /// pattern <c>Pattern</c>. The grid will then be clears and the results enumerated in the grids
-    /// contents showing the FileName, Last Update Time, and physical size. The supplied
-    /// <c>col</c> color will be used to show the content generated.
-    /// </summary>
-    /// <param name="Dirname"></param>
-    /// <param name="col"></param>
-    /// <param name="Pattern"></param>
-    /// <remarks></remarks>
+        /// Will open the directory specified by <c>Dirname</c> and will enumerate its contents via the supplied
+        /// pattern <c>Pattern</c>. The grid will then be clears and the results enumerated in the grids
+        /// contents showing the FileName, Last Update Time, and physical size. The supplied
+        /// <c>col</c> color will be used to show the content generated.
+        /// </summary>
+        /// <param name="Dirname"></param>
+        /// <param name="col"></param>
+        /// <param name="Pattern"></param>
+        /// <remarks></remarks>
         public void PopulateFromADirectory(string Dirname, Color col, string Pattern)
         {
             PopulateFromADirectory(Dirname, _DefaultCellFont, col, Pattern);
@@ -13774,16 +13774,16 @@ namespace TAIGridControl2
 
 
         /// <summary>
-    /// Will open the directory specified by <c>Dirname</c> and will enumerate its contents via the supplied
-    /// pattern <c>Pattern</c>. The grid will then be clears and the results enumerated in the grids
-    /// contents showing the FileName, Last Update Time, and physical size. The supplied
-    /// <c>col</c> color and <c>gridfont</c> font will be used to show the content generated.
-    /// </summary>
-    /// <param name="Dirname"></param>
-    /// <param name="gridfont"></param>
-    /// <param name="col"></param>
-    /// <param name="Pattern"></param>
-    /// <remarks></remarks>
+        /// Will open the directory specified by <c>Dirname</c> and will enumerate its contents via the supplied
+        /// pattern <c>Pattern</c>. The grid will then be clears and the results enumerated in the grids
+        /// contents showing the FileName, Last Update Time, and physical size. The supplied
+        /// <c>col</c> color and <c>gridfont</c> font will be used to show the content generated.
+        /// </summary>
+        /// <param name="Dirname"></param>
+        /// <param name="gridfont"></param>
+        /// <param name="col"></param>
+        /// <param name="Pattern"></param>
+        /// <remarks></remarks>
         public void PopulateFromADirectory(string Dirname, Font gridfont, Color col, string Pattern)
         {
             try
@@ -13838,25 +13838,25 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Attempts to open the directory specfied by <c>Dirname</c> and enumerate the entire contents
-    /// The results are the appended to the current grids contents
-    /// The FileName, Last Update Time, and physical size are enumerated.
-    /// </summary>
-    /// <param name="Dirname"></param>
-    /// <remarks></remarks>
+        /// Attempts to open the directory specfied by <c>Dirname</c> and enumerate the entire contents
+        /// The results are the appended to the current grids contents
+        /// The FileName, Last Update Time, and physical size are enumerated.
+        /// </summary>
+        /// <param name="Dirname"></param>
+        /// <remarks></remarks>
         public void AppendPopulate(string Dirname)
         {
             AppendPopulate(Dirname, "*");
         }
 
         /// <summary>
-    /// Attempts to open the directory specfied by <c>Dirname</c> and enumerate the contents via the supplied <c>Pattern</c>
-    /// The results are the appended to the current grids contents
-    /// The FileName, Last Update Time, and physical size are enumerated.
-    /// </summary>
-    /// <param name="Dirname"></param>
-    /// <param name="Pattern"></param>
-    /// <remarks></remarks>
+        /// Attempts to open the directory specfied by <c>Dirname</c> and enumerate the contents via the supplied <c>Pattern</c>
+        /// The results are the appended to the current grids contents
+        /// The FileName, Last Update Time, and physical size are enumerated.
+        /// </summary>
+        /// <param name="Dirname"></param>
+        /// <param name="Pattern"></param>
+        /// <remarks></remarks>
         public void AppendPopulate(string Dirname, string Pattern)
         {
             var dinf = new System.IO.DirectoryInfo(Dirname);
@@ -13900,35 +13900,35 @@ namespace TAIGridControl2
 
 
         /// <summary>
-    /// Will fire the CellClicked event from the outside world
-    /// </summary>
-    /// <param name="Row"></param>
-    /// <param name="col"></param>
-    /// <remarks></remarks>
+        /// Will fire the CellClicked event from the outside world
+        /// </summary>
+        /// <param name="Row"></param>
+        /// <param name="col"></param>
+        /// <remarks></remarks>
         public void RaiseCellClickedEvent(int Row, int col)
         {
             CellClicked?.Invoke(this, Row, col);
         }
 
         /// <summary>
-    /// Will fire the CellDoubleClicked event from the outside world
-    /// </summary>
-    /// <param name="row"></param>
-    /// <param name="col"></param>
-    /// <remarks></remarks>
+        /// Will fire the CellDoubleClicked event from the outside world
+        /// </summary>
+        /// <param name="row"></param>
+        /// <param name="col"></param>
+        /// <remarks></remarks>
         public void RaiseCellDoubleClickedEvent(int row, int col)
         {
             CellDoubleClicked?.Invoke(this, row, col);
         }
 
         /// <summary>
-    /// Will fire the GridHover event from the outside world
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="rowid"></param>
-    /// <param name="colid"></param>
-    /// <param name="textvalue"></param>
-    /// <remarks></remarks>
+        /// Will fire the GridHover event from the outside world
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="rowid"></param>
+        /// <param name="colid"></param>
+        /// <param name="textvalue"></param>
+        /// <remarks></remarks>
         public void RaiseGridHoverEvents(object sender, int rowid, int colid, string textvalue)
         {
             if (!_TearAwayWork)
@@ -13936,11 +13936,11 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Will remove a specified row of data from the grids contents
-    /// If rowid is greater than rows in the grid nothing will be removed
-    /// </summary>
-    /// <param name="rowid"></param>
-    /// <remarks></remarks>
+        /// Will remove a specified row of data from the grids contents
+        /// If rowid is greater than rows in the grid nothing will be removed
+        /// </summary>
+        /// <param name="rowid"></param>
+        /// <remarks></remarks>
         public void RemoveRowFromGrid(int rowid)
         {
             var hdr = _GridHeader;
@@ -13990,11 +13990,11 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Will attempt to remove specific rowws from the grid contained in the supplied
-    /// arraylist of integers
-    /// </summary>
-    /// <param name="ListOfRows"></param>
-    /// <remarks></remarks>
+        /// Will attempt to remove specific rowws from the grid contained in the supplied
+        /// arraylist of integers
+        /// </summary>
+        /// <param name="ListOfRows"></param>
+        /// <remarks></remarks>
         public void RemoveRowsFromGrid(ArrayList ListOfRows)
         {
             // will take arraylist rows and purge them from the _grid(x,y) array
@@ -14061,12 +14061,12 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Will attempt to remove a specific column from the grids contents
-    /// If colid is greater than the number of columns in the grid nothing will
-    /// be removed
-    /// </summary>
-    /// <param name="colid"></param>
-    /// <remarks></remarks>
+        /// Will attempt to remove a specific column from the grids contents
+        /// If colid is greater than the number of columns in the grid nothing will
+        /// be removed
+        /// </summary>
+        /// <param name="colid"></param>
+        /// <remarks></remarks>
         public void RemoveColFromGrid(int colid)
         {
             if (colid < 0 | colid > _cols - 1)
@@ -14114,12 +14114,12 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Will attempt to walk the contents of a column for integers 1 through 12
-    /// on finding a 1 through 12 it will replace the integers with the name of that
-    /// month number IE 1 = January, 2 = February...
-    /// </summary>
-    /// <param name="columnid"></param>
-    /// <remarks></remarks>
+        /// Will attempt to walk the contents of a column for integers 1 through 12
+        /// on finding a 1 through 12 it will replace the integers with the name of that
+        /// month number IE 1 = January, 2 = February...
+        /// </summary>
+        /// <param name="columnid"></param>
+        /// <remarks></remarks>
         public void ReplaceColMonthNumericWithMonthName(int columnid)
         {
             int y;
@@ -14225,10 +14225,10 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Will walk the list of columns tornaway and will set the windows to be siz width
-    /// </summary>
-    /// <param name="siz"></param>
-    /// <remarks></remarks>
+        /// Will walk the list of columns tornaway and will set the windows to be siz width
+        /// </summary>
+        /// <param name="siz"></param>
+        /// <remarks></remarks>
         public void ResizeTearawayColumnsHorizontally(int siz)
         {
             if (TearAways.Count == 0)
@@ -14249,10 +14249,10 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Will walk the list of torn away columns and will set each one to siz height
-    /// </summary>
-    /// <param name="siz"></param>
-    /// <remarks></remarks>
+        /// Will walk the list of torn away columns and will set each one to siz height
+        /// </summary>
+        /// <param name="siz"></param>
+        /// <remarks></remarks>
         public void ResizeTearawayColumnsVertically(int siz)
         {
             if (TearAways.Count == 0)
@@ -14286,11 +14286,11 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Will walk the list of torn away columns and will set each to sizx width andf sizy height
-    /// </summary>
-    /// <param name="sizx"></param>
-    /// <param name="sizy"></param>
-    /// <remarks></remarks>
+        /// Will walk the list of torn away columns and will set each to sizx width andf sizy height
+        /// </summary>
+        /// <param name="sizx"></param>
+        /// <param name="sizy"></param>
+        /// <remarks></remarks>
         public void ResizeTearawayColumnsVerticallyAndHorizontally(int sizx, int sizy)
         {
             if (TearAways.Count == 0)
@@ -14312,11 +14312,11 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Will set the column at colid edit restrictions to the list contained in the CaretDelimitedString
-    /// </summary>
-    /// <param name="colid"></param>
-    /// <param name="CaretDelimitedString"></param>
-    /// <remarks></remarks>
+        /// Will set the column at colid edit restrictions to the list contained in the CaretDelimitedString
+        /// </summary>
+        /// <param name="colid"></param>
+        /// <param name="CaretDelimitedString"></param>
+        /// <remarks></remarks>
         public void RestrictColumnEditsTo(int colid, string CaretDelimitedString)
         {
             var reslist = new EditColumnRestrictor();
@@ -14334,11 +14334,11 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Will set the column at colid edit restrictions list to the supplied ArrayListOfStrings
-    /// </summary>
-    /// <param name="colid"></param>
-    /// <param name="ArrayListOfStrings"></param>
-    /// <remarks></remarks>
+        /// Will set the column at colid edit restrictions list to the supplied ArrayListOfStrings
+        /// </summary>
+        /// <param name="colid"></param>
+        /// <param name="ArrayListOfStrings"></param>
+        /// <remarks></remarks>
         public void RestrictColumnEditsTo(int colid, ArrayList ArrayListOfStrings)
         {
             var reslist = new EditColumnRestrictor();
@@ -14402,15 +14402,15 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Will attempt to render the grids surface onto the supplied graphics context GR, The grid will be rendered into the rectangle denoted by
-    /// xloc,yloc and width and height
-    /// </summary>
-    /// <param name="gr"></param>
-    /// <param name="xloc"></param>
-    /// <param name="yloc"></param>
-    /// <param name="width"></param>
-    /// <param name="height"></param>
-    /// <remarks></remarks>
+        /// Will attempt to render the grids surface onto the supplied graphics context GR, The grid will be rendered into the rectangle denoted by
+        /// xloc,yloc and width and height
+        /// </summary>
+        /// <param name="gr"></param>
+        /// <param name="xloc"></param>
+        /// <param name="yloc"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <remarks></remarks>
         public void PlaceGridOnGraphicsContext(Graphics gr, int xloc, int yloc, int width, int height)
         {
             var cr = new Rectangle(xloc, yloc, width, height);
@@ -14419,9 +14419,9 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Walks the list of open tear away columns and sets the to be on top of all windows
-    /// </summary>
-    /// <remarks></remarks>
+        /// Walks the list of open tear away columns and sets the to be on top of all windows
+        /// </summary>
+        /// <remarks></remarks>
         public void PullAllTearAwaysToTheFront()
         {
             if (TearAways.Count == 0)
@@ -14446,9 +14446,9 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Walks the list of tear away columns and sets them to be behind all open windows.
-    /// </summary>
-    /// <remarks></remarks>
+        /// Walks the list of tear away columns and sets them to be behind all open windows.
+        /// </summary>
+        /// <remarks></remarks>
         public void PushAllTearAwaysToTheBack()
         {
             if (TearAways.Count == 0)
@@ -14475,9 +14475,9 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Selects all rows in the current grid
-    /// </summary>
-    /// <remarks></remarks>
+        /// Selects all rows in the current grid
+        /// </summary>
+        /// <remarks></remarks>
         public void SelectAllRows()
         {
             var aList = new ArrayList();
@@ -14490,9 +14490,9 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Selects rows in the current grid from an arraylist of row IDs
-    /// </summary>
-    /// <remarks></remarks>
+        /// Selects rows in the current grid from an arraylist of row IDs
+        /// </summary>
+        /// <remarks></remarks>
         public void SelectRows(ArrayList rowIDs)
         {
             try
@@ -14506,10 +14506,10 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Sets the background color for all cells in the grid to be the supplied color
-    /// </summary>
-    /// <param name="color"></param>
-    /// <remarks></remarks>
+        /// Sets the background color for all cells in the grid to be the supplied color
+        /// </summary>
+        /// <param name="color"></param>
+        /// <remarks></remarks>
         public void SetAllCellBackcolors(Color color)
         {
             int x, y;
@@ -14527,10 +14527,10 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Sets the foreground color for all cells in the grid to be the supplied color
-    /// </summary>
-    /// <param name="color"></param>
-    /// <remarks></remarks>
+        /// Sets the foreground color for all cells in the grid to be the supplied color
+        /// </summary>
+        /// <param name="color"></param>
+        /// <remarks></remarks>
         public void SetAllCellForecolors(Color color)
         {
             int x, y;
@@ -14548,11 +14548,11 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Sets all the cells in the specific column Col to be the the supplied color in the background
-    /// </summary>
-    /// <param name="Col"></param>
-    /// <param name="color"></param>
-    /// <remarks></remarks>
+        /// Sets all the cells in the specific column Col to be the the supplied color in the background
+        /// </summary>
+        /// <param name="Col"></param>
+        /// <param name="color"></param>
+        /// <remarks></remarks>
         public void SetColBackColor(int Col, Color color)
         {
             try
@@ -14572,11 +14572,11 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Sets all the cells in the specific column Col to be the the supplied color in the foreground
-    /// </summary>
-    /// <param name="Col"></param>
-    /// <param name="color"></param>
-    /// <remarks></remarks>
+        /// Sets all the cells in the specific column Col to be the the supplied color in the foreground
+        /// </summary>
+        /// <param name="Col"></param>
+        /// <param name="color"></param>
+        /// <remarks></remarks>
         public void SetColForeColor(int Col, Color color)
         {
             try
@@ -14596,10 +14596,10 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Applied the specified enumerated colorscheme to the grids contents
-    /// </summary>
-    /// <param name="Scheme"></param>
-    /// <remarks></remarks>
+        /// Applied the specified enumerated colorscheme to the grids contents
+        /// </summary>
+        /// <param name="Scheme"></param>
+        /// <remarks></remarks>
         public void SetColorScheme(TaiGridColorSchemes Scheme)
         {
             switch (Scheme)
@@ -14733,10 +14733,10 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Will apply the supplied <c>ItemToSet</c> to the cell currently being edited in the grid
-    /// </summary>
-    /// <param name="ItemToSet"></param>
-    /// <remarks></remarks>
+        /// Will apply the supplied <c>ItemToSet</c> to the cell currently being edited in the grid
+        /// </summary>
+        /// <param name="ItemToSet"></param>
+        /// <remarks></remarks>
         public void SetEditItemText(string ItemToSet)
         {
             if (_EditMode)
@@ -14749,11 +14749,11 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Attempts to set the cell at <c>row</c> and <c>col</c> to be in edit mode
-    /// </summary>
-    /// <param name="row"></param>
-    /// <param name="col"></param>
-    /// <remarks></remarks>
+        /// Attempts to set the cell at <c>row</c> and <c>col</c> to be in edit mode
+        /// </summary>
+        /// <param name="row"></param>
+        /// <param name="col"></param>
+        /// <remarks></remarks>
         public void SetEditItem(int row, int col)
         {
             // lets do some sanity checking here
@@ -14918,11 +14918,11 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Sets the row at <c>row</c> to be the corresponging <c>color</c> background color
-    /// </summary>
-    /// <param name="row"></param>
-    /// <param name="color"></param>
-    /// <remarks></remarks>
+        /// Sets the row at <c>row</c> to be the corresponging <c>color</c> background color
+        /// </summary>
+        /// <param name="row"></param>
+        /// <param name="color"></param>
+        /// <remarks></remarks>
         public void SetRowBackColor(int row, Color color)
         {
             try
@@ -14942,11 +14942,11 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Sets the row at <c>row</c> to have the corresponding <c>color</c> foreground color
-    /// </summary>
-    /// <param name="row"></param>
-    /// <param name="color"></param>
-    /// <remarks></remarks>
+        /// Sets the row at <c>row</c> to have the corresponding <c>color</c> foreground color
+        /// </summary>
+        /// <param name="row"></param>
+        /// <param name="color"></param>
+        /// <remarks></remarks>
         public void SetRowForeColor(int row, Color color)
         {
             try
@@ -14966,12 +14966,12 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Will attempt to sort the contents of the current grid on <c>col</c>
-    /// If <c>Descending</c> is true or false will dictate the order of the sort
-    /// </summary>
-    /// <param name="col"></param>
-    /// <param name="Descending"></param>
-    /// <remarks></remarks>
+        /// Will attempt to sort the contents of the current grid on <c>col</c>
+        /// If <c>Descending</c> is true or false will dictate the order of the sort
+        /// </summary>
+        /// <param name="col"></param>
+        /// <param name="Descending"></param>
+        /// <remarks></remarks>
         public void SortGridOnColumn(int col, bool Descending)
         {
             if (col < 0 | col > _cols - 1)
@@ -14990,12 +14990,12 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Will atempt to sort the grids contents on <c>col</c> treating the column contents as dates.
-    /// The <c>Descending</c> parameter will distate the order of the sort
-    /// </summary>
-    /// <param name="col"></param>
-    /// <param name="Descending"></param>
-    /// <remarks></remarks>
+        /// Will atempt to sort the grids contents on <c>col</c> treating the column contents as dates.
+        /// The <c>Descending</c> parameter will distate the order of the sort
+        /// </summary>
+        /// <param name="col"></param>
+        /// <param name="Descending"></param>
+        /// <remarks></remarks>
         public void SortGridOnColumnDate(int col, bool Descending)
         {
             if (col < 0 | col > _cols - 1)
@@ -15014,12 +15014,12 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Will atempt to sort the grids contents on <c>col</c> treating the column contents as numbers.
-    /// The <c>Descending</c> parameter will distate the order of the sort
-    /// </summary>
-    /// <param name="col"></param>
-    /// <param name="Descending"></param>
-    /// <remarks></remarks>
+        /// Will atempt to sort the grids contents on <c>col</c> treating the column contents as numbers.
+        /// The <c>Descending</c> parameter will distate the order of the sort
+        /// </summary>
+        /// <param name="col"></param>
+        /// <param name="Descending"></param>
+        /// <remarks></remarks>
         public void SortGridOnColumnNumeric(int col, bool Descending)
         {
             if (col < 0 | col > _cols - 1)
@@ -15038,12 +15038,12 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Will attempt to add all the values in a column denoted by <c>colnum</c> and return
-    /// the sum as a double
-    /// </summary>
-    /// <param name="colnum"></param>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Will attempt to add all the values in a column denoted by <c>colnum</c> and return
+        /// the sum as a double
+        /// </summary>
+        /// <param name="colnum"></param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public double SumUpColumn(int colnum)
         {
             int t;
@@ -15071,11 +15071,11 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Manually sets the position of the verticle scrollbar of the grid if the contents are larger
-    /// than the physical grid window.
-    /// </summary>
-    /// <param name="sb"></param>
-    /// <remarks></remarks>
+        /// Manually sets the position of the verticle scrollbar of the grid if the contents are larger
+        /// than the physical grid window.
+        /// </summary>
+        /// <param name="sb"></param>
+        /// <remarks></remarks>
         public void SetVertScrollbarPosition(int sb)
         {
             if (vs.Visible)
@@ -15086,12 +15086,12 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Will attempt to wrap the text data in a specified <c>col</c> at <c>wraplen</c> length.
-    /// The wrap is smat in that it tries to wrap on whitespace boundaries
-    /// </summary>
-    /// <param name="col"></param>
-    /// <param name="wraplen"></param>
-    /// <remarks></remarks>
+        /// Will attempt to wrap the text data in a specified <c>col</c> at <c>wraplen</c> length.
+        /// The wrap is smat in that it tries to wrap on whitespace boundaries
+        /// </summary>
+        /// <param name="col"></param>
+        /// <param name="wraplen"></param>
+        /// <remarks></remarks>
         public void WordWrapColumn(int col, int wraplen)
         {
             int t;
@@ -15106,11 +15106,11 @@ namespace TAIGridControl2
 
 
         /// <summary>
-    /// Will return the computed STDEV of all the numbers contained in the column denoted by <c>colid</c>
-    /// </summary>
-    /// <param name="colid"></param>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Will return the computed STDEV of all the numbers contained in the column denoted by <c>colid</c>
+        /// </summary>
+        /// <param name="colid"></param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public double GetColumnSTDEV(int colid)
         {
             var arl = GetColAsCleanedArrayList(colid);
@@ -15155,11 +15155,11 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Will return the computed STDEVP of all the numbers contained in the column denoted by <c>colid</c>
-    /// </summary>
-    /// <param name="colid"></param>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Will return the computed STDEVP of all the numbers contained in the column denoted by <c>colid</c>
+        /// </summary>
+        /// <param name="colid"></param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public double GetColumnSTDEVP(int colid)
         {
             var arl = GetColAsCleanedArrayList(colid);
@@ -15206,15 +15206,15 @@ namespace TAIGridControl2
 
 
         /// <summary>
-    /// Will calculate the fuzzy membership of the values at <c>colid</c> beyond <c>targetval</c> from the direction of <c>outlier</c>
-    /// Values will be between 0 and 1 where beyond <c>targetval</c> is 1 and between <c>outlier</c> and target are some portion
-    /// of 0 to 1. Will use a Liner function between <c>outlier</c> and <c>targetval</c>
-    /// </summary>
-    /// <param name="colid"></param>
-    /// <param name="targetval"></param>
-    /// <param name="outlier"></param>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Will calculate the fuzzy membership of the values at <c>colid</c> beyond <c>targetval</c> from the direction of <c>outlier</c>
+        /// Values will be between 0 and 1 where beyond <c>targetval</c> is 1 and between <c>outlier</c> and target are some portion
+        /// of 0 to 1. Will use a Liner function between <c>outlier</c> and <c>targetval</c>
+        /// </summary>
+        /// <param name="colid"></param>
+        /// <param name="targetval"></param>
+        /// <param name="outlier"></param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public ArrayList FuzzyColumnMembership(int colid, double targetval, double outlier)
         {
             var arl = new ArrayList();
@@ -15356,13 +15356,13 @@ namespace TAIGridControl2
 
 
         /// <summary>
-    /// Will take the values at the specified <c>row</c> and starting at the specified <c>col</c> to the
-    /// last column in the existing grid and add them up returning the result as a double.
-    /// </summary>
-    /// <param name="row"></param>
-    /// <param name="col"></param>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Will take the values at the specified <c>row</c> and starting at the specified <c>col</c> to the
+        /// last column in the existing grid and add them up returning the result as a double.
+        /// </summary>
+        /// <param name="row"></param>
+        /// <param name="col"></param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public double RollupColumn(int row, int col)
         {
             double result = 0.0;
@@ -15393,13 +15393,13 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// will take the values at the specified <c>row</c> and <c>col</c> continuing to the edge of the grid
-    /// and will add them up returning the result as a double
-    /// </summary>
-    /// <param name="row"></param>
-    /// <param name="col"></param>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// will take the values at the specified <c>row</c> and <c>col</c> continuing to the edge of the grid
+        /// and will add them up returning the result as a double
+        /// </summary>
+        /// <param name="row"></param>
+        /// <param name="col"></param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public double RollupCube(int row, int col)
         {
             double result = 0.0;
@@ -15434,13 +15434,13 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// will take the values in a specified <c>col</c> and will take all the valies from the specfied <c>row</c>
-    /// until the last row in the grid and will add them up returning the result as a double
-    /// </summary>
-    /// <param name="row"></param>
-    /// <param name="col"></param>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// will take the values in a specified <c>col</c> and will take all the valies from the specfied <c>row</c>
+        /// until the last row in the grid and will add them up returning the result as a double
+        /// </summary>
+        /// <param name="row"></param>
+        /// <param name="col"></param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public double RollupRow(int row, int col)
         {
             double result = 0.0;
@@ -15473,11 +15473,11 @@ namespace TAIGridControl2
 
 
         /// <summary>
-    /// Will populate the grid from the supplied <c>sFilename</c>
-    /// The call will assume that the caller wants the first set of items from the supplied xml file
-    /// </summary>
-    /// <param name="sFilename"></param>
-    /// <remarks></remarks>
+        /// Will populate the grid from the supplied <c>sFilename</c>
+        /// The call will assume that the caller wants the first set of items from the supplied xml file
+        /// </summary>
+        /// <param name="sFilename"></param>
+        /// <remarks></remarks>
         public void ImportFromXML(string sFilename)
         {
             try
@@ -15524,12 +15524,12 @@ namespace TAIGridControl2
         }
 
         /// <summary>
-    /// Will populate the grid from the supplied <c>sFilename</c>
-    /// The call will attempt to get the data from the designated <c>tblnum</c> in the supplied xml file
-    /// </summary>
-    /// <param name="sFilename"></param>
-    /// <param name="tblnum"></param>
-    /// <remarks></remarks>
+        /// Will populate the grid from the supplied <c>sFilename</c>
+        /// The call will attempt to get the data from the designated <c>tblnum</c> in the supplied xml file
+        /// </summary>
+        /// <param name="sFilename"></param>
+        /// <param name="tblnum"></param>
+        /// <remarks></remarks>
         public void ImportFromXML(string sFilename, int tblnum)
         {
             try
@@ -15581,64 +15581,64 @@ namespace TAIGridControl2
 
 
         /// <summary>
-    /// Will attempt to print the contents of the grid to the default printer in the system
-    /// The grids own properties for Outlining printed cells, Printing page numbers,
-    /// Previewing the output first, Page orientation will be employed in the resulting process
-    /// </summary>
-    /// <remarks></remarks>
+        /// Will attempt to print the contents of the grid to the default printer in the system
+        /// The grids own properties for Outlining printed cells, Printing page numbers,
+        /// Previewing the output first, Page orientation will be employed in the resulting process
+        /// </summary>
+        /// <remarks></remarks>
         public void PrintTheGrid()
         {
             PrintTheGrid("", _gridReportMatchColors, _gridReportOutlineCells, _gridReportNumberPages, _gridReportPreviewFirst, _gridReportOrientLandscape);
         }
 
         /// <summary>
-    /// Will attempt to print the contents of the grid to the default printer in the system
-    /// The grids own properties for Outlining printed cells, Printing page numbers,
-    /// Previewing the output first, Page orientation will be employed in the resulting process
-    /// The supplied <c>Title</c> will be used to lable the pages of output
-    /// </summary>
-    /// <param name="Title"></param>
-    /// <remarks></remarks>
+        /// Will attempt to print the contents of the grid to the default printer in the system
+        /// The grids own properties for Outlining printed cells, Printing page numbers,
+        /// Previewing the output first, Page orientation will be employed in the resulting process
+        /// The supplied <c>Title</c> will be used to lable the pages of output
+        /// </summary>
+        /// <param name="Title"></param>
+        /// <remarks></remarks>
         public void PrintTheGrid(string Title)
         {
             PrintTheGrid(Title, _gridReportMatchColors, _gridReportOutlineCells, _gridReportNumberPages, _gridReportPreviewFirst, _gridReportOrientLandscape);
         }
 
         /// <summary>
-    /// Will attempt to print the contents of the grid to the default printer in the system
-    /// The grids own properties for Outlining printed cells, Previewing the output first,
-    /// The supplied <c>Title</c> will be used to lable the pages of output as well as the
-    /// supplied values for <c>NumberPages</c> and <c>Landscapemode</c> will override those setup
-    /// in the grid properties
-    /// </summary>
-    /// <param name="Title"></param>
-    /// <param name="NumberPages"></param>
-    /// <param name="Landscapemode"></param>
-    /// <remarks></remarks>
+        /// Will attempt to print the contents of the grid to the default printer in the system
+        /// The grids own properties for Outlining printed cells, Previewing the output first,
+        /// The supplied <c>Title</c> will be used to lable the pages of output as well as the
+        /// supplied values for <c>NumberPages</c> and <c>Landscapemode</c> will override those setup
+        /// in the grid properties
+        /// </summary>
+        /// <param name="Title"></param>
+        /// <param name="NumberPages"></param>
+        /// <param name="Landscapemode"></param>
+        /// <remarks></remarks>
         public void PrintTheGrid(string Title, bool NumberPages, bool Landscapemode)
         {
             PrintTheGrid(Title, _gridReportMatchColors, _gridReportOutlineCells, NumberPages, _gridReportPreviewFirst, Landscapemode);
         }
 
         /// <summary>
-    /// Will attempt to print the contents of the grid to the default printer in the system
-    /// using supplied values for
-    /// <list type="Bullet">
-    /// <item> <c>Title</c> will use thee supplied strin g to title the resulting output</item>
-    /// <item> <c>MatchColors</c> attempting to match the colors on the grid with printed output</item>
-    /// <item> <c>OutlineCells</c> will draw an outline around each cell of output on the printed page</item>
-    /// <item> <c>NumberPages</c> will number each page as its printed</item>
-    /// <item> <c>PreviewFirst</c> will show the print preview windows forst before sending the results to the printer</item>
-    /// <item> <c>Landscapemode</c> will dictate that the resulting output be in landscape mode</item>
-    /// </list>
-    /// </summary>
-    /// <param name="Title"></param>
-    /// <param name="MatchColors"></param>
-    /// <param name="OutlineCells"></param>
-    /// <param name="NumberPages"></param>
-    /// <param name="PreviewFirst"></param>
-    /// <param name="LandscapeMode"></param>
-    /// <remarks></remarks>
+        /// Will attempt to print the contents of the grid to the default printer in the system
+        /// using supplied values for
+        /// <list type="Bullet">
+        /// <item> <c>Title</c> will use thee supplied strin g to title the resulting output</item>
+        /// <item> <c>MatchColors</c> attempting to match the colors on the grid with printed output</item>
+        /// <item> <c>OutlineCells</c> will draw an outline around each cell of output on the printed page</item>
+        /// <item> <c>NumberPages</c> will number each page as its printed</item>
+        /// <item> <c>PreviewFirst</c> will show the print preview windows forst before sending the results to the printer</item>
+        /// <item> <c>Landscapemode</c> will dictate that the resulting output be in landscape mode</item>
+        /// </list>
+        /// </summary>
+        /// <param name="Title"></param>
+        /// <param name="MatchColors"></param>
+        /// <param name="OutlineCells"></param>
+        /// <param name="NumberPages"></param>
+        /// <param name="PreviewFirst"></param>
+        /// <param name="LandscapeMode"></param>
+        /// <remarks></remarks>
         public void PrintTheGrid(string Title, bool MatchColors, bool OutlineCells, bool NumberPages, bool PreviewFirst, bool LandscapeMode)
         {
             if (_psets == null)
@@ -15748,19 +15748,19 @@ namespace TAIGridControl2
 
 
         /// <summary>
-    /// Instructs the grid to stop is continuous redrawing
-    /// Can be used to speed up population oiperations that are being performed manually
-    /// </summary>
-    /// <remarks></remarks>
+        /// Instructs the grid to stop is continuous redrawing
+        /// Can be used to speed up population oiperations that are being performed manually
+        /// </summary>
+        /// <remarks></remarks>
         public void SuspendGridPaintOperations()
         {
             _Painting = true;
         }
 
         /// <summary>
-    /// Will resume the grid automatic redrawing operations
-    /// </summary>
-    /// <remarks></remarks>
+        /// Will resume the grid automatic redrawing operations
+        /// </summary>
+        /// <remarks></remarks>
         public void ResumeGridPaintOperations()
         {
             _Painting = false;
