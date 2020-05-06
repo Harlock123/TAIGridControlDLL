@@ -1,7 +1,7 @@
 # TAIGridControlDLL 
 
-##Lonnie Allen Watson
-##May 6th 2020
+## Lonnie Allen Watson
+## May 6th 2020
  
  A Little Back Story from early 2000's
 
