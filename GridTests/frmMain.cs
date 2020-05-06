@@ -15,5 +15,17 @@ namespace GridTests
         {
             InitializeComponent();
         }
+
+        private void btnWQL_Click(object sender, EventArgs e)
+        {
+            string wql = "SELECT * FROM Win32_Printer ";
+
+            taig.PopulateFromWQL(wql);
+        }
+
+        private void frmMain_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
