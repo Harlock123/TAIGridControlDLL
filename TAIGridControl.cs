@@ -5789,8 +5789,6 @@ namespace TAIGridControl2
             }
         }
 
-
-
         private int AllColWidths()
         {
             int t;
@@ -9673,7 +9671,6 @@ namespace TAIGridControl2
             Invalidate();
         }
 
-
         /// <summary>
         /// Will instance Microsoft excel and place the contents of the grid on the first worksheet in the excel application
         /// </summary>
@@ -10006,8 +10003,6 @@ namespace TAIGridControl2
             }
         }
 
-
-
         /// <summary>
         /// Will open the internal export filename dialog querying the user for the filename to export to
         /// Will then export the contents of the grid to a textfile employing the properties setup by
@@ -10181,9 +10176,6 @@ namespace TAIGridControl2
                 Interaction.MsgBox(ex.ToString(), (MsgBoxStyle)((int)MsgBoxStyle.Information + (int)MsgBoxStyle.OkOnly), "TAIGRIDControl.ExportToText Error...");
             }
         }
-
-
-
 
         /// <summary>
         /// Will return a list(of string) of the unique values contained in ColId of the current grid contents
@@ -10880,8 +10872,6 @@ namespace TAIGridControl2
                 GridHoverleave?.Invoke(this);
         }
 
-
-
         // New stuff as of May 31 2005
 
         /// <summary>
@@ -10987,9 +10977,6 @@ namespace TAIGridControl2
                 Interaction.MsgBox(ex.Message);
             }
         }
-
-
-
 
         // All the from Array Calls
 
@@ -11456,8 +11443,6 @@ namespace TAIGridControl2
         {
             PopulateGridFromArray(arr, Cellfont, ForeColor, true);
         }
-
-
 
         /// <summary>
         /// Will allow a database populate of a grid within an already populated grid of data.
@@ -12111,9 +12096,6 @@ namespace TAIGridControl2
             }
         }
 
-
-
-
         // SQL Populate Data Calls
 
         /// <summary>
@@ -12546,8 +12528,6 @@ namespace TAIGridControl2
             PopulateGridWithData(ConnectionString, Sql, fnt, _DefaultForeColor);
         }
 
-
-
         // OLE Populate Data Calls
 
         /// <summary>
@@ -12872,9 +12852,6 @@ namespace TAIGridControl2
             OLEPopulateGridWithData(ConnectionString, Sql, fnt, _DefaultForeColor);
         }
 
-
-
-
         // ODBC Populate Data Calls
 
         /// <summary>
@@ -13198,8 +13175,6 @@ namespace TAIGridControl2
             ODBCPopulateGridWithData(ConnectionString, Sql, fnt, _DefaultForeColor);
         }
 
-
-
         // webservice populate calls
 
         /// <summary>
@@ -13414,8 +13389,6 @@ namespace TAIGridControl2
             NormalizeTearaways();
         }
 
-
-
         // Pivot Populate Calls
 
         /// <summary>
@@ -13583,8 +13556,6 @@ namespace TAIGridControl2
             Refresh();
         }
 
-
-
         // Populate from a datatable
 
         /// <summary>
@@ -13671,8 +13642,6 @@ namespace TAIGridControl2
 
             NormalizeTearaways();
         }
-
-
 
         /// <summary>
         /// Will open the directory specified by <c>Dirname</c> and will enumerate its contents.
@@ -13771,7 +13740,6 @@ namespace TAIGridControl2
         {
             PopulateFromADirectory(Dirname, _DefaultCellFont, col, Pattern);
         }
-
 
         /// <summary>
         /// Will open the directory specified by <c>Dirname</c> and will enumerate its contents via the supplied
@@ -13897,7 +13865,6 @@ namespace TAIGridControl2
 
             Refresh();
         }
-
 
         /// <summary>
         /// Will fire the CellClicked event from the outside world
@@ -14366,7 +14333,7 @@ namespace TAIGridControl2
 
             _colEditRestrictions.Add(reslist);
         }
-
+        
         public Array ReturnDelimitedStringAsArray(string StringToParse, int Columns, int rows, string Delimiter)
         {
             // add a delimiter to the begning and the end of the string
@@ -15104,7 +15071,6 @@ namespace TAIGridControl2
             Invalidate();
         }
 
-
         /// <summary>
         /// Will return the computed STDEV of all the numbers contained in the column denoted by <c>colid</c>
         /// </summary>
@@ -15202,8 +15168,6 @@ namespace TAIGridControl2
 
             return res;
         }
-
-
 
         /// <summary>
         /// Will calculate the fuzzy membership of the values at <c>colid</c> beyond <c>targetval</c> from the direction of <c>outlier</c>
@@ -15353,8 +15317,6 @@ namespace TAIGridControl2
             Refresh();
         }
 
-
-
         /// <summary>
         /// Will take the values at the specified <c>row</c> and starting at the specified <c>col</c> to the
         /// last column in the existing grid and add them up returning the result as a double.
@@ -15470,8 +15432,6 @@ namespace TAIGridControl2
             return result;
         }
 
-
-
         /// <summary>
         /// Will populate the grid from the supplied <c>sFilename</c>
         /// The call will assume that the caller wants the first set of items from the supplied xml file
@@ -15577,8 +15537,6 @@ namespace TAIGridControl2
                 Interaction.MsgBox(ex.ToString(), (MsgBoxStyle)((int)MsgBoxStyle.Information + (int)MsgBoxStyle.OkOnly), "TAIGRIDControl.ImportFromXML Error...");
             }
         }
-
-
 
         /// <summary>
         /// Will attempt to print the contents of the grid to the default printer in the system
@@ -15742,11 +15700,6 @@ namespace TAIGridControl2
             }
         }
 
-
-
-
-
-
         /// <summary>
         /// Instructs the grid to stop is continuous redrawing
         /// Can be used to speed up population oiperations that are being performed manually
@@ -15766,9 +15719,6 @@ namespace TAIGridControl2
             _Painting = false;
             Refresh();
         }
-
-
-
 
         private void TAIGRIDv2_Paint(object sender, PaintEventArgs e)
         {
@@ -17417,7 +17367,6 @@ namespace TAIGridControl2
             KillAllTearAwayColumnWindows();
         }
 
-
         private void menu_Popup(object sender, EventArgs e)
         {
             if (Antialias)
@@ -18786,10 +18735,6 @@ namespace TAIGridControl2
             ArrangeTearAwayWindows();
         }
 
-
-
-
-
         protected override void OnPaintBackground(PaintEventArgs pevent)
         {
         }
@@ -19119,8 +19064,6 @@ namespace TAIGridControl2
                 return false;
             } // If _EditMode And kd = Keys.Tab And _AllowInGridEdits
         }
-
-
 
         private class frmExportToText : Form
         {
@@ -19661,20 +19604,14 @@ namespace TAIGridControl2
                 ResumeLayout(false);
             }
 
-
-
-            // ----------|----------|----------|-----------------------------------------------------
-            // DATE   |   WHO    |   WHAT   |  Description of WHAT
-            // ----------|----------|----------|-----------------------------------------------------
-
-
-
             private string _delimiter = ",";
 
             private string _filename;
 
             private bool _includeFieldNames = true;
+            
             private bool _includeLineTerminator = true;
+            
             private frmPageSetup _PageSetupForm;
 
             private void cmdBrowse_Click(object sender, EventArgs e)
@@ -19731,14 +19668,6 @@ namespace TAIGridControl2
                 _includeFieldNames = Conversions.ToBoolean(chkIncludeFieldNames.CheckState);
                 _includeLineTerminator = Conversions.ToBoolean(chkIncludeLineTerminator.CheckState);
             }
-
-
-
-
-
-
-
-
 
             public string Delimiter
             {
