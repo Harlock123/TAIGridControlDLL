@@ -1,0 +1,964 @@
+﻿ // Jan 23, 2003  Added functionality to take a sqlconnection and a sqlstring and autopopulate the grid
+    // with the contents of a recordset of that data
+    // Overloaded with three formats 
+    // PopulateGridWithData(ByVal ConnectionString As String, ByVal Sql As String, ByVal Gridfont As Font)
+    // Public Sub PopulateGridWithData(ByVal ConnectionString As String, ByVal Sql As String)
+    // Public Sub PopulateGridWithData(ByVal cn As SqlClient.SqlConnection, ByVal sql As String)
+    // 
+    // Jan 23, 2003  Added functionality to auto size a grid to its contents
+    // 
+    // Jan 23, 2003  Added functionality to take a cell or a column and format its contents with
+    // a special case being for money
+    // 
+    // Feb 28, 2003  Added an overload for PopulateGridWData to accept an actual Connection that is already open
+    // 
+    // Feb 28, 2003  Added an overload for PopulateGridWData to accept  an open connection and a color to place on
+    // the rendered text
+    // 
+    // Mar 15, 2003  Added Some overloads for PopulateGridWData to accept a font for the grid, and the color for the font
+    // 
+    // Mar 17, 2003  Added a public method to sum up the contents of a column and return it as a numeric
+    // 
+    // Mar 23, 2003  Added some error precautions to all PopulateGridWdata methods to handle timeouts better
+    // Increased Timeouts to 500 seconds. Need to do a parameter for this that can be read
+    // and written to for the class, allowing the external program to configure.
+    // 
+    // Mar 26, 2003  Added the ability to key up and down on a grid to move the mouse selected row
+    // added the ability to pageup and pagedown on a grid to move the mouseselected row
+    // Added the ability to hit enter or return to fire a doubleclicked event on the 
+    // currently selected mouserow
+    // Added two events RowSelected and RowDeSelected to be fired whenever the mouserow
+    // is altered via keyboard or the mouse
+    // Added a DataBaseTimeOut property to tied its value to all database access functions default to 500 sec
+    // Added a paginationsize property for paging up and down on the grid default to 10 lines
+    // Added code to handle resizeing the grid more elegantly it should suffice for most uses
+    // 
+    // Apr 03, 2003  Added SelectedRow property that tracks Mouserow DOH! 
+    // Added event calls to the populate methods so that the alteration of the grid would
+    // be notified to external clients.
+    // 
+    // May 07, 2003  Fixed a stupid bug in sum up column that made it handle negative numbers improperly
+    // 
+    // May 12, 2003  Added new event PartialSelection and a new property MaxRowsSelected
+    // This will allow programatic setting of a maximum number of items to select with
+    // any of the PopulateGridWData calls. Default is 0 = disabled
+    // on list truncation the event PartialSelection is fired for notiofication purposes
+    // 
+    // May 13, 2003  Various bug fixes around yesterdays additional functionality
+    // 
+    // May 21, 2003  Fixed a state bug with the selected row not refreshing properly
+    // 
+    // Jun 08, 2003  Fixed some internal rendering bugs
+    // Header now properly shown on manual inserts of data as well as populategridwithdata calls
+    // Radical adjustments in fontsize on allcellsusethisfont will now scroll to visible region properly
+    // added an overload for AlternateRowColoration() call to accept no parameters will use default or last
+    // added new subroutine PopulateGridFromArray takes a 2 dimensional string array and populates the grid
+    // with it. The first row of the array is the header text
+    // 
+    // Jun 09, 2003  Had an epiphany today "Why not range check the cell drawing operations and not render the ones
+    // that are not visible?" ... DOH! its much faster now...
+    // Added three overloads for PopulateGridFromArray() array can be Strings, Integers, Longs, and Doubles
+    // Added 8 more overloads for all the PopulateGridFromArray() calls with font and forecolor like
+    // the overloads for PopulateGridWithData() calls
+    // 
+    // Jun 10, 2003  Optimized the range checking operations to more quickly find the cells that are to be drawn
+    // Added two new functions GetRowAsString() hand it a rowid and you get a pipe delimited string
+    // perfect for the split function to blow it into an array
+    // GetGridAsArray() will return a two dimensional array of the size of the current grid filled with
+    // the current grids contents. Hand it to another grid and you will get a copy operation.
+    // Added a TAIGCanvas_MouseEnter() event handler to focus this control for MouseWheel Functionality
+    // 
+    // Jun 17, 2003  Fixed a simple bug in the keydown handler that was not fireing the rowdeslected event properly when the
+    // user scrolled off the botom of the grid with the down arrow.
+    // 
+    // Jun 18, 2003  Added a method to remove a column from the grid entirely
+    // altered the COLWIDTH and ROWHEIGHT calls to accept a 0 value or any value on a write
+    // this allows you to hide a column from display by setting its width to 0
+    // or hide a row by setting its height to 0 (Note setting a colwidth or rowheight to anything
+    // turns off _Autosizecellstocontents)
+    // Implimented CellOutline property to either draw or not draw bounding boxes on individual cells
+    // 
+    // Jun 30, 2003  After a number of fits and starts finally go the control to support moving the highlite row
+    // programatically set SelectedRow to whatever row you want and call DoSelectedRowHighLite()
+    // Fixed a bug where radically altering the grids dimensions via PopulateGridFromArray calls would
+    // Leave the thing in a wacked out state with the keyboard handler object visible at the bottom of a 
+    // large empty area where grid items used to be
+    // 
+    // Jul 01, 2003  Added an overload for DoSelectedRowHighlite() to accept the row to highlite
+    // Added functionality to keep the selected row active with global font changes to the grid via AllCellsUseThisFont()
+    // Fixed a bug that caused hidden columns to render their contents even though the column was supposed to be hidden
+    // this also extended to hidden rows. Would only do so on the last row or column but was a bug none the less
+    // Fixed another bug where if the grid was not in autosize mode then it would not seemingly draw properly if there
+    // were more than the height rows.
+    // 
+    // Jul 02, 2003  Added 4 new populate calls OLEPopulateGridWithData() that mirror the 4 regulare POPULATEGRIDWITHDATA calls that work 
+    // with SQL server. These new ones work on access data sources.. Jeff needed this for the Butler Project
+    // Also added 4 new calls to the same PopulateGridWithData methods that are called SQLPopulateGridWithData for completion
+    // of the syntax. The old PopulateGridWithData methods are still there for backwards compatability.
+    // 
+    // Jul 14, 2003  Added 2 functions ( 1 overload ) GetColumnIDByName(name) and GetColumnIDByName(name,NoUpperCase) to return an integer
+    // representing the column ID passed in as name string. If you pass True to the second version then the call with not
+    // convert the arguments to uppercase on the compare otherwise it will. The first version always converts to uppercase
+    // on the compare.
+    // 
+    // Jul 17, 2003  At the insistance of our other ANAL developers here at Tidgewell Associates, Inc. All functions and
+    // routine calls have been alphabetized in their respective sections now.
+    // 
+    // Jul 18, 2003  At the request of Jeff added a new public function and one overload FindInCol. Function will return
+    // RowID of a search from a stringvalue in a given column number. Overload also allows for case sensativity
+    // or no case sensativity. And I even put them in Aplhabetical order...
+    // Implemented a potential fix for an obscure bug issue where the grid was doing some drawing of cells that
+    // were not yet fully populated resulting in trapped errors that left the drawing surface in a meseed up
+    // Ghostbusters like Crossed state (Red X) Basically added some additional checks to ensure no attempt is made
+    // to use a NULL brush or Font in a drawing operation
+    // 
+    // Aug 01, 2003  Added some more command timeout functions to each of the PopulateGrid calls to accomodate slow links to data
+    // Added some better error recovery in the PopulateGrid calls to better handle problems
+    // 
+    // Aug 11, 2003  Added an overload for InitializeGrid that takes the number of rows and cols as arguments. This it is hoped will
+    // facilitate the speedup of the populategridfromarray calls as they are seemingly slow on the draw now.
+    // Changed the InitializeGrid call used by the sql populators to default all setups in an effort to avoid the
+    // problem of the top row on a col from being centered across calls.
+    // Added new property OmitNulls as a boolean. when tru will replace NULL values with and empty string into array
+    // When false will place {NULL} into array. Default is False to mimic old behavior requested by J. Corrao...
+    // 
+    // Aug 21, 2003  Added new property COLPASSWORD(idx) as string, use it to set a columns visualization characteristic from the 
+    // contained text to whatever string value you assign here. The actual column contents are unaffected by this
+    // it is simply a diaplsy trick. Used to shorten extremely long columns like password hashes and what not in an
+    // effort to enhance readability.
+    // 
+    // Sep 09, 2003  Added new Methods to populate grid from ODBC data sources. Will not work on 1.0 framework without 1.0 additions
+    // of the ODBC data access mechanisms.
+    // 
+    // Sep 22, 2003  Fixed a small problem with modality on setting the default forecolor for all subsequent additions to the
+    // grid programatically. Stupid on my part has been fixed.
+    // 
+    // Sep 29, 2003  Added new method PivotPopulate with a load of overloads for formatting, color and font.
+    // PivotPopulate(sgrid,xcol,ycol,scol,xxx,xxx,xxx,xxx) takes a source grid and scans Xcol for unique values
+    // these values are populated into ME across the top. Then it scans ycol for unique values and populates ME
+    // down the side with them. Finally is scans scol for the cross section of the corresponding Xcol and Ycol value
+    // Summing the result and populating ME with those results. Operates simillarly to Excels Pivot Table functionality.
+    // Usefull in those times when non rectangular results are coming from SQL and you cannot get a simple sql query to
+    // perform as expected. ( which is like always )
+    // 
+    // Oct 21, 2003  Added new methods with overloads to take a specifically formatted string from any source ( Our webmethods for exmple )
+    // this string contains as the firt two elements the row and column counts | {pipe} delimited. Then the First row names 
+    // of the grids columns | {pipe} delimited. Followed by each row of data also | {pipe} delimited.
+    // The standard assortment of overloads are provided with Color and font selection as well as both color and font select.
+    // 
+    // Nov 07, 2003  Added new property AntiAlias as a boolean True and its on False and its off. Off by default
+    // Applies to both Text rendered and Lines rendered ( though lines rendered are at right angles anyways thus show
+    // no difference between on and off.
+    // Added new Popupmenu on right mousebutton to copy entire grids contents to clipboard. Easily pasted into Excel
+    // Added Font Smaller option to popup menu decreases defaultcellfont by 1 point and redisplays grid
+    // Added Font Larger option to popul menu increases defaultcellfont by 1 nd redisplays grid
+    // Added Smoothing boolean to popup menu Tracks current Antialias setting and allows users to toggle setting
+    // Added new boolean property AllowPopupMenu defaults to true that will allow or disallow popup menu from coming up
+    // 
+    // Nov 18, 2003  Fixed some minor internal stuff around rendering
+    // 
+    // Dec 10, 2003  Fixed some minor internal stuff around rendering
+    // 
+    // Jan 21, 2004  Added new methods to RollupColumn and RollupRow
+    // Syntax RollupColumn(row,col) will rollup up col+1 to cols on row and return value
+    // RollupRow(row,col) will rollup row+1 to rows onn col and return value
+    // RollupCube(row,col) will rollup row+1 to rows and col+1 to cols and return value
+    // Necessary for 24 month columer rollup on Lag tool for State of PA
+    // 
+    // Feb 04, 2004  Added the export to text file functions
+    // 
+    // Feb 12, 2004  Fixed a bug on the showing of the title area chopping off the lower portion of the grid
+    // Fixed a bug where the PopulateGridWData call might bomb on there being a timestamp in the resulting selection
+    // Timestamps convert to Byte arrays and Byte arrays don't cast to strings easily. Implimented the fix on all
+    // PopulateGridWData calls uses new internal private function ReturnByteArrayAsHexString
+    // Fixed a situation where the grid might try and allocate a bitmap of dimensions that were illegal. The Maximum
+    // size of the scroll bitmap is now set to 16766 x 16766 pixels
+    // 
+    // Feb 16, 2004  Added two new events and placed their raiseevent calls in the appropriate places
+    // StartedDatabasePopulateOperation and FinishedDatabasePopulateOperation called when the system starts and finishes
+    // the lengthy populategridwdata functions...
+    // Fixed a small bug having to do with font size stuff on the font context menu
+    // Fixed another bug where partial selections forced via the MaxRowsSelected Property were returning MaxRows-1
+    // This affected all the PopulateGridWData calls
+    // 
+    // Feb 17, 2004  Added new functionality to allow Users to resize column width on their own Requested by Lreedy.
+    // Added new Property to allow/disallow this new functionality. Routines affected MouseDown, Mouseup, and Mousemoce 
+    // for the canvas subobject. User just clicks and holds on header row and moves mouse side to side to adjust the colwidth.
+    // Raises a new event ColumnResized(server,ColID)
+    // 
+    // 
+    // Feb 18, 2004  Added new property UserColresizeMinimum. This property defaults to 5 pixels and set the smallest size that a user can 
+    // resize a coloumn to. This prevents a user from making a column 0 pixels wide making that column to small to be selected
+    // and resized to a larger width.
+    // 
+    // Feb 18, 2004  Added net Public Method to CopyGridToClipboard.  Removed code from Menuitem1 and placed that code into the CopyGridToClipboard
+    // Method.
+    // 
+    // Mar 04, 2004  Fixed a bug in Columformat and ColumnformatasMoney when invalid colums were handed into them
+    // 
+    // Mar 11, 2004  Lots of aditions to the included context menu
+    // Export to excel, Fixed Alternate row colorization to only color populated columns
+    // Fixed the wacky sizing of the rows in excel export
+    // Added menu options to send to excel, and adjust alternatecolorizing, and column/row autofiting
+    // Added formatters for the grid column contents Format as Money, Number, Text, Left Center and Right justification
+    // These new formatters were added to the internal context menu
+    // Fixed the cause for the menu to popup in a different place then where the mouse was on right mousebutton
+    // 
+    // Mar 15, 2004  Added two new Properties LastConnectionString and LastSQLString each will return the last passed in connection or
+    // SQL code used for any of the PopulateGridWithData calls.
+    // 
+    // Mar 24, 2004 Added the ability to hand the PopulateViaWebServiceString method a delimiter of more then one character.  
+    // Added a new Public Function called ReturnDelimitedStringAsArray to parse a delimited string 
+    // and return a string array(,) 
+    // 
+    // Mar 28, 2004  Added some further modifications to what is drawn and when its drawn to try and always ensure that a row and col is
+    // drawn at least in part.
+    // 
+    // Mar 30, 2004  Some further refinements to the drawing process. Overrode the on paint background. Helps reduce flicker
+    // 
+    // Apr 15, 2004  Added new events toomanyrecords and toomanyfields called when either the autosize check length and width of the resulting
+    // bitmap would exceed 16735 pixels and the bitmap is truncated.
+    // Also added DefaultForegroundColor property to allow the autopopulators to get the color right
+    // Changed the default color for the grids text being added from system.drawing.color.blue to system.drawing.color.black
+    // 
+    // Jun 07, 2004  Fixed a bug in the Item(x,y) call that resulted in exporting to excel bombing on having a programatic cell populated with
+    // no data.
+    // Added 4 new subs to POPULATE, ODBCPOPULATE, OLDPOPULATE and SQLPOPULATE w data calls (16 in all ) these calls now will
+    // take a datareader of the appropriate type and will populate from the datareader. The call will not close that datareader
+    // however since it is basically a firehose cursor you will not be able to reiterate over the data after the grid has
+    // done its thing with it...
+    // Added two new properties ExcelMatchGridColors and ExcelOutLineCells. These properties allow the export to excel to
+    // Attempt to match the colorization of the grid itself. If you set up the grid control with custome colors in certain 
+    // Cells the export function will attempt to match those color now. ( If you use any of the aplha blending that setting
+    // Will not be carries over to excel as its not supported in excel. The OutlineCells boolean will attempt to outline the
+    // exported cells in a solid line ( Usefull as colorizations will remove outlines and make the grid look flat and lifeless )
+    // Added two new context menu items to support user mode setting of the above new properties and code to tract these 
+    // new properties current settings when the menu pops up.
+    // 
+    // Jun 08, 2004  Added new exporttoexcel function that takes the excel instance the workbook instance along with the worksheet name
+    // this was added to support Beaver county CAP reporter function. Allowing multiple Reports to be sent to a single
+    // excel instance.
+    // 
+    // Jun 16, 2004  Complete rewrite from the ground up
+    // Primarily to fix a problem of getting to much data on a populate.
+    // Not really anything that went untouched. 
+    // 
+    // Jun 17, 2004
+    // Jun 18, 2004
+    // Jun 19, 2004
+    // Jun 21, 2004  Continued rewrite and testing as replecement in our projects
+    // 
+    // Jun 23, 2004  Added new property AllowColumnSelection defaults to true if you turn it off column selection is disabled
+    // Added new property AllowControlKeyMenuPopup will disallow the ctrl key forcing of menu to popup even if a cistom
+    // context menu has been attached to the control. Defaults to allowing ( TRUE )
+    // 
+    // Jun 25, 2004  Added SelectedRowForeColor and SelectedRowBackColor and SelectedColForeColor and SelectedColBackColor using FLYWHEEL
+    // Fixed a bug where the last row might not be visible using keyboard navigation
+    // Added new methods to SetColBackColor and SetColForeColor to add to the ROW ones already in the control
+    // Added new Methods GetColAsArrayList and GetRowAsArrayList
+    // Fixed a bug where the elected row was being cleared on a mouse wheel
+    // Fixed a bug where a populate call might cause the grid to bomb if there were less than the number of cols or rows
+    // in the grid after the populate vs before the populate and the viewport was adjusted to these areas before the 
+    // populate call was made. (Basically I reset the status of the scrollbars on all InitGrid calls )
+    // Grid now gets Focus when the mouse enters it so that the mousewheel will be active in the grid as soon as you
+    // hover over the grid
+    // Added Default Value Attributes for a ton of the exposed properties using Flywheel
+    // 
+    // Jul 02, 2004  Added some additional checks in MouseWheel event handler to prevent out of bounds conditions
+    // 
+    // Jul 08, 2004  Added DeleteRow and DeleteColumn for compatability with CTINVOICER
+    // Added AutoFocus property defaults to true
+    // Added Enter and Return keyboard handlers
+    // Added Left and Right keyboard Handlers
+    // Added the tossing of events RowSelected and RowDeSelected in the appropriate places
+    // Fixed some issues with Populate grid from array
+    // 
+    // Jul 24, 2004
+    // Jul 25, 2004  Two main new things done to improve performance and reduce memory footprint
+    // Created a semaphore to prevent automated grid sizing needlessly ( Vastly improved performance )
+    // Created a level of redirection for the creation of the grids Fonts, Pens, Stringformats, and Backcolors
+    // This has the effect of vastly reducing memory footprint. Example
+    // 5000 Rows of 58 colums ( Select top 5000 * from claims ) prodiced a grid quiet state of using about 900 megs of PF!
+    // That Same setup now uses just < 100 megs
+    // Also added a DefaultBackColor property that was logically missing
+    // Now putting 100000 rows in the grid is doable and that uses only about 300 mgs of PF memory
+    // Also moved scrollbar calculations before intitial render to reduce that pause between progress bar ending and initial
+    // render
+    // 
+    // Jul 26, 2004  Performance enhancements in colorizers to speed up the works
+    // Export to excel progress messages implimented
+    // 
+    // 
+    // Oct 07, 2004  Re-added ColPasswords property aand implimented it back into the rendering engine as an oversite on my part when
+    // we re-implimented the grid back in the summer. Larry needed this in his FTP processor
+    // 
+    // Nov 05, 2004  Fixed two bugs The Default ForgroundColor and DefaultBackgroundColor were setting the wrong internal variables
+    // The Col Passwords item was not being used for colum width calculations when AutoSizing the grid to cells contents
+    // That has been fixed in this release.
+    // 
+    // Nov 09, 2004  Added new method SetColorScheme that uses a builtin enumeration TaiGridColorSchemes to set the coloring used
+    // in the grid. The schemes need some work yet but the ability is defined in the grid itself now.
+    // Fixed a bug where in some cases the last column might not be visable because of the size in fonts increase.
+    // 
+    // Nov 15, 2004  Added check for the visibility of the grid on raising ceryain mouseevents. CellClicked and CellDoubleClicked.
+    // It appares that under some circumstances the grid was fireing a second doubleclick event with the cirrect parameters
+    // but if its on a form that is handling the event that is also being hidden then the form will wire the event to the
+    // wrong handler. It will also send the wrong handler the wrong parameters. This ofcourse will cause all maanner of
+    // weirdness that proved difficult to track down. These changes should prevent that sort of thing from happening.
+    // 
+    // Nov 18, 2004  Fixed a stupid bug with searching in the grid that jeff found yesterday
+    // 
+    // Nov 23, 2004  Fixed a bug in sumupcolumn.
+    // 
+    // Dec 01, 2004  Forced setting of selected row to jump to the top of the grid on a refresh.
+    // 
+    // Dec 02, 2004  Fixed a search in column issue Jeff uncovered in conjunction with Care Tracker
+    // Ctrl F fill now repeate the last search operation from the currently selected row and NOT Beep
+    // Show now handle population from array and password cols correctly per Larry.
+    // 
+    // Dec 03, 2004  Added two new functions and tied them to Menu items under the SORT menu to allow you to sort a column as dates
+    // either descending or ascending. Old sort routine is still there but this treats cell contents as textual entities
+    // and date sorts often are broken if the dates are not formatted properly first read as date sorts are always broken.
+    // new routines handle date sorts differently after first ensuring that the entire column contains data that CAN be
+    // converted to a date first. If a column has any data that caannot be converted to a date then a message box will
+    // inform the user that date conversion fails for some of the columns data and the sort was aborted.
+    // 
+    // Dec 06, 2004  Added aa semaphore on mousedoubleclick to prevent the fireing of a mouseup after the doubleclick event is fired. 
+    // This was the cause of the grid not tracking the selected row after doubleclicking on that row and having the grid
+    // hidden by another form and then reselected after showing that form again. The event model would fire
+    // Mouse Down    Mouse DoubleClick     Mouse Up. CTinvoicer woulod select the row after the doubleclick and then
+    // the mouse Up would reselect the row after the vert scrollbar was moved to the last selected row. Te effect was if
+    // There was no scrollbar or the scrollbar was at the top of the screen the last selected row would re-select. If the
+    // Scroll bar was scrolled down at all the selectedrown would jump down by the offset of the vert scrollbar because of
+    // the phantom mouseclick. Since the System.Windows.Forms event model has no way to short circuit this characteristic
+    // I had to do it in code.
+    // 
+    // Dec 07, 2004  Massive performance enhancements using REDGATE ANTS profiler tools just purchased.
+    // Changes in the AutosizeCheck routine, The Populate from data routines, implemented using the ANTs profile
+    // runs as a guidline. Now an order of magnitude faster in typical use.
+    // 
+    // Dec 29, 2004  Added a boat load of new context menu options to support math on columns and rows. 
+    // MAX and MIN, SUM and AVERAGE on cols and rows selected with the mouse menubutton (right menu button)
+    // Also added the copy cell to clipboard option to facilitate the grids use as a research tool when used in
+    // conjunction with our other tools like Claimsexplorer.
+    // 
+    // Jan 05, 2005  Set the default for the autofocus property to be False. For some CareTracker issues.
+    // 
+    // Jan 13, 2005  Configured the two PopulateFromWebService base functions. Now will examine the string for {NULL} note the case
+    // if and only if the OmitNulls property is true. If so it will replace these with empty strings to more closely
+    // approximate the behaivior of the true populatefromdatabase calls. Implemented for the time tracker application
+    // as jeff uncovered this anomaly.
+    // 
+    // Jan 28, 2005  Larry re-wrote the ExportToExcel(ByVal _excel As Object, ByVal _WorkBook As Object, ByVal wsname As String) method
+    // to increase performance.  Also added ReturnExcelColumn function to return the Excel column as a letter.
+    // 
+    // Feb 17, 2005  Larry Modified export to excel to get around Excel 2003 specifics tested back to office 2000 version of excel.
+    // 
+    // Mar 15, 2005  Added Populate Grid with Datatable support
+    // 
+    // Mar 28, 2005  Fixed the ReturnExcelColumn call to properly handle columns over 104, uncovered in the HCQUreporter
+    // 
+    // Mar 30, 2005  Fixed a issue in the pivot populate call that was mishandling the header labels
+    // 
+    // Apr 01, 2005  Added the ability to Print the Grid for support of reporting output in THe TAIQuery Reporter and
+    // The Report tools being developed for VBH datasets in Beaver County and Fayette County
+    // PrintTheGrid(4 Overloads)
+    // Print and Preview the grid output in the grids own context menu
+    // Properties to control Landscape/Portrait, GridOutlining, Matching Coloration
+    // Title and Page Numbering. 
+    // 
+    // Apr 19, 2005  Fixed a problem with the FormatColumnAsMoney method.
+    // 
+    // Apr 20, 2005  Fixed a big in the print grid procedure where multiheight rows were not coloring properly
+    // 
+    // Jun 02, 2005  Added Multiple Selection Capabilities
+    // CTRL and click selects SHIFT and click selects range
+    // SelectedRows() returns an arraylist of integers for the rows that have been selected
+    // Edit Capabilities 
+    // AllowInGridEdits allows or disallows editing globally
+    // ColEditable(colindex) = True or False allows or disallows editing the contents of a given columns data defaults
+    // to false in all cases
+    // Raises events on changing any cell with CellEdited(sender,row,col,oldval,newval)
+    // The textbox that allows editing can be changed to a different backcolor with the CellBackcolorEdit property
+    // New event GridResorted(sender,colindex) will fire whenever the sort operation is called Colindex is the sort column
+    // New Method SortGridOnColumn(col,Descending) will sort of col id col, Descending if true Ascending otherwise
+    // Will clear the SelectedRow property and the SelectedRows arraylist on sort as well
+    // New Method PopulateFromWQL(WQLStatement) Like the other database calls will Populate the grid with the results
+    // of the supplied WQL statement
+    // Completion of Major re-work on printing. Can print to any installed printer, using any supported page size
+    // can adjust the Orientation, print any range of pages or all pages
+    // 
+    // Jun 03, 2005  Fixed some minor issues with MultiSelect
+    // Added new Property ColMaxCharacters(colid) this will allow you to elpisis truncate the display of a given colid
+    // without actually truncating the data being stored inside the grid. Its a display trick like the ColPassword(colid)
+    // property that already exists
+    // Added event calls to GridResorted on user date sorting of the grid as well
+    // Added new method RemoveRowsFromGrid(listofrows as Arraylist) Send in an array list of row integers and the grid will
+    // Remove them in a single shot
+    // Added a new event KeyPressedInGrid(Sender as Object,keycode as Keys) will send in a keys object representing the
+    // whenever the grid has focus and the grid is NOT in editmode on a cell. You will get thing like Keys.Delete and Keys.F1 
+    // and what not in this event. used to determining keys being pressed not just letters on the keyboard.
+    // 
+    // Jun 09, 2005  Added the ability to restrict edited cells to a list of values
+    // RestrictColumnEditsTo(ByVal colid As Integer, ByVal CaretDelimitedString As String) allows you to send in
+    // a ^ delimited array of strings to display in the drop down combo box on editing a cell rather than the standard
+    // textbox for edits.
+    // You can also use RestrictColumnEditsTo(ByVal colid As Integer, ByVal ArrayListOfStrings As ArrayList) to build an
+    // arraylist of strings to send into the grid as a restrictor list (Internally it will use the supplied arraylist to
+    // build a CaretDelimitedString for you. If your arraylist items contain a ^ character that character will be
+    // converted to a + character prior to this operation.
+    // ClearAllColumnEditRestrictionLists() will remove any current column restrictions
+    // to clear a specific column restriction use the ClearSpecificColumnEditRestrictionList(ByVal colid As Integer)
+    // Sending in the colid of the desired colum you wish to clear the list on
+    // You still have to AllowInGridEdits and set the desired columid as editable...
+    // Example:
+    // TAIG.AllowInGridEdits = True
+    // TAIG.ColEditable(2) = True
+    // TAIG.ColEditable(4) = True
+    // TAIG.RestrictColumnEditsTo(2, "123^456^789")
+    // 
+    // Fixed a bug in the RemoveRowsFromGrid that was creating an additional column on repopulate. 
+    // SetAllCellBackColors(color as Color) will set all cells to a certain background color 
+    // SetAllCellForeColors(color as Color) will set all cells to a certain foreground color
+    // New Property PageSettings  Gets or Sets the PageSettings object used to print the grid
+    // Use this to configure the Landscape,Papersize, and other printer specific settings externally before printing
+    // the grids contents
+    // The Tab key inside the grid when you are editing a field will n ow tab to the next edit field on the grid
+    // If you are at the end of the grids edit fields the Tab key will tab off the grid to the next tabstop on the
+    // Containing form
+    // Fixed a bug where the grid did not Scroll to where the user was editing a cell on Tabbing through the Grids
+    // Edit fields. It will now scroll to keep the edit fields on the top of the grid itself
+    // restricted columns will now NOT allow you to type anything into the combo text box you must either leave
+    // It blank to select nothing or select something in the list.
+    // 
+    // Jun 10, 2005  Added SetEditItemText(string) to allow you to set the contents of either the combobox text or a textbox text on edit
+    // while you are in edit mode on a given cell
+    // Fixed a bounds condition where ig a grid had 2 cells on a row it would not tab to the next row on editing and tabbing
+    // properly.
+    // Changed the way a doubleclick is handled internally to NOT deselect the row that wwas just cliccked on in selected
+    // row to better accomodaare the way the grid was being used in some of our applications. Single click interfaces
+    // remin unchanged. (The problem was introduced with the introduction of Multiple Selections)
+    // 
+    // Jun 12, 2005  Added ReplaceColMonthNumericWithMonthName(ByVal columnid As Integer)
+    // Use this to rip through a columns contents aand replace all occurances of Month Numerics with
+    // The Long Gregorian name for the month. Usefull in ordering operations where you want the months to order
+    // Numerically but want to show Alphabetically. Use SSQL to get the numeric form and order then convert them
+    // all to show the name for the month.
+    // Added DoControlBreakProcessing(ByVal BreakColIntArrayList As ArrayList, _
+    // ByVal SumColumnIntegerArraylist As ArrayList, _
+    // ByVal IgnoreCase As Boolean, _
+    // ByVal ColumnToPlaceSubtotalTextIn As Integer, _
+    // ByVal SubtotalText As String, _
+    // ByVal RightAlignSubTotalText As Boolean, _
+    // ByVal ColorForSubTotalRows As System.Drawing.Color, _
+    // ByVal BlankSeperateBreaks As Boolean, _
+    // ByVal EchoBreakFieldsOnSubtotalLines As Boolean)
+    // The work horse routine can help replace all that grid manipulation routines in some of our reports to get
+    // ordered and grouped output. Simply craft the SQL code as usual and tell the grid to do the break reporting
+    // for you. Hand it 2 arraylists of integers representing column IDs that you want to break and Sum on.
+    // Boolean to ignore or not ignore case on the breaks, An Integer indicating Where to put the subtotal text.
+    // What text to place on the subtotal row, What color to color the subtotal rows, 
+    // A Boolean to Right Justify the subtotal text, A boolean to seperate each break
+    // with a blank row or not, Finally a boolean to indicate if you want to echo the Break data in the subtotal rows
+    // With this all manner of Formatted output can be crafted with a few commands and the grids internal functionality.
+    // 
+    // Jun 20, 2005  Added new Event GridHover(Sender,row,col,item)
+    // Sender is the Grid object itself
+    // Row and Col are integers representing the Row and the column that the user is hovering over
+    // Item is a string representing the actuaal value at that position in the grid itself
+    // Event is Not raised if the user is hovering over the Header or the Title or is outside the bounds
+    // of the grid itself.
+    // 
+    // Jun 21, 2005  Added new event GridHoverleave(sender as object)
+    // will fire this event if you are hivering over the grid canvas but not on grid data itself
+    // use this event to remove any tooltip text associated with the grid object. To prevent floating unassociated
+    // tooltips from hanging on out there.
+    // New Methods
+    // DoControlBreakSubTotals(ByVal BreakColArrayValues As ArrayList, _
+    // ByVal ColToFindValues As Integer, _
+    // ByVal IgnoreCase As Boolean, _
+    // ByVal SumColumnIntegerArrayList As ArrayList, _
+    // ByVal ColorForBreakSubtotals As System.Drawing.Color, _
+    // ByVal CutoffRow As Integer)
+    // BreakColArrayValues is an arraylist of distinct valued to subtotal on (Actual textual values in the grid)
+    // ColToFindValues what column to look in for the values above
+    // IgnoreCase  Self explanitory
+    // SumColumnIntegerArrayList and arraylist of column IDs to sum on
+    // ColorForBreakSubtotals What color to put in the new rows that will be added to the grid
+    // CutoffRow What row to stop looking past. (Use this to preset the stoprow if you are using this call
+    // multiple times to subtotal different columns)
+    // 
+    // Public Function GetDistinctColumnEntries(ByVal colid As Integer, _
+    // ByVal exclusionlist As ArrayList, _
+    // ByVal ignorecase As Boolean) As ArrayList
+    // Colid is the integer columnid to look into
+    // exclusionlist is an arraylist of strings to exclude from the results
+    // ignorecase self explanitory
+    // This will return an arraylist of descrete values contained in a column minus any in the exclusionlist
+    // use this to supply the BreakColArrayValues parameter to the above new method
+    // Two overloads with sane parameters for the above additional entries
+    // 
+    // Jun 22, 2005  Added new functionality allowing users to elect to have a column displayed as a checkbox.
+    // ColCheckBox(colid) as Boolean property set to True or False (Default is false)
+    // Rendered checkbox uses the ControlPaint.Drawcheckbox method to simulate the checkbox drawing
+    // System will interpret values in the _grid(x,y) array of text TRUE, FALSE, YES, NO, Y, N, 1, 0 will all render
+    // Checked or unchecked boxes as appropriate.
+    // If you sel a Checkbox column to be editable then clicking on that cell will intrepret the value contained in the
+    // _grid(x,y) cell and flip its meaning TRUE becomes FALSE and visa versa, YES becomes NO aand visa versa, 
+    // and so on and so forth.
+    // The new gridHover events will still pass back the value contained inside the grid not a boolean status of the checkbox
+    // think of the grid containing text still but the display being tricked to interpret that text and render either a 
+    // checked or unchecked box.
+    // TABBING around in the grids edit fields will bypass checkbox edits and skip to the next non checkbox.
+    // 
+    // ClearAllGridCheckboxStates() will reset all grid renderings back to normal mode, turning off all checkbox rendering
+    // 
+    // Bug Fixes....
+    // Fixed a bug where the LANDSCAPEMODE parameter of PrintTheGrid was being ignored
+    // Fixed a bug where the Grids additional staatus arrays for hidden columns and editable columns where not being
+    // reinitialized properly after an alteration of the grids dimensions.
+    // Fixed a bug where populating with an sqldatareader would give you 1 row even if the reader was empty. It now
+    // will hive you just the field names in the header and no empty row
+    // 
+    // Jun 29, 2005  Added AllowRowSelection to the grid to Allow (Default) or Disallow row selection. Necessary for BHISAuths  
+    // 
+    // Jun 30, 2005  Added the property set for SelectedRows(Arraylist) to allow programatic setting of multiple rows of grid data
+    // this was necessary for Auths selection of multiple services attached to an auth
+    // Sorting of the grid will now retain all column width specifications even hidden columns because they are width 0
+    // across the sort call. Even the sortoncolumn methods in the grid itself because they really call the same functions
+    // internally as the context menus. Added test functionality to test the selected rows call to the test harnes
+    // 
+    // Jul 1, 2005   Made RenderGrid() method public. This enables the grid to be used with rendering itself onto alternate
+    // graphics contexts.
+    // Added SelectAllRows() to automatically select all rows in the grid. (For Jen)
+    // 
+    // Jul 3, 2005   Made Render Grid Private Again. Exposed a new Method GetGridContentsAsImage
+    // that returns an Bitmap (Image) of the grids rendered surface
+    // Non clipped and no scrollbars. (even if the scrollers are visible for the onscreen version of the grid).
+    // This will be useful for placing grids contents onto printer object surfaces.
+    // or even Direct3D rotating Cubes (sic)
+    // It is important to use caution on how you call this routine because the resulting Bitmap can get to be HUGE
+    // While the in memory version of this bitmap is miniscule until the routine is called.
+    // calling it on a large grid can create a massive in memory bitmap that can drag the system to it's knees while
+    // persisted.
+    // That is why there is also a FreeGridContentImage method that allows you to remove this in memory footprint
+    // after you are finished with it.
+    // Usage:
+    // Assume you have the grid and it is called myGrid.
+    // Assume you have a graphics object called GR
+    // 
+    // Dim w As Integer = myGrid.GetGridContentsAsImage.Width  ' width of the internal to the grid image
+    // Dim h As Integer = myGrid.GetGridContentsAsImage.Height ' height of the internal to the grid image
+    // 
+    // Dim sf As Single = Me.Width / w ' scale factor
+    // 
+    // Dim ww As Single = w * sf
+    // Dim hh As Single = h * sf
+    // 
+    // GR.DrawImage(myGrid.GetGridContentsAsImage, 0, 0, ww, hh)
+    // myGrid.FreeGridContentImage()
+    // 
+    // Fixed a small bug in the DeSelectAllRows call that was leaving selected roww selected but clearing the selectedrows 
+    // collection. The result waas whatever row was last selected remained selected after the call.
+    // 
+    // Jul 11, 2005  Ver 1.1.0.15
+    // Added two new methods to assist reporting efforts 
+    // PlaceGridOnGraphicsContext(Graphics, Xloc,Yloc,Width,Height)
+    // This will render at native resolutions the grids contents offset at xloc,yloc and clipped at width and height
+    // onto the supplied graphics context. Print the grid inside a report now is as easy as...
+    // TAIG.PlaceGridOnGraphicsContext(gr, 100, 100, 600, 200)
+    // places grid named TAIG onto Graphics Context GR at coord 100,100 with a width of 600 and height of 200 px
+    // 
+    // WordWrapColumn(Colid, WrapLength)
+    // will force a wordwrap operation on supplied column id with a length of wraplength. Will strip off embedded
+    // System.Environment.Newlines and will insert its own trimming excess whitespace and will reinsert the data
+    // back into the grid. Note unlike some of the other methods that format output (Password columns and what not)
+    // this method will aalter the internal data stored inside the grid. If you are going to check against the orig
+    // data in a daatabase you will likely get inequalities on columns that you run this method against. Use for 
+    // display purposes only
+    // 
+    // Fixed a bug in the edit mode where a tab off the last edit field in a given grid would not save the edited data
+    // and would blank the field/cell instead. 
+    // 
+    // Jul 12, 2005  Fixed an off by one error in SelectAllRows
+    // 
+    // Jul 14, 2005  Added 
+    // SetEditItem(ByVal row As Integer, ByVal col As Integer)
+    // Allows you to programatically select a certain col and row as the items being edited in the grid.
+    // The column must allow edits and the row and col must be in the range of rows and columns in the grid itself
+    // row >-1 and < _rows col >-1 and < _cols.... 
+    // Implemented for Larrys messaging scheme in the BHIS Project.
+    // 
+    // Aug 01, 2005  Ver 1.1.0.18
+    // Added 4 new Methods and one Function
+    // Functions
+    // CreatePersistanceScript(ByVal tname As String) as String
+    // Will craft a syntactically correct Create Table statement using table name TNAME
+    // that will drop that table name first from a database. The create will then be
+    // Followed by a series of Inserts that will insert data into the database table created
+    // by the create table statement. The fiels added to the table will follow the
+    // Header names unless the field is named ID. In which case the field will be renamed
+    // ID_DATA. This is because the create table statement will craft an identity field
+    // called ID, seting its type to numeric and setting its autonumbering to start at
+    // 1. All other fields will be VARCHARS that are large enough to hold the largest
+    // value currently in the grid, or 8000 characters whichever is smaller.
+    // If the field contains all empty strings then the resuklting Varchar field will be 
+    // set to 10 characters in length.
+    // The strings inserted will be ' escaped allowing
+    // values like O'Mally to be inserted into the result set.
+    // 
+    // Methods
+    // FrequencyDistribution(ByVal sgrid As TAIGridControl, ByVal ColForFrequency As Integer)
+    // This populate grid call will take a source grid contents and rip through that grids
+    // data on colid ColForFrequency and count the number of times each distinct value
+    // appears in that column. The result will be a grid with 2 columns one the distinct
+    // values plucked from the source grid. The other a count of how many times each of
+    // those distinct values appeared in the source grid.
+    // Usefull in reporting apps where things like Diagnosis or Procedure code counts
+    // are desired.
+    // 1 Overload where you pass in a SortDescending boolean and the resulting grid will
+    // be sorted numerically on the frequency eirther descending or ascending.
+    // 
+    // SortGridOnColumnDate(ByVal col As Integer, ByVal Descending As Boolean)
+    // SortGridOnColumnNumeric(ByVal col As Integer, ByVal Descending As Boolean)
+    // will sort the colid COL as either a date or as a number Asc or Desc as defined by
+    // the boolean parameter Descending.
+    // Added 2 new menu options on the context menu to call the SortGridOnColumnNumeric 
+    // renamed the SortGrid menu options to read ASCII Sort Grid to better reflect the
+    // function of the selection. The Date sorters were already there they have just been
+    // exposed to the outside world programatically.
+    // 
+    // 
+    // Aug 02, 2005  Ver 1.1.0.19
+    // Added 1 new function w 1 overload
+    // CreateHTMLTableScript()
+    // Defaults to Border 1, Match colors and Omits Nulls see below...
+    // CreateHTMLTableScript(ByVal BorderVal As Integer, _
+    // ByVal MatchColors As Boolean, _
+    // ByVal OmitNulls as Boolean)
+    // Will return a string containing an HTML table format that represents the grids contents
+    // BorderVal is the Border thickness ranges from 0 to whatever 
+    // MatchColors will make the grids title, Header, and Cells match the origin grids colors
+    // OmitNulls will make the resultset have blank cells where the {null} cell was in the source
+    // 
+    // Aug 03, 2005  Ver 1.1.0.20
+    // Added two new menu options to the context manu that Wrap the SQL and the HTML creators
+    // that have been addded over the past few days
+    // 
+    // Aug 04, 2005  Ver 1.1.0.21
+    // Added a new item to the Context Menus under Math. Display Frequency Distribution
+    // This will call the internal FrequencyDistribution method and display the results in
+    // another grid contained inside a dialog window. Usefull in the Query reporter to do 
+    // things like count the number of each procedure codes or Diag codes in a query like
+    // Select * from claims where svcdate between '10/1/2001' and '12/31/2001'. For those
+    // analysis freaks out there.
+    // 
+    // Aug 04, 2005  Ver 1.1.0.22
+    // Fixed a short sighted issue where creating an SQL persistance script if the Grid had
+    // Header labled with Spaces in them the resulting SQLscript would have a problem on the
+    // Inserts because the field names would not have been enclosed in []'s
+    // DOH!
+    // 
+    // Aug 05, 2005  Ver 1.1.0.23
+    // Major performance issue with the HTML table creation functions fixed
+    // String Manipulations are a Drag. They were making the thing run like it was in 
+    // waist deep wet cement.
+    // 
+    // Aug 25, 2005  Ver 1.1.0.24
+    // Added a properties option to the context menu. For now brings up a limited dialog
+    // where the end user can adjust font sizes, and the visibility of he title and header
+    // Fixed the notion of selecting with the mouse and then arrowing about leaving the
+    // clicked row selected as you cursored about. Now you have to shift click or 
+    // ctrl click to get those results
+    // Made the rendering of checkbox columns render a ghosted checkbox if the cells contents
+    // are empty rather than a non checked checkbox. This was done for the TAIHCSISAugmentor
+    // project. If that cells contents are rendered ghosted then it cannot be change via
+    // the mouseclick even if the column editing is allowed with the other methods.
+    // 
+    // Sep 05, 2005  Ver 1.1.0.26
+    // Re-implemented the way the Selected Rows collection was being populated to more
+    // closely approximate the way it used to work before the Aug 25 additions. This should
+    // fix the breakage that some folks endured with multiple selection interpretation caused
+    // by those changes.
+    // This build is a prelude version to the new version of the grid with build in Fuzzy
+    // algorythims for set analsys.
+    // 
+    // Nov 10, 2005  Ver 1.1.0.27
+    // Changed the way the printer object is being dealt with. Switched some of the printer
+    // object that are internal to late binging to better catch exceptions around printers
+    // and printer manipulation. (Like 'There aren't any installed printers')
+    // If the initial printersetup is failing internally the contexts menus printer stuff
+    // will be disabled. 
+    // Also the printer setup dialog won't display if the grid itself is empty. 
+    // All this should solve issue 352 on BHIS as well as Larrys issue with the HCSIS Robot
+    // 
+    // Nov 28, 2005  Ver 1.1.0.30
+    // Implementation of a new feature called tearaway columns
+    // Rational:
+    // With some tools like the Query Reporter and the Livanta Explorer lots of columns
+    // in data grids proved cumbersome to message.
+    // One persons column layout was good for that person but sub optimal
+    // for the next bloke.
+    // Tearaway columns allow for user manipulation of column order in seperate
+    // floating tool windows.
+    // If the user repopulates the grid with data then the open floating tearaways
+    // will adjust to the new contents as follows
+    // 1)  If the floating windows was on a column that no longer exists in the new grid
+    // It will be closed
+    // 2)  If the floating tool window still exists in the new grid its title will change
+    // to refrlect the new grid column title and its contents will change to reflect the
+    // new column contents
+    // 3)  If the Verticle scrollbar is visible in the main grid the toolwindows will also
+    // have the verticle scrollbar
+    // User interaction on any verticle scrollbar both in a floating toolwindow and
+    // the main grid itself will adjust all visible verticle scrollbars accordingly
+    // 
+    // The context menu now has three new options
+    // Tear Column Away
+    // Will take the colum you were over when you pressedthe right mousebutton and tear
+    // it out into a floating window
+    // Hide Tear Away Column
+    // Will take the column in the main grid and will cloas a tearaway for the column
+    // if one is already open otherwise it will do nothing
+    // Hide All Tearaways
+    // This global option will toss away any tearaway floating windows that are open
+    // 
+    // Nov 29, 2005  Ver 1.1.0.31
+    // Added the ability for the grid to broadcast hovering events on tearawys as if it was
+    // getting User Interaction on the main grid itself. The issue is that if you are using
+    // a simple tooltip control to display end user information to the user based on these
+    // GridHover events then the tooltip appears to be behind any of the tearaway windows.
+    // To solve this I implemented a sort of builtintooltip on each tearaway as well as 
+    // the main grid itself.
+    // In the GridHover event you get the Sender, row, col and value hovering over
+    // call DisplayGridToolTip(sender, TextVal) sending back the sender and whatever you
+    // want to have displayed in the tool tip. The Grid will route the request to the correct
+    // control or form based on who the initial sender was.
+    // Call HideGridToolTip() to make any displayed tooltips go away.
+    // Of course you can just respond to the gridhover event in your own way if you want to
+    // Also fixed a small error in sizing with the grid and determining what column you are
+    // over when you pull up a context menu.
+    // 
+    // 
+    // Ver 1.1.0.32 
+    // Simple Change to make Tearaways topmost on the screen
+    // to help aid in its use with the Livanta Explorer
+    // 
+    // Dec 01, 2005  Ver 1.1.0.33
+    // Added new Tearawway option to the context menu. Tear Away Multiple Columns will bring
+    // up a dialog allowwing you to click select more than one ccolumn in te current grid
+    // to tear away. Ok will tear the selected ones away cancel will abort that process
+    // Added the Arrange Tear Aways option to the context menu to arrange tearaway windows
+    // across and then down the screen. Using system defined screen resolution as its
+    // for placement. Windows will be arrange in the order they were opened and will be non
+    // overlapping.
+    // Tearawys are now embellished coloration wise to match grid defaults. They are outlined
+    // per Ann's request with her use of the Livanta Explorer.
+    // 
+    // Ver 1.1.0.34
+    // Added the ability to click on a row in a tear away and have that rows selection
+    // be echoed vack to the parent grid and subsequently echoed to all other tearaway
+    // windows automagically. Asked for by Ann in her use of the Livanta Explorer
+    // 
+    // Dec 02, 2005  Ver 1.1.0.35
+    // Added new functionality to the AutoArrange Tear Aways to automatically shrink
+    // windows to match the height of the rendered content on small lists.
+    // Added internal functionality to better inhibit redrawing on tearaway movement
+    // and resizing. This will better remove the Windorms getting hosed bugs that have
+    // plagued the autotrack window sizing feature I put in yesterday for the Livanta 
+    // explorer.
+    // Plugged a small memory hole that would ultimately result in a GC.Collect freeze
+    // during use in some situations
+    // Mousing over a tearawy will now focus that tearaway forcing displayed tooltips 
+    // to render topmost preventing the tooltip layering issue that occured with multiple
+    // tearaways being present.
+    // Row selection in Any tearaway will track on all other tearaways and the mother grid
+    // Arrow key movement of selected row in any tearaway will track in all other tearaways
+    // as well as the mother grid.
+    // General performance tweaks and internal optimizations on the tearaway feature in general
+    // 
+    // Dec 05, 2005  Ver 1.1.0.36
+    // Added the ability to click and double click on a tearaway and have the click or doubleclick
+    // send the mother grid the event so it could raise the CellClicked and CellDoubleClicked 
+    // events respectively
+    // Added two new public Methods RaiseCellClickedEvent and RaiseCellDoubleClickedEvent
+    // these public methods support the above functionality and allow a developer to 
+    // message these functions of the grid externally
+    // Changed the way a cell selection in a tear away occurs to clear the selectedrows collection
+    // in the mothergrid on selection of a cell in a tearaway.
+    // 
+    // Dec 19, 2005  Ver 1.1.0.37
+    // Major refactoring effort around the storing and rendition of different backcolors and 
+    // forecolors in cells of the grid. The old method attempted to determine if a desired
+    // color was already in he list. The equality operator uses was flawed and this a new
+    // color entry was always being made. Wasting memory and performance. Flaw was uncovered
+    // during implementation of new reporting requirements for Beaver county. These changes 
+    // were made to the PDF version of the grid and have been echoed back to the mainstream
+    // version in 1.1.0.37.
+    // Also in this version are a new Overload of DoControlBreakProcessing with an extra
+    // parameter boolean TreatBlanksAsSame. This will allow and already controlbreaked grid
+    // to be further refined with additional breaks. The blanked fields that are the same from
+    // the prior control will be inferred thus treated as the same.
+    // Two new public methods.
+    // InsertRowsIntoGridAt(ByVal atrow As Integer, ByVal numrows As Integer)
+    // Will do as it seay and insert numrows of open space int the grid atrow
+    // Public Sub PolulateGridWithDataAt(ByVal ConnectionString As String, _
+    // ByVal Sql As String, _
+    // ByVal Atrow As Integer, _
+    // ByVal newbackcolor As Color, _
+    // ByVal newheadercolor As Color, _
+    // ByVal ColOffSet As Integer)
+    // Will insert the sql results of SQL against ConnecrionString into the grid
+    // atrow with the newbackcolor, and newheadercolor offseting by coloffset
+    // There is one overlolad on this the takes no coloffset and assumes column 0 for
+    // the starting column.
+    // This is used in the beaver reporting application to insert subreports into the grid.
+    // 
+    // Ver 1.1.0.38
+    // Added two new properties for Larry EditModeCol and EditModeRow
+    // If the grid is in editmode and you examine these properties you should get the 
+    // Col and Row of the edit operation. Usefull if you are processing dialog keys at
+    // the form level in Lookups and what not.
+    // 
+    // Dec 23, 2005  Ver 1.1.0.39
+    // Fixed an issue where if a cell ws in edit mode and the use either scrolled up to down
+    // and or left to right the edit boc (cmbo or textbox would no scroll to match the
+    // underlieing grid movement. Code added to the VS amd HS scroll managers to account
+    // for this. Bug discovered by Larry in his BHIS claims module.
+    // 
+    // Jan 10, 2006  Ver 1.1.0.40
+    // Fixed a stupid bug with currency conversion crap in the ColFormatAsMoney() call
+    // 
+    // Ver 1.1.0.41
+    // Fixed a different stupid bug in the ColFormatAsMoney method for Jeff
+    // 
+    // Feb 17, 2006  Ver 1.1.0.42
+    // Added a call to KillAllTearAways() on handledestroyed to help in leaving tearaways orphand
+    // in BHIS. 
+    // Moved KillAllTearAways to public methods allowing developers to call it externally
+    // in cases where they might want to ensure the tearaways are removed AKA in BHIS
+    // Cleared the SelectedRows Collecton on edit mode transitions from row to row this should fix
+    // a problem Jeff Id'd with the grids usage inside of BHIS
+    // Some printer output cleanup in an attempt to fix the BHIS 4039 lexmark printer issues.
+    // I fear the issue still exists and that the 4039 printer driver in Lehigh is Flatlined.
+    // All new functionality and actions tested in harness and passed.
+    // 
+    // Ver 1.1.0.43
+    // Added new functionality to allow attachment of custom contextual menus to the grids
+    // right mouse button functionality. This will replace the large menu that comes along for
+    // the ride with the grid with a user supplied menu. Event handlers of this supplied menu
+    // functionality remain external to the grid and are the responsibility of the developer 
+    // Usage...
+    // TAIG.ContextMenu = {some menu that you create}
+    // In support for this there are two new Readonly Properties
+    // ColOverOnMenuButton and RowOverOnMenuButton. These two integer properties will return
+    // the zero based integer values the represent the row and col that the user was over when
+    // they clicked the right mousebutton to bring up the menu in the first place. Even if the
+    // menu selection itself had the user move over a new row or column. If these return -1's
+    // then the user contexted menu over a blank part of the grid or the header or title
+    // of the grid.
+    // Functionality implemented for support of the usage of our grid control in ClaimsExplorer
+    // rather than the Crappy Microsoft grid.
+    // 
+    // Ver 1.1.0.44
+    // Added new functionality to allow or disallow functional groups from the builtin context
+    // menu....
+    // AllowTearAwayFunctionality(),AllowExcelFunctionality(),AllowTextFunctionality(),
+    // AllowHTMLFunctionality(),AllowSQLFunctionality(),AllowMathFunctionality(),
+    // AllowFormatFunctionality(),AllowSettingsFunctionality(),AllowSortFunctionality()
+    // All are Boolean properties that default to True
+    // Setting one of false will turn off that bit of functionality in the builtin context menu
+    // for example:
+    // AllowTearAwayFunctionality = False will disable the 5 tearaway menu items in the context
+    // menu 
+    // Implemented for BHIS selective disallowing of some items that cause modality issues
+    // with other window functions contained inside the parent program. Because the all default
+    // to true this has no effect on software that does not exercise these new properties.
+    // It's a drop in replacement all all grid since 1.1.0.33
+    // 
+    // Mar 03, 2006  Ver 1.1.0.45
+    // Added new functionality to allow spread sheet output to roll over onto a new sheet when
+    // the grid has more than X rows in it. New property of ExcelMaxRowsPerSheet which defaults
+    // to 30000 and has a range of 100 - 65000 dictates where the split will occur on exporting
+    // insanely large grid contents to excel.
+    // 
+    // Mar 06, 2006  Ver 1.1.0.46
+    // Fixed a rounding issue with breaking large sheets across multiple pages in excel export
+    // Integer division working differently between c# and VB in the .Net framework
+    // 
+    // Mar 08, 2006  Ver 1.1.0.47
+    // Fixed a problem that eluded me earlier with the header of the grid appearing on
+    // the newly created sheet in a multisheet excel export operation. Problem only happened
+    // where there was some rows, columns or cells that were colored differently than the predominant
+    // background color of the grid itself. Basically it breaks down into what I believe is a 
+    // bug in the way non instance types of objects are created and scoped during a programs execution
+    // It breaks down into this maxium....
+    // If you Create it you must initialize it lest you get surprised by unexpected bahaviors 
+    // later on in the codes execution. 12 Hrs blown on this simple to resolve issue but
+    // maddingly elusive to track down.
+    // 
+    // Mar 17, 2006  Ver 1.1.0.48
+    // Added in System.DateTime and System.Single to list of DataTypes in PopulateGridWithADataTable
+    // 
+    // Jul 06, 2006  Ver 1.1.0.49
+    // Added an overload for the ITEM property to take a string as the column identifier
+    // where it will do the GetColomnIDByName for you.
+    // 
+    // Oct 20, 2006  Ver 1.1.0.51
+    // Added code to shrink and wrap the gridreporttitle on printing grid contents
+    // 
+    // Oct 27, 2006  Ver 1.1.0.52
+    // Added new property Defaults to False ShowDatesWithTime. THis will force the population
+    // of any SystemDatetime column to expand the the time portion to show HH:MM AM/PM even if
+    // the time portion is 12 midnight ( system defaults to not showing the time by default )
+    // If left at false the time portion is ignored in all cases. All populators from database
+    // calls will honor this boolean property. Implemented for DAS issues Jen has in BHIS
+    // 
+    // 
+    // USAGE:
+    // 
+    // assume the grid control is named TAIG
+    // 
+    // To put some stuff in  the grid
+    // 
+    // Private _database as string = "Data Source={SERVER};User ID={SOMEUSER}; Password={SOMEPASSWORD};Initial Catalog={DATABASE};"
+    // Private _gridfontsmall As New Font("ARIAL", 8, FontStyle.Bold, GraphicsUnit.Point)
+    // Private _sql as string = "SELECT TOP 10 * FROM SOMETABLE"
+    // 
+    // TAIG.PopulateGridWithData(_database,_sql,_gridfontsmall)
+    // 
+    // ' there are over loads for this method that take a color also but the default works fine
+    // ' if you want to know more... Use the Force, Read the Source...
+    // 
+    // 
+    /// <summary>
+
+/// The main grid control used in all our applications. Developed from scratch over the course of years it
+
+/// has functionality to do all matter of things related to the gathering,display,editing,exporting tabular data.
+
+/// <code>
+
+/// <example>
+
+/// Example Usage
+
+/// Assume that the control is on a form and is named TAIG
+
+/// the following code will populate the grid with some data taken from SQL server
+
+/// </example>
+
+/// Private _database as string = "Data Source={SERVER};User ID={SOMEUSER}; Password={SOMEPASSWORD};Initial Catalog={DATABASE};"
+
+/// Private _gridfontsmall As New Font("ARIAL", 8, FontStyle.Bold, GraphicsUnit.Point)
+
+/// Private _sql as string = "SELECT TOP 10 * FROM SOMETABLE"
+
+/// TAIG.PopulateGridWithData(_database,_sql,_gridfontsmall)
+
+/// </code>
+
+/// </summary>
+
+/// <remarks></remarks>
