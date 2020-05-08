@@ -136,7 +136,7 @@ namespace TAIGridControl2
             stringFormat1.Trimming = System.Drawing.StringTrimming.Character;
             this._taigFreq.GridHeaderStringFormat = stringFormat1;
             this._taigFreq.GridheaderVisible = true;
-            this._taigFreq.Location = new System.Drawing.Point(0, 5);
+            this._taigFreq.Location = new System.Drawing.Point(0, 4);
             this._taigFreq.Name = "_taigFreq";
             this._taigFreq.PageSettings = null;
             this._taigFreq.PaginationSize = 0;
@@ -149,7 +149,7 @@ namespace TAIGridControl2
             this._taigFreq.SelectedRowBackColor = System.Drawing.Color.Blue;
             this._taigFreq.SelectedRowForeColor = System.Drawing.Color.White;
             this._taigFreq.SelectedRows = ((System.Collections.ArrayList)(resources.GetObject("_taigFreq.SelectedRows")));
-            this._taigFreq.Size = new System.Drawing.Size(391, 339);
+            this._taigFreq.Size = new System.Drawing.Size(392, 344);
             this._taigFreq.TabIndex = 0;
             this._taigFreq.TitleBackColor = System.Drawing.Color.Blue;
             this._taigFreq.TitleFont = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -166,15 +166,15 @@ namespace TAIGridControl2
             // 
             this._btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this._btnClose.Location = new System.Drawing.Point(187, 348);
+            this._btnClose.Location = new System.Drawing.Point(156, 352);
             this._btnClose.Name = "_btnClose";
-            this._btnClose.Size = new System.Drawing.Size(27, 23);
+            this._btnClose.Size = new System.Drawing.Size(88, 20);
             this._btnClose.TabIndex = 1;
             this._btnClose.Text = "Close";
             // 
             // frmFreqDist
             // 
-            this.AutoScaleBaseSize = new System.Drawing.Size(6, 15);
+            this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.ClientSize = new System.Drawing.Size(394, 375);
             this.Controls.Add(this._btnClose);
             this.Controls.Add(this._taigFreq);

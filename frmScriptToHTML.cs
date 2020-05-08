@@ -287,123 +287,119 @@ namespace TAIGridControl2
         [DebuggerStepThrough()]
         private void InitializeComponent()
         {
-            _Label2 = new System.Windows.Forms.Label();
-            _btnOk = new System.Windows.Forms.Button();
-            _btnOk.Click += btnOk_Click;
-            _btnCancel = new System.Windows.Forms.Button();
-            _btnCancel.Click += btnCancel_Click;
-            _btnSelectFile = new System.Windows.Forms.Button();
-            _btnSelectFile.Click += btnSelectFile_Click;
-            _txtFileName = new System.Windows.Forms.TextBox();
-            _OFD = new System.Windows.Forms.OpenFileDialog();
-            _txtBorder = new System.Windows.Forms.TextBox();
-            _Label1 = new System.Windows.Forms.Label();
-            _chkMatchColors = new System.Windows.Forms.CheckBox();
-            _chkOmitNulls = new System.Windows.Forms.CheckBox();
-            SuspendLayout();
+            this._Label2 = new System.Windows.Forms.Label();
+            this._btnOk = new System.Windows.Forms.Button();
+            this._btnCancel = new System.Windows.Forms.Button();
+            this._btnSelectFile = new System.Windows.Forms.Button();
+            this._txtFileName = new System.Windows.Forms.TextBox();
+            this._OFD = new System.Windows.Forms.OpenFileDialog();
+            this._txtBorder = new System.Windows.Forms.TextBox();
+            this._Label1 = new System.Windows.Forms.Label();
+            this._chkMatchColors = new System.Windows.Forms.CheckBox();
+            this._chkOmitNulls = new System.Windows.Forms.CheckBox();
+            this.SuspendLayout();
             // 
-            // Label2
+            // _Label2
             // 
-            _Label2.Location = new System.Drawing.Point(4, 68);
-            _Label2.Name = "Label2";
-            _Label2.Size = new System.Drawing.Size(212, 16);
-            _Label2.TabIndex = 11;
-            _Label2.Text = "Save the resulting HTML Table script to";
+            this._Label2.Location = new System.Drawing.Point(4, 68);
+            this._Label2.Name = "_Label2";
+            this._Label2.Size = new System.Drawing.Size(212, 16);
+            this._Label2.TabIndex = 11;
+            this._Label2.Text = "Save the resulting HTML Table script to";
             // 
-            // btnOk
+            // _btnOk
             // 
-            _btnOk.Location = new System.Drawing.Point(316, 4);
-            _btnOk.Name = "btnOk";
-            _btnOk.Size = new System.Drawing.Size(56, 20);
-            _btnOk.TabIndex = 10;
-            _btnOk.Text = "Ok";
+            this._btnOk.Location = new System.Drawing.Point(316, 4);
+            this._btnOk.Name = "_btnOk";
+            this._btnOk.Size = new System.Drawing.Size(56, 20);
+            this._btnOk.TabIndex = 10;
+            this._btnOk.Text = "Ok";
             // 
-            // btnCancel
+            // _btnCancel
             // 
-            _btnCancel.Location = new System.Drawing.Point(256, 4);
-            _btnCancel.Name = "btnCancel";
-            _btnCancel.Size = new System.Drawing.Size(56, 20);
-            _btnCancel.TabIndex = 9;
-            _btnCancel.Text = "Cancel";
+            this._btnCancel.Location = new System.Drawing.Point(256, 4);
+            this._btnCancel.Name = "_btnCancel";
+            this._btnCancel.Size = new System.Drawing.Size(56, 20);
+            this._btnCancel.TabIndex = 9;
+            this._btnCancel.Text = "Cancel";
             // 
-            // btnSelectFile
+            // _btnSelectFile
             // 
-            _btnSelectFile.Location = new System.Drawing.Point(348, 44);
-            _btnSelectFile.Name = "btnSelectFile";
-            _btnSelectFile.Size = new System.Drawing.Size(24, 20);
-            _btnSelectFile.TabIndex = 8;
-            _btnSelectFile.Text = "...";
+            this._btnSelectFile.Location = new System.Drawing.Point(348, 44);
+            this._btnSelectFile.Name = "_btnSelectFile";
+            this._btnSelectFile.Size = new System.Drawing.Size(24, 20);
+            this._btnSelectFile.TabIndex = 8;
+            this._btnSelectFile.Text = "...";
             // 
-            // txtFileName
+            // _txtFileName
             // 
-            _txtFileName.Location = new System.Drawing.Point(4, 44);
-            _txtFileName.Name = "txtFileName";
-            _txtFileName.Size = new System.Drawing.Size(340, 20);
-            _txtFileName.TabIndex = 7;
-            _txtFileName.Text = "";
+            this._txtFileName.Location = new System.Drawing.Point(4, 44);
+            this._txtFileName.Name = "_txtFileName";
+            this._txtFileName.Size = new System.Drawing.Size(340, 20);
+            this._txtFileName.TabIndex = 7;
             // 
-            // OFD
+            // _OFD
             // 
-            _OFD.CheckFileExists = false;
-            _OFD.DefaultExt = "html";
-            _OFD.Title = "Select file name to save the script to";
+            this._OFD.CheckFileExists = false;
+            this._OFD.DefaultExt = "html";
+            this._OFD.Title = "Select file name to save the script to";
             // 
-            // txtBorder
+            // _txtBorder
             // 
-            _txtBorder.Location = new System.Drawing.Point(4, 20);
-            _txtBorder.Name = "txtBorder";
-            _txtBorder.Size = new System.Drawing.Size(28, 20);
-            _txtBorder.TabIndex = 12;
-            _txtBorder.Text = "1";
+            this._txtBorder.Location = new System.Drawing.Point(4, 20);
+            this._txtBorder.Name = "_txtBorder";
+            this._txtBorder.Size = new System.Drawing.Size(28, 20);
+            this._txtBorder.TabIndex = 12;
+            this._txtBorder.Text = "1";
             // 
-            // Label1
+            // _Label1
             // 
-            _Label1.Location = new System.Drawing.Point(0, 4);
-            _Label1.Name = "Label1";
-            _Label1.Size = new System.Drawing.Size(60, 12);
-            _Label1.TabIndex = 13;
-            _Label1.Text = "Border";
+            this._Label1.Location = new System.Drawing.Point(0, 4);
+            this._Label1.Name = "_Label1";
+            this._Label1.Size = new System.Drawing.Size(60, 12);
+            this._Label1.TabIndex = 13;
+            this._Label1.Text = "Border";
             // 
-            // chkMatchColors
+            // _chkMatchColors
             // 
-            _chkMatchColors.Checked = true;
-            _chkMatchColors.CheckState = System.Windows.Forms.CheckState.Checked;
-            _chkMatchColors.Location = new System.Drawing.Point(40, 24);
-            _chkMatchColors.Name = "chkMatchColors";
-            _chkMatchColors.Size = new System.Drawing.Size(96, 16);
-            _chkMatchColors.TabIndex = 14;
-            _chkMatchColors.Text = "Match Colors";
+            this._chkMatchColors.Checked = true;
+            this._chkMatchColors.CheckState = System.Windows.Forms.CheckState.Checked;
+            this._chkMatchColors.Location = new System.Drawing.Point(40, 24);
+            this._chkMatchColors.Name = "_chkMatchColors";
+            this._chkMatchColors.Size = new System.Drawing.Size(96, 16);
+            this._chkMatchColors.TabIndex = 14;
+            this._chkMatchColors.Text = "Match Colors";
             // 
-            // chkOmitNulls
+            // _chkOmitNulls
             // 
-            _chkOmitNulls.Checked = true;
-            _chkOmitNulls.CheckState = System.Windows.Forms.CheckState.Checked;
-            _chkOmitNulls.Location = new System.Drawing.Point(144, 24);
-            _chkOmitNulls.Name = "chkOmitNulls";
-            _chkOmitNulls.Size = new System.Drawing.Size(96, 16);
-            _chkOmitNulls.TabIndex = 15;
-            _chkOmitNulls.Text = "Omit Nulls";
+            this._chkOmitNulls.Checked = true;
+            this._chkOmitNulls.CheckState = System.Windows.Forms.CheckState.Checked;
+            this._chkOmitNulls.Location = new System.Drawing.Point(144, 24);
+            this._chkOmitNulls.Name = "_chkOmitNulls";
+            this._chkOmitNulls.Size = new System.Drawing.Size(96, 16);
+            this._chkOmitNulls.TabIndex = 15;
+            this._chkOmitNulls.Text = "Omit Nulls";
             // 
             // frmScriptToHTML
             // 
-            AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-            ClientSize = new System.Drawing.Size(376, 83);
-            ControlBox = false;
-            Controls.Add(_chkOmitNulls);
-            Controls.Add(_chkMatchColors);
-            Controls.Add(_Label1);
-            Controls.Add(_txtBorder);
-            Controls.Add(_Label2);
-            Controls.Add(_btnOk);
-            Controls.Add(_btnCancel);
-            Controls.Add(_btnSelectFile);
-            Controls.Add(_txtFileName);
-            FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            Name = "frmScriptToHTML";
-            ShowInTaskbar = false;
-            StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-            Text = "Script Grid as an HTML Table";
-            ResumeLayout(false);
+            this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+            this.ClientSize = new System.Drawing.Size(376, 83);
+            this.Controls.Add(this._chkOmitNulls);
+            this.Controls.Add(this._chkMatchColors);
+            this.Controls.Add(this._Label1);
+            this.Controls.Add(this._txtBorder);
+            this.Controls.Add(this._Label2);
+            this.Controls.Add(this._btnOk);
+            this.Controls.Add(this._btnCancel);
+            this.Controls.Add(this._btnSelectFile);
+            this.Controls.Add(this._txtFileName);
+            this.Name = "frmScriptToHTML";
+            this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
+            this.Text = "Script Grid as an HTML Table";
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
         }
 
 

@@ -2471,6 +2471,65 @@
             <param name="FormatSpec"></param>
             <remarks></remarks>
         </member>
+        <member name="M:TAIGridControl2.TAIGridControl.PivotPopulate(TAIGridControl2.TAIGridControl,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            The pivot populate calls simulate pivot table functionality in excel.
+            The instance grid that the pethod is called on will be populated with data from a source grid <c>sgrid</c>
+            The defined <c>xcol</c> and <c>ycol</c> parameters will be used to search the source grid for unique values
+            then for each unique value set in each of the two columns the
+            </summary>
+            <param name="sgrid"></param>
+            <param name="xcol"></param>
+            <param name="ycol"></param>
+            <param name="scol"></param>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.PivotPopulate(TAIGridControl2.TAIGridControl,System.Int32,System.Int32,System.Int32,System.String,System.Drawing.Color)">
+            <summary>
+            The pivot populate calls simulate pivot table functionality in excel.
+            The instance grid that the pethod is called on will be populated with data from a source grid <c>sgrid</c>
+            The defined <c>xcol</c> and <c>ycol</c> parameters will be used to search the source grid for unique values
+            then for each unique value set in each of the two columns the
+            </summary>
+            <param name="sgrid"></param>
+            <param name="xcol"></param>
+            <param name="ycol"></param>
+            <param name="scol"></param>
+            <param name="formatspec"></param>
+            <param name="col"></param>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.PivotPopulate(TAIGridControl2.TAIGridControl,System.Int32,System.Int32,System.Int32,System.String,System.Drawing.Color,System.Drawing.Font)">
+            <summary>
+            The pivot populate calls simulate pivot table functionality in excel.
+            The instance grid that the pethod is called on will be populated with data from a source grid <c>sgrid</c>
+            The defined <c>xcol</c> and <c>ycol</c> parameters will be used to search the source grid for unique values
+            then for each unique value set in each of the two columns the
+            </summary>
+            <param name="sgrid"></param>
+            <param name="xcol"></param>
+            <param name="ycol"></param>
+            <param name="scol"></param>
+            <param name="formatspec"></param>
+            <param name="col"></param>
+            <param name="fnt"></param>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.PivotPopulate(TAIGridControl2.TAIGridControl,System.Int32,System.Int32,System.Int32,System.String,System.Drawing.Font)">
+            <summary>
+            The pivot populate calls simulate pivot table functionality in excel.
+            The instance grid that the pethod is called on will be populated with data from a source grid <c>sgrid</c>
+            The defined <c>xcol</c> and <c>ycol</c> parameters will be used to search the source grid for unique values
+            then for each unique value set in each of the two columns the
+            </summary>
+            <param name="sgrid"></param>
+            <param name="xcol"></param>
+            <param name="ycol"></param>
+            <param name="scol"></param>
+            <param name="formatspec"></param>
+            <param name="fnt"></param>
+            <remarks></remarks>
+        </member>
         <member name="M:TAIGridControl2.TAIGridControl.PopulateGridWithADataTable(System.Data.DataSet)">
             <summary>
             Will take the supplied dataSet and extract the first table from that dataset and populate the grid with the

@@ -559,209 +559,196 @@ namespace TAIGridControl2
         [DebuggerStepThrough()]
         private void InitializeComponent()
         {
-            _btnCancel = new Button();
-            _btnCancel.Click += btnCancel_Click;
-            _btnOk = new Button();
-            _btnOk.Click += btnOk_Click;
-            _cmboPaperSize = new ComboBox();
-            _cmboPaperSize.SelectedIndexChanged += cmboPaperSize_SelectedIndexChanged;
-            _Label1 = new Label();
-            _GroupBox1 = new GroupBox();
-            _Label2 = new Label();
-            _txtEndPage = new TextBox();
-            _txtStartPage = new TextBox();
-            _rbPageRange = new RadioButton();
-            _rbAllPages = new RadioButton();
-            _GroupBox2 = new GroupBox();
-            _rbLandscape = new RadioButton();
-            _rbLandscape.CheckedChanged += rbLandscape_CheckedChanged;
-            _rbProtriate = new RadioButton();
-            _rbProtriate.CheckedChanged += rbProtriate_CheckedChanged;
-            _Label3 = new Label();
-            _cmboPrinter = new ComboBox();
-            _cmboPrinter.SelectedIndexChanged += cmboPrinter_SelectedIndexChanged;
-            _btnPrint = new Button();
-            _btnPrint.Click += btnPrint_Click;
-            _btnPreview = new Button();
-            _btnPreview.Click += btnPreview_Click;
-            _GroupBox1.SuspendLayout();
-            _GroupBox2.SuspendLayout();
-            SuspendLayout();
+            this._btnCancel = new System.Windows.Forms.Button();
+            this._btnOk = new System.Windows.Forms.Button();
+            this._cmboPaperSize = new System.Windows.Forms.ComboBox();
+            this._Label1 = new System.Windows.Forms.Label();
+            this._GroupBox1 = new System.Windows.Forms.GroupBox();
+            this._Label2 = new System.Windows.Forms.Label();
+            this._txtEndPage = new System.Windows.Forms.TextBox();
+            this._txtStartPage = new System.Windows.Forms.TextBox();
+            this._rbPageRange = new System.Windows.Forms.RadioButton();
+            this._rbAllPages = new System.Windows.Forms.RadioButton();
+            this._GroupBox2 = new System.Windows.Forms.GroupBox();
+            this._rbLandscape = new System.Windows.Forms.RadioButton();
+            this._rbProtriate = new System.Windows.Forms.RadioButton();
+            this._Label3 = new System.Windows.Forms.Label();
+            this._cmboPrinter = new System.Windows.Forms.ComboBox();
+            this._btnPrint = new System.Windows.Forms.Button();
+            this._btnPreview = new System.Windows.Forms.Button();
+            this._GroupBox1.SuspendLayout();
+            this._GroupBox2.SuspendLayout();
+            this.SuspendLayout();
             // 
-            // btnCancel
+            // _btnCancel
             // 
-            _btnCancel.Location = new Point(360, 208);
-            _btnCancel.Name = "btnCancel";
-            _btnCancel.Size = new Size(60, 20);
-            _btnCancel.TabIndex = 0;
-            _btnCancel.Text = "Cancel";
+            this._btnCancel.Location = new System.Drawing.Point(360, 208);
+            this._btnCancel.Name = "_btnCancel";
+            this._btnCancel.Size = new System.Drawing.Size(60, 20);
+            this._btnCancel.TabIndex = 0;
+            this._btnCancel.Text = "Cancel";
             // 
-            // btnOk
+            // _btnOk
             // 
-            _btnOk.Location = new Point(296, 208);
-            _btnOk.Name = "btnOk";
-            _btnOk.Size = new Size(60, 20);
-            _btnOk.TabIndex = 1;
-            _btnOk.Text = "Accept";
+            this._btnOk.Location = new System.Drawing.Point(296, 208);
+            this._btnOk.Name = "_btnOk";
+            this._btnOk.Size = new System.Drawing.Size(60, 20);
+            this._btnOk.TabIndex = 1;
+            this._btnOk.Text = "Accept";
             // 
-            // cmboPaperSize
+            // _cmboPaperSize
             // 
-            _cmboPaperSize.Location = new Point(4, 48);
-            _cmboPaperSize.Name = "cmboPaperSize";
-            _cmboPaperSize.Size = new Size(420, 21);
-            _cmboPaperSize.TabIndex = 2;
+            this._cmboPaperSize.Location = new System.Drawing.Point(4, 48);
+            this._cmboPaperSize.Name = "_cmboPaperSize";
+            this._cmboPaperSize.Size = new System.Drawing.Size(420, 21);
+            this._cmboPaperSize.TabIndex = 2;
             // 
-            // Label1
+            // _Label1
             // 
-            _Label1.Location = new Point(4, 72);
-            _Label1.Name = "Label1";
-            _Label1.Size = new Size(120, 16);
-            _Label1.TabIndex = 3;
-            _Label1.Text = "Select Paper Size";
+            this._Label1.Location = new System.Drawing.Point(4, 72);
+            this._Label1.Name = "_Label1";
+            this._Label1.Size = new System.Drawing.Size(120, 16);
+            this._Label1.TabIndex = 3;
+            this._Label1.Text = "Select Paper Size";
             // 
-            // GroupBox1
+            // _GroupBox1
             // 
-            _GroupBox1.Controls.Add(_Label2);
-            _GroupBox1.Controls.Add(_txtEndPage);
-            _GroupBox1.Controls.Add(_txtStartPage);
-            _GroupBox1.Controls.Add(_rbPageRange);
-            _GroupBox1.Controls.Add(_rbAllPages);
-            _GroupBox1.Location = new Point(8, 96);
-            _GroupBox1.Name = "GroupBox1";
-            _GroupBox1.Size = new Size(160, 108);
-            _GroupBox1.TabIndex = 4;
-            _GroupBox1.TabStop = false;
-            _GroupBox1.Text = "Print What?";
+            this._GroupBox1.Controls.Add(this._Label2);
+            this._GroupBox1.Controls.Add(this._txtEndPage);
+            this._GroupBox1.Controls.Add(this._txtStartPage);
+            this._GroupBox1.Controls.Add(this._rbPageRange);
+            this._GroupBox1.Controls.Add(this._rbAllPages);
+            this._GroupBox1.Location = new System.Drawing.Point(8, 96);
+            this._GroupBox1.Name = "_GroupBox1";
+            this._GroupBox1.Size = new System.Drawing.Size(160, 108);
+            this._GroupBox1.TabIndex = 4;
+            this._GroupBox1.TabStop = false;
+            this._GroupBox1.Text = "Print What?";
             // 
-            // Label2
+            // _Label2
             // 
-            _Label2.Location = new Point(72, 80);
-            _Label2.Name = "Label2";
-            _Label2.Size = new Size(20, 16);
-            _Label2.TabIndex = 4;
-            _Label2.Text = "to";
-            _Label2.TextAlign = ContentAlignment.TopCenter;
+            this._Label2.Location = new System.Drawing.Point(72, 80);
+            this._Label2.Name = "_Label2";
+            this._Label2.Size = new System.Drawing.Size(20, 16);
+            this._Label2.TabIndex = 4;
+            this._Label2.Text = "to";
+            this._Label2.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
-            // txtEndPage
+            // _txtEndPage
             // 
-            _txtEndPage.Location = new Point(100, 76);
-            _txtEndPage.Name = "txtEndPage";
-            _txtEndPage.Size = new Size(44, 20);
-            _txtEndPage.TabIndex = 3;
-            _txtEndPage.Text = "";
+            this._txtEndPage.Location = new System.Drawing.Point(100, 76);
+            this._txtEndPage.Name = "_txtEndPage";
+            this._txtEndPage.Size = new System.Drawing.Size(44, 20);
+            this._txtEndPage.TabIndex = 3;
             // 
-            // txtStartPage
+            // _txtStartPage
             // 
-            _txtStartPage.Location = new Point(20, 76);
-            _txtStartPage.Name = "txtStartPage";
-            _txtStartPage.Size = new Size(44, 20);
-            _txtStartPage.TabIndex = 2;
-            _txtStartPage.Text = "";
+            this._txtStartPage.Location = new System.Drawing.Point(20, 76);
+            this._txtStartPage.Name = "_txtStartPage";
+            this._txtStartPage.Size = new System.Drawing.Size(44, 20);
+            this._txtStartPage.TabIndex = 2;
             // 
-            // rbPageRange
+            // _rbPageRange
             // 
-            _rbPageRange.Location = new Point(20, 52);
-            _rbPageRange.Name = "rbPageRange";
-            _rbPageRange.Size = new Size(124, 20);
-            _rbPageRange.TabIndex = 1;
-            _rbPageRange.Text = "A Range Of Pages";
+            this._rbPageRange.Location = new System.Drawing.Point(20, 52);
+            this._rbPageRange.Name = "_rbPageRange";
+            this._rbPageRange.Size = new System.Drawing.Size(124, 20);
+            this._rbPageRange.TabIndex = 1;
+            this._rbPageRange.Text = "A Range Of Pages";
             // 
-            // rbAllPages
+            // _rbAllPages
             // 
-            _rbAllPages.Checked = true;
-            _rbAllPages.Location = new Point(20, 28);
-            _rbAllPages.Name = "rbAllPages";
-            _rbAllPages.Size = new Size(124, 20);
-            _rbAllPages.TabIndex = 0;
-            _rbAllPages.TabStop = true;
-            _rbAllPages.Text = "All Pages";
+            this._rbAllPages.Checked = true;
+            this._rbAllPages.Location = new System.Drawing.Point(20, 28);
+            this._rbAllPages.Name = "_rbAllPages";
+            this._rbAllPages.Size = new System.Drawing.Size(124, 20);
+            this._rbAllPages.TabIndex = 0;
+            this._rbAllPages.TabStop = true;
+            this._rbAllPages.Text = "All Pages";
             // 
-            // GroupBox2
+            // _GroupBox2
             // 
-            _GroupBox2.Controls.Add(_rbLandscape);
-            _GroupBox2.Controls.Add(_rbProtriate);
-            _GroupBox2.Location = new Point(260, 96);
-            _GroupBox2.Name = "GroupBox2";
-            _GroupBox2.Size = new Size(160, 108);
-            _GroupBox2.TabIndex = 5;
-            _GroupBox2.TabStop = false;
-            _GroupBox2.Text = "Orientation";
+            this._GroupBox2.Controls.Add(this._rbLandscape);
+            this._GroupBox2.Controls.Add(this._rbProtriate);
+            this._GroupBox2.Location = new System.Drawing.Point(260, 96);
+            this._GroupBox2.Name = "_GroupBox2";
+            this._GroupBox2.Size = new System.Drawing.Size(160, 108);
+            this._GroupBox2.TabIndex = 5;
+            this._GroupBox2.TabStop = false;
+            this._GroupBox2.Text = "Orientation";
             // 
-            // rbLandscape
+            // _rbLandscape
             // 
-            _rbLandscape.Location = new Point(20, 52);
-            _rbLandscape.Name = "rbLandscape";
-            _rbLandscape.Size = new Size(124, 20);
-            _rbLandscape.TabIndex = 1;
-            _rbLandscape.Text = "Landscape";
+            this._rbLandscape.Location = new System.Drawing.Point(20, 52);
+            this._rbLandscape.Name = "_rbLandscape";
+            this._rbLandscape.Size = new System.Drawing.Size(124, 20);
+            this._rbLandscape.TabIndex = 1;
+            this._rbLandscape.Text = "Landscape";
             // 
-            // rbProtriate
+            // _rbProtriate
             // 
-            _rbProtriate.Checked = true;
-            _rbProtriate.Location = new Point(20, 28);
-            _rbProtriate.Name = "rbProtriate";
-            _rbProtriate.Size = new Size(124, 20);
-            _rbProtriate.TabIndex = 0;
-            _rbProtriate.TabStop = true;
-            _rbProtriate.Text = "Portrait";
+            this._rbProtriate.Checked = true;
+            this._rbProtriate.Location = new System.Drawing.Point(20, 28);
+            this._rbProtriate.Name = "_rbProtriate";
+            this._rbProtriate.Size = new System.Drawing.Size(124, 20);
+            this._rbProtriate.TabIndex = 0;
+            this._rbProtriate.TabStop = true;
+            this._rbProtriate.Text = "Portrait";
             // 
-            // Label3
+            // _Label3
             // 
-            _Label3.Location = new Point(4, 28);
-            _Label3.Name = "Label3";
-            _Label3.Size = new Size(152, 16);
-            _Label3.TabIndex = 7;
-            _Label3.Text = "Select Printer to Print to";
+            this._Label3.Location = new System.Drawing.Point(4, 28);
+            this._Label3.Name = "_Label3";
+            this._Label3.Size = new System.Drawing.Size(152, 16);
+            this._Label3.TabIndex = 7;
+            this._Label3.Text = "Select Printer to Print to";
             // 
-            // cmboPrinter
+            // _cmboPrinter
             // 
-            _cmboPrinter.Location = new Point(4, 4);
-            _cmboPrinter.Name = "cmboPrinter";
-            _cmboPrinter.Size = new Size(420, 21);
-            _cmboPrinter.TabIndex = 6;
+            this._cmboPrinter.Location = new System.Drawing.Point(4, 4);
+            this._cmboPrinter.Name = "_cmboPrinter";
+            this._cmboPrinter.Size = new System.Drawing.Size(420, 21);
+            this._cmboPrinter.TabIndex = 6;
             // 
-            // btnPrint
+            // _btnPrint
             // 
-            _btnPrint.Location = new Point(232, 208);
-            _btnPrint.Name = "btnPrint";
-            _btnPrint.Size = new Size(60, 20);
-            _btnPrint.TabIndex = 8;
-            _btnPrint.Text = "Print";
+            this._btnPrint.Location = new System.Drawing.Point(232, 208);
+            this._btnPrint.Name = "_btnPrint";
+            this._btnPrint.Size = new System.Drawing.Size(60, 20);
+            this._btnPrint.TabIndex = 8;
+            this._btnPrint.Text = "Print";
             // 
-            // btnPreview
+            // _btnPreview
             // 
-            _btnPreview.Location = new Point(168, 208);
-            _btnPreview.Name = "btnPreview";
-            _btnPreview.Size = new Size(60, 20);
-            _btnPreview.TabIndex = 9;
-            _btnPreview.Text = "Preview";
+            this._btnPreview.Location = new System.Drawing.Point(168, 208);
+            this._btnPreview.Name = "_btnPreview";
+            this._btnPreview.Size = new System.Drawing.Size(60, 20);
+            this._btnPreview.TabIndex = 9;
+            this._btnPreview.Text = "Preview";
             // 
             // frmPageSetup
             // 
-            AutoScaleBaseSize = new Size(5, 13);
-            ClientSize = new Size(430, 231);
-            ControlBox = false;
-            Controls.Add(_btnPreview);
-            Controls.Add(_btnPrint);
-            Controls.Add(_Label3);
-            Controls.Add(_cmboPrinter);
-            Controls.Add(_GroupBox2);
-            Controls.Add(_GroupBox1);
-            Controls.Add(_Label1);
-            Controls.Add(_cmboPaperSize);
-            Controls.Add(_btnOk);
-            Controls.Add(_btnCancel);
-            FormBorderStyle = FormBorderStyle.FixedDialog;
-            Name = "frmPageSetup";
-            ShowInTaskbar = false;
-            StartPosition = FormStartPosition.CenterScreen;
-            Text = "Setup Printed Page Metrics";
-            base.Activated += HandleFormShow;
-            _GroupBox1.ResumeLayout(false);
-            base.Activated += HandleFormShow;
-            _GroupBox2.ResumeLayout(false);
-            base.Activated += HandleFormShow;
-            ResumeLayout(false);
+            this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+            this.ClientSize = new System.Drawing.Size(430, 231);
+            this.Controls.Add(this._btnPreview);
+            this.Controls.Add(this._btnPrint);
+            this.Controls.Add(this._Label3);
+            this.Controls.Add(this._cmboPrinter);
+            this.Controls.Add(this._GroupBox2);
+            this.Controls.Add(this._GroupBox1);
+            this.Controls.Add(this._Label1);
+            this.Controls.Add(this._cmboPaperSize);
+            this.Controls.Add(this._btnOk);
+            this.Controls.Add(this._btnCancel);
+            this.Name = "frmPageSetup";
+            this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Setup Printed Page Metrics";
+            this._GroupBox1.ResumeLayout(false);
+            this._GroupBox1.PerformLayout();
+            this._GroupBox2.ResumeLayout(false);
+            this.ResumeLayout(false);
+
         }
 
 
