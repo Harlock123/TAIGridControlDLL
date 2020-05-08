@@ -13434,7 +13434,7 @@ namespace TAIGridControl2
         /// <param name="xcol"></param>
         /// <param name="ycol"></param>
         /// <param name="scol"></param>
-        /// <param name="FormatSpec"></param>
+        /// <param name="formatspec"></param>
         /// <param name="col"></param>
         /// <remarks></remarks>
         public void PivotPopulate(TAIGridControl sgrid, int xcol, int ycol, int scol, string formatspec, Color col)
@@ -13452,7 +13452,7 @@ namespace TAIGridControl2
         /// <param name="xcol"></param>
         /// <param name="ycol"></param>
         /// <param name="scol"></param>
-        /// <param name="FormatSpec"></param>
+        /// <param name="formatspec"></param>
         /// <param name="col"></param>
         /// <param name="fnt"></param>
         /// <remarks></remarks>
@@ -13549,7 +13549,7 @@ namespace TAIGridControl2
         /// <param name="xcol"></param>
         /// <param name="ycol"></param>
         /// <param name="scol"></param>
-        /// <param name="FormatSpec"></param>
+        /// <param name="formatspec"></param>
         /// <param name="fnt"></param>
         /// <remarks></remarks>
         public void PivotPopulate(TAIGridControl sgrid, int xcol, int ycol, int scol, string formatspec, Font fnt)
