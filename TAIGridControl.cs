@@ -13408,16 +13408,54 @@ namespace TAIGridControl2
             PivotPopulate(sgrid, xcol, ycol, scol, FormatSpec, _DefaultForeColor, _DefaultCellFont);
         }
 
+        /// <summary>
+        /// The pivot populate calls simulate pivot table functionality in excel.
+        /// The instance grid that the pethod is called on will be populated with data from a source grid <c>sgrid</c>
+        /// The defined <c>xcol</c> and <c>ycol</c> parameters will be used to search the source grid for unique values
+        /// then for each unique value set in each of the two columns the
+        /// </summary>
+        /// <param name="sgrid"></param>
+        /// <param name="xcol"></param>
+        /// <param name="ycol"></param>
+        /// <param name="scol"></param>
+        /// <remarks></remarks>
         public void PivotPopulate(TAIGridControl sgrid, int xcol, int ycol, int scol)
         {
             PivotPopulate(sgrid, xcol, ycol, scol, "0.0000", _DefaultForeColor, _DefaultCellFont);
         }
 
+        /// <summary>
+        /// The pivot populate calls simulate pivot table functionality in excel.
+        /// The instance grid that the pethod is called on will be populated with data from a source grid <c>sgrid</c>
+        /// The defined <c>xcol</c> and <c>ycol</c> parameters will be used to search the source grid for unique values
+        /// then for each unique value set in each of the two columns the
+        /// </summary>
+        /// <param name="sgrid"></param>
+        /// <param name="xcol"></param>
+        /// <param name="ycol"></param>
+        /// <param name="scol"></param>
+        /// <param name="FormatSpec"></param>
+        /// <param name="col"></param>
+        /// <remarks></remarks>
         public void PivotPopulate(TAIGridControl sgrid, int xcol, int ycol, int scol, string formatspec, Color col)
         {
             PivotPopulate(sgrid, xcol, ycol, scol, formatspec, col, _DefaultCellFont);
         }
 
+        /// <summary>
+        /// The pivot populate calls simulate pivot table functionality in excel.
+        /// The instance grid that the pethod is called on will be populated with data from a source grid <c>sgrid</c>
+        /// The defined <c>xcol</c> and <c>ycol</c> parameters will be used to search the source grid for unique values
+        /// then for each unique value set in each of the two columns the
+        /// </summary>
+        /// <param name="sgrid"></param>
+        /// <param name="xcol"></param>
+        /// <param name="ycol"></param>
+        /// <param name="scol"></param>
+        /// <param name="FormatSpec"></param>
+        /// <param name="col"></param>
+        /// <param name="fnt"></param>
+        /// <remarks></remarks>
         public void PivotPopulate(TAIGridControl sgrid, int xcol, int ycol, int scol, string formatspec, Color col, Font fnt)
         {
             int x, y, xxx;
@@ -13501,6 +13539,19 @@ namespace TAIGridControl2
             NormalizeTearaways();
         }
 
+        /// <summary>
+        /// The pivot populate calls simulate pivot table functionality in excel.
+        /// The instance grid that the pethod is called on will be populated with data from a source grid <c>sgrid</c>
+        /// The defined <c>xcol</c> and <c>ycol</c> parameters will be used to search the source grid for unique values
+        /// then for each unique value set in each of the two columns the
+        /// </summary>
+        /// <param name="sgrid"></param>
+        /// <param name="xcol"></param>
+        /// <param name="ycol"></param>
+        /// <param name="scol"></param>
+        /// <param name="FormatSpec"></param>
+        /// <param name="fnt"></param>
+        /// <remarks></remarks>
         public void PivotPopulate(TAIGridControl sgrid, int xcol, int ycol, int scol, string formatspec, Font fnt)
         {
             PivotPopulate(sgrid, xcol, ycol, scol, formatspec, _DefaultForeColor, fnt);
