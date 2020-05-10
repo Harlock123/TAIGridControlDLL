@@ -11,6 +11,10 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Microsoft.VisualBasic.CompilerServices;
 using Excel = Microsoft.Office.Interop.Excel;
+using DocumentFormat;
+using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Packaging;
+//using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace TAIGridControl2
 {
@@ -9677,20 +9681,102 @@ namespace TAIGridControl2
         /// <remarks></remarks>
         public void ExportToExcel()
         {
-            Excel.Application _excel;
-            Excel.Workbook _workbook = new Excel.Workbook();
 
             try
             {
-                _excel = (Excel.Application)Interaction.CreateObject("Excel.Application");
-                // _excel.Visible = True
+                string filetogenerate = System.IO.Path.Combine(System.Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "EXCELOUTPUT.xlsx");
 
-                // _excel.ScreenUpdating = False
+                using ( DocumentFormat.OpenXml.Packaging.SpreadsheetDocument document = SpreadsheetDocument.Create(filetogenerate, SpreadsheetDocumentType.Workbook))
+                {
+                    WorkbookPart workbookPart = document.AddWorkbookPart();
+                    workbookPart.Workbook = new DocumentFormat.OpenXml.Spreadsheet.Workbook();
 
-                // _workbook = _excel.Workbooks.Add()
+                    WorksheetPart worksheetPart = workbookPart.AddNewPart<WorksheetPart>();
+                    var sheetData = new DocumentFormat.OpenXml.Spreadsheet.SheetData();
+                    worksheetPart.Worksheet = new DocumentFormat.OpenXml.Spreadsheet.Worksheet(sheetData);
 
-                ExportToExcel(_excel, _workbook, _excelWorkSheetName);
+                    DocumentFormat.OpenXml.Spreadsheet.Sheets sheets = workbookPart.Workbook.AppendChild(new DocumentFormat.OpenXml.Spreadsheet.Sheets());
+                    DocumentFormat.OpenXml.Spreadsheet.Sheet sheet = 
+                        new DocumentFormat.OpenXml.Spreadsheet.Sheet() 
+                        { 
+                            Id = workbookPart.GetIdOfPart(worksheetPart), SheetId = 1, Name = _excelWorkSheetName 
+                        };
+
+                    sheets.Append(sheet);
+
+                    DocumentFormat.OpenXml.Spreadsheet.Row headerRow = new DocumentFormat.OpenXml.Spreadsheet.Row();
+
+                    List<String> columns = new List<string>();
+
+                    foreach (string s in _GridHeader)
+                    {
+                        columns.Add(s);
+
+                        DocumentFormat.OpenXml.Spreadsheet.Cell cell = new DocumentFormat.OpenXml.Spreadsheet.Cell();
+                        cell.DataType = DocumentFormat.OpenXml.Spreadsheet.CellValues.String;
+                        cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue(s);
+                        headerRow.AppendChild(cell);
+                    }
+
+                    //List<String> columns = new List<string>();
+                    //foreach (System.Data.DataColumn column in table.Columns)
+                    //{
+                    //    columns.Add(column.ColumnName);
+
+                    //    Cell cell = new Cell();
+                    //    cell.DataType = CellValues.String;
+                    //    cell.CellValue = new CellValue(column.ColumnName);
+                    //    headerRow.AppendChild(cell);
+                    //}
+
+                    sheetData.AppendChild(headerRow);
+
+                    for(int r = 0;r<_rows;r++)
+                    {
+                        DocumentFormat.OpenXml.Spreadsheet.Row newRow = new DocumentFormat.OpenXml.Spreadsheet.Row();
+                        for (int c=0;c<_cols;c++)
+                        {
+                            DocumentFormat.OpenXml.Spreadsheet.Cell cell = new DocumentFormat.OpenXml.Spreadsheet.Cell();
+                            cell.DataType = DocumentFormat.OpenXml.Spreadsheet.CellValues.String;
+                            cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue(_grid[r,c]);
+                            newRow.AppendChild(cell);
+                        }
+
+                        sheetData.AppendChild(newRow);
+                    }
+                   
+                    //foreach (DataRow dsrow in table.Rows)
+                    //{
+                    //    Row newRow = new Row();
+                    //    foreach (String col in columns)
+                    //    {
+                    //        Cell cell = new Cell();
+                    //        cell.DataType = CellValues.String;
+                    //        cell.CellValue = new CellValue(dsrow[col].ToString());
+                    //        newRow.AppendChild(cell);
+                    //    }
+
+                    //    sheetData.AppendChild(newRow);
+                    //}
+
+                    workbookPart.Workbook.Save();
+                }
             }
+
+            //Excel.Application _excel;
+            //Excel.Workbook _workbook = new Excel.Workbook();
+
+            //try
+            //{
+            //    _excel = (Excel.Application)Interaction.CreateObject("Excel.Application");
+            //    // _excel.Visible = True
+
+            //    // _excel.ScreenUpdating = False
+
+            //    // _workbook = _excel.Workbooks.Add()
+
+            //    ExportToExcel(_excel, _workbook, _excelWorkSheetName);
+            //}
             catch (Exception ex)
             {
                 Interaction.MsgBox(ex.ToString(), (MsgBoxStyle)((int)MsgBoxStyle.Information + (int)MsgBoxStyle.OkOnly), "TAIGRIDControl.ExportToExcel Error...");
