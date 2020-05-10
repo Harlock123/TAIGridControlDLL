@@ -11,9 +11,11 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Microsoft.VisualBasic.CompilerServices;
 using Excel = Microsoft.Office.Interop.Excel;
-using DocumentFormat;
-using DocumentFormat.OpenXml;
-using DocumentFormat.OpenXml.Packaging;
+//using DocumentFormat;
+//using DocumentFormat.OpenXml;
+//using DocumentFormat.OpenXml.Packaging;
+
+using ClosedXML.Excel;
 //using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace TAIGridControl2
@@ -9686,81 +9688,144 @@ namespace TAIGridControl2
             {
                 string filetogenerate = System.IO.Path.Combine(System.Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "EXCELOUTPUT.xlsx");
 
-                using ( DocumentFormat.OpenXml.Packaging.SpreadsheetDocument document = SpreadsheetDocument.Create(filetogenerate, SpreadsheetDocumentType.Workbook))
+                IXLWorkbook workbook = new XLWorkbook();
+
+                IXLWorksheet worksheet = workbook.Worksheets.Add(_excelWorkSheetName);
+
+                for (int h = 0;h<_cols; h++)
                 {
-                    WorkbookPart workbookPart = document.AddWorkbookPart();
-                    workbookPart.Workbook = new DocumentFormat.OpenXml.Spreadsheet.Workbook();
+                    worksheet.Cell(1, h + 1).Value = _GridHeader[h];
 
-                    WorksheetPart worksheetPart = workbookPart.AddNewPart<WorksheetPart>();
-                    var sheetData = new DocumentFormat.OpenXml.Spreadsheet.SheetData();
-                    worksheetPart.Worksheet = new DocumentFormat.OpenXml.Spreadsheet.Worksheet(sheetData);
-
-                    DocumentFormat.OpenXml.Spreadsheet.Sheets sheets = workbookPart.Workbook.AppendChild(new DocumentFormat.OpenXml.Spreadsheet.Sheets());
-                    DocumentFormat.OpenXml.Spreadsheet.Sheet sheet = 
-                        new DocumentFormat.OpenXml.Spreadsheet.Sheet() 
-                        { 
-                            Id = workbookPart.GetIdOfPart(worksheetPart), SheetId = 1, Name = _excelWorkSheetName 
-                        };
-
-                    sheets.Append(sheet);
-
-                    DocumentFormat.OpenXml.Spreadsheet.Row headerRow = new DocumentFormat.OpenXml.Spreadsheet.Row();
-
-                    List<String> columns = new List<string>();
-
-                    foreach (string s in _GridHeader)
+                    if (_excelMatchGridColorScheme)
                     {
-                        columns.Add(s);
+                        
+                        worksheet.Cell(1, h + 1).Style.Font.Bold = _GridHeaderFont.Bold;
+                        worksheet.Cell(1, h + 1).Style.Fill.BackgroundColor = XLColor.FromColor(_GridHeaderBackcolor);
+                        worksheet.Cell(1, h + 1).Style.Font.FontColor = XLColor.FromColor(_GridHeaderForecolor);
 
-                        DocumentFormat.OpenXml.Spreadsheet.Cell cell = new DocumentFormat.OpenXml.Spreadsheet.Cell();
-                        cell.DataType = DocumentFormat.OpenXml.Spreadsheet.CellValues.String;
-                        cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue(s);
-                        headerRow.AppendChild(cell);
+                        worksheet.Cell(1, h + 1).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+                        worksheet.Cell(1, h + 1).Style.Border.TopBorder = XLBorderStyleValues.Thin;
+                        worksheet.Cell(1, h + 1).Style.Border.LeftBorder = XLBorderStyleValues.Thin;
+                        worksheet.Cell(1, h + 1).Style.Border.RightBorder = XLBorderStyleValues.Thin;
+
+
                     }
+                }
 
-                    //List<String> columns = new List<string>();
-                    //foreach (System.Data.DataColumn column in table.Columns)
-                    //{
-                    //    columns.Add(column.ColumnName);
-
-                    //    Cell cell = new Cell();
-                    //    cell.DataType = CellValues.String;
-                    //    cell.CellValue = new CellValue(column.ColumnName);
-                    //    headerRow.AppendChild(cell);
-                    //}
-
-                    sheetData.AppendChild(headerRow);
-
-                    for(int r = 0;r<_rows;r++)
+                for (int r = 0; r < _rows; r++)
+                {
+                    
+                    for (int c = 0; c < _cols; c++)
                     {
-                        DocumentFormat.OpenXml.Spreadsheet.Row newRow = new DocumentFormat.OpenXml.Spreadsheet.Row();
-                        for (int c=0;c<_cols;c++)
+                        worksheet.Cell(r + 2, c + 1).Value = _grid[r, c];
+
+                        if (_excelMatchGridColorScheme)
                         {
-                            DocumentFormat.OpenXml.Spreadsheet.Cell cell = new DocumentFormat.OpenXml.Spreadsheet.Cell();
-                            cell.DataType = DocumentFormat.OpenXml.Spreadsheet.CellValues.String;
-                            cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue(_grid[r,c]);
-                            newRow.AppendChild(cell);
+
+                            worksheet.Cell(r + 2, c + 1).Style.Font.Bold = get_CellFont(r, c).Bold;
+
+                            SolidBrush bb = (SolidBrush)get_CellBackColor(r, c);
+
+                            worksheet.Cell(r + 2, c + 1).Style.Fill.BackgroundColor = XLColor.FromColor(bb.Color);
+
+                            worksheet.Cell(r + 2, c + 1).Style.Font.FontColor = XLColor.FromColor(get_CellForeColor(r,c).Color);
+
+                            worksheet.Cell(r + 2, c + 1).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+                            worksheet.Cell(r + 2, c + 1).Style.Border.TopBorder = XLBorderStyleValues.Thin;
+                            worksheet.Cell(r + 2, c + 1).Style.Border.LeftBorder = XLBorderStyleValues.Thin;
+                            worksheet.Cell(r + 2, c + 1).Style.Border.RightBorder = XLBorderStyleValues.Thin;
+
                         }
 
-                        sheetData.AppendChild(newRow);
                     }
-                   
-                    //foreach (DataRow dsrow in table.Rows)
-                    //{
-                    //    Row newRow = new Row();
-                    //    foreach (String col in columns)
-                    //    {
-                    //        Cell cell = new Cell();
-                    //        cell.DataType = CellValues.String;
-                    //        cell.CellValue = new CellValue(dsrow[col].ToString());
-                    //        newRow.AppendChild(cell);
-                    //    }
 
-                    //    sheetData.AppendChild(newRow);
-                    //}
-
-                    workbookPart.Workbook.Save();
                 }
+
+                worksheet.Columns().AdjustToContents();
+
+                workbook.SaveAs(filetogenerate);
+
+                //using ( DocumentFormat.OpenXml.Packaging.SpreadsheetDocument document = SpreadsheetDocument.Create(filetogenerate, SpreadsheetDocumentType.Workbook))
+                //{
+                //    WorkbookPart workbookPart = document.AddWorkbookPart();
+                //    workbookPart.Workbook = new DocumentFormat.OpenXml.Spreadsheet.Workbook();
+
+                //    WorksheetPart worksheetPart = workbookPart.AddNewPart<WorksheetPart>();
+                //    var sheetData = new DocumentFormat.OpenXml.Spreadsheet.SheetData();
+                //    worksheetPart.Worksheet = new DocumentFormat.OpenXml.Spreadsheet.Worksheet(sheetData);
+
+                //    DocumentFormat.OpenXml.Spreadsheet.Sheets sheets = workbookPart.Workbook.AppendChild(new DocumentFormat.OpenXml.Spreadsheet.Sheets());
+                //    DocumentFormat.OpenXml.Spreadsheet.Sheet sheet = 
+                //        new DocumentFormat.OpenXml.Spreadsheet.Sheet() 
+                //        { 
+                //            Id = workbookPart.GetIdOfPart(worksheetPart), SheetId = 1, Name = _excelWorkSheetName 
+                //        };
+
+                //    sheets.Append(sheet);
+
+                //    DocumentFormat.OpenXml.Spreadsheet.Row headerRow = new DocumentFormat.OpenXml.Spreadsheet.Row();
+
+                //    List<String> columns = new List<string>();
+
+                //    foreach (string s in _GridHeader)
+                //    {
+                //        columns.Add(s);
+
+                //        DocumentFormat.OpenXml.Spreadsheet.Cell cell = new DocumentFormat.OpenXml.Spreadsheet.Cell();
+                //        cell.DataType = DocumentFormat.OpenXml.Spreadsheet.CellValues.String;
+                //        cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue(s);
+
+                //        if (_excelMatchGridColorScheme)
+                //        {
+                           
+                //        }
+
+                //        headerRow.AppendChild(cell);
+                //    }
+
+                //    //List<String> columns = new List<string>();
+                //    //foreach (System.Data.DataColumn column in table.Columns)
+                //    //{
+                //    //    columns.Add(column.ColumnName);
+
+                //    //    Cell cell = new Cell();
+                //    //    cell.DataType = CellValues.String;
+                //    //    cell.CellValue = new CellValue(column.ColumnName);
+                //    //    headerRow.AppendChild(cell);
+                //    //}
+
+                //    sheetData.AppendChild(headerRow);
+
+                //    for(int r = 0;r<_rows;r++)
+                //    {
+                //        DocumentFormat.OpenXml.Spreadsheet.Row newRow = new DocumentFormat.OpenXml.Spreadsheet.Row();
+                //        for (int c=0;c<_cols;c++)
+                //        {
+                //            DocumentFormat.OpenXml.Spreadsheet.Cell cell = new DocumentFormat.OpenXml.Spreadsheet.Cell();
+                //            cell.DataType = DocumentFormat.OpenXml.Spreadsheet.CellValues.String;
+                //            cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue(_grid[r,c]);
+                //            newRow.AppendChild(cell);
+                //        }
+
+                //        sheetData.AppendChild(newRow);
+                //    }
+                   
+                //    //foreach (DataRow dsrow in table.Rows)
+                //    //{
+                //    //    Row newRow = new Row();
+                //    //    foreach (String col in columns)
+                //    //    {
+                //    //        Cell cell = new Cell();
+                //    //        cell.DataType = CellValues.String;
+                //    //        cell.CellValue = new CellValue(dsrow[col].ToString());
+                //    //        newRow.AppendChild(cell);
+                //    //    }
+
+                //    //    sheetData.AppendChild(newRow);
+                //    //}
+
+                //    workbookPart.Workbook.Save();
+                //}
             }
 
             //Excel.Application _excel;
