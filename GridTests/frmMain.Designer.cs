@@ -32,14 +32,17 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
             this.btnWQL = new System.Windows.Forms.Button();
             this.taig = new TAIGridControl2.TAIGridControl();
+            this.btnSQLPopulate = new System.Windows.Forms.Button();
+            this.btnBigSqlPopulate = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnWQL
             // 
             this.btnWQL.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnWQL.Location = new System.Drawing.Point(13, 457);
+            this.btnWQL.Location = new System.Drawing.Point(10, 371);
+            this.btnWQL.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnWQL.Name = "btnWQL";
-            this.btnWQL.Size = new System.Drawing.Size(121, 23);
+            this.btnWQL.Size = new System.Drawing.Size(91, 34);
             this.btnWQL.TabIndex = 1;
             this.btnWQL.Text = "WQL Populate";
             this.btnWQL.UseVisualStyleBackColor = true;
@@ -87,7 +90,8 @@
             stringFormat1.Trimming = System.Drawing.StringTrimming.Character;
             this.taig.GridHeaderStringFormat = stringFormat1;
             this.taig.GridheaderVisible = true;
-            this.taig.Location = new System.Drawing.Point(12, 12);
+            this.taig.Location = new System.Drawing.Point(9, 10);
+            this.taig.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.taig.Name = "taig";
             this.taig.PageSettings = null;
             this.taig.PaginationSize = 0;
@@ -100,7 +104,7 @@
             this.taig.SelectedRowBackColor = System.Drawing.Color.Blue;
             this.taig.SelectedRowForeColor = System.Drawing.Color.White;
             this.taig.SelectedRows = ((System.Collections.ArrayList)(resources.GetObject("taig.SelectedRows")));
-            this.taig.Size = new System.Drawing.Size(986, 438);
+            this.taig.Size = new System.Drawing.Size(740, 356);
             this.taig.TabIndex = 0;
             this.taig.TitleBackColor = System.Drawing.Color.Blue;
             this.taig.TitleFont = new System.Drawing.Font("Arial", 16F);
@@ -113,13 +117,40 @@
             this.taig.XMLNameSpace = "TAI_Grid_Ouptut";
             this.taig.XMLTableName = "Table";
             // 
+            // btnSQLPopulate
+            // 
+            this.btnSQLPopulate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnSQLPopulate.Location = new System.Drawing.Point(105, 371);
+            this.btnSQLPopulate.Margin = new System.Windows.Forms.Padding(2);
+            this.btnSQLPopulate.Name = "btnSQLPopulate";
+            this.btnSQLPopulate.Size = new System.Drawing.Size(91, 34);
+            this.btnSQLPopulate.TabIndex = 2;
+            this.btnSQLPopulate.Text = "SQL Populate";
+            this.btnSQLPopulate.UseVisualStyleBackColor = true;
+            this.btnSQLPopulate.Click += new System.EventHandler(this.btnSQLPopulate_Click);
+            // 
+            // btnBigSqlPopulate
+            // 
+            this.btnBigSqlPopulate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnBigSqlPopulate.Location = new System.Drawing.Point(200, 371);
+            this.btnBigSqlPopulate.Margin = new System.Windows.Forms.Padding(2);
+            this.btnBigSqlPopulate.Name = "btnBigSqlPopulate";
+            this.btnBigSqlPopulate.Size = new System.Drawing.Size(109, 34);
+            this.btnBigSqlPopulate.TabIndex = 3;
+            this.btnBigSqlPopulate.Text = "BIG SQL Populate";
+            this.btnBigSqlPopulate.UseVisualStyleBackColor = true;
+            this.btnBigSqlPopulate.Click += new System.EventHandler(this.btnBigSqlPopulate_Click);
+            // 
             // frmMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1010, 512);
+            this.ClientSize = new System.Drawing.Size(758, 416);
+            this.Controls.Add(this.btnBigSqlPopulate);
+            this.Controls.Add(this.btnSQLPopulate);
             this.Controls.Add(this.btnWQL);
             this.Controls.Add(this.taig);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "frmMain";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.frmMain_Load);
@@ -131,6 +162,8 @@
 
         private TAIGridControl2.TAIGridControl taig;
         private System.Windows.Forms.Button btnWQL;
+        private System.Windows.Forms.Button btnSQLPopulate;
+        private System.Windows.Forms.Button btnBigSqlPopulate;
     }
 }
 

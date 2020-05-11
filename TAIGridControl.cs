@@ -9686,6 +9686,14 @@ namespace TAIGridControl2
 
             try
             {
+                var frm = new frmExportingToExcelWorking();
+
+                if (_ShowExcelExportMessage)
+                {
+                    frm.Show();
+                    frm.Refresh();
+                }
+
                 string filetogenerate = System.IO.Path.Combine(System.Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "EXCELOUTPUT.xlsx");
 
                 IXLWorkbook workbook = new XLWorkbook();
@@ -9745,6 +9753,12 @@ namespace TAIGridControl2
 
                 workbook.SaveAs(filetogenerate);
 
+                if (_ShowExcelExportMessage)
+                {
+                    frm.Hide();
+                    frm = null;
+                }
+
                 //using ( DocumentFormat.OpenXml.Packaging.SpreadsheetDocument document = SpreadsheetDocument.Create(filetogenerate, SpreadsheetDocumentType.Workbook))
                 //{
                 //    WorkbookPart workbookPart = document.AddWorkbookPart();
@@ -9777,7 +9791,7 @@ namespace TAIGridControl2
 
                 //        if (_excelMatchGridColorScheme)
                 //        {
-                           
+
                 //        }
 
                 //        headerRow.AppendChild(cell);
@@ -9809,7 +9823,7 @@ namespace TAIGridControl2
 
                 //        sheetData.AppendChild(newRow);
                 //    }
-                   
+
                 //    //foreach (DataRow dsrow in table.Rows)
                 //    //{
                 //    //    Row newRow = new Row();

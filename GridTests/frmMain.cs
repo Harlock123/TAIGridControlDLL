@@ -27,5 +27,23 @@ namespace GridTests
         {
 
         }
+
+        private void btnSQLPopulate_Click(object sender, EventArgs e)
+        {
+            string cn = "Server=(local);Database=HIDATA;Trusted_Connection=True;"; // My test env has this running locally
+
+            string sql = "SELECT TOP 1000 * from tblMEMBERMAIN";
+
+            taig.PopulateGridWithData(cn, sql);
+        }
+
+        private void btnBigSqlPopulate_Click(object sender, EventArgs e)
+        {
+            string cn = "Server=(local);Database=HIDATA;Trusted_Connection=True;"; // My test env has this running locally
+
+            string sql = "SELECT * from tblMEMBERMAIN"; // In my test env it shouild grab over 14000 rows
+
+            taig.PopulateGridWithData(cn, sql);
+        }
     }
 }
