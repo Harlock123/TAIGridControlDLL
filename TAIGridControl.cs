@@ -5095,14 +5095,13 @@ namespace TAIGridControl2
             }
         }
 
-        // Item
         /// <summary>
-        /// Gets or sets the contents of the grid cell at row R and col C
+        /// Gets contents of the grid cell at row R and col C
         /// </summary>
-        /// <param name="r"></param>
-        /// <param name="c"></param>
+        /// <param name="r">The Row number to fetch contents from</param>
+        /// <param name="c">The Col number to fetch contents from</param>
         /// <value></value>
-        /// <returns></returns>
+        /// <returns>The String representation of the cells contents located at <c>r</c> Row and <c>c</c> Col. Returns an empty string if out of bounds or the contents of the cell are NULL</returns>
         /// <remarks></remarks>
         public string get_item(int r, int c)
         {
@@ -5113,7 +5112,12 @@ namespace TAIGridControl2
             else
                 return _grid[r, c];
         }
-
+        /// <summary>
+        /// will set the value of a cell located as <c>r</c> and <c>c</c> to the value of <c>value</c>
+        /// </summary>
+        /// <param name="r">the row number to set</param>
+        /// <param name="c">the col number to set</param>
+        /// <param name="value">the value to set for the cell as row, col</param>
         public void set_item(int r, int c, string value)
         {
             if (r < 0 | c < 0 | r > _rows - 1 | c > _cols - 1)
@@ -5126,14 +5130,13 @@ namespace TAIGridControl2
             }
         }
 
-        // Item
         /// <summary>
-        /// Gets or sets the contents of the grid cell at row R and column name colname
+        /// Gets contents of the grid cell at row R and col colname
         /// </summary>
-        /// <param name="r"></param>
-        /// <param name="colname"></param>
+        /// <param name="r">The Row number to fetch contents from</param>
+        /// <param name="colname">The string name of the column number to fetch contents from (Taken from the Header of that column)</param>
         /// <value></value>
-        /// <returns></returns>
+        /// <returns>The String representation of the cells contents located at <c>r</c> Row and <c>colname</c> Col. Returns an empty string if out of bounds or the contents of the cell are NULL</returns>
         /// <remarks></remarks>
         public string get_item(int r, string colname)
         {
@@ -5148,7 +5151,12 @@ namespace TAIGridControl2
             else
                 return _grid[r, c];
         }
-
+        /// <summary>
+        /// will set the value of a cell located as <c>r</c> and <c>colname</c> the columns name based on its header to the value of <c>value</c>
+        /// </summary>
+        /// <param name="r">the row number to set</param>
+        /// <param name="colname">the column name to set (based on the columns header)</param>
+        /// <param name="value">the value to set at the cell indicated by r,colname</param>
         public void set_item(int r, string colname, string value)
         {
             int c = -1;
@@ -5278,7 +5286,7 @@ namespace TAIGridControl2
         /// </summary>
         /// <param name="idx"></param>
         /// <value></value>
-        /// <returns></returns>
+        /// <returns> Integer in pixels of the <c>idx</c> row height currently</returns>
         /// <remarks></remarks>
         public int get_RowHeight(int idx)
         {
@@ -5288,6 +5296,11 @@ namespace TAIGridControl2
                 return _rowheights[idx];
         }
 
+        /// <summary>
+        /// Will explicitly set the hight of <c>idx</c> row to be <c>value</c> pixels in height.
+        /// </summary>
+        /// <param name="idx"></param>
+        /// <param name="value"></param>
         public void set_RowHeight(int idx, int value)
         {
             if (idx < 0 | idx > _rows)
@@ -5694,7 +5707,6 @@ namespace TAIGridControl2
             }
         }
 
-
         // XMLDataSetName
         /// <summary>
         /// Gets or sets he name of the dataset used during the export to XML of the grids contents
@@ -5794,2293 +5806,7 @@ namespace TAIGridControl2
                 _xmlTableName = value;
             }
         }
-
-        private int AllColWidths()
-        {
-            int t;
-            int res = 0;
-            var loopTo = _cols - 1;
-            for (t = 0; t <= loopTo; t++)
-                res = res + _colwidths[t];
-
-            return res + 1;
-        }
-
-        private int AllRowHeights()
-        {
-            int t;
-            int res = 0;
-            var loopTo = _rows - 1;
-            for (t = 0; t <= loopTo; t++)
-                res = res + _rowheights[t];
-
-            if (TitleVisible)
-                res = res + TitleFont.Height;
-
-            return res + 1;
-        }
-
-        private int CalculatePageRange()
-        {
-
-            // Dim psets As New System.Drawing.printing.PageSettings
-
-            if (Conversions.ToBoolean(Operators.ConditionalCompareObjectEqual(_psets.PrinterSettings.PrintRange, System.Drawing.Printing.PrintRange.SomePages, false)))
-            {
-                _gridPrintingAllPages = false;
-                _gridStartPage = Conversions.ToInteger(_psets.PrinterSettings.FromPage);
-                _gridEndPage = Conversions.ToInteger(_psets.PrinterSettings.ToPage);
-
-                var ppea = new System.Drawing.Printing.PrintPageEventArgs(CreateGraphics(), new Rectangle(Conversions.ToInteger(_psets.Margins.Left), Conversions.ToInteger(_psets.Margins.Top), Conversions.ToInteger(_psets.Margins.Right - _psets.Margins.Left), Conversions.ToInteger(_psets.Margins.Bottom - _psets.Margins.Top)), (Rectangle)_psets.Bounds, _psets);
-
-                _gridReportPageNumbers = 1;
-                _gridReportCurrentrow = 0;
-                _gridReportCurrentColumn = 0;
-
-                Fake_PrintPage(this, ppea);
-
-                while (ppea.HasMorePages)
-                    Fake_PrintPage(this, ppea);
-
-                int maxpage = _gridReportPageNumbers;
-
-                _gridReportPageNumbers = 1;
-                _gridReportCurrentrow = 0;
-                _gridReportCurrentColumn = 0;
-                return maxpage;
-            }
-            else
-            {
-                _gridPrintingAllPages = true;
-                _gridStartPage = 1;
-                _gridStartPageRow = -1;
-
-                var ppea = new System.Drawing.Printing.PrintPageEventArgs(CreateGraphics(), new Rectangle(Conversions.ToInteger(_psets.Margins.Left), Conversions.ToInteger(_psets.Margins.Top), Conversions.ToInteger(_psets.Margins.Right - _psets.Margins.Left), Conversions.ToInteger(_psets.Margins.Bottom - _psets.Margins.Top)), (Rectangle)_psets.Bounds, _psets);
-
-                _gridReportPageNumbers = 1;
-                _gridReportCurrentrow = 0;
-                _gridReportCurrentColumn = 0;
-
-                Fake_PrintPage(this, ppea);
-
-                while (ppea.HasMorePages)
-                    Fake_PrintPage(this, ppea);
-
-                int maxpage = _gridReportPageNumbers;
-
-                _gridReportPageNumbers = 1;
-                _gridReportCurrentrow = 0;
-                _gridReportCurrentColumn = 0;
-
-                _gridEndPage = maxpage;
-
-                return maxpage;
-            }
-        }
-
-        private void CheckGridTearAways(int colid)
-        {
-            // 
-            // to be use in methods that affect a specific grid column
-            // like RemoveColFromGrid
-            // 
-
-            // dont bother unless we actualy have some to act on 
-            if (TearAways.Count == 0)
-                return;
-
-            int t;
-
-            for (t = TearAways.Count - 1; t >= 0; t += -1)
-            {
-                TearAwayWindowEntry ta = (TAIGridControl2.TAIGridControl.TearAwayWindowEntry)TearAways[t];
-
-                if (ta.ColID == colid)
-                {
-                    // we are showing the column that needs to get the boot
-                    ta.KillTearAway();
-                    TearAways.RemoveAt(t);
-                }
-            }
-
-            if (TearAways.Count > 0)
-            {
-                var loopTo = TearAways.Count - 1;
-                // we still have some so lets look to see if any colids were greater than 
-                // the intended colid for deletion if so we need to decrement them by one
-                for (t = 0; t <= loopTo; t++)
-                {
-                    if (((TearAwayWindowEntry)TearAways[t]).ColID > colid)
-                        ((TearAwayWindowEntry)TearAways[t]).ColID -= 1;
-                }
-            }
-        }
-
-        private string CleanMoneyString(string s)
-        {
-            return s.Replace("$", "").Replace("(", "").Replace(")", "").Replace(",", "");
-        }
-
-        private void ClearToBackgroundColor()
-        {
-            var gr = CreateGraphics();
-            gr.FillRectangle(new SolidBrush(BackColor), gr.ClipBounds);
-        }
-
-        private void ClearToBackgroundColor(Graphics gr)
-        {
-            gr.FillRectangle(new SolidBrush(BackColor), gr.ClipBounds);
-        }
-
-        private void DoAutoSizeCheck(Graphics gr)
-        {
-            int r;
-            int c;
-            int rr = 0;
-            int cc = 0;
-            string t;
-
-            int rrr = 0;
-            var sz = new SizeF(0, 0);
-
-            if (!_AutoSizeSemaphore | _AutoSizeAlreadyCalculated)
-                return;
-
-            if (_AutosizeCellsToContents)
-            {
-                _AutoSizeSemaphore = false;
-                var loopTo = _rows - 1;
-                for (r = 0; r <= loopTo; r++)
-                    _rowheights[r] = 0;
-                var loopTo1 = _cols - 1;
-                for (c = 0; c <= loopTo1; c++)
-                {
-                    t = " " + _GridHeader[c] + " ";
-                    cc = Conversions.ToInteger(gr.MeasureString(t, _GridHeaderFont).Width);
-                    if (cc > rr)
-                        rr = cc;
-                    var loopTo2 = _rows - 1;
-                    for (r = 0; r <= loopTo2; r++)
-                    {
-                        if (!string.IsNullOrEmpty(_colPasswords[c]))
-                            t = " " + _colPasswords[c] + " ";
-                        else if (_grid[r, c] == null)
-                            t = "  ";
-                        else
-                            t = " " + _grid[r, c] + " ";
-
-                        if (_colMaxCharacters[c] != 0)
-                        {
-                            if (t.Length > _colMaxCharacters[c])
-                                t = t.Substring(0, _colMaxCharacters[c]);
-                        }
-
-                        if (!_AllowWhiteSpaceInCells)
-                        {
-                            t = t.Replace(Constants.vbCr, " ").Replace(Constants.vbLf, " ").Replace(Constants.vbTab, " ").Replace(Constants.vbFormFeed, " ");
-
-                            while ((t.Replace("  ", " ") ?? "") != (t ?? ""))
-                                t = t.Replace("  ", " ");
-                        }
-
-                        sz = gr.MeasureString(t, _gridCellFontsList[_gridCellFonts[r, c]]);
-
-                        cc = Conversions.ToInteger(sz.Width);
-
-                        if (cc > rr)
-                            rr = cc;
-
-                        if (_rowheights[r] < sz.Height)
-                            _rowheights[r] = Conversions.ToInteger(sz.Height);
-                    }
-
-                    _colwidths[c] = rr;
-                    rr = 0;
-                }
-
-                cc = Conversions.ToInteger(gr.MeasureString("Yy", _GridHeaderFont).Height);
-
-                _GridHeaderHeight = cc;
-
-                cc = Conversions.ToInteger(gr.MeasureString("Yy", _GridTitleFont).Height);
-
-                _GridTitleHeight = cc;
-
-                // For r = 0 To _rows - 1
-                // For c = 0 To _cols - 1
-                // t = " " & _grid(r, c) & " "
-                // cc = gr.MeasureString(t, _gridCellFontsList(_gridCellFonts(r, c))).Height
-                // If cc > rr Then
-                // rr = cc
-                // End If
-                // Next
-
-                // _rowheights(r) = rr
-                // rr = 0
-
-                // Next
-
-                _AutoSizeSemaphore = true;
-
-                _AutoSizeAlreadyCalculated = true;
-            }
-            else
-            {
-            }
-        }
-
-        private void Fake_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e)
-        {
-            int x, y, xx, r, c;
-            var fnt = new Font("Courier New", 10 * _gridReportScaleFactor, FontStyle.Regular, GraphicsUnit.Pixel);
-            var fnt2 = new Font("Courier New", 10 * _gridReportScaleFactor, FontStyle.Bold, GraphicsUnit.Pixel);
-
-            float m;
-
-            Font ft;
-
-            var greypen = new Pen(Color.Gray);
-
-            int pagewidth = e.PageSettings.Bounds.Size.Width;
-            int pageheight = e.PageSettings.Bounds.Size.Height;
-
-            int lrmargin = 40;
-            int tbmargin = 70;
-
-            bool colprintedonpage = false;
-
-            if (AllColWidths() * _gridReportScaleFactor < pagewidth - 2 * lrmargin)
-                xx = Conversions.ToInteger((pagewidth - 2 * lrmargin - AllColWidths() * _gridReportScaleFactor) / 2);
-            else
-                xx = 0;
-
-
-            var rect = new RectangleF(0, 0, 1, 1);
-
-            x = lrmargin;
-            y = tbmargin;
-
-            int coloffset = 0;
-            bool morecols = true;
-            int currow = _gridReportCurrentrow;
-
-            if ((int)e.PageSettings.PrinterSettings.PrintRange == (int)System.Drawing.Printing.PrintRange.SomePages)
-            {
-                // we may be printing just a range so lets see if we can calculate the row to start printing on
-                if (_gridStartPageRow <= 0)
-                {
-                    // we have not set this up yet so lets check the bounds
-                    if (_gridReportPageNumbers >= _gridStartPage)
-                        _gridStartPageRow = currow;
-                }
-            }
-
-            ft = _GridHeaderFont;
-
-            ft = new Font(_GridHeaderFont.FontFamily, (_GridHeaderFont.SizeInPoints - 1) * _gridReportScaleFactor, _GridHeaderFont.Style, _GridHeaderFont.Unit);
-
-            // calculate size and place te printed on date on the page
-
-            m = e.Graphics.MeasureString(_gridReportPrintedOn.ToLongDateString() + Constants.vbCrLf
-                                        + _gridReportPrintedOn.ToLongTimeString(), fnt).Width;
-
-            if (_gridReportNumberPages)
-                // we want to number the pages here
-
-                m = e.Graphics.MeasureString("Page " + _gridReportPageNumbers.ToString(), fnt).Height;
-            var loopTo = Cols - 1;
-
-            // print the grid header
-
-            for (c = _gridReportCurrentColumn; c <= loopTo; c++)
-            {
-                if (x + _colwidths[c] + xx > pagewidth - lrmargin & colprintedonpage)
-                    break;
-
-                colprintedonpage = true;
-
-                rect.X = Convert.ToSingle(x + xx);
-                rect.Y = Convert.ToSingle(y);
-                rect.Width = Convert.ToSingle(_colwidths[c]);
-                rect.Height = Convert.ToSingle(_GridHeaderHeight);
-
-                x = x + _colwidths[c];
-            }
-
-
-            y += _GridHeaderHeight;
-            x = lrmargin;
-            var loopTo1 = Rows - 1;
-            for (r = _gridReportCurrentrow; r <= loopTo1; r++)
-            {
-                var loopTo2 = Cols - 1;
-                for (c = _gridReportCurrentColumn; c <= loopTo2; c++)
-                {
-                    if (x + _colwidths[c] + xx > pagewidth - lrmargin & colprintedonpage)
-                    {
-                        coloffset = c;
-                        morecols = true;
-                        break;
-                    }
-                    else
-                        morecols = false;
-
-                    colprintedonpage = true;
-
-                    rect.X = Convert.ToSingle(x + xx);
-                    rect.Y = Convert.ToSingle(y);
-                    rect.Width = Convert.ToSingle(_colwidths[c]);
-                    rect.Height = Convert.ToSingle(_rowheights[r]);
-
-                    // ft = New Font(_gridCellFontsList(_gridCellFonts(r, c)).FontFamily, _
-                    // _gridCellFontsList(_gridCellFonts(r, c)).SizeInPoints - 1, _
-                    // _gridCellFontsList(_gridCellFonts(r, c)).Style, _
-                    // _gridCellFontsList(_gridCellFonts(r, c)).Unit)
-
-                    // e.Graphics.DrawString(_grid(r, c), ft, _
-                    // Brushes.Black, rect, _gridCellAlignmentList(_gridCellAlignment(r, c)))
-
-                    x = x + _colwidths[c];
-                }
-                x = lrmargin;
-                y += _rowheights[r];
-                _gridReportCurrentrow += 1;
-
-                // do we need to skip to next page here
-                if (y >= pageheight - tbmargin)
-                    break;
-                else
-                {
-                }
-
-                Application.DoEvents();
-            }
-
-            if (_gridReportCurrentrow >= Rows - 1 & !morecols)
-            {
-                e.HasMorePages = false;
-                // _gridReportPageNumbers = 1
-                _gridReportCurrentrow = 0;
-                _gridReportCurrentColumn = 0;
-            }
-            else
-            {
-                if (morecols)
-                {
-                    _gridReportCurrentColumn = coloffset;
-                    _gridReportCurrentrow = currow;
-                }
-                else
-                    _gridReportCurrentColumn = 0;
-                e.HasMorePages = true;
-                _gridReportPageNumbers += 1;
-            }
-        }
-
-        private int GetGridBackColorListEntry(Brush bcol)
-        {
-            int t;
-            int flag = -1;
-
-            SolidBrush bbcol;
-            SolidBrush aacol;
-            var loopTo = _gridBackColorList.GetUpperBound(0);
-            for (t = 0; t <= loopTo; t++)
-            {
-                if (_gridBackColorList[t] == null)
-                {
-                }
-                else
-                {
-                    bbcol = (SolidBrush)_gridBackColorList[t];
-                    aacol = (SolidBrush)bcol;
-
-                    if (aacol.Color.A == bbcol.Color.A)
-                    {
-                        if (aacol.Color.R == bbcol.Color.R)
-                        {
-                            if (aacol.Color.G == bbcol.Color.G)
-                            {
-                                if (aacol.Color.B == bbcol.Color.B)
-                                {
-                                    flag = t;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (flag == -1)
-            {
-                // we dont have that fnt2find in the list so we need to add it
-                t = _gridBackColorList.GetUpperBound(0);
-                t += 1;
-                var old_gridBackColorList = _gridBackColorList;
-                _gridBackColorList = new Brush[t + 1 + 1];
-                if (old_gridBackColorList != null)
-                    Array.Copy(old_gridBackColorList, _gridBackColorList, Math.Min(t + 1 + 1, old_gridBackColorList.Length));
-                _gridBackColorList[t] = bcol;
-                flag = t;
-            }
-
-            return flag;
-        }
-
-        private int GetGridCellAlignmentListEntry(StringFormat sfmt)
-        {
-            int t;
-            int flag = -1;
-            var loopTo = _gridCellAlignmentList.GetUpperBound(0);
-            for (t = 0; t <= loopTo; t++)
-            {
-                if (sfmt.Equals(_gridCellAlignmentList[t]))
-                {
-                    flag = t;
-                    break;
-                }
-            }
-
-            if (flag == -1)
-            {
-                // we dont have that fnt2find in the list so we need to add it
-                t = _gridCellAlignmentList.GetUpperBound(0);
-                t += 1;
-                var old_gridCellAlignmentList = _gridCellAlignmentList;
-                _gridCellAlignmentList = new StringFormat[t + 1 + 1];
-                if (old_gridCellAlignmentList != null)
-                    Array.Copy(old_gridCellAlignmentList, _gridCellAlignmentList, Math.Min(t + 1 + 1, old_gridCellAlignmentList.Length));
-                _gridCellAlignmentList[t] = sfmt;
-                flag = t;
-            }
-
-            return flag;
-        }
-
-        private int GetGridCellFontListEntry(Font fnt2find)
-        {
-            int t;
-            int flag = -1;
-            var loopTo = _gridCellFontsList.GetUpperBound(0);
-            for (t = 0; t <= loopTo; t++)
-            {
-                if (fnt2find.Equals(_gridCellFontsList[t]))
-                {
-                    flag = t;
-                    break;
-                }
-            }
-
-            if (flag == -1)
-            {
-                // we dont have that fnt2find in the list so we need to add it
-                t = _gridCellFontsList.GetUpperBound(0);
-                t += 1;
-                var old_gridCellFontsList = _gridCellFontsList;
-                _gridCellFontsList = new Font[t + 1 + 1];
-                if (old_gridCellFontsList != null)
-                    Array.Copy(old_gridCellFontsList, _gridCellFontsList, Math.Min(t + 1 + 1, old_gridCellFontsList.Length));
-                _gridCellFontsList[t] = fnt2find;
-                flag = t;
-            }
-
-            return flag;
-        }
-
-        private int GetGridForeColorListEntry(Pen fcol)
-        {
-            int t;
-            int flag = -1;
-            var loopTo = _gridForeColorList.GetUpperBound(0);
-            for (t = 0; t <= loopTo; t++)
-            {
-                if (_gridForeColorList[t] == null)
-                {
-                }
-                else if (fcol.Color.A == _gridForeColorList[t].Color.A)
-                {
-                    if (fcol.Color.R == _gridForeColorList[t].Color.R)
-                    {
-                        if (fcol.Color.G == _gridForeColorList[t].Color.G)
-                        {
-                            if (fcol.Color.B == _gridForeColorList[t].Color.B)
-                            {
-                                flag = t;
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (flag == -1)
-            {
-                // we dont have that fnt2find in the list so we need to add it
-                t = _gridForeColorList.GetUpperBound(0);
-                t += 1;
-                var old_gridForeColorList = _gridForeColorList;
-                _gridForeColorList = new Pen[t + 1 + 1];
-                if (old_gridForeColorList != null)
-                    Array.Copy(old_gridForeColorList, _gridForeColorList, Math.Min(t + 1 + 1, old_gridForeColorList.Length));
-                _gridForeColorList[t] = fcol;
-                flag = t;
-            }
-
-            return flag;
-        }
-
-        private string GetLetter(int iNumber)
-        {
-            try
-            {
-                switch (iNumber)
-                {
-                    case 0:
-                        {
-                            return "";
-                        }
-
-                    case 1:
-                        {
-                            return "A";
-                        }
-
-                    case 2:
-                        {
-                            return "B";
-                        }
-
-                    case 3:
-                        {
-                            return "C";
-                        }
-
-                    case 4:
-                        {
-                            return "D";
-                        }
-
-                    case 5:
-                        {
-                            return "E";
-                        }
-
-                    case 6:
-                        {
-                            return "F";
-                        }
-
-                    case 7:
-                        {
-                            return "G";
-                        }
-
-                    case 8:
-                        {
-                            return "H";
-                        }
-
-                    case 9:
-                        {
-                            return "I";
-                        }
-
-                    case 10:
-                        {
-                            return "J";
-                        }
-
-                    case 11:
-                        {
-                            return "K";
-                        }
-
-                    case 12:
-                        {
-                            return "L";
-                        }
-
-                    case 13:
-                        {
-                            return "M";
-                        }
-
-                    case 14:
-                        {
-                            return "N";
-                        }
-
-                    case 15:
-                        {
-                            return "O";
-                        }
-
-                    case 16:
-                        {
-                            return "P";
-                        }
-
-                    case 17:
-                        {
-                            return "Q";
-                        }
-
-                    case 18:
-                        {
-                            return "R";
-                        }
-
-                    case 19:
-                        {
-                            return "S";
-                        }
-
-                    case 20:
-                        {
-                            return "T";
-                        }
-
-                    case 21:
-                        {
-                            return "U";
-                        }
-
-                    case 22:
-                        {
-                            return "V";
-                        }
-
-                    case 23:
-                        {
-                            return "W";
-                        }
-
-                    case 24:
-                        {
-                            return "X";
-                        }
-
-                    case 25:
-                        {
-                            return "Y";
-                        }
-
-                    case 26:
-                        {
-                            return "Z";
-                        }
-
-                    default:
-                        {
-                            return "";
-                        }
-                }
-            }
-            catch (Exception ex)
-            {
-                Interaction.MsgBox(ex.ToString(), (MsgBoxStyle)((int)MsgBoxStyle.Information + (int)MsgBoxStyle.OkOnly), "TAIGRIDControl.GetUpperColumn Error...");
-                return "";
-            }
-        }
-
-        private string GetUpperColumn(int iCols)
-        {
-            try
-            {
-                int iMajor = Conversions.ToInteger(iCols / (double)26);
-                int iMinor = iCols % 26;
-
-                return GetLetter(iMajor) + GetLetter(iMinor);
-            }
-            catch (Exception ex)
-            {
-                Interaction.MsgBox(ex.ToString(), (MsgBoxStyle)((int)MsgBoxStyle.Information + (int)MsgBoxStyle.OkOnly), "TAIGRIDControl.GetLetter Error...");
-                return GetLetter(1) + GetLetter(1);
-            }
-        }
-
-        private Point GimmeGridSize()
-        {
-            var pnt = default(Point);
-            int x, y;
-            int siz = 0;
-            var loopTo = _cols - 1;
-            for (x = 0; x <= loopTo; x++)
-                siz = siz + _colwidths[x];
-
-            pnt.X = siz;
-            siz = 0;
-            var loopTo1 = _rows - 1;
-            for (y = 0; y <= loopTo1; y++)
-                siz = siz + _rowheights[y];
-
-            if (_GridTitleVisible)
-                siz = siz + _GridTitleHeight;
-
-            if (_GridHeaderVisible)
-                siz = siz + _GridHeaderHeight;
-
-            pnt.Y = siz;
-
-            return pnt;
-        }
-
-        private int GimmeXOffset(int col)
-        {
-            int t;
-            int ret = 0;
-
-            if (col == 0)
-                ret = 0;
-            else
-            {
-                var loopTo = col - 1;
-                for (t = 0; t <= loopTo; t++)
-                    ret = ret + _colwidths[t];
-            }
-            return ret;
-        }
-
-        private int GimmeYOffset(int row)
-        {
-            int t;
-            int ret = 0;
-
-            if (row == 0)
-                ret = 0;
-            else
-            {
-                var loopTo = row - 1;
-                for (t = 0; t <= loopTo; t++)
-                    ret = ret + _rowheights[t];
-            }
-            return ret;
-        }
-
-        private void InitializeTheGrid()
-        {
-            int r, c;
-
-            _grid = new string[3, 3];
-            _gridBackColor = new int[3, 3];
-            _gridForeColor = new int[3, 3];
-            _gridCellFonts = new int[3, 3];
-            _gridCellFontsList = new Font[2];
-            _gridForeColorList = new Pen[2];
-            _gridBackColorList = new Brush[2];
-            _gridCellAlignment = new int[3, 3];
-            _gridCellAlignmentList = new StringFormat[2];
-            _colwidths = new int[3];
-            _colhidden = new bool[3];
-            _rowhidden = new bool[3];
-            _colEditable = new bool[3];
-            _rowEditable = new bool[3];
-            _colboolean = new bool[3];
-            _colPasswords = new string[3];
-            _colMaxCharacters = new int[3];
-            _rowheights = new int[3];
-            _GridHeader = new string[3];
-            _rows = 2;
-            _cols = 2;
-
-            _SelectedRow = -1;
-            _SelectedColumn = -1;
-
-            _gridCellFontsList[0] = _DefaultCellFont;
-            _gridForeColorList[0] = new Pen(_DefaultForeColor);
-            _gridCellAlignmentList[0] = _DefaultStringFormat;
-            _gridBackColorList[0] = new SolidBrush(_DefaultBackColor);
-
-
-            hs.Visible = false;
-            vs.Visible = false;
-            hs.Value = 0;
-            vs.Value = 0;
-            var loopTo = _rows - 1;
-            for (r = 0; r <= loopTo; r++)
-            {
-                var loopTo1 = _cols - 1;
-                for (c = 0; c <= loopTo1; c++)
-                {
-                    _gridBackColor[r, c] = 0; // New SolidBrush(_DefaultBackColor.AntiqueWhite)
-                    _gridForeColor[r, c] = 0; // New Pen(_DefaultForeColor.Blue)
-                    _gridCellFonts[r, c] = 0; // _DefaultCellFont
-                    _gridCellAlignment[r, c] = 0; // _DefaultStringFormat
-                }
-            }
-        }
-
-        private void InitializeTheGrid(int row, int col)
-        {
-            int r, c;
-
-            _grid = new string[row + 1, col + 1];
-            _gridBackColor = new int[row + 1, col + 1];
-            _gridForeColor = new int[row + 1, col + 1];
-            _gridCellFonts = new int[row + 1, col + 1];
-            _gridCellFontsList = new Font[2];
-            _gridForeColorList = new Pen[2];
-            _gridBackColorList = new Brush[2];
-            _gridCellAlignment = new int[row + 1, col + 1];
-            _gridCellAlignmentList = new StringFormat[2];
-            _colwidths = new int[col + 1];
-            _colEditable = new bool[col + 1];
-            _rowEditable = new bool[row + 1];
-            _colhidden = new bool[col + 1];
-            _colboolean = new bool[col + 1];
-            _rowhidden = new bool[row + 1];
-            _colPasswords = new string[col + 1];
-            _colMaxCharacters = new int[col + 1];
-            _rowheights = new int[row + 1];
-            _GridHeader = new string[col + 1];
-
-            _SelectedRows = new ArrayList();
-            // '_SelectedRows.Clear()
-
-            _rows = row;
-            _cols = col;
-
-            _SelectedRow = -1;
-            _SelectedColumn = -1;
-
-            _gridCellFontsList[0] = _DefaultCellFont;
-            _gridForeColorList[0] = new Pen(_DefaultForeColor);
-            _gridCellAlignmentList[0] = _DefaultStringFormat;
-            _gridBackColorList[0] = new SolidBrush(_DefaultBackColor);
-
-
-            hs.Visible = false;
-            vs.Visible = false;
-            hs.Value = 0;
-            vs.Value = 0;
-            var loopTo = _rows - 1;
-            for (r = 0; r <= loopTo; r++)
-            {
-                _rowEditable[r] = true;
-                var loopTo1 = _cols - 1;
-                for (c = 0; c <= loopTo1; c++)
-                {
-                    _gridBackColor[r, c] = 0; // New SolidBrush(_DefaultBackColor)
-                    _gridForeColor[r, c] = 0; // New Pen(_DefaultForeColor)
-                    _gridCellFonts[r, c] = 0; // _DefaultCellFont
-                    _gridCellAlignment[r, c] = 0; // _DefaultStringFormat
-                }
-            }
-
-            var loopTo2 = _cols - 1;
-            for (c = 0; c <= loopTo2; c++)
-            {
-                _colPasswords[c] = "";
-                _colEditable[c] = false;
-                _colhidden[c] = false;
-                _colboolean[c] = false;
-            }
-        }
-
-        private void NormalizeTearaways()
-        {
-            if (TearAways.Count == 0)
-                // we dont have any tearaways lets blow this pop stand
-                return;
-
-            // we have some so lets fix things here
-
-            int t;
-
-            for (t = TearAways.Count - 1; t >= 0; t += -1)
-            {
-                TearAwayWindowEntry ta = (TAIGridControl2.TAIGridControl.TearAwayWindowEntry)TearAways[t];
-                if (ta.ColID >= _cols)
-                    // we have a tearaway open on a column that no longer exists so lets close it
-                    ta.Winform.KillMe(ta.ColID);
-                else
-                {
-                    // we the column is still there so lets change its title and its contents
-                    ta.Winform.Text = get_HeaderLabel(ta.ColID);
-                    ta.Winform.ListItems = GetColAsArrayList(ta.ColID);
-                    ta.SetTearAwayScrollParameters(vs.Minimum, vs.Maximum, vs.Visible);
-                    ta.SetTearAwayScrollIndex(vs.Value);
-                }
-            }
-        }
-
-        private void OleRenderGrid(Graphics gr)
-        {
-            int w = AllColWidths();
-            int h = AllRowHeights();
-            var orig = default(Point);
-            int t;
-            int xof;
-            int xxof, yyof;
-            int r, c;
-            int rh, rhy, rhx; // use for checkbox renderings
-            int rowstart = -1;
-            int rowend = -1;
-            int colstart = -1;
-            int colend = -1;
-            int gyofset;
-            string renderstring = "";
-
-            if (_gridForeColorList[0] == null)
-                _gridForeColorList[0] = new Pen(_DefaultForeColor);
-
-            if (_gridBackColorList[0] == null)
-                _gridBackColorList[0] = new SolidBrush(_DefaultBackColor);
-
-            if (_GridHeaderVisible)
-                h += _GridHeaderHeight;
-
-            if (_antialias)
-            {
-                gr.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-                gr.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
-            }
-            else
-            {
-                gr.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
-                gr.TextRenderingHint = System.Drawing.Text.TextRenderingHint.SystemDefault;
-            }
-
-            ClearToBackgroundColor(gr);
-
-            // If we are disallowing selection of columns then make sure the Selected column variable is out of bounds
-            if (!_AllowColumnSelection)
-                _SelectedColumn = -1;
-
-            if (_GridTitleVisible)
-            {
-                // we need to draw the title
-                gr.FillRectangle(new SolidBrush(_GridTitleBackcolor), 0, 0, w, _GridTitleHeight);
-                gr.DrawString(_GridTitle, _GridTitleFont, new SolidBrush(_GridTitleForeColor), 0, 0);
-                orig.X = 0;
-                orig.Y = _GridTitleHeight;
-            }
-            else
-            {
-                orig.X = 0;
-                orig.Y = 0;
-            }
-
-            if (_cols != 0 & _GridHeaderVisible)
-                orig.Y = orig.Y + _GridHeaderHeight;
-
-            yyof = 0;
-            xxof = 0;
-
-            if (_rows == 0 & _cols == 0)
-            {
-            }
-            else
-            {
-                rowstart = 0;
-                rowend = _rows - 1;
-
-                colstart = 0;
-                colend = _cols - 1;
-                var loopTo = rowend;
-
-                // time to render the grid here
-                for (r = rowstart; r <= loopTo; r++)
-                {
-                    gyofset = GimmeYOffset(r);
-                    var loopTo1 = colend;
-                    for (c = colstart; c <= loopTo1; c++)
-                    {
-                        xof = GimmeXOffset(c);
-                        if (_colwidths[c] > 0)
-                        {
-                            if (_colPasswords[c] == null)
-                                renderstring = _grid[r, c];
-                            else if (string.IsNullOrEmpty(_colPasswords[c]))
-                                renderstring = _grid[r, c];
-                            else
-                                renderstring = _colPasswords[c];
-
-                            // handle the Max characters display here
-
-                            if (_colMaxCharacters[c] != 0)
-                            {
-                                if (renderstring.Length > _colMaxCharacters[c])
-                                    renderstring = renderstring.Substring(0, _colMaxCharacters[c]) + "...";
-                            }
-
-                            if (r == _SelectedRow | c == _SelectedColumn | _SelectedRows.Contains(r))
-                            {
-                                if (r == _SelectedRow | _SelectedRows.Contains(r))
-                                {
-                                    // we have a selected row override of selected column
-
-                                    gr.FillRectangle(new SolidBrush(_RowHighLiteBackColor), xof - xxof, orig.Y + gyofset - yyof, _colwidths[c], _rowheights[r]);
-
-                                    if (_colboolean[c])
-                                    {
-                                        // we have to render the the checkbox
-
-                                        rh = _rowheights[r] - 2;
-
-                                        if (rh > 14)
-                                            rh = 14;
-
-                                        if (rh < 6)
-                                            rh = 6;
-
-                                        rhx = _colwidths[c] / 2 - rh / 2;
-
-                                        if (rhx < 0)
-                                            rhx = 0;
-
-                                        rhy = _rowheights[r] / 2 - rh / 2;
-
-                                        if (rhy < 0)
-                                            rhy = 0;
-
-                                        if ((Strings.UCase(renderstring) ?? "") == "TRUE" | (Strings.UCase(renderstring) ?? "") == "YES" | (Strings.UCase(renderstring) ?? "") == "Y" | (Strings.UCase(renderstring) ?? "") == "1")
-                                            ControlPaint.DrawCheckBox(gr, xof - xxof + rhx, orig.Y + gyofset - yyof + rhy, rh, rh, ButtonState.Checked);
-                                        else if (string.IsNullOrEmpty(Strings.UCase(renderstring)))
-                                            ControlPaint.DrawCheckBox(gr, xof - xxof + rhx, orig.Y + gyofset - yyof + rhy, rh, rh, ButtonState.Inactive);
-                                        else
-                                            ControlPaint.DrawCheckBox(gr, xof - xxof + rhx, orig.Y + gyofset - yyof + rhy, rh, rh, ButtonState.Normal);
-                                    }
-                                    else
-                                        gr.DrawString(renderstring, _gridCellFontsList[_gridCellFonts[r, c]], new SolidBrush(_RowHighLiteForeColor), new RectangleF(xof - xxof, orig.Y + gyofset - yyof, _colwidths[c], _rowheights[r]), _gridCellAlignmentList[_gridCellAlignment[r, c]]);
-
-
-                                    if (_CellOutlines)
-                                        gr.DrawRectangle(new Pen(_CellOutlineColor), new Rectangle(xof - xxof, orig.Y + gyofset - yyof, _colwidths[c], _rowheights[r]));
-                                }
-                                else
-                                {
-                                    // we have a selected Col
-
-                                    gr.FillRectangle(new SolidBrush(_ColHighliteBackColor), xof - xxof, orig.Y + gyofset - yyof, _colwidths[c], _rowheights[r]);
-
-                                    if (_colboolean[c])
-                                    {
-                                        // we have to render the the checkbox
-                                        rh = _rowheights[r] - 2;
-
-                                        if (rh > 14)
-                                            rh = 14;
-
-                                        if (rh < 6)
-                                            rh = 6;
-
-                                        rhx = _colwidths[c] / 2 - rh / 2;
-
-                                        if (rhx < 0)
-                                            rhx = 0;
-
-                                        rhy = _rowheights[r] / 2 - rh / 2;
-
-                                        if (rhy < 0)
-                                            rhy = 0;
-
-                                        if ((Strings.UCase(renderstring) ?? "") == "TRUE" | (Strings.UCase(renderstring) ?? "") == "YES" | (Strings.UCase(renderstring) ?? "") == "Y" | (Strings.UCase(renderstring) ?? "") == "1")
-                                            ControlPaint.DrawCheckBox(gr, xof - xxof + rhx, orig.Y + gyofset - yyof + rhy, rh, rh, ButtonState.Checked);
-                                        else if (string.IsNullOrEmpty(Strings.UCase(renderstring)))
-                                            ControlPaint.DrawCheckBox(gr, xof - xxof + rhx, orig.Y + gyofset - yyof + rhy, rh, rh, ButtonState.Inactive);
-                                        else
-                                            ControlPaint.DrawCheckBox(gr, xof - xxof + rhx, orig.Y + gyofset - yyof + rhy, rh, rh, ButtonState.Normal);
-                                    }
-                                    else
-                                        gr.DrawString(renderstring, _gridCellFontsList[_gridCellFonts[r, c]], new SolidBrush(_ColHighliteForeColor), new RectangleF(xof - xxof, orig.Y + gyofset - yyof, _colwidths[c], _rowheights[r]), _gridCellAlignmentList[_gridCellAlignment[r, c]]);
-
-                                    if (_CellOutlines)
-                                        gr.DrawRectangle(new Pen(_CellOutlineColor), new Rectangle(xof - xxof, orig.Y + gyofset - yyof, _colwidths[c], _rowheights[r]));
-                                }
-                            }
-                            else
-                            {
-                                gr.FillRectangle(_gridBackColorList[_gridBackColor[r, c]], xof - xxof, orig.Y + gyofset - yyof, _colwidths[c], _rowheights[r]);
-
-                                if (_colboolean[c])
-                                {
-                                    // we have to render the the checkbox
-                                    rh = _rowheights[r] - 2;
-
-                                    if (rh > 14)
-                                        rh = 14;
-
-                                    if (rh < 6)
-                                        rh = 6;
-
-                                    rhx = _colwidths[c] / 2 - rh / 2;
-
-                                    if (rhx < 0)
-                                        rhx = 0;
-
-                                    rhy = _rowheights[r] / 2 - rh / 2;
-
-                                    if (rhy < 0)
-                                        rhy = 0;
-
-                                    if ((Strings.UCase(renderstring) ?? "") == "TRUE" | (Strings.UCase(renderstring) ?? "") == "YES" | (Strings.UCase(renderstring) ?? "") == "Y" | (Strings.UCase(renderstring) ?? "") == "1")
-                                        ControlPaint.DrawCheckBox(gr, xof - xxof + rhx, orig.Y + gyofset - yyof + rhy, rh, rh, ButtonState.Checked);
-                                    else if (string.IsNullOrEmpty(Strings.UCase(renderstring)))
-                                        ControlPaint.DrawCheckBox(gr, xof - xxof + rhx, orig.Y + gyofset - yyof + rhy, rh, rh, ButtonState.Inactive);
-                                    else
-                                        ControlPaint.DrawCheckBox(gr, xof - xxof + rhx, orig.Y + gyofset - yyof + rhy, rh, rh, ButtonState.Normal);
-                                }
-                                else
-                                    gr.DrawString(renderstring, _gridCellFontsList[_gridCellFonts[r, c]], new SolidBrush(_gridForeColorList[_gridForeColor[r, c]].Color), new RectangleF(xof - xxof, orig.Y + gyofset - yyof, _colwidths[c], _rowheights[r]), _gridCellAlignmentList[_gridCellAlignment[r, c]]);
-                                if (_CellOutlines)
-                                    gr.DrawRectangle(new Pen(_CellOutlineColor), new Rectangle(xof - xxof, orig.Y + gyofset - yyof, _colwidths[c], _rowheights[r]));
-                            }
-                        }
-                    }
-                }
-
-                // recalc the top area so we can draw the header if its vivible
-                if (_GridTitleVisible)
-                {
-                    orig.X = 0;
-                    orig.Y = _GridTitleHeight;
-                }
-                else
-                {
-                    orig.X = 0;
-                    orig.Y = 0;
-                }
-
-                gr.SetClip(new RectangleF(0, 0, w, h));
-
-                if (_cols != 0 & _GridHeaderVisible)
-                {
-                    var loopTo2 = _cols - 1;
-                    // we need to render the Header
-
-                    for (t = 0; t <= loopTo2; t++)
-                    {
-                        xof = GimmeXOffset(t);
-                        if (_colwidths[t] > 0)
-                        {
-                            gr.FillRectangle(new SolidBrush(_GridHeaderBackcolor), xof - xxof, orig.Y, _colwidths[t], _GridHeaderHeight);
-                            gr.DrawString(_GridHeader[t], _GridHeaderFont, new SolidBrush(_GridHeaderForecolor), new RectangleF(xof - xxof, orig.Y, _colwidths[t], _GridHeaderHeight), _GridHeaderStringFormat);
-                            if (_CellOutlines)
-                                gr.DrawRectangle(new Pen(_CellOutlineColor), new Rectangle(xof - xxof, orig.Y, _colwidths[t], _GridHeaderHeight));
-                        }
-                    }
-                    orig.Y = orig.Y + _GridHeaderHeight;
-                }
-
-                // do we need to display the scrollbars
-
-                // RecalcScrollBars()
-
-                if ((int)_BorderStyle == (int)BorderStyle.Fixed3D | (int)_BorderStyle == (int)BorderStyle.FixedSingle)
-                    gr.DrawRectangle(new Pen(_BorderColor, 1), 0, 0, w - 1, h - 1);
-
-                /* TODO ERROR: Skipped IfDirectiveTrivia *//* TODO ERROR: Skipped DisabledTextTrivia *//* TODO ERROR: Skipped EndIfDirectiveTrivia */
-                _Painting = false;
-            }
-        }
-
-        private void PrivatePopulateGridFromArray(string[,] arr, Font gridfont, Color col, bool FirstRowHeader)
-        {
-            int x, y;
-            int r, c;
-
-            r = arr.GetUpperBound(0) + 1;
-            c = arr.GetUpperBound(1) + 1;
-
-            if (FirstRowHeader)
-            {
-                InitializeTheGrid(r - 1, c);
-                var loopTo = c - 1;
-                for (y = 0; y <= loopTo; y++)
-                    _GridHeader[y] = arr[0, y];
-                var loopTo1 = r - 1;
-                for (x = 1; x <= loopTo1; x++)
-                {
-                    var loopTo2 = c - 1;
-                    for (y = 0; y <= loopTo2; y++)
-                        _grid[x, y] = arr[x, y];
-                }
-            }
-            else
-            {
-                var loopTo3 = r - 1;
-                // InitializeTheGrid(r, c)
-                // For y = 0 To c - 1
-                // _GridHeader(y) = "Column - " & y.ToString
-                // Next
-                for (x = 0; x <= loopTo3; x++)
-                {
-                    var loopTo4 = c - 1;
-                    for (y = 0; y <= loopTo4; y++)
-                        _grid[x, y] = arr[x, y];
-                }
-            }
-
-            AllCellsUseThisFont(gridfont);
-            AllCellsUseThisForeColor(col);
-
-            AutoSizeCellsToContents = true;
-            _colEditRestrictions.Clear();
-
-            Refresh();
-        }
-
-        private void RecalcScrollBars()
-        {
-            // ##Recalculates the positions and the visibility for the scroll bars
-
-            int ClientHeight;
-
-            ClientHeight = Height;
-
-
-            _GridSize = GimmeGridSize();
-
-            if (_GridHeaderVisible)
-                ClientHeight -= _GridHeaderHeight;
-
-            if (_GridTitleVisible)
-                ClientHeight -= _GridTitleHeight;
-
-            if (_GridSize.X > Width)
-            {
-                hs.Visible = true;
-                hs.Height = _ScrollBarWeight;
-
-                hs.Maximum = _cols + 2;
-                hs.LargeChange = 4;
-                hs.SmallChange = 1;
-                ClientHeight -= _ScrollBarWeight;
-            }
-            else
-            {
-                hs.Visible = false;
-                hs.Maximum = 1;
-                hs.Minimum = 0;
-                hs.Value = 0;
-            }
-
-            if (_GridSize.Y > ClientHeight)
-            {
-                vs.Visible = true;
-                vs.Width = _ScrollBarWeight;
-
-                vs.Maximum = _rows + 10;
-                vs.LargeChange = 10;
-                vs.SmallChange = 1;
-            }
-            else
-            {
-                vs.Visible = false;
-                vs.Maximum = 1;
-                vs.Minimum = 0;
-                vs.Value = 0;
-            }
-        }
-
-        private void RedimTable()
-        {
-            var oldrowhidden = new bool[_rowhidden.GetUpperBound(0) + 1];
-            var oldcolhidden = new bool[_colhidden.GetUpperBound(0) + 1];
-            var oldcolboolean = new bool[_colboolean.GetUpperBound(0) + 1];
-            var oldcoleditable = new bool[_colEditable.GetUpperBound(0) + 1];
-            var oldroweditable = new bool[_rowEditable.GetUpperBound(0) + 1];
-            var oldcolwidths = new int[_colwidths.GetUpperBound(0) + 1];
-            var oldrowheights = new int[_rowheights.GetUpperBound(0) + 1];
-            var oldgridheader = new string[_GridHeader.GetUpperBound(0) + 1];
-            var oldgrid = new string[_grid.GetUpperBound(0) + 1, _grid.GetUpperBound(1) + 1];
-            var oldgridbcolor = new int[_grid.GetUpperBound(0) + 1, _grid.GetUpperBound(1) + 1];
-            var oldgridfcolor = new int[_grid.GetUpperBound(0) + 1, _grid.GetUpperBound(1) + 1];
-            var oldgridfonts = new int[_grid.GetUpperBound(0) + 1, _grid.GetUpperBound(1) + 1];
-            var oldgridcolpasswords = new string[_colPasswords.GetUpperBound(0) + 1];
-            var oldcolmaxcharacters = new int[_colMaxCharacters.GetUpperBound(0) + 1];
-            var oldgridcellalignment = new int[_grid.GetUpperBound(0) + 1, _grid.GetUpperBound(1) + 1];
-            int r, c;
-            int x, y;
-
-            x = oldgrid.GetUpperBound(0);
-            y = oldgrid.GetUpperBound(1);
-            var loopTo = x;
-            for (r = 0; r <= loopTo; r++)
-            {
-                var loopTo1 = y;
-                for (c = 0; c <= loopTo1; c++)
-                {
-                    oldgrid[r, c] = _grid[r, c];
-                    oldgridbcolor[r, c] = _gridBackColor[r, c];
-                    oldgridfcolor[r, c] = _gridForeColor[r, c];
-                    oldgridfonts[r, c] = _gridCellFonts[r, c];
-                    oldgridcellalignment[r, c] = _gridCellAlignment[r, c];
-                }
-            }
-
-            var loopTo2 = Math.Min(_GridHeader.GetUpperBound(0), _colwidths.GetUpperBound(0));
-            for (c = 0; c <= loopTo2; c++)
-            {
-                oldgridheader[c] = _GridHeader[c];
-                oldcolwidths[c] = _colwidths[c];
-                oldgridcolpasswords[c] = _colPasswords[c];
-                oldcolhidden[c] = _colhidden[c];
-                oldcolboolean[c] = _colboolean[c];
-                oldcoleditable[c] = _colEditable[c];
-                oldcolmaxcharacters[c] = _colMaxCharacters[c];
-            }
-
-            var loopTo3 = _rowheights.GetUpperBound(0);
-            for (r = 0; r <= loopTo3; r++)
-                oldrowheights[r] = _rowheights[r];
-            var loopTo4 = _rowhidden.GetUpperBound(0);
-            for (r = 0; r <= loopTo4; r++)
-                oldrowhidden[r] = _rowhidden[r];
-            var loopTo5 = _rowEditable.GetUpperBound(0);
-            for (r = 0; r <= loopTo5; r++)
-                oldroweditable[r] = _rowEditable[r];
-
-            _rowhidden = new bool[_rows + 1];
-            _colhidden = new bool[_cols + 1];
-            _colboolean = new bool[_cols + 1];
-            _colEditable = new bool[_cols + 1];
-            _rowEditable = new bool[_rows + 1];
-            _rowheights = new int[_rows + 1];
-            _colwidths = new int[_cols + 1];
-            _GridHeader = new string[_cols + 1];
-            _grid = new string[_rows + 1, _cols + 1];
-            _gridBackColor = new int[_rows + 1, _cols + 1];
-            _gridForeColor = new int[_rows + 1, _cols + 1];
-            _gridCellFonts = new int[_rows + 1, _cols + 1];
-            _gridCellAlignment = new int[_rows + 1, _cols + 1];
-            _colPasswords = new string[_cols + 1];
-            _colMaxCharacters = new int[_cols + 1];
-
-            if (_rows < x)
-                x = _rows;
-
-            if (_cols < y)
-                y = _cols;
-            var loopTo6 = y;
-            for (c = 0; c <= loopTo6; c++)
-            {
-                _colPasswords[c] = oldgridcolpasswords[c];
-                _GridHeader[c] = oldgridheader[c];
-                _colwidths[c] = oldcolwidths[c];
-                _colhidden[c] = oldcolhidden[c];
-                _colboolean[c] = oldcolboolean[c];
-                _colEditable[c] = oldcoleditable[c];
-                _colMaxCharacters[c] = oldcolmaxcharacters[c];
-            }
-
-            var loopTo7 = x;
-            for (r = 0; r <= loopTo7; r++)
-            {
-                _rowheights[r] = oldrowheights[r];
-                _rowhidden[r] = oldrowhidden[r];
-                _rowEditable[r] = oldroweditable[r];
-            }
-
-            if (x == 0)
-            {
-                r = x;
-                var loopTo8 = y;
-                for (c = 0; c <= loopTo8; c++)
-                {
-                    _grid[r, c] = oldgrid[r, c];
-                    _gridBackColor[r, c] = GetGridBackColorListEntry(new SolidBrush(_DefaultBackColor));
-                    _gridForeColor[r, c] = GetGridForeColorListEntry(new Pen(_DefaultForeColor));
-                    _gridCellFonts[r, c] = GetGridCellFontListEntry(_DefaultCellFont);
-                    _gridCellAlignment[r, c] = GetGridCellAlignmentListEntry(_DefaultStringFormat);
-                }
-            }
-            else
-            {
-                var loopTo9 = x;
-                for (r = 0; r <= loopTo9; r++)
-                {
-                    var loopTo10 = y;
-                    for (c = 0; c <= loopTo10; c++)
-                    {
-                        _grid[r, c] = oldgrid[r, c];
-                        _gridBackColor[r, c] = oldgridbcolor[r, c];
-                        _gridForeColor[r, c] = oldgridfcolor[r, c];
-                        _gridCellFonts[r, c] = oldgridfonts[r, c];
-                        _gridCellAlignment[r, c] = oldgridcellalignment[r, c];
-                    }
-                }
-            }
-
-            if (oldcolwidths.GetUpperBound(0) < _colwidths.GetUpperBound(0))
-            {
-                var loopTo11 = _colwidths.GetUpperBound(0);
-                for (c = oldcolwidths.GetUpperBound(0) + 1; c <= loopTo11; c++)
-                {
-                    _colwidths[c] = _DefaultColWidth;
-                    _colEditable[c] = false; // default all new columns to not editable
-                    _colhidden[c] = false; // cols default to not hidden
-                    _colboolean[c] = false; // cols default to not boolean
-                }
-            }
-
-            if (oldrowheights.GetUpperBound(0) < _rowheights.GetUpperBound(0))
-            {
-                var loopTo12 = _rowheights.GetUpperBound(0);
-                for (r = oldrowheights.GetUpperBound(0) + 1; r <= loopTo12; r++)
-                    _rowheights[r] = _DefaultRowHeight;
-            }
-
-            var loopTo13 = _cols - 1;
-            for (c = 0; c <= loopTo13; c++)
-            {
-                if (_colwidths[c] == 0 & !_colhidden[c])
-                    _colwidths[c] = _DefaultColWidth;
-            }
-
-            var loopTo14 = _rows - 1;
-            for (r = 0; r <= loopTo14; r++)
-            {
-                if (_rowheights[r] == 0 & !_rowhidden[r])
-                    _rowheights[r] = _DefaultRowHeight;
-            }
-        }
-
-        private void RenderGrid(Graphics grview)
-        {
-            int w = Conversions.ToInteger(grview.VisibleClipBounds.Width);
-            int h = Conversions.ToInteger(grview.VisibleClipBounds.Height);
-            var orig = default(Point);
-            int t;
-            int xof;
-            int xxof, yyof;
-            int r, c;
-            int rh, rhy, rhx; // use for checkbox renderings
-            int rowstart = -1;
-            int rowend = -1;
-            int colstart = -1;
-            int colend = -1;
-            int gyofset;
-            string renderstring = "";
-
-            // 
-            // Here we want to just bail if the size is less than some small size
-            // 
-
-            if (w < 10 | h < 10)
-                return;
-
-            if (_Painting)
-                return;
-            else
-                _Painting = true;
-
-            if (_gridForeColorList[0] == null)
-                _gridForeColorList[0] = new Pen(_DefaultForeColor);
-
-            if (_gridBackColorList[0] == null)
-                _gridBackColorList[0] = new SolidBrush(_DefaultBackColor);
-
-            Graphics gr;
-            Bitmap bmp;
-
-            bmp = new Bitmap(w, h, grview);
-            gr = Graphics.FromImage(bmp);
-
-            if (_antialias)
-            {
-                gr.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-                gr.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
-            }
-            else
-            {
-                gr.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
-                gr.TextRenderingHint = System.Drawing.Text.TextRenderingHint.SystemDefault;
-            }
-
-            DoAutoSizeCheck(gr);
-
-            ClearToBackgroundColor(gr);
-
-            RecalcScrollBars();
-
-            // If we are disallowing selection of columns then make sure the Selectedcolumn variable is out of bounds
-            if (!_AllowColumnSelection)
-                _SelectedColumn = -1;
-
-            if (_GridTitleVisible)
-            {
-                // we need to draw the title
-                gr.FillRectangle(new SolidBrush(_GridTitleBackcolor), 0, 0, w, _GridTitleHeight);
-                gr.DrawString(_GridTitle, _GridTitleFont, new SolidBrush(_GridTitleForeColor), 0, 0);
-                orig.X = 0;
-                orig.Y = _GridTitleHeight;
-            }
-            else
-            {
-                orig.X = 0;
-                orig.Y = 0;
-            }
-
-            if (_cols != 0 & _GridHeaderVisible)
-                orig.Y = orig.Y + _GridHeaderHeight;
-
-            if (vs.Visible)
-                yyof = GimmeYOffset(vs.Value);
-            else
-                yyof = 0;
-
-            if (hs.Visible)
-                xxof = GimmeXOffset(hs.Value);
-            else
-                xxof = 0;
-
-            if (_rows == 0 & _cols == 0)
-                // We have nothing else to draw so lets bail
-                _Painting = false;
-            else
-            {
-                // if we are possible needing to draw the background we had better do it here
-                if (!(hs.Visible & vs.Visible))
-                {
-                    if (_GridTitleVisible)
-                        gr.FillRectangle(new SolidBrush(BackColor), new RectangleF(0, _GridTitleHeight, w, h - _GridTitleHeight));
-                    else
-                        gr.FillRectangle(new SolidBrush(BackColor), gr.VisibleClipBounds);
-                }
-
-                // here we want to validate the starting and ending rows for the render process
-                if (vs.Visible)
-                {
-
-                    // If _SelectedRow <> -1 Then
-                    // vs.Value = _SelectedRow
-                    // End If
-
-                    rowstart = vs.Value;
-                    rowend = _rows - 1;
-                    var loopTo = _rows - 1;
-                    for (r = rowstart; r <= loopTo; r++)
-                    {
-                        if (GimmeYOffset(r) - yyof >= h)
-                        {
-                            rowend = r;
-                            break;
-                        }
-                    }
-                }
-                else
-                {
-                    rowstart = 0;
-                    rowend = _rows - 1;
-                }
-
-                if (hs.Visible)
-                {
-                    colstart = hs.Value;
-                    colend = _cols - 1;
-                    var loopTo1 = _cols - 1;
-                    for (c = colstart; c <= loopTo1; c++)
-                    {
-                        if (GimmeXOffset(c) - xxof >= w)
-                        {
-                            colend = c;
-                            break;
-                        }
-                    }
-                }
-                else
-                {
-                    colstart = 0;
-                    colend = _cols - 1;
-                }
-
-                // If _SelectedRow <> -1 And vs.Visible Then
-                // If _SelectedRow < rowstart Then
-                // vs.Value = vs.Value - (rowstart - _SelectedRow)
-                // End If
-                // If _SelectedRow > rowend Then
-                // vs.Value = vs.Value + (_SelectedRow - rowend)
-                // End If
-                // End If
-
-                // from now on all drawing ops occur below the grid title if its visible and the header if its visible
-
-                gr.SetClip(new RectangleF(0, orig.Y, w, h - orig.Y));
-                var loopTo2 = rowend;
-
-                // Console.WriteLine(rowstart.ToString & " - " & rowend.ToString & " ------- " & colstart.ToString & " - " & colend)
-
-                // time to render the grid here
-                for (r = rowstart; r <= loopTo2; r++)
-                {
-                    gyofset = GimmeYOffset(r);
-                    var loopTo3 = colend;
-                    for (c = colstart; c <= loopTo3; c++)
-                    {
-                        xof = GimmeXOffset(c);
-                        if (_colwidths[c] > 0)
-                        {
-                            if (_colPasswords[c] == null)
-                                renderstring = _grid[r, c];
-                            else if (string.IsNullOrEmpty(_colPasswords[c]))
-                                renderstring = _grid[r, c];
-                            else
-                                renderstring = _colPasswords[c];
-
-                            // handle the Max characters display here
-
-                            if (_colMaxCharacters[c] != 0)
-                            {
-                                if (renderstring.Length > _colMaxCharacters[c])
-                                    renderstring = renderstring.Substring(0, _colMaxCharacters[c]) + "...";
-                            }
-
-                            if (r == _SelectedRow | c == _SelectedColumn | _SelectedRows.Contains(r))
-                            {
-                                if (r == _SelectedRow | _SelectedRows.Contains(r))
-                                {
-                                    // we have a selected row override of selected column
-
-                                    gr.FillRectangle(new SolidBrush(_RowHighLiteBackColor), xof - xxof, orig.Y + gyofset - yyof, _colwidths[c], _rowheights[r]);
-
-                                    if (_colboolean[c])
-                                    {
-                                        // we have to render the the checkbox
-
-                                        rh = _rowheights[r] - 2;
-
-                                        if (rh > 14)
-                                            rh = 14;
-
-                                        if (rh < 6)
-                                            rh = 6;
-
-                                        rhx = _colwidths[c] / 2 - rh / 2;
-
-                                        if (rhx < 0)
-                                            rhx = 0;
-
-                                        rhy = _rowheights[r] / 2 - rh / 2;
-
-                                        if (rhy < 0)
-                                            rhy = 0;
-
-                                        if ((Strings.UCase(renderstring) ?? "") == "TRUE" | (Strings.UCase(renderstring) ?? "") == "YES" | (Strings.UCase(renderstring) ?? "") == "Y" | (Strings.UCase(renderstring) ?? "") == "1")
-                                            ControlPaint.DrawCheckBox(gr, xof - xxof + rhx, orig.Y + gyofset - yyof + rhy, rh, rh, ButtonState.Checked);
-                                        else if (string.IsNullOrEmpty(Strings.UCase(renderstring)))
-                                            ControlPaint.DrawCheckBox(gr, xof - xxof + rhx, orig.Y + gyofset - yyof + rhy, rh, rh, ButtonState.Inactive);
-                                        else
-                                            ControlPaint.DrawCheckBox(gr, xof - xxof + rhx, orig.Y + gyofset - yyof + rhy, rh, rh, ButtonState.Normal);
-                                    }
-                                    else
-                                        gr.DrawString(renderstring, _gridCellFontsList[_gridCellFonts[r, c]], new SolidBrush(_RowHighLiteForeColor), new RectangleF(xof - xxof, orig.Y + gyofset - yyof, _colwidths[c], _rowheights[r]), _gridCellAlignmentList[_gridCellAlignment[r, c]]);
-
-
-                                    if (_CellOutlines)
-                                        gr.DrawRectangle(new Pen(_CellOutlineColor), new Rectangle(xof - xxof, orig.Y + gyofset - yyof, _colwidths[c], _rowheights[r]));
-                                }
-                                else
-                                {
-                                    // we have a selected Col
-
-                                    gr.FillRectangle(new SolidBrush(_ColHighliteBackColor), xof - xxof, orig.Y + gyofset - yyof, _colwidths[c], _rowheights[r]);
-
-                                    if (_colboolean[c])
-                                    {
-                                        // we have to render the the checkbox
-                                        rh = _rowheights[r] - 2;
-
-                                        if (rh > 14)
-                                            rh = 14;
-
-                                        if (rh < 6)
-                                            rh = 6;
-
-                                        rhx = _colwidths[c] / 2 - rh / 2;
-
-                                        if (rhx < 0)
-                                            rhx = 0;
-
-                                        rhy = _rowheights[r] / 2 - rh / 2;
-
-                                        if (rhy < 0)
-                                            rhy = 0;
-
-                                        if ((Strings.UCase(renderstring) ?? "") == "TRUE" | (Strings.UCase(renderstring) ?? "") == "YES" | (Strings.UCase(renderstring) ?? "") == "Y" | (Strings.UCase(renderstring) ?? "") == "1")
-                                            ControlPaint.DrawCheckBox(gr, xof - xxof + rhx, orig.Y + gyofset - yyof + rhy, rh, rh, ButtonState.Checked);
-                                        else if (string.IsNullOrEmpty(Strings.UCase(renderstring)))
-                                            ControlPaint.DrawCheckBox(gr, xof - xxof + rhx, orig.Y + gyofset - yyof + rhy, rh, rh, ButtonState.Inactive);
-                                        else
-                                            ControlPaint.DrawCheckBox(gr, xof - xxof + rhx, orig.Y + gyofset - yyof + rhy, rh, rh, ButtonState.Normal);
-                                    }
-                                    else
-                                        gr.DrawString(renderstring, _gridCellFontsList[_gridCellFonts[r, c]], new SolidBrush(_ColHighliteForeColor), new RectangleF(xof - xxof, orig.Y + gyofset - yyof, _colwidths[c], _rowheights[r]), _gridCellAlignmentList[_gridCellAlignment[r, c]]);
-
-                                    if (_CellOutlines)
-                                        gr.DrawRectangle(new Pen(_CellOutlineColor), new Rectangle(xof - xxof, orig.Y + gyofset - yyof, _colwidths[c], _rowheights[r]));
-                                }
-                            }
-                            else
-                            {
-                                gr.FillRectangle(_gridBackColorList[_gridBackColor[r, c]], xof - xxof, orig.Y + gyofset - yyof, _colwidths[c], _rowheights[r]);
-
-                                if (_colboolean[c])
-                                {
-                                    // we have to render the the checkbox
-                                    rh = _rowheights[r] - 2;
-
-                                    if (rh > 14)
-                                        rh = 14;
-
-                                    if (rh < 6)
-                                        rh = 6;
-
-                                    rhx = _colwidths[c] / 2 - rh / 2;
-
-                                    if (rhx < 0)
-                                        rhx = 0;
-
-                                    rhy = _rowheights[r] / 2 - rh / 2;
-
-                                    if (rhy < 0)
-                                        rhy = 0;
-
-                                    if ((Strings.UCase(renderstring) ?? "") == "TRUE" | (Strings.UCase(renderstring) ?? "") == "YES" | (Strings.UCase(renderstring) ?? "") == "Y" | (Strings.UCase(renderstring) ?? "") == "1")
-                                        ControlPaint.DrawCheckBox(gr, xof - xxof + rhx, orig.Y + gyofset - yyof + rhy, rh, rh, ButtonState.Checked);
-                                    else if (string.IsNullOrEmpty(Strings.UCase(renderstring)))
-                                        ControlPaint.DrawCheckBox(gr, xof - xxof + rhx, orig.Y + gyofset - yyof + rhy, rh, rh, ButtonState.Inactive);
-                                    else
-                                        ControlPaint.DrawCheckBox(gr, xof - xxof + rhx, orig.Y + gyofset - yyof + rhy, rh, rh, ButtonState.Normal);
-                                }
-                                else
-                                    gr.DrawString(renderstring, _gridCellFontsList[_gridCellFonts[r, c]], new SolidBrush(_gridForeColorList[_gridForeColor[r, c]].Color), new RectangleF(xof - xxof, orig.Y + gyofset - yyof, _colwidths[c], _rowheights[r]), _gridCellAlignmentList[_gridCellAlignment[r, c]]);
-                                if (_CellOutlines)
-                                    gr.DrawRectangle(new Pen(_CellOutlineColor), new Rectangle(xof - xxof, orig.Y + gyofset - yyof, _colwidths[c], _rowheights[r]));
-                            }
-                        }
-                    }
-                }
-
-                // recalc the top area so we can draw the header if its vivible
-                if (_GridTitleVisible)
-                {
-                    orig.X = 0;
-                    orig.Y = _GridTitleHeight;
-                }
-                else
-                {
-                    orig.X = 0;
-                    orig.Y = 0;
-                }
-
-                gr.SetClip(new RectangleF(0, 0, w, h));
-
-                if (_cols != 0 & _GridHeaderVisible)
-                {
-                    var loopTo4 = _cols - 1;
-                    // we need to render the Header
-
-                    for (t = 0; t <= loopTo4; t++)
-                    {
-                        xof = GimmeXOffset(t);
-                        if (_colwidths[t] > 0)
-                        {
-                            gr.FillRectangle(new SolidBrush(_GridHeaderBackcolor), xof - xxof, orig.Y, _colwidths[t], _GridHeaderHeight);
-                            gr.DrawString(_GridHeader[t], _GridHeaderFont, new SolidBrush(_GridHeaderForecolor), new RectangleF(xof - xxof, orig.Y, _colwidths[t], _GridHeaderHeight), _GridHeaderStringFormat);
-                            if (_CellOutlines)
-                                gr.DrawRectangle(new Pen(_CellOutlineColor), new Rectangle(xof - xxof, orig.Y, _colwidths[t], _GridHeaderHeight));
-                        }
-                    }
-                    orig.Y = orig.Y + _GridHeaderHeight;
-                }
-
-                // do we need to display the scrollbars
-
-                RecalcScrollBars();
-
-                if ((int)_BorderStyle == (int)BorderStyle.Fixed3D | (int)_BorderStyle == (int)BorderStyle.FixedSingle)
-                    gr.DrawRectangle(new Pen(_BorderColor, 1), 0, 0, w - 1, h - 1);
-
-                /* TODO ERROR: Skipped IfDirectiveTrivia *//* TODO ERROR: Skipped DisabledTextTrivia *//* TODO ERROR: Skipped EndIfDirectiveTrivia */
-                _Painting = false;
-            }
-
-            grview.DrawImageUnscaled(bmp, 0, 0);
-            gr.Dispose();
-            bmp.Dispose();
-            bmp = null;
-        }
-
-        private void RenderGridToGraphicsContext(Graphics gr, Rectangle Cliprect)
-        {
-            int w = AllColWidths();
-            int h = AllRowHeights();
-            var orig = default(Point);
-            int t;
-            int xof;
-            int xxof, yyof, ofx, ofy;
-            int r, c;
-            int rh, rhy, rhx; // use for checkbox renderings
-            int rowstart = -1;
-            int rowend = -1;
-            int colstart = -1;
-            int colend = -1;
-            int gyofset;
-            string renderstring = "";
-
-            gr.SetClip(Cliprect);
-            ofx = Cliprect.X;
-            ofy = Cliprect.Y;
-
-            if (_gridForeColorList[0] == null)
-                _gridForeColorList[0] = new Pen(_DefaultForeColor);
-
-            if (_gridBackColorList[0] == null)
-                _gridBackColorList[0] = new SolidBrush(_DefaultBackColor);
-
-            if (_GridHeaderVisible)
-                h += _GridHeaderHeight;
-
-            if (_antialias)
-            {
-                gr.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-                gr.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
-            }
-            else
-            {
-                gr.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
-                gr.TextRenderingHint = System.Drawing.Text.TextRenderingHint.SystemDefault;
-            }
-
-            ClearToBackgroundColor(gr);
-
-            // If we are disallowing selection of columns then make sure the Selected column variable is out of bounds
-            if (!_AllowColumnSelection)
-                _SelectedColumn = -1;
-
-            if (_GridTitleVisible)
-            {
-                // we need to draw the title
-                gr.FillRectangle(new SolidBrush(_GridTitleBackcolor), 0 + ofx, 0 + ofy, w, _GridTitleHeight);
-                gr.DrawString(_GridTitle, _GridTitleFont, new SolidBrush(_GridTitleForeColor), 0 + ofx, 0 + ofy);
-                orig.X = 0;
-                orig.Y = _GridTitleHeight;
-            }
-            else
-            {
-                orig.X = 0;
-                orig.Y = 0;
-            }
-
-            if (_cols != 0 & _GridHeaderVisible)
-                orig.Y = orig.Y + _GridHeaderHeight;
-
-            yyof = 0;
-            xxof = 0;
-
-            if (_rows == 0 & _cols == 0)
-            {
-            }
-            else
-            {
-                rowstart = 0;
-                rowend = _rows - 1;
-
-                colstart = 0;
-                colend = _cols - 1;
-                var loopTo = rowend;
-
-                // time to render the grid here
-                for (r = rowstart; r <= loopTo; r++)
-                {
-                    gyofset = GimmeYOffset(r);
-                    var loopTo1 = colend;
-                    for (c = colstart; c <= loopTo1; c++)
-                    {
-                        xof = GimmeXOffset(c);
-                        if (_colwidths[c] > 0)
-                        {
-                            if (_colPasswords[c] == null)
-                                renderstring = _grid[r, c];
-                            else if (string.IsNullOrEmpty(_colPasswords[c]))
-                                renderstring = _grid[r, c];
-                            else
-                                renderstring = _colPasswords[c];
-
-                            // handle the Max characters display here
-
-                            if (_colMaxCharacters[c] != 0)
-                            {
-                                if (renderstring.Length > _colMaxCharacters[c])
-                                    renderstring = renderstring.Substring(0, _colMaxCharacters[c]) + "...";
-                            }
-
-                            if (r == _SelectedRow | c == _SelectedColumn | _SelectedRows.Contains(r))
-                            {
-                                if (r == _SelectedRow | _SelectedRows.Contains(r))
-                                {
-                                    // we have a selected row override of selected column
-
-                                    gr.FillRectangle(new SolidBrush(_RowHighLiteBackColor), xof - xxof + ofx, orig.Y + gyofset - yyof + ofy, _colwidths[c], _rowheights[r]);
-
-                                    if (_colboolean[c])
-                                    {
-                                        rh = _rowheights[r] - 2;
-
-                                        if (rh > 14)
-                                            rh = 14;
-
-                                        if (rh < 6)
-                                            rh = 6;
-
-                                        rhx = _colwidths[c] / 2 - rh / 2;
-
-                                        if (rhx < 0)
-                                            rhx = 0;
-
-                                        rhy = _rowheights[r] / 2 - rh / 2;
-
-                                        if (rhy < 0)
-                                            rhy = 0;
-
-                                        if ((Strings.UCase(renderstring) ?? "") == "TRUE" | (Strings.UCase(renderstring) ?? "") == "YES" | (Strings.UCase(renderstring) ?? "") == "Y" | (Strings.UCase(renderstring) ?? "") == "1")
-                                            ControlPaint.DrawCheckBox(gr, xof - xxof + rhx, orig.Y + gyofset - yyof + rhy, rh, rh, ButtonState.Checked);
-                                        else if (string.IsNullOrEmpty(Strings.UCase(renderstring)))
-                                            ControlPaint.DrawCheckBox(gr, xof - xxof + rhx, orig.Y + gyofset - yyof + rhy, rh, rh, ButtonState.Inactive);
-                                        else
-                                            ControlPaint.DrawCheckBox(gr, xof - xxof + rhx, orig.Y + gyofset - yyof + rhy, rh, rh, ButtonState.Normal);
-                                    }
-                                    else
-                                        gr.DrawString(renderstring, _gridCellFontsList[_gridCellFonts[r, c]], new SolidBrush(_RowHighLiteForeColor), new RectangleF(xof - xxof, orig.Y + gyofset - yyof, _colwidths[c], _rowheights[r]), _gridCellAlignmentList[_gridCellAlignment[r, c]]);
-
-                                    if (_CellOutlines)
-                                        gr.DrawRectangle(new Pen(_CellOutlineColor), new Rectangle(xof - xxof + ofx, orig.Y + gyofset - yyof + ofy, _colwidths[c], _rowheights[r]));
-                                }
-                                else
-                                {
-                                    // we have a selected Col
-
-                                    gr.FillRectangle(new SolidBrush(_ColHighliteBackColor), xof - xxof + ofx, orig.Y + gyofset - yyof + ofy, _colwidths[c], _rowheights[r]);
-
-                                    if (_colboolean[c])
-                                    {
-                                        // we have to render the the checkbox
-                                        rh = _rowheights[r] - 2;
-
-                                        if (rh > 14)
-                                            rh = 14;
-
-                                        if (rh < 6)
-                                            rh = 6;
-
-                                        rhx = _colwidths[c] / 2 - rh / 2;
-
-                                        if (rhx < 0)
-                                            rhx = 0;
-
-                                        rhy = _rowheights[r] / 2 - rh / 2;
-
-                                        if (rhy < 0)
-                                            rhy = 0;
-
-                                        if ((Strings.UCase(renderstring) ?? "") == "TRUE" | (Strings.UCase(renderstring) ?? "") == "YES" | (Strings.UCase(renderstring) ?? "") == "Y" | (Strings.UCase(renderstring) ?? "") == "1")
-                                            ControlPaint.DrawCheckBox(gr, xof - xxof + rhx, orig.Y + gyofset - yyof + rhy, rh, rh, ButtonState.Checked);
-                                        else if (string.IsNullOrEmpty(Strings.UCase(renderstring)))
-                                            ControlPaint.DrawCheckBox(gr, xof - xxof + rhx, orig.Y + gyofset - yyof + rhy, rh, rh, ButtonState.Inactive);
-                                        else
-                                            ControlPaint.DrawCheckBox(gr, xof - xxof + rhx, orig.Y + gyofset - yyof + rhy, rh, rh, ButtonState.Normal);
-                                    }
-                                    else
-                                        gr.DrawString(renderstring, _gridCellFontsList[_gridCellFonts[r, c]], new SolidBrush(_RowHighLiteForeColor), new RectangleF(xof - xxof, orig.Y + gyofset - yyof, _colwidths[c], _rowheights[r]), _gridCellAlignmentList[_gridCellAlignment[r, c]]);
-
-                                    if (_CellOutlines)
-                                        gr.DrawRectangle(new Pen(_CellOutlineColor), new Rectangle(xof - xxof + ofx, orig.Y + gyofset - yyof + ofy, _colwidths[c], _rowheights[r]));
-                                }
-                            }
-                            else
-                            {
-                                gr.FillRectangle(_gridBackColorList[_gridBackColor[r, c]], xof - xxof + ofx, orig.Y + gyofset - yyof + ofy, _colwidths[c], _rowheights[r]);
-
-                                if (_colboolean[c])
-                                {
-                                    // we have to render the the checkbox
-                                    rh = _rowheights[r] - 2;
-
-                                    if (rh > 14)
-                                        rh = 14;
-
-                                    if (rh < 6)
-                                        rh = 6;
-
-                                    rhx = _colwidths[c] / 2 - rh / 2;
-
-                                    if (rhx < 0)
-                                        rhx = 0;
-
-                                    rhy = _rowheights[r] / 2 - rh / 2;
-
-                                    if (rhy < 0)
-                                        rhy = 0;
-
-                                    if ((Strings.UCase(renderstring) ?? "") == "TRUE" | (Strings.UCase(renderstring) ?? "") == "YES" | (Strings.UCase(renderstring) ?? "") == "Y" | (Strings.UCase(renderstring) ?? "") == "1")
-                                        ControlPaint.DrawCheckBox(gr, xof - xxof + rhx, orig.Y + gyofset - yyof + rhy, rh, rh, ButtonState.Checked);
-                                    else if (string.IsNullOrEmpty(Strings.UCase(renderstring)))
-                                        ControlPaint.DrawCheckBox(gr, xof - xxof + rhx, orig.Y + gyofset - yyof + rhy, rh, rh, ButtonState.Inactive);
-                                    else
-                                        ControlPaint.DrawCheckBox(gr, xof - xxof + rhx, orig.Y + gyofset - yyof + rhy, rh, rh, ButtonState.Normal);
-                                }
-                                else
-                                    gr.DrawString(renderstring, _gridCellFontsList[_gridCellFonts[r, c]], new SolidBrush(_RowHighLiteForeColor), new RectangleF(xof - xxof, orig.Y + gyofset - yyof, _colwidths[c], _rowheights[r]), _gridCellAlignmentList[_gridCellAlignment[r, c]]);
-                                if (_CellOutlines)
-                                    gr.DrawRectangle(new Pen(_CellOutlineColor), new Rectangle(xof - xxof + ofx, orig.Y + gyofset - yyof + ofy, _colwidths[c], _rowheights[r]));
-                            }
-                        }
-                    }
-                }
-
-                // recalc the top area so we can draw the header if its vivible
-                if (_GridTitleVisible)
-                {
-                    orig.X = 0;
-                    orig.Y = _GridTitleHeight;
-                }
-                else
-                {
-                    orig.X = 0;
-                    orig.Y = 0;
-                }
-
-                gr.SetClip(new RectangleF(0 + ofx, 0 + ofy, Cliprect.Width, Cliprect.Height));
-
-                if (_cols != 0 & _GridHeaderVisible)
-                {
-                    var loopTo2 = _cols - 1;
-                    // we need to render the Header
-
-                    for (t = 0; t <= loopTo2; t++)
-                    {
-                        xof = GimmeXOffset(t);
-                        if (_colwidths[t] > 0)
-                        {
-                            gr.FillRectangle(new SolidBrush(_GridHeaderBackcolor), xof - xxof + ofx, orig.Y + ofy, _colwidths[t], _GridHeaderHeight);
-                            gr.DrawString(_GridHeader[t], _GridHeaderFont, new SolidBrush(_GridHeaderForecolor), new RectangleF(xof - xxof + ofx, orig.Y + ofy, _colwidths[t], _GridHeaderHeight), _GridHeaderStringFormat);
-                            if (_CellOutlines)
-                                gr.DrawRectangle(new Pen(_CellOutlineColor), new Rectangle(xof - xxof + ofx, orig.Y + ofy, _colwidths[t], _GridHeaderHeight));
-                        }
-                    }
-                    orig.Y = orig.Y + _GridHeaderHeight;
-                }
-
-                // do we need to display the scrollbars
-
-                // RecalcScrollBars()
-
-                if ((int)_BorderStyle == (int)BorderStyle.Fixed3D | (int)_BorderStyle == (int)BorderStyle.FixedSingle)
-                    gr.DrawRectangle(new Pen(_BorderColor, 1), 0 + ofx, 0 + ofy, Cliprect.Width - 1, Cliprect.Height - 1);
-
-                /* TODO ERROR: Skipped IfDirectiveTrivia *//* TODO ERROR: Skipped DisabledTextTrivia *//* TODO ERROR: Skipped EndIfDirectiveTrivia */
-                _Painting = false;
-            }
-        }
-
-        private string ReturnExcelColumn(int intColumn)
-        {
-            try
-            {
-                var arrAlphabet = new ArrayList();
-                arrAlphabet.Add("A");
-                arrAlphabet.Add("B");
-                arrAlphabet.Add("C");
-                arrAlphabet.Add("D");
-                arrAlphabet.Add("E");
-                arrAlphabet.Add("F");
-                arrAlphabet.Add("G");
-                arrAlphabet.Add("H");
-                arrAlphabet.Add("I");
-                arrAlphabet.Add("J");
-                arrAlphabet.Add("K");
-                arrAlphabet.Add("L");
-                arrAlphabet.Add("M");
-                arrAlphabet.Add("N");
-                arrAlphabet.Add("O");
-                arrAlphabet.Add("P");
-                arrAlphabet.Add("Q");
-                arrAlphabet.Add("R");
-                arrAlphabet.Add("S");
-                arrAlphabet.Add("T");
-                arrAlphabet.Add("U");
-                arrAlphabet.Add("V");
-                arrAlphabet.Add("W");
-                arrAlphabet.Add("X");
-                arrAlphabet.Add("Y");
-                arrAlphabet.Add("Z");
-
-                if (intColumn <= 25)
-                    return arrAlphabet[intColumn].ToString();
-                else
-                {
-                    int idx = intColumn / 26;
-                    if (idx == 0)
-                        idx += 1;
-                    if (idx >= 1)
-                        // If (intColumn - 1) - (idx * 26) < 0 Then
-                        // Return arrAlphabet.Item(idx - 1) + arrAlphabet.Item((intColumn) - (idx * 26))
-                        // Else
-                        return arrAlphabet[idx - 1].ToString() + arrAlphabet[intColumn - idx * 26].ToString();
-                    else
-                        return "A" + arrAlphabet[intColumn - idx * 26];
-                }
-            }
-            catch (Exception ex)
-            {
-                Interaction.MsgBox(ex.ToString(), (MsgBoxStyle)((int)MsgBoxStyle.Information + (int)MsgBoxStyle.OkOnly), "TAIGRIDControl.ExportToExcel.ReturnExcelColumn Error...");
-                return "";
-            }
-        }
-
-        private string ReturnByteArrayAsHexString(byte[] Bytes)
-        {
-            int t;
-            string result = "";
-            string a;
-
-            try
-            {
-                var loopTo = Bytes.GetLength(0) - 1;
-                for (t = 0; t <= loopTo; t++)
-                {
-                    a = Strings.Right("00" + Conversion.Hex(Bytes[t]), 2);
-                    result = result + a;
-                }
-            }
-            catch (Exception ex)
-            {
-            }
-
-            return result;
-        }
-
-        private string ReturnHTMLColor(Color col)
-        {
-            string result = Conversions.ToString((char)34) + "#";
-
-            result += Strings.Right("0" + Conversion.Hex(col.R), 2);
-            result += Strings.Right("0" + Conversion.Hex(col.G), 2);
-            result += Strings.Right("0" + Conversion.Hex(col.B), 2) + Conversions.ToString((char)34);
-
-            return result;
-        }
-
-        private void SetCols(int newColVal)
-        {
-            int t;
-
-            hs.Value = 0;
-
-            if (_cols == 0)
-            {
-                // we have no columns now so lets just set them
-                _colwidths = new int[newColVal + 1];
-                var loopTo = newColVal - 1;
-                for (t = 0; t <= loopTo; t++)
-                    _colwidths[t] = _DefaultColWidth;
-                _cols = newColVal;
-            }
-            else
-                _cols = newColVal;
-
-            RedimTable();
-        }
-
-        private void SetRows(int newRowVal)
-        {
-            int t;
-
-            vs.Value = 0;
-
-            if (_rows == 0)
-            {
-                // we have no rows now so lets start things off
-                _rowheights = new int[newRowVal + 1];
-                var loopTo = newRowVal - 1;
-                for (t = 0; t <= loopTo; t++)
-                    _rowheights[t] = _DefaultRowHeight;
-                _rows = newRowVal;
-            }
-            else
-                _rows = newRowVal;
-
-            RedimTable();
-        }
-
-        private string SplitLongString(string input, int breaklen)
-        {
-            var splitstringarray = input.Split(" ".ToCharArray());
-
-            string ret = "";
-            string subret = "";
-
-            int t = 0;
-            var loopTo = splitstringarray.GetUpperBound(0);
-            for (t = 0; t <= loopTo; t++)
-            {
-                if ((splitstringarray[t].Trim() ?? "") == (Environment.NewLine ?? ""))
-                    splitstringarray[t] = "";
-
-                subret += " " + splitstringarray[t].Trim();
-
-                if (subret.Length >= breaklen)
-                {
-                    ret += subret + Environment.NewLine;
-                    subret = "";
-                }
-            }
-
-
-            ret += subret;
-
-            ret = ret.Trim();
-
-            if (ret.EndsWith(Environment.NewLine))
-                ret = ret.Substring(1, ret.Length - Environment.NewLine.Length);
-
-
-            return ret;
-        }
-
-        private void TearAwayColumID(int id)
-        {
-            if (TearAways.Count > 0)
-            {
-                int t;
-                var loopTo = TearAways.Count - 1;
-                for (t = 0; t <= loopTo; t++)
-                {
-                    TearAwayWindowEntry ta = (TAIGridControl2.TAIGridControl.TearAwayWindowEntry)TearAways[t];
-                    if (ta.ColID == id)
-                    {
-                        // we already got one of these
-                        ta.Winform.BringToFront();
-                        ta.Winform.Focus();
-                        return;
-                    }
-                }
-            }
-
-            var tear = new TearAwayWindowEntry();
-            var TearItem = new frmColumnTearAway(get_HeaderLabel(id));
-            TearItem.Show();
-
-            TearItem.ListItems = GetColAsArrayList(id);
-            TearItem.GridParent = this;
-            TearItem.Colid = id;
-            TearItem.DefaultSelectionColor = _RowHighLiteBackColor;
-            TearItem.GridDefaultBackColor = _DefaultBackColor;
-            TearItem.GridDefaultForeColor = _DefaultForeColor;
-            TearItem.SelectedRow = _SelectedRow;
-
-            tear.Winform = TearItem;
-
-            tear.ColID = id;
-            tear.SetTearAwayScrollParameters(vs.Minimum, vs.Maximum, vs.Visible);
-
-            // tear.ShowTearAway()
-            TearAways.Add(tear);
-        }
-
+              
 
         /// <summary>
         /// Takes the DelimitedSTringArray string and splits it up on the Delimiter. Then adds a row to the grids contents
@@ -11143,7 +8869,7 @@ namespace TAIGridControl2
             }
         }
 
-        // All the from Array Calls
+        #region PopulateGridFromArray Calls
 
         /// <summary>
         /// Will populate the grids contents from an 2 dimensional array of stings <c>arr</c>, employing the supplied parameters
@@ -11609,6 +9335,10 @@ namespace TAIGridControl2
             PopulateGridFromArray(arr, Cellfont, ForeColor, true);
         }
 
+        #endregion
+
+        #region PopulateGridWithDataAt Calls
+
         /// <summary>
         /// Will allow a database populate of a grid within an already populated grid of data.
         /// The effect will be to insert data from a carefully crafted query into a rectangular region of an
@@ -11622,14 +9352,14 @@ namespace TAIGridControl2
         /// <item><c>ColOffset</c> the column offset from the edge to start populating</item>
         /// </list>
         /// </summary>
-        /// <param name="ConnectionString"></param>
-        /// <param name="Sql"></param>
-        /// <param name="Atrow"></param>
-        /// <param name="newbackcolor"></param>
-        /// <param name="newheadercolor"></param>
-        /// <param name="ColOffSet"></param>
+        /// <param name="ConnectionString">A legal connection string representing the database. </param>
+        /// <param name="Sql">The actual SQL code to execute against the database represented in <c>ConnectionString</c>.</param>
+        /// <param name="Atrow">The Row from wich you want the insertion to occur.</param>
+        /// <param name="newbackcolor">The <c>System.Drawing.Color</c> to set the newly inserted rows to use as a background color. </param>
+        /// <param name="newheadercolor">Newly inserted rows will have a new header applied at the first row inserted, this will be used as the background color for this new header</param>
+        /// <param name="ColOffSet">New rows inserted will be placed starting the this column offset. Allowing insertion of data into rectangular regions of and existing grid</param>
         /// <remarks></remarks>
-        public void PolulateGridWithDataAt(string ConnectionString, string Sql, int Atrow, Color newbackcolor, Color newheadercolor, int ColOffSet)
+        public void PopulateGridWithDataAt(string ConnectionString, string Sql, int Atrow, Color newbackcolor, Color newheadercolor, int ColOffSet)
         {
             var cn = new System.Data.SqlClient.SqlConnection(ConnectionString);
             System.Data.SqlClient.SqlCommand dbc;
@@ -11789,13 +9519,13 @@ namespace TAIGridControl2
         /// <item><c>newheadercolor</c> the color to use for the header that will be created from the queried data</item>
         /// </list>
         /// </summary>
-        /// <param name="ConnectionString"></param>
-        /// <param name="Sql"></param>
-        /// <param name="Atrow"></param>
-        /// <param name="newbackcolor"></param>
-        /// <param name="newheadercolor"></param>
+        /// <param name="ConnectionString">A legal connection string representing the database. </param>
+        /// <param name="Sql">The actual SQL code to execute against the database represented in <c>ConnectionString</c>.</param>
+        /// <param name="Atrow">The Row from wich you want the insertion to occur.</param>
+        /// <param name="newbackcolor">The <c>System.Drawing.Color</c> to set the newly inserted rows to use as a background color. </param>
+        /// <param name="newheadercolor">Newly inserted rows will have a new header applied at the first row inserted, this will be used as the background color for this new header</param>
         /// <remarks></remarks>
-        public void PolulateGridWithDataAt(string ConnectionString, string Sql, int Atrow, Color newbackcolor, Color newheadercolor)
+        public void PopulateGridWithDataAt(string ConnectionString, string Sql, int Atrow, Color newbackcolor, Color newheadercolor)
         {
             var cn = new System.Data.SqlClient.SqlConnection(ConnectionString);
             System.Data.SqlClient.SqlCommand dbc;
@@ -11954,14 +9684,14 @@ namespace TAIGridControl2
         /// <item><c>newbackcolor</c> the color to be used to setup the background of the cells for the new data</item>
         /// </list>
         /// </summary>
-        /// <param name="ConnectionString"></param>
-        /// <param name="Sql"></param>
-        /// <param name="Atrow"></param>
-        /// <param name="newbackcolor"></param>
+        /// <param name="ConnectionString">A legal connection string representing the database. </param>
+        /// <param name="Sql">The actual SQL code to execute against the database represented in <c>ConnectionString</c>.</param>
+        /// <param name="Atrow">The Row from wich you want the insertion to occur.</param>
+        /// <param name="newbackcolor">The <c>System.Drawing.Color</c> to set the newly inserted rows to use as a background color. </param>
         /// <remarks></remarks>
-        public void PolulateGridWithDataAt(string ConnectionString, string Sql, int Atrow, Color newbackcolor)
+        public void PopulateGridWithDataAt(string ConnectionString, string Sql, int Atrow, Color newbackcolor)
         {
-            PolulateGridWithDataAt(ConnectionString, Sql, Atrow, newbackcolor, true);
+            PopulateGridWithDataAt(ConnectionString, Sql, Atrow, newbackcolor, true);
         }
 
         /// <summary>
@@ -11976,13 +9706,13 @@ namespace TAIGridControl2
         /// <item><c>allowDups></c> Will not insert any rows that already exist in the grid if set to false</item>
         /// </list>
         /// </summary>
-        /// <param name="ConnectionString"></param>
-        /// <param name="Sql"></param>
-        /// <param name="Atrow"></param>
-        /// <param name="newbackcolor"></param>
-        /// <param name="allowDups"></param>
+        /// <param name="ConnectionString">A legal connection string representing the database. </param>
+        /// <param name="Sql">The actual SQL code to execute against the database represented in <c>ConnectionString</c>.</param>
+        /// <param name="Atrow">The Row from wich you want the insertion to occur.</param>
+        /// <param name="newbackcolor">The <c>System.Drawing.Color</c> to set the newly inserted rows to use as a background color. </param>
+        /// <param name="allowDups"> Will not insert any rows that already exist in the grid if set to false</param>
         /// <remarks></remarks>
-        public void PolulateGridWithDataAt(string ConnectionString, string Sql, int Atrow, Color newbackcolor, bool allowDups)
+        public void PopulateGridWithDataAt(string ConnectionString, string Sql, int Atrow, Color newbackcolor, bool allowDups)
         {
             var cn = new System.Data.SqlClient.SqlConnection(ConnectionString);
             System.Data.SqlClient.SqlCommand dbc;
@@ -12261,7 +9991,9 @@ namespace TAIGridControl2
             }
         }
 
-        // SQL Populate Data Calls
+        #endregion
+
+        #region PopulateGridWithData Calls
 
         /// <summary>
         /// Will take the supplied SQLDataReader <c>SQLDR</c> and will automatically populate the grid with its contents using
@@ -12601,6 +10333,10 @@ namespace TAIGridControl2
             PopulateGridWithData(ConnectionString, Sql, fnt, _DefaultForeColor);
         }
 
+        #endregion
+
+        #region SQLPopulateGridWithData Calls
+
         /// <summary>
         /// A synonym for the PopulateGridWithData method of the same signature
         /// </summary>
@@ -12693,6 +10429,9 @@ namespace TAIGridControl2
             PopulateGridWithData(ConnectionString, Sql, fnt, _DefaultForeColor);
         }
 
+        #endregion
+
+        #region OLEPopulateGridWithData Calls
         // OLE Populate Data Calls
 
         /// <summary>
@@ -13017,6 +10756,10 @@ namespace TAIGridControl2
             OLEPopulateGridWithData(ConnectionString, Sql, fnt, _DefaultForeColor);
         }
 
+        #endregion
+
+        #region ODBCPopulateGridWithData Calls
+
         // ODBC Populate Data Calls
 
         /// <summary>
@@ -13340,7 +11083,9 @@ namespace TAIGridControl2
             ODBCPopulateGridWithData(ConnectionString, Sql, fnt, _DefaultForeColor);
         }
 
-        // webservice populate calls
+        #endregion
+
+        #region PopulateViaWebServiceString Calls
 
         /// <summary>
         /// The Webservice set of populators actually are forms of populators from formatted string similar to populat from text files
@@ -13554,7 +11299,9 @@ namespace TAIGridControl2
             NormalizeTearaways();
         }
 
-        // Pivot Populate Calls
+        #endregion
+
+        #region PivotPopulate Calls
 
         /// <summary>
         /// The pivot populate calls simulate pivot table functionality in excel.
@@ -13722,6 +11469,9 @@ namespace TAIGridControl2
             PivotPopulate(sgrid, xcol, ycol, scol, formatspec, _DefaultForeColor, fnt);
         }
 
+        #endregion
+
+        #region FrequencyDistribution Calls
         public void FrequencyDistribution(TAIGridControl sgrid, int ColForFrequency)
         {
             var codes = new ArrayList();
@@ -13772,7 +11522,9 @@ namespace TAIGridControl2
             Refresh();
         }
 
-        // Populate from a datatable
+        #endregion
+
+        #region PopulateGridWithDataTable Calls
 
         /// <summary>
         /// Will take the supplied dataSet and extract the first table from that dataset and populate the grid with the
@@ -13858,6 +11610,10 @@ namespace TAIGridControl2
 
             NormalizeTearaways();
         }
+
+        #endregion
+
+        #region PopulateFrimADirectory Calls
 
         /// <summary>
         /// Will open the directory specified by <c>Dirname</c> and will enumerate its contents.
@@ -14081,6 +11837,8 @@ namespace TAIGridControl2
 
             Refresh();
         }
+
+        #endregion
 
         /// <summary>
         /// Will fire the CellClicked event from the outside world
@@ -15272,8 +13030,8 @@ namespace TAIGridControl2
         /// Will attempt to wrap the text data in a specified <c>col</c> at <c>wraplen</c> length.
         /// The wrap is smat in that it tries to wrap on whitespace boundaries
         /// </summary>
-        /// <param name="col"></param>
-        /// <param name="wraplen"></param>
+        /// <param name="col">The specific column that you want to set the <c>wraplen</c> on</param>
+        /// <param name="wraplen">sets the column <c>col</c> to workwrap on <c>wraplen</c> characters</param>
         /// <remarks></remarks>
         public void WordWrapColumn(int col, int wraplen)
         {
@@ -15934,6 +13692,2293 @@ namespace TAIGridControl2
         {
             _Painting = false;
             Refresh();
+        }
+
+        #region Private Methods
+        private int AllColWidths()
+        {
+            int t;
+            int res = 0;
+            var loopTo = _cols - 1;
+            for (t = 0; t <= loopTo; t++)
+                res = res + _colwidths[t];
+
+            return res + 1;
+        }
+
+        private int AllRowHeights()
+        {
+            int t;
+            int res = 0;
+            var loopTo = _rows - 1;
+            for (t = 0; t <= loopTo; t++)
+                res = res + _rowheights[t];
+
+            if (TitleVisible)
+                res = res + TitleFont.Height;
+
+            return res + 1;
+        }
+
+        private int CalculatePageRange()
+        {
+
+            // Dim psets As New System.Drawing.printing.PageSettings
+
+            if (Conversions.ToBoolean(Operators.ConditionalCompareObjectEqual(_psets.PrinterSettings.PrintRange, System.Drawing.Printing.PrintRange.SomePages, false)))
+            {
+                _gridPrintingAllPages = false;
+                _gridStartPage = Conversions.ToInteger(_psets.PrinterSettings.FromPage);
+                _gridEndPage = Conversions.ToInteger(_psets.PrinterSettings.ToPage);
+
+                var ppea = new System.Drawing.Printing.PrintPageEventArgs(CreateGraphics(), new Rectangle(Conversions.ToInteger(_psets.Margins.Left), Conversions.ToInteger(_psets.Margins.Top), Conversions.ToInteger(_psets.Margins.Right - _psets.Margins.Left), Conversions.ToInteger(_psets.Margins.Bottom - _psets.Margins.Top)), (Rectangle)_psets.Bounds, _psets);
+
+                _gridReportPageNumbers = 1;
+                _gridReportCurrentrow = 0;
+                _gridReportCurrentColumn = 0;
+
+                Fake_PrintPage(this, ppea);
+
+                while (ppea.HasMorePages)
+                    Fake_PrintPage(this, ppea);
+
+                int maxpage = _gridReportPageNumbers;
+
+                _gridReportPageNumbers = 1;
+                _gridReportCurrentrow = 0;
+                _gridReportCurrentColumn = 0;
+                return maxpage;
+            }
+            else
+            {
+                _gridPrintingAllPages = true;
+                _gridStartPage = 1;
+                _gridStartPageRow = -1;
+
+                var ppea = new System.Drawing.Printing.PrintPageEventArgs(CreateGraphics(), new Rectangle(Conversions.ToInteger(_psets.Margins.Left), Conversions.ToInteger(_psets.Margins.Top), Conversions.ToInteger(_psets.Margins.Right - _psets.Margins.Left), Conversions.ToInteger(_psets.Margins.Bottom - _psets.Margins.Top)), (Rectangle)_psets.Bounds, _psets);
+
+                _gridReportPageNumbers = 1;
+                _gridReportCurrentrow = 0;
+                _gridReportCurrentColumn = 0;
+
+                Fake_PrintPage(this, ppea);
+
+                while (ppea.HasMorePages)
+                    Fake_PrintPage(this, ppea);
+
+                int maxpage = _gridReportPageNumbers;
+
+                _gridReportPageNumbers = 1;
+                _gridReportCurrentrow = 0;
+                _gridReportCurrentColumn = 0;
+
+                _gridEndPage = maxpage;
+
+                return maxpage;
+            }
+        }
+
+        private void CheckGridTearAways(int colid)
+        {
+            // 
+            // to be use in methods that affect a specific grid column
+            // like RemoveColFromGrid
+            // 
+
+            // dont bother unless we actualy have some to act on 
+            if (TearAways.Count == 0)
+                return;
+
+            int t;
+
+            for (t = TearAways.Count - 1; t >= 0; t += -1)
+            {
+                TearAwayWindowEntry ta = (TAIGridControl2.TAIGridControl.TearAwayWindowEntry)TearAways[t];
+
+                if (ta.ColID == colid)
+                {
+                    // we are showing the column that needs to get the boot
+                    ta.KillTearAway();
+                    TearAways.RemoveAt(t);
+                }
+            }
+
+            if (TearAways.Count > 0)
+            {
+                var loopTo = TearAways.Count - 1;
+                // we still have some so lets look to see if any colids were greater than 
+                // the intended colid for deletion if so we need to decrement them by one
+                for (t = 0; t <= loopTo; t++)
+                {
+                    if (((TearAwayWindowEntry)TearAways[t]).ColID > colid)
+                        ((TearAwayWindowEntry)TearAways[t]).ColID -= 1;
+                }
+            }
+        }
+
+        private string CleanMoneyString(string s)
+        {
+            return s.Replace("$", "").Replace("(", "").Replace(")", "").Replace(",", "");
+        }
+
+        private void ClearToBackgroundColor()
+        {
+            var gr = CreateGraphics();
+            gr.FillRectangle(new SolidBrush(BackColor), gr.ClipBounds);
+        }
+
+        private void ClearToBackgroundColor(Graphics gr)
+        {
+            gr.FillRectangle(new SolidBrush(BackColor), gr.ClipBounds);
+        }
+
+        private void DoAutoSizeCheck(Graphics gr)
+        {
+            int r;
+            int c;
+            int rr = 0;
+            int cc = 0;
+            string t;
+
+            int rrr = 0;
+            var sz = new SizeF(0, 0);
+
+            if (!_AutoSizeSemaphore | _AutoSizeAlreadyCalculated)
+                return;
+
+            if (_AutosizeCellsToContents)
+            {
+                _AutoSizeSemaphore = false;
+                var loopTo = _rows - 1;
+                for (r = 0; r <= loopTo; r++)
+                    _rowheights[r] = 0;
+                var loopTo1 = _cols - 1;
+                for (c = 0; c <= loopTo1; c++)
+                {
+                    t = " " + _GridHeader[c] + " ";
+                    cc = Conversions.ToInteger(gr.MeasureString(t, _GridHeaderFont).Width);
+                    if (cc > rr)
+                        rr = cc;
+                    var loopTo2 = _rows - 1;
+                    for (r = 0; r <= loopTo2; r++)
+                    {
+                        if (!string.IsNullOrEmpty(_colPasswords[c]))
+                            t = " " + _colPasswords[c] + " ";
+                        else if (_grid[r, c] == null)
+                            t = "  ";
+                        else
+                            t = " " + _grid[r, c] + " ";
+
+                        if (_colMaxCharacters[c] != 0)
+                        {
+                            if (t.Length > _colMaxCharacters[c])
+                                t = t.Substring(0, _colMaxCharacters[c]);
+                        }
+
+                        if (!_AllowWhiteSpaceInCells)
+                        {
+                            t = t.Replace(Constants.vbCr, " ").Replace(Constants.vbLf, " ").Replace(Constants.vbTab, " ").Replace(Constants.vbFormFeed, " ");
+
+                            while ((t.Replace("  ", " ") ?? "") != (t ?? ""))
+                                t = t.Replace("  ", " ");
+                        }
+
+                        sz = gr.MeasureString(t, _gridCellFontsList[_gridCellFonts[r, c]]);
+
+                        cc = Conversions.ToInteger(sz.Width);
+
+                        if (cc > rr)
+                            rr = cc;
+
+                        if (_rowheights[r] < sz.Height)
+                            _rowheights[r] = Conversions.ToInteger(sz.Height);
+                    }
+
+                    _colwidths[c] = rr;
+                    rr = 0;
+                }
+
+                cc = Conversions.ToInteger(gr.MeasureString("Yy", _GridHeaderFont).Height);
+
+                _GridHeaderHeight = cc;
+
+                cc = Conversions.ToInteger(gr.MeasureString("Yy", _GridTitleFont).Height);
+
+                _GridTitleHeight = cc;
+
+                // For r = 0 To _rows - 1
+                // For c = 0 To _cols - 1
+                // t = " " & _grid(r, c) & " "
+                // cc = gr.MeasureString(t, _gridCellFontsList(_gridCellFonts(r, c))).Height
+                // If cc > rr Then
+                // rr = cc
+                // End If
+                // Next
+
+                // _rowheights(r) = rr
+                // rr = 0
+
+                // Next
+
+                _AutoSizeSemaphore = true;
+
+                _AutoSizeAlreadyCalculated = true;
+            }
+            else
+            {
+            }
+        }
+
+        private void Fake_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e)
+        {
+            int x, y, xx, r, c;
+            var fnt = new Font("Courier New", 10 * _gridReportScaleFactor, FontStyle.Regular, GraphicsUnit.Pixel);
+            var fnt2 = new Font("Courier New", 10 * _gridReportScaleFactor, FontStyle.Bold, GraphicsUnit.Pixel);
+
+            float m;
+
+            Font ft;
+
+            var greypen = new Pen(Color.Gray);
+
+            int pagewidth = e.PageSettings.Bounds.Size.Width;
+            int pageheight = e.PageSettings.Bounds.Size.Height;
+
+            int lrmargin = 40;
+            int tbmargin = 70;
+
+            bool colprintedonpage = false;
+
+            if (AllColWidths() * _gridReportScaleFactor < pagewidth - 2 * lrmargin)
+                xx = Conversions.ToInteger((pagewidth - 2 * lrmargin - AllColWidths() * _gridReportScaleFactor) / 2);
+            else
+                xx = 0;
+
+
+            var rect = new RectangleF(0, 0, 1, 1);
+
+            x = lrmargin;
+            y = tbmargin;
+
+            int coloffset = 0;
+            bool morecols = true;
+            int currow = _gridReportCurrentrow;
+
+            if ((int)e.PageSettings.PrinterSettings.PrintRange == (int)System.Drawing.Printing.PrintRange.SomePages)
+            {
+                // we may be printing just a range so lets see if we can calculate the row to start printing on
+                if (_gridStartPageRow <= 0)
+                {
+                    // we have not set this up yet so lets check the bounds
+                    if (_gridReportPageNumbers >= _gridStartPage)
+                        _gridStartPageRow = currow;
+                }
+            }
+
+            ft = _GridHeaderFont;
+
+            ft = new Font(_GridHeaderFont.FontFamily, (_GridHeaderFont.SizeInPoints - 1) * _gridReportScaleFactor, _GridHeaderFont.Style, _GridHeaderFont.Unit);
+
+            // calculate size and place te printed on date on the page
+
+            m = e.Graphics.MeasureString(_gridReportPrintedOn.ToLongDateString() + Constants.vbCrLf
+                                        + _gridReportPrintedOn.ToLongTimeString(), fnt).Width;
+
+            if (_gridReportNumberPages)
+                // we want to number the pages here
+
+                m = e.Graphics.MeasureString("Page " + _gridReportPageNumbers.ToString(), fnt).Height;
+            var loopTo = Cols - 1;
+
+            // print the grid header
+
+            for (c = _gridReportCurrentColumn; c <= loopTo; c++)
+            {
+                if (x + _colwidths[c] + xx > pagewidth - lrmargin & colprintedonpage)
+                    break;
+
+                colprintedonpage = true;
+
+                rect.X = Convert.ToSingle(x + xx);
+                rect.Y = Convert.ToSingle(y);
+                rect.Width = Convert.ToSingle(_colwidths[c]);
+                rect.Height = Convert.ToSingle(_GridHeaderHeight);
+
+                x = x + _colwidths[c];
+            }
+
+
+            y += _GridHeaderHeight;
+            x = lrmargin;
+            var loopTo1 = Rows - 1;
+            for (r = _gridReportCurrentrow; r <= loopTo1; r++)
+            {
+                var loopTo2 = Cols - 1;
+                for (c = _gridReportCurrentColumn; c <= loopTo2; c++)
+                {
+                    if (x + _colwidths[c] + xx > pagewidth - lrmargin & colprintedonpage)
+                    {
+                        coloffset = c;
+                        morecols = true;
+                        break;
+                    }
+                    else
+                        morecols = false;
+
+                    colprintedonpage = true;
+
+                    rect.X = Convert.ToSingle(x + xx);
+                    rect.Y = Convert.ToSingle(y);
+                    rect.Width = Convert.ToSingle(_colwidths[c]);
+                    rect.Height = Convert.ToSingle(_rowheights[r]);
+
+                    // ft = New Font(_gridCellFontsList(_gridCellFonts(r, c)).FontFamily, _
+                    // _gridCellFontsList(_gridCellFonts(r, c)).SizeInPoints - 1, _
+                    // _gridCellFontsList(_gridCellFonts(r, c)).Style, _
+                    // _gridCellFontsList(_gridCellFonts(r, c)).Unit)
+
+                    // e.Graphics.DrawString(_grid(r, c), ft, _
+                    // Brushes.Black, rect, _gridCellAlignmentList(_gridCellAlignment(r, c)))
+
+                    x = x + _colwidths[c];
+                }
+                x = lrmargin;
+                y += _rowheights[r];
+                _gridReportCurrentrow += 1;
+
+                // do we need to skip to next page here
+                if (y >= pageheight - tbmargin)
+                    break;
+                else
+                {
+                }
+
+                Application.DoEvents();
+            }
+
+            if (_gridReportCurrentrow >= Rows - 1 & !morecols)
+            {
+                e.HasMorePages = false;
+                // _gridReportPageNumbers = 1
+                _gridReportCurrentrow = 0;
+                _gridReportCurrentColumn = 0;
+            }
+            else
+            {
+                if (morecols)
+                {
+                    _gridReportCurrentColumn = coloffset;
+                    _gridReportCurrentrow = currow;
+                }
+                else
+                    _gridReportCurrentColumn = 0;
+                e.HasMorePages = true;
+                _gridReportPageNumbers += 1;
+            }
+        }
+
+        private int GetGridBackColorListEntry(Brush bcol)
+        {
+            int t;
+            int flag = -1;
+
+            SolidBrush bbcol;
+            SolidBrush aacol;
+            var loopTo = _gridBackColorList.GetUpperBound(0);
+            for (t = 0; t <= loopTo; t++)
+            {
+                if (_gridBackColorList[t] == null)
+                {
+                }
+                else
+                {
+                    bbcol = (SolidBrush)_gridBackColorList[t];
+                    aacol = (SolidBrush)bcol;
+
+                    if (aacol.Color.A == bbcol.Color.A)
+                    {
+                        if (aacol.Color.R == bbcol.Color.R)
+                        {
+                            if (aacol.Color.G == bbcol.Color.G)
+                            {
+                                if (aacol.Color.B == bbcol.Color.B)
+                                {
+                                    flag = t;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (flag == -1)
+            {
+                // we dont have that fnt2find in the list so we need to add it
+                t = _gridBackColorList.GetUpperBound(0);
+                t += 1;
+                var old_gridBackColorList = _gridBackColorList;
+                _gridBackColorList = new Brush[t + 1 + 1];
+                if (old_gridBackColorList != null)
+                    Array.Copy(old_gridBackColorList, _gridBackColorList, Math.Min(t + 1 + 1, old_gridBackColorList.Length));
+                _gridBackColorList[t] = bcol;
+                flag = t;
+            }
+
+            return flag;
+        }
+
+        private int GetGridCellAlignmentListEntry(StringFormat sfmt)
+        {
+            int t;
+            int flag = -1;
+            var loopTo = _gridCellAlignmentList.GetUpperBound(0);
+            for (t = 0; t <= loopTo; t++)
+            {
+                if (sfmt.Equals(_gridCellAlignmentList[t]))
+                {
+                    flag = t;
+                    break;
+                }
+            }
+
+            if (flag == -1)
+            {
+                // we dont have that fnt2find in the list so we need to add it
+                t = _gridCellAlignmentList.GetUpperBound(0);
+                t += 1;
+                var old_gridCellAlignmentList = _gridCellAlignmentList;
+                _gridCellAlignmentList = new StringFormat[t + 1 + 1];
+                if (old_gridCellAlignmentList != null)
+                    Array.Copy(old_gridCellAlignmentList, _gridCellAlignmentList, Math.Min(t + 1 + 1, old_gridCellAlignmentList.Length));
+                _gridCellAlignmentList[t] = sfmt;
+                flag = t;
+            }
+
+            return flag;
+        }
+
+        private int GetGridCellFontListEntry(Font fnt2find)
+        {
+            int t;
+            int flag = -1;
+            var loopTo = _gridCellFontsList.GetUpperBound(0);
+            for (t = 0; t <= loopTo; t++)
+            {
+                if (fnt2find.Equals(_gridCellFontsList[t]))
+                {
+                    flag = t;
+                    break;
+                }
+            }
+
+            if (flag == -1)
+            {
+                // we dont have that fnt2find in the list so we need to add it
+                t = _gridCellFontsList.GetUpperBound(0);
+                t += 1;
+                var old_gridCellFontsList = _gridCellFontsList;
+                _gridCellFontsList = new Font[t + 1 + 1];
+                if (old_gridCellFontsList != null)
+                    Array.Copy(old_gridCellFontsList, _gridCellFontsList, Math.Min(t + 1 + 1, old_gridCellFontsList.Length));
+                _gridCellFontsList[t] = fnt2find;
+                flag = t;
+            }
+
+            return flag;
+        }
+
+        private int GetGridForeColorListEntry(Pen fcol)
+        {
+            int t;
+            int flag = -1;
+            var loopTo = _gridForeColorList.GetUpperBound(0);
+            for (t = 0; t <= loopTo; t++)
+            {
+                if (_gridForeColorList[t] == null)
+                {
+                }
+                else if (fcol.Color.A == _gridForeColorList[t].Color.A)
+                {
+                    if (fcol.Color.R == _gridForeColorList[t].Color.R)
+                    {
+                        if (fcol.Color.G == _gridForeColorList[t].Color.G)
+                        {
+                            if (fcol.Color.B == _gridForeColorList[t].Color.B)
+                            {
+                                flag = t;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (flag == -1)
+            {
+                // we dont have that fnt2find in the list so we need to add it
+                t = _gridForeColorList.GetUpperBound(0);
+                t += 1;
+                var old_gridForeColorList = _gridForeColorList;
+                _gridForeColorList = new Pen[t + 1 + 1];
+                if (old_gridForeColorList != null)
+                    Array.Copy(old_gridForeColorList, _gridForeColorList, Math.Min(t + 1 + 1, old_gridForeColorList.Length));
+                _gridForeColorList[t] = fcol;
+                flag = t;
+            }
+
+            return flag;
+        }
+
+        private string GetLetter(int iNumber)
+        {
+            try
+            {
+                switch (iNumber)
+                {
+                    case 0:
+                        {
+                            return "";
+                        }
+
+                    case 1:
+                        {
+                            return "A";
+                        }
+
+                    case 2:
+                        {
+                            return "B";
+                        }
+
+                    case 3:
+                        {
+                            return "C";
+                        }
+
+                    case 4:
+                        {
+                            return "D";
+                        }
+
+                    case 5:
+                        {
+                            return "E";
+                        }
+
+                    case 6:
+                        {
+                            return "F";
+                        }
+
+                    case 7:
+                        {
+                            return "G";
+                        }
+
+                    case 8:
+                        {
+                            return "H";
+                        }
+
+                    case 9:
+                        {
+                            return "I";
+                        }
+
+                    case 10:
+                        {
+                            return "J";
+                        }
+
+                    case 11:
+                        {
+                            return "K";
+                        }
+
+                    case 12:
+                        {
+                            return "L";
+                        }
+
+                    case 13:
+                        {
+                            return "M";
+                        }
+
+                    case 14:
+                        {
+                            return "N";
+                        }
+
+                    case 15:
+                        {
+                            return "O";
+                        }
+
+                    case 16:
+                        {
+                            return "P";
+                        }
+
+                    case 17:
+                        {
+                            return "Q";
+                        }
+
+                    case 18:
+                        {
+                            return "R";
+                        }
+
+                    case 19:
+                        {
+                            return "S";
+                        }
+
+                    case 20:
+                        {
+                            return "T";
+                        }
+
+                    case 21:
+                        {
+                            return "U";
+                        }
+
+                    case 22:
+                        {
+                            return "V";
+                        }
+
+                    case 23:
+                        {
+                            return "W";
+                        }
+
+                    case 24:
+                        {
+                            return "X";
+                        }
+
+                    case 25:
+                        {
+                            return "Y";
+                        }
+
+                    case 26:
+                        {
+                            return "Z";
+                        }
+
+                    default:
+                        {
+                            return "";
+                        }
+                }
+            }
+            catch (Exception ex)
+            {
+                Interaction.MsgBox(ex.ToString(), (MsgBoxStyle)((int)MsgBoxStyle.Information + (int)MsgBoxStyle.OkOnly), "TAIGRIDControl.GetUpperColumn Error...");
+                return "";
+            }
+        }
+
+        private string GetUpperColumn(int iCols)
+        {
+            try
+            {
+                int iMajor = Conversions.ToInteger(iCols / (double)26);
+                int iMinor = iCols % 26;
+
+                return GetLetter(iMajor) + GetLetter(iMinor);
+            }
+            catch (Exception ex)
+            {
+                Interaction.MsgBox(ex.ToString(), (MsgBoxStyle)((int)MsgBoxStyle.Information + (int)MsgBoxStyle.OkOnly), "TAIGRIDControl.GetLetter Error...");
+                return GetLetter(1) + GetLetter(1);
+            }
+        }
+
+        private Point GimmeGridSize()
+        {
+            var pnt = default(Point);
+            int x, y;
+            int siz = 0;
+            var loopTo = _cols - 1;
+            for (x = 0; x <= loopTo; x++)
+                siz = siz + _colwidths[x];
+
+            pnt.X = siz;
+            siz = 0;
+            var loopTo1 = _rows - 1;
+            for (y = 0; y <= loopTo1; y++)
+                siz = siz + _rowheights[y];
+
+            if (_GridTitleVisible)
+                siz = siz + _GridTitleHeight;
+
+            if (_GridHeaderVisible)
+                siz = siz + _GridHeaderHeight;
+
+            pnt.Y = siz;
+
+            return pnt;
+        }
+
+        private int GimmeXOffset(int col)
+        {
+            int t;
+            int ret = 0;
+
+            if (col == 0)
+                ret = 0;
+            else
+            {
+                var loopTo = col - 1;
+                for (t = 0; t <= loopTo; t++)
+                    ret = ret + _colwidths[t];
+            }
+            return ret;
+        }
+
+        private int GimmeYOffset(int row)
+        {
+            int t;
+            int ret = 0;
+
+            if (row == 0)
+                ret = 0;
+            else
+            {
+                var loopTo = row - 1;
+                for (t = 0; t <= loopTo; t++)
+                    ret = ret + _rowheights[t];
+            }
+            return ret;
+        }
+
+        private void InitializeTheGrid()
+        {
+            int r, c;
+
+            _grid = new string[3, 3];
+            _gridBackColor = new int[3, 3];
+            _gridForeColor = new int[3, 3];
+            _gridCellFonts = new int[3, 3];
+            _gridCellFontsList = new Font[2];
+            _gridForeColorList = new Pen[2];
+            _gridBackColorList = new Brush[2];
+            _gridCellAlignment = new int[3, 3];
+            _gridCellAlignmentList = new StringFormat[2];
+            _colwidths = new int[3];
+            _colhidden = new bool[3];
+            _rowhidden = new bool[3];
+            _colEditable = new bool[3];
+            _rowEditable = new bool[3];
+            _colboolean = new bool[3];
+            _colPasswords = new string[3];
+            _colMaxCharacters = new int[3];
+            _rowheights = new int[3];
+            _GridHeader = new string[3];
+            _rows = 2;
+            _cols = 2;
+
+            _SelectedRow = -1;
+            _SelectedColumn = -1;
+
+            _gridCellFontsList[0] = _DefaultCellFont;
+            _gridForeColorList[0] = new Pen(_DefaultForeColor);
+            _gridCellAlignmentList[0] = _DefaultStringFormat;
+            _gridBackColorList[0] = new SolidBrush(_DefaultBackColor);
+
+
+            hs.Visible = false;
+            vs.Visible = false;
+            hs.Value = 0;
+            vs.Value = 0;
+            var loopTo = _rows - 1;
+            for (r = 0; r <= loopTo; r++)
+            {
+                var loopTo1 = _cols - 1;
+                for (c = 0; c <= loopTo1; c++)
+                {
+                    _gridBackColor[r, c] = 0; // New SolidBrush(_DefaultBackColor.AntiqueWhite)
+                    _gridForeColor[r, c] = 0; // New Pen(_DefaultForeColor.Blue)
+                    _gridCellFonts[r, c] = 0; // _DefaultCellFont
+                    _gridCellAlignment[r, c] = 0; // _DefaultStringFormat
+                }
+            }
+        }
+
+        private void InitializeTheGrid(int row, int col)
+        {
+            int r, c;
+
+            _grid = new string[row + 1, col + 1];
+            _gridBackColor = new int[row + 1, col + 1];
+            _gridForeColor = new int[row + 1, col + 1];
+            _gridCellFonts = new int[row + 1, col + 1];
+            _gridCellFontsList = new Font[2];
+            _gridForeColorList = new Pen[2];
+            _gridBackColorList = new Brush[2];
+            _gridCellAlignment = new int[row + 1, col + 1];
+            _gridCellAlignmentList = new StringFormat[2];
+            _colwidths = new int[col + 1];
+            _colEditable = new bool[col + 1];
+            _rowEditable = new bool[row + 1];
+            _colhidden = new bool[col + 1];
+            _colboolean = new bool[col + 1];
+            _rowhidden = new bool[row + 1];
+            _colPasswords = new string[col + 1];
+            _colMaxCharacters = new int[col + 1];
+            _rowheights = new int[row + 1];
+            _GridHeader = new string[col + 1];
+
+            _SelectedRows = new ArrayList();
+            // '_SelectedRows.Clear()
+
+            _rows = row;
+            _cols = col;
+
+            _SelectedRow = -1;
+            _SelectedColumn = -1;
+
+            _gridCellFontsList[0] = _DefaultCellFont;
+            _gridForeColorList[0] = new Pen(_DefaultForeColor);
+            _gridCellAlignmentList[0] = _DefaultStringFormat;
+            _gridBackColorList[0] = new SolidBrush(_DefaultBackColor);
+
+
+            hs.Visible = false;
+            vs.Visible = false;
+            hs.Value = 0;
+            vs.Value = 0;
+            var loopTo = _rows - 1;
+            for (r = 0; r <= loopTo; r++)
+            {
+                _rowEditable[r] = true;
+                var loopTo1 = _cols - 1;
+                for (c = 0; c <= loopTo1; c++)
+                {
+                    _gridBackColor[r, c] = 0; // New SolidBrush(_DefaultBackColor)
+                    _gridForeColor[r, c] = 0; // New Pen(_DefaultForeColor)
+                    _gridCellFonts[r, c] = 0; // _DefaultCellFont
+                    _gridCellAlignment[r, c] = 0; // _DefaultStringFormat
+                }
+            }
+
+            var loopTo2 = _cols - 1;
+            for (c = 0; c <= loopTo2; c++)
+            {
+                _colPasswords[c] = "";
+                _colEditable[c] = false;
+                _colhidden[c] = false;
+                _colboolean[c] = false;
+            }
+        }
+
+        private void NormalizeTearaways()
+        {
+            if (TearAways.Count == 0)
+                // we dont have any tearaways lets blow this pop stand
+                return;
+
+            // we have some so lets fix things here
+
+            int t;
+
+            for (t = TearAways.Count - 1; t >= 0; t += -1)
+            {
+                TearAwayWindowEntry ta = (TAIGridControl2.TAIGridControl.TearAwayWindowEntry)TearAways[t];
+                if (ta.ColID >= _cols)
+                    // we have a tearaway open on a column that no longer exists so lets close it
+                    ta.Winform.KillMe(ta.ColID);
+                else
+                {
+                    // we the column is still there so lets change its title and its contents
+                    ta.Winform.Text = get_HeaderLabel(ta.ColID);
+                    ta.Winform.ListItems = GetColAsArrayList(ta.ColID);
+                    ta.SetTearAwayScrollParameters(vs.Minimum, vs.Maximum, vs.Visible);
+                    ta.SetTearAwayScrollIndex(vs.Value);
+                }
+            }
+        }
+
+        private void OleRenderGrid(Graphics gr)
+        {
+            int w = AllColWidths();
+            int h = AllRowHeights();
+            var orig = default(Point);
+            int t;
+            int xof;
+            int xxof, yyof;
+            int r, c;
+            int rh, rhy, rhx; // use for checkbox renderings
+            int rowstart = -1;
+            int rowend = -1;
+            int colstart = -1;
+            int colend = -1;
+            int gyofset;
+            string renderstring = "";
+
+            if (_gridForeColorList[0] == null)
+                _gridForeColorList[0] = new Pen(_DefaultForeColor);
+
+            if (_gridBackColorList[0] == null)
+                _gridBackColorList[0] = new SolidBrush(_DefaultBackColor);
+
+            if (_GridHeaderVisible)
+                h += _GridHeaderHeight;
+
+            if (_antialias)
+            {
+                gr.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                gr.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+            }
+            else
+            {
+                gr.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
+                gr.TextRenderingHint = System.Drawing.Text.TextRenderingHint.SystemDefault;
+            }
+
+            ClearToBackgroundColor(gr);
+
+            // If we are disallowing selection of columns then make sure the Selected column variable is out of bounds
+            if (!_AllowColumnSelection)
+                _SelectedColumn = -1;
+
+            if (_GridTitleVisible)
+            {
+                // we need to draw the title
+                gr.FillRectangle(new SolidBrush(_GridTitleBackcolor), 0, 0, w, _GridTitleHeight);
+                gr.DrawString(_GridTitle, _GridTitleFont, new SolidBrush(_GridTitleForeColor), 0, 0);
+                orig.X = 0;
+                orig.Y = _GridTitleHeight;
+            }
+            else
+            {
+                orig.X = 0;
+                orig.Y = 0;
+            }
+
+            if (_cols != 0 & _GridHeaderVisible)
+                orig.Y = orig.Y + _GridHeaderHeight;
+
+            yyof = 0;
+            xxof = 0;
+
+            if (_rows == 0 & _cols == 0)
+            {
+            }
+            else
+            {
+                rowstart = 0;
+                rowend = _rows - 1;
+
+                colstart = 0;
+                colend = _cols - 1;
+                var loopTo = rowend;
+
+                // time to render the grid here
+                for (r = rowstart; r <= loopTo; r++)
+                {
+                    gyofset = GimmeYOffset(r);
+                    var loopTo1 = colend;
+                    for (c = colstart; c <= loopTo1; c++)
+                    {
+                        xof = GimmeXOffset(c);
+                        if (_colwidths[c] > 0)
+                        {
+                            if (_colPasswords[c] == null)
+                                renderstring = _grid[r, c];
+                            else if (string.IsNullOrEmpty(_colPasswords[c]))
+                                renderstring = _grid[r, c];
+                            else
+                                renderstring = _colPasswords[c];
+
+                            // handle the Max characters display here
+
+                            if (_colMaxCharacters[c] != 0)
+                            {
+                                if (renderstring.Length > _colMaxCharacters[c])
+                                    renderstring = renderstring.Substring(0, _colMaxCharacters[c]) + "...";
+                            }
+
+                            if (r == _SelectedRow | c == _SelectedColumn | _SelectedRows.Contains(r))
+                            {
+                                if (r == _SelectedRow | _SelectedRows.Contains(r))
+                                {
+                                    // we have a selected row override of selected column
+
+                                    gr.FillRectangle(new SolidBrush(_RowHighLiteBackColor), xof - xxof, orig.Y + gyofset - yyof, _colwidths[c], _rowheights[r]);
+
+                                    if (_colboolean[c])
+                                    {
+                                        // we have to render the the checkbox
+
+                                        rh = _rowheights[r] - 2;
+
+                                        if (rh > 14)
+                                            rh = 14;
+
+                                        if (rh < 6)
+                                            rh = 6;
+
+                                        rhx = _colwidths[c] / 2 - rh / 2;
+
+                                        if (rhx < 0)
+                                            rhx = 0;
+
+                                        rhy = _rowheights[r] / 2 - rh / 2;
+
+                                        if (rhy < 0)
+                                            rhy = 0;
+
+                                        if ((Strings.UCase(renderstring) ?? "") == "TRUE" | (Strings.UCase(renderstring) ?? "") == "YES" | (Strings.UCase(renderstring) ?? "") == "Y" | (Strings.UCase(renderstring) ?? "") == "1")
+                                            ControlPaint.DrawCheckBox(gr, xof - xxof + rhx, orig.Y + gyofset - yyof + rhy, rh, rh, ButtonState.Checked);
+                                        else if (string.IsNullOrEmpty(Strings.UCase(renderstring)))
+                                            ControlPaint.DrawCheckBox(gr, xof - xxof + rhx, orig.Y + gyofset - yyof + rhy, rh, rh, ButtonState.Inactive);
+                                        else
+                                            ControlPaint.DrawCheckBox(gr, xof - xxof + rhx, orig.Y + gyofset - yyof + rhy, rh, rh, ButtonState.Normal);
+                                    }
+                                    else
+                                        gr.DrawString(renderstring, _gridCellFontsList[_gridCellFonts[r, c]], new SolidBrush(_RowHighLiteForeColor), new RectangleF(xof - xxof, orig.Y + gyofset - yyof, _colwidths[c], _rowheights[r]), _gridCellAlignmentList[_gridCellAlignment[r, c]]);
+
+
+                                    if (_CellOutlines)
+                                        gr.DrawRectangle(new Pen(_CellOutlineColor), new Rectangle(xof - xxof, orig.Y + gyofset - yyof, _colwidths[c], _rowheights[r]));
+                                }
+                                else
+                                {
+                                    // we have a selected Col
+
+                                    gr.FillRectangle(new SolidBrush(_ColHighliteBackColor), xof - xxof, orig.Y + gyofset - yyof, _colwidths[c], _rowheights[r]);
+
+                                    if (_colboolean[c])
+                                    {
+                                        // we have to render the the checkbox
+                                        rh = _rowheights[r] - 2;
+
+                                        if (rh > 14)
+                                            rh = 14;
+
+                                        if (rh < 6)
+                                            rh = 6;
+
+                                        rhx = _colwidths[c] / 2 - rh / 2;
+
+                                        if (rhx < 0)
+                                            rhx = 0;
+
+                                        rhy = _rowheights[r] / 2 - rh / 2;
+
+                                        if (rhy < 0)
+                                            rhy = 0;
+
+                                        if ((Strings.UCase(renderstring) ?? "") == "TRUE" | (Strings.UCase(renderstring) ?? "") == "YES" | (Strings.UCase(renderstring) ?? "") == "Y" | (Strings.UCase(renderstring) ?? "") == "1")
+                                            ControlPaint.DrawCheckBox(gr, xof - xxof + rhx, orig.Y + gyofset - yyof + rhy, rh, rh, ButtonState.Checked);
+                                        else if (string.IsNullOrEmpty(Strings.UCase(renderstring)))
+                                            ControlPaint.DrawCheckBox(gr, xof - xxof + rhx, orig.Y + gyofset - yyof + rhy, rh, rh, ButtonState.Inactive);
+                                        else
+                                            ControlPaint.DrawCheckBox(gr, xof - xxof + rhx, orig.Y + gyofset - yyof + rhy, rh, rh, ButtonState.Normal);
+                                    }
+                                    else
+                                        gr.DrawString(renderstring, _gridCellFontsList[_gridCellFonts[r, c]], new SolidBrush(_ColHighliteForeColor), new RectangleF(xof - xxof, orig.Y + gyofset - yyof, _colwidths[c], _rowheights[r]), _gridCellAlignmentList[_gridCellAlignment[r, c]]);
+
+                                    if (_CellOutlines)
+                                        gr.DrawRectangle(new Pen(_CellOutlineColor), new Rectangle(xof - xxof, orig.Y + gyofset - yyof, _colwidths[c], _rowheights[r]));
+                                }
+                            }
+                            else
+                            {
+                                gr.FillRectangle(_gridBackColorList[_gridBackColor[r, c]], xof - xxof, orig.Y + gyofset - yyof, _colwidths[c], _rowheights[r]);
+
+                                if (_colboolean[c])
+                                {
+                                    // we have to render the the checkbox
+                                    rh = _rowheights[r] - 2;
+
+                                    if (rh > 14)
+                                        rh = 14;
+
+                                    if (rh < 6)
+                                        rh = 6;
+
+                                    rhx = _colwidths[c] / 2 - rh / 2;
+
+                                    if (rhx < 0)
+                                        rhx = 0;
+
+                                    rhy = _rowheights[r] / 2 - rh / 2;
+
+                                    if (rhy < 0)
+                                        rhy = 0;
+
+                                    if ((Strings.UCase(renderstring) ?? "") == "TRUE" | (Strings.UCase(renderstring) ?? "") == "YES" | (Strings.UCase(renderstring) ?? "") == "Y" | (Strings.UCase(renderstring) ?? "") == "1")
+                                        ControlPaint.DrawCheckBox(gr, xof - xxof + rhx, orig.Y + gyofset - yyof + rhy, rh, rh, ButtonState.Checked);
+                                    else if (string.IsNullOrEmpty(Strings.UCase(renderstring)))
+                                        ControlPaint.DrawCheckBox(gr, xof - xxof + rhx, orig.Y + gyofset - yyof + rhy, rh, rh, ButtonState.Inactive);
+                                    else
+                                        ControlPaint.DrawCheckBox(gr, xof - xxof + rhx, orig.Y + gyofset - yyof + rhy, rh, rh, ButtonState.Normal);
+                                }
+                                else
+                                    gr.DrawString(renderstring, _gridCellFontsList[_gridCellFonts[r, c]], new SolidBrush(_gridForeColorList[_gridForeColor[r, c]].Color), new RectangleF(xof - xxof, orig.Y + gyofset - yyof, _colwidths[c], _rowheights[r]), _gridCellAlignmentList[_gridCellAlignment[r, c]]);
+                                if (_CellOutlines)
+                                    gr.DrawRectangle(new Pen(_CellOutlineColor), new Rectangle(xof - xxof, orig.Y + gyofset - yyof, _colwidths[c], _rowheights[r]));
+                            }
+                        }
+                    }
+                }
+
+                // recalc the top area so we can draw the header if its vivible
+                if (_GridTitleVisible)
+                {
+                    orig.X = 0;
+                    orig.Y = _GridTitleHeight;
+                }
+                else
+                {
+                    orig.X = 0;
+                    orig.Y = 0;
+                }
+
+                gr.SetClip(new RectangleF(0, 0, w, h));
+
+                if (_cols != 0 & _GridHeaderVisible)
+                {
+                    var loopTo2 = _cols - 1;
+                    // we need to render the Header
+
+                    for (t = 0; t <= loopTo2; t++)
+                    {
+                        xof = GimmeXOffset(t);
+                        if (_colwidths[t] > 0)
+                        {
+                            gr.FillRectangle(new SolidBrush(_GridHeaderBackcolor), xof - xxof, orig.Y, _colwidths[t], _GridHeaderHeight);
+                            gr.DrawString(_GridHeader[t], _GridHeaderFont, new SolidBrush(_GridHeaderForecolor), new RectangleF(xof - xxof, orig.Y, _colwidths[t], _GridHeaderHeight), _GridHeaderStringFormat);
+                            if (_CellOutlines)
+                                gr.DrawRectangle(new Pen(_CellOutlineColor), new Rectangle(xof - xxof, orig.Y, _colwidths[t], _GridHeaderHeight));
+                        }
+                    }
+                    orig.Y = orig.Y + _GridHeaderHeight;
+                }
+
+                // do we need to display the scrollbars
+
+                // RecalcScrollBars()
+
+                if ((int)_BorderStyle == (int)BorderStyle.Fixed3D | (int)_BorderStyle == (int)BorderStyle.FixedSingle)
+                    gr.DrawRectangle(new Pen(_BorderColor, 1), 0, 0, w - 1, h - 1);
+
+                /* TODO ERROR: Skipped IfDirectiveTrivia *//* TODO ERROR: Skipped DisabledTextTrivia *//* TODO ERROR: Skipped EndIfDirectiveTrivia */
+                _Painting = false;
+            }
+        }
+
+        private void PrivatePopulateGridFromArray(string[,] arr, Font gridfont, Color col, bool FirstRowHeader)
+        {
+            int x, y;
+            int r, c;
+
+            r = arr.GetUpperBound(0) + 1;
+            c = arr.GetUpperBound(1) + 1;
+
+            if (FirstRowHeader)
+            {
+                InitializeTheGrid(r - 1, c);
+                var loopTo = c - 1;
+                for (y = 0; y <= loopTo; y++)
+                    _GridHeader[y] = arr[0, y];
+                var loopTo1 = r - 1;
+                for (x = 1; x <= loopTo1; x++)
+                {
+                    var loopTo2 = c - 1;
+                    for (y = 0; y <= loopTo2; y++)
+                        _grid[x, y] = arr[x, y];
+                }
+            }
+            else
+            {
+                var loopTo3 = r - 1;
+                // InitializeTheGrid(r, c)
+                // For y = 0 To c - 1
+                // _GridHeader(y) = "Column - " & y.ToString
+                // Next
+                for (x = 0; x <= loopTo3; x++)
+                {
+                    var loopTo4 = c - 1;
+                    for (y = 0; y <= loopTo4; y++)
+                        _grid[x, y] = arr[x, y];
+                }
+            }
+
+            AllCellsUseThisFont(gridfont);
+            AllCellsUseThisForeColor(col);
+
+            AutoSizeCellsToContents = true;
+            _colEditRestrictions.Clear();
+
+            Refresh();
+        }
+
+        private void RecalcScrollBars()
+        {
+            // ##Recalculates the positions and the visibility for the scroll bars
+
+            int ClientHeight;
+
+            ClientHeight = Height;
+
+
+            _GridSize = GimmeGridSize();
+
+            if (_GridHeaderVisible)
+                ClientHeight -= _GridHeaderHeight;
+
+            if (_GridTitleVisible)
+                ClientHeight -= _GridTitleHeight;
+
+            if (_GridSize.X > Width)
+            {
+                hs.Visible = true;
+                hs.Height = _ScrollBarWeight;
+
+                hs.Maximum = _cols + 2;
+                hs.LargeChange = 4;
+                hs.SmallChange = 1;
+                ClientHeight -= _ScrollBarWeight;
+            }
+            else
+            {
+                hs.Visible = false;
+                hs.Maximum = 1;
+                hs.Minimum = 0;
+                hs.Value = 0;
+            }
+
+            if (_GridSize.Y > ClientHeight)
+            {
+                vs.Visible = true;
+                vs.Width = _ScrollBarWeight;
+
+                vs.Maximum = _rows + 10;
+                vs.LargeChange = 10;
+                vs.SmallChange = 1;
+            }
+            else
+            {
+                vs.Visible = false;
+                vs.Maximum = 1;
+                vs.Minimum = 0;
+                vs.Value = 0;
+            }
+        }
+
+        private void RedimTable()
+        {
+            var oldrowhidden = new bool[_rowhidden.GetUpperBound(0) + 1];
+            var oldcolhidden = new bool[_colhidden.GetUpperBound(0) + 1];
+            var oldcolboolean = new bool[_colboolean.GetUpperBound(0) + 1];
+            var oldcoleditable = new bool[_colEditable.GetUpperBound(0) + 1];
+            var oldroweditable = new bool[_rowEditable.GetUpperBound(0) + 1];
+            var oldcolwidths = new int[_colwidths.GetUpperBound(0) + 1];
+            var oldrowheights = new int[_rowheights.GetUpperBound(0) + 1];
+            var oldgridheader = new string[_GridHeader.GetUpperBound(0) + 1];
+            var oldgrid = new string[_grid.GetUpperBound(0) + 1, _grid.GetUpperBound(1) + 1];
+            var oldgridbcolor = new int[_grid.GetUpperBound(0) + 1, _grid.GetUpperBound(1) + 1];
+            var oldgridfcolor = new int[_grid.GetUpperBound(0) + 1, _grid.GetUpperBound(1) + 1];
+            var oldgridfonts = new int[_grid.GetUpperBound(0) + 1, _grid.GetUpperBound(1) + 1];
+            var oldgridcolpasswords = new string[_colPasswords.GetUpperBound(0) + 1];
+            var oldcolmaxcharacters = new int[_colMaxCharacters.GetUpperBound(0) + 1];
+            var oldgridcellalignment = new int[_grid.GetUpperBound(0) + 1, _grid.GetUpperBound(1) + 1];
+            int r, c;
+            int x, y;
+
+            x = oldgrid.GetUpperBound(0);
+            y = oldgrid.GetUpperBound(1);
+            var loopTo = x;
+            for (r = 0; r <= loopTo; r++)
+            {
+                var loopTo1 = y;
+                for (c = 0; c <= loopTo1; c++)
+                {
+                    oldgrid[r, c] = _grid[r, c];
+                    oldgridbcolor[r, c] = _gridBackColor[r, c];
+                    oldgridfcolor[r, c] = _gridForeColor[r, c];
+                    oldgridfonts[r, c] = _gridCellFonts[r, c];
+                    oldgridcellalignment[r, c] = _gridCellAlignment[r, c];
+                }
+            }
+
+            var loopTo2 = Math.Min(_GridHeader.GetUpperBound(0), _colwidths.GetUpperBound(0));
+            for (c = 0; c <= loopTo2; c++)
+            {
+                oldgridheader[c] = _GridHeader[c];
+                oldcolwidths[c] = _colwidths[c];
+                oldgridcolpasswords[c] = _colPasswords[c];
+                oldcolhidden[c] = _colhidden[c];
+                oldcolboolean[c] = _colboolean[c];
+                oldcoleditable[c] = _colEditable[c];
+                oldcolmaxcharacters[c] = _colMaxCharacters[c];
+            }
+
+            var loopTo3 = _rowheights.GetUpperBound(0);
+            for (r = 0; r <= loopTo3; r++)
+                oldrowheights[r] = _rowheights[r];
+            var loopTo4 = _rowhidden.GetUpperBound(0);
+            for (r = 0; r <= loopTo4; r++)
+                oldrowhidden[r] = _rowhidden[r];
+            var loopTo5 = _rowEditable.GetUpperBound(0);
+            for (r = 0; r <= loopTo5; r++)
+                oldroweditable[r] = _rowEditable[r];
+
+            _rowhidden = new bool[_rows + 1];
+            _colhidden = new bool[_cols + 1];
+            _colboolean = new bool[_cols + 1];
+            _colEditable = new bool[_cols + 1];
+            _rowEditable = new bool[_rows + 1];
+            _rowheights = new int[_rows + 1];
+            _colwidths = new int[_cols + 1];
+            _GridHeader = new string[_cols + 1];
+            _grid = new string[_rows + 1, _cols + 1];
+            _gridBackColor = new int[_rows + 1, _cols + 1];
+            _gridForeColor = new int[_rows + 1, _cols + 1];
+            _gridCellFonts = new int[_rows + 1, _cols + 1];
+            _gridCellAlignment = new int[_rows + 1, _cols + 1];
+            _colPasswords = new string[_cols + 1];
+            _colMaxCharacters = new int[_cols + 1];
+
+            if (_rows < x)
+                x = _rows;
+
+            if (_cols < y)
+                y = _cols;
+            var loopTo6 = y;
+            for (c = 0; c <= loopTo6; c++)
+            {
+                _colPasswords[c] = oldgridcolpasswords[c];
+                _GridHeader[c] = oldgridheader[c];
+                _colwidths[c] = oldcolwidths[c];
+                _colhidden[c] = oldcolhidden[c];
+                _colboolean[c] = oldcolboolean[c];
+                _colEditable[c] = oldcoleditable[c];
+                _colMaxCharacters[c] = oldcolmaxcharacters[c];
+            }
+
+            var loopTo7 = x;
+            for (r = 0; r <= loopTo7; r++)
+            {
+                _rowheights[r] = oldrowheights[r];
+                _rowhidden[r] = oldrowhidden[r];
+                _rowEditable[r] = oldroweditable[r];
+            }
+
+            if (x == 0)
+            {
+                r = x;
+                var loopTo8 = y;
+                for (c = 0; c <= loopTo8; c++)
+                {
+                    _grid[r, c] = oldgrid[r, c];
+                    _gridBackColor[r, c] = GetGridBackColorListEntry(new SolidBrush(_DefaultBackColor));
+                    _gridForeColor[r, c] = GetGridForeColorListEntry(new Pen(_DefaultForeColor));
+                    _gridCellFonts[r, c] = GetGridCellFontListEntry(_DefaultCellFont);
+                    _gridCellAlignment[r, c] = GetGridCellAlignmentListEntry(_DefaultStringFormat);
+                }
+            }
+            else
+            {
+                var loopTo9 = x;
+                for (r = 0; r <= loopTo9; r++)
+                {
+                    var loopTo10 = y;
+                    for (c = 0; c <= loopTo10; c++)
+                    {
+                        _grid[r, c] = oldgrid[r, c];
+                        _gridBackColor[r, c] = oldgridbcolor[r, c];
+                        _gridForeColor[r, c] = oldgridfcolor[r, c];
+                        _gridCellFonts[r, c] = oldgridfonts[r, c];
+                        _gridCellAlignment[r, c] = oldgridcellalignment[r, c];
+                    }
+                }
+            }
+
+            if (oldcolwidths.GetUpperBound(0) < _colwidths.GetUpperBound(0))
+            {
+                var loopTo11 = _colwidths.GetUpperBound(0);
+                for (c = oldcolwidths.GetUpperBound(0) + 1; c <= loopTo11; c++)
+                {
+                    _colwidths[c] = _DefaultColWidth;
+                    _colEditable[c] = false; // default all new columns to not editable
+                    _colhidden[c] = false; // cols default to not hidden
+                    _colboolean[c] = false; // cols default to not boolean
+                }
+            }
+
+            if (oldrowheights.GetUpperBound(0) < _rowheights.GetUpperBound(0))
+            {
+                var loopTo12 = _rowheights.GetUpperBound(0);
+                for (r = oldrowheights.GetUpperBound(0) + 1; r <= loopTo12; r++)
+                    _rowheights[r] = _DefaultRowHeight;
+            }
+
+            var loopTo13 = _cols - 1;
+            for (c = 0; c <= loopTo13; c++)
+            {
+                if (_colwidths[c] == 0 & !_colhidden[c])
+                    _colwidths[c] = _DefaultColWidth;
+            }
+
+            var loopTo14 = _rows - 1;
+            for (r = 0; r <= loopTo14; r++)
+            {
+                if (_rowheights[r] == 0 & !_rowhidden[r])
+                    _rowheights[r] = _DefaultRowHeight;
+            }
+        }
+
+        private void RenderGrid(Graphics grview)
+        {
+            int w = Conversions.ToInteger(grview.VisibleClipBounds.Width);
+            int h = Conversions.ToInteger(grview.VisibleClipBounds.Height);
+            var orig = default(Point);
+            int t;
+            int xof;
+            int xxof, yyof;
+            int r, c;
+            int rh, rhy, rhx; // use for checkbox renderings
+            int rowstart = -1;
+            int rowend = -1;
+            int colstart = -1;
+            int colend = -1;
+            int gyofset;
+            string renderstring = "";
+
+            // 
+            // Here we want to just bail if the size is less than some small size
+            // 
+
+            if (w < 10 | h < 10)
+                return;
+
+            if (_Painting)
+                return;
+            else
+                _Painting = true;
+
+            if (_gridForeColorList[0] == null)
+                _gridForeColorList[0] = new Pen(_DefaultForeColor);
+
+            if (_gridBackColorList[0] == null)
+                _gridBackColorList[0] = new SolidBrush(_DefaultBackColor);
+
+            Graphics gr;
+            Bitmap bmp;
+
+            bmp = new Bitmap(w, h, grview);
+            gr = Graphics.FromImage(bmp);
+
+            if (_antialias)
+            {
+                gr.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                gr.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+            }
+            else
+            {
+                gr.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
+                gr.TextRenderingHint = System.Drawing.Text.TextRenderingHint.SystemDefault;
+            }
+
+            DoAutoSizeCheck(gr);
+
+            ClearToBackgroundColor(gr);
+
+            RecalcScrollBars();
+
+            // If we are disallowing selection of columns then make sure the Selectedcolumn variable is out of bounds
+            if (!_AllowColumnSelection)
+                _SelectedColumn = -1;
+
+            if (_GridTitleVisible)
+            {
+                // we need to draw the title
+                gr.FillRectangle(new SolidBrush(_GridTitleBackcolor), 0, 0, w, _GridTitleHeight);
+                gr.DrawString(_GridTitle, _GridTitleFont, new SolidBrush(_GridTitleForeColor), 0, 0);
+                orig.X = 0;
+                orig.Y = _GridTitleHeight;
+            }
+            else
+            {
+                orig.X = 0;
+                orig.Y = 0;
+            }
+
+            if (_cols != 0 & _GridHeaderVisible)
+                orig.Y = orig.Y + _GridHeaderHeight;
+
+            if (vs.Visible)
+                yyof = GimmeYOffset(vs.Value);
+            else
+                yyof = 0;
+
+            if (hs.Visible)
+                xxof = GimmeXOffset(hs.Value);
+            else
+                xxof = 0;
+
+            if (_rows == 0 & _cols == 0)
+                // We have nothing else to draw so lets bail
+                _Painting = false;
+            else
+            {
+                // if we are possible needing to draw the background we had better do it here
+                if (!(hs.Visible & vs.Visible))
+                {
+                    if (_GridTitleVisible)
+                        gr.FillRectangle(new SolidBrush(BackColor), new RectangleF(0, _GridTitleHeight, w, h - _GridTitleHeight));
+                    else
+                        gr.FillRectangle(new SolidBrush(BackColor), gr.VisibleClipBounds);
+                }
+
+                // here we want to validate the starting and ending rows for the render process
+                if (vs.Visible)
+                {
+
+                    // If _SelectedRow <> -1 Then
+                    // vs.Value = _SelectedRow
+                    // End If
+
+                    rowstart = vs.Value;
+                    rowend = _rows - 1;
+                    var loopTo = _rows - 1;
+                    for (r = rowstart; r <= loopTo; r++)
+                    {
+                        if (GimmeYOffset(r) - yyof >= h)
+                        {
+                            rowend = r;
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    rowstart = 0;
+                    rowend = _rows - 1;
+                }
+
+                if (hs.Visible)
+                {
+                    colstart = hs.Value;
+                    colend = _cols - 1;
+                    var loopTo1 = _cols - 1;
+                    for (c = colstart; c <= loopTo1; c++)
+                    {
+                        if (GimmeXOffset(c) - xxof >= w)
+                        {
+                            colend = c;
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    colstart = 0;
+                    colend = _cols - 1;
+                }
+
+                // If _SelectedRow <> -1 And vs.Visible Then
+                // If _SelectedRow < rowstart Then
+                // vs.Value = vs.Value - (rowstart - _SelectedRow)
+                // End If
+                // If _SelectedRow > rowend Then
+                // vs.Value = vs.Value + (_SelectedRow - rowend)
+                // End If
+                // End If
+
+                // from now on all drawing ops occur below the grid title if its visible and the header if its visible
+
+                gr.SetClip(new RectangleF(0, orig.Y, w, h - orig.Y));
+                var loopTo2 = rowend;
+
+                // Console.WriteLine(rowstart.ToString & " - " & rowend.ToString & " ------- " & colstart.ToString & " - " & colend)
+
+                // time to render the grid here
+                for (r = rowstart; r <= loopTo2; r++)
+                {
+                    gyofset = GimmeYOffset(r);
+                    var loopTo3 = colend;
+                    for (c = colstart; c <= loopTo3; c++)
+                    {
+                        xof = GimmeXOffset(c);
+                        if (_colwidths[c] > 0)
+                        {
+                            if (_colPasswords[c] == null)
+                                renderstring = _grid[r, c];
+                            else if (string.IsNullOrEmpty(_colPasswords[c]))
+                                renderstring = _grid[r, c];
+                            else
+                                renderstring = _colPasswords[c];
+
+                            // handle the Max characters display here
+
+                            if (_colMaxCharacters[c] != 0)
+                            {
+                                if (renderstring.Length > _colMaxCharacters[c])
+                                    renderstring = renderstring.Substring(0, _colMaxCharacters[c]) + "...";
+                            }
+
+                            if (r == _SelectedRow | c == _SelectedColumn | _SelectedRows.Contains(r))
+                            {
+                                if (r == _SelectedRow | _SelectedRows.Contains(r))
+                                {
+                                    // we have a selected row override of selected column
+
+                                    gr.FillRectangle(new SolidBrush(_RowHighLiteBackColor), xof - xxof, orig.Y + gyofset - yyof, _colwidths[c], _rowheights[r]);
+
+                                    if (_colboolean[c])
+                                    {
+                                        // we have to render the the checkbox
+
+                                        rh = _rowheights[r] - 2;
+
+                                        if (rh > 14)
+                                            rh = 14;
+
+                                        if (rh < 6)
+                                            rh = 6;
+
+                                        rhx = _colwidths[c] / 2 - rh / 2;
+
+                                        if (rhx < 0)
+                                            rhx = 0;
+
+                                        rhy = _rowheights[r] / 2 - rh / 2;
+
+                                        if (rhy < 0)
+                                            rhy = 0;
+
+                                        if ((Strings.UCase(renderstring) ?? "") == "TRUE" | (Strings.UCase(renderstring) ?? "") == "YES" | (Strings.UCase(renderstring) ?? "") == "Y" | (Strings.UCase(renderstring) ?? "") == "1")
+                                            ControlPaint.DrawCheckBox(gr, xof - xxof + rhx, orig.Y + gyofset - yyof + rhy, rh, rh, ButtonState.Checked);
+                                        else if (string.IsNullOrEmpty(Strings.UCase(renderstring)))
+                                            ControlPaint.DrawCheckBox(gr, xof - xxof + rhx, orig.Y + gyofset - yyof + rhy, rh, rh, ButtonState.Inactive);
+                                        else
+                                            ControlPaint.DrawCheckBox(gr, xof - xxof + rhx, orig.Y + gyofset - yyof + rhy, rh, rh, ButtonState.Normal);
+                                    }
+                                    else
+                                        gr.DrawString(renderstring, _gridCellFontsList[_gridCellFonts[r, c]], new SolidBrush(_RowHighLiteForeColor), new RectangleF(xof - xxof, orig.Y + gyofset - yyof, _colwidths[c], _rowheights[r]), _gridCellAlignmentList[_gridCellAlignment[r, c]]);
+
+
+                                    if (_CellOutlines)
+                                        gr.DrawRectangle(new Pen(_CellOutlineColor), new Rectangle(xof - xxof, orig.Y + gyofset - yyof, _colwidths[c], _rowheights[r]));
+                                }
+                                else
+                                {
+                                    // we have a selected Col
+
+                                    gr.FillRectangle(new SolidBrush(_ColHighliteBackColor), xof - xxof, orig.Y + gyofset - yyof, _colwidths[c], _rowheights[r]);
+
+                                    if (_colboolean[c])
+                                    {
+                                        // we have to render the the checkbox
+                                        rh = _rowheights[r] - 2;
+
+                                        if (rh > 14)
+                                            rh = 14;
+
+                                        if (rh < 6)
+                                            rh = 6;
+
+                                        rhx = _colwidths[c] / 2 - rh / 2;
+
+                                        if (rhx < 0)
+                                            rhx = 0;
+
+                                        rhy = _rowheights[r] / 2 - rh / 2;
+
+                                        if (rhy < 0)
+                                            rhy = 0;
+
+                                        if ((Strings.UCase(renderstring) ?? "") == "TRUE" | (Strings.UCase(renderstring) ?? "") == "YES" | (Strings.UCase(renderstring) ?? "") == "Y" | (Strings.UCase(renderstring) ?? "") == "1")
+                                            ControlPaint.DrawCheckBox(gr, xof - xxof + rhx, orig.Y + gyofset - yyof + rhy, rh, rh, ButtonState.Checked);
+                                        else if (string.IsNullOrEmpty(Strings.UCase(renderstring)))
+                                            ControlPaint.DrawCheckBox(gr, xof - xxof + rhx, orig.Y + gyofset - yyof + rhy, rh, rh, ButtonState.Inactive);
+                                        else
+                                            ControlPaint.DrawCheckBox(gr, xof - xxof + rhx, orig.Y + gyofset - yyof + rhy, rh, rh, ButtonState.Normal);
+                                    }
+                                    else
+                                        gr.DrawString(renderstring, _gridCellFontsList[_gridCellFonts[r, c]], new SolidBrush(_ColHighliteForeColor), new RectangleF(xof - xxof, orig.Y + gyofset - yyof, _colwidths[c], _rowheights[r]), _gridCellAlignmentList[_gridCellAlignment[r, c]]);
+
+                                    if (_CellOutlines)
+                                        gr.DrawRectangle(new Pen(_CellOutlineColor), new Rectangle(xof - xxof, orig.Y + gyofset - yyof, _colwidths[c], _rowheights[r]));
+                                }
+                            }
+                            else
+                            {
+                                gr.FillRectangle(_gridBackColorList[_gridBackColor[r, c]], xof - xxof, orig.Y + gyofset - yyof, _colwidths[c], _rowheights[r]);
+
+                                if (_colboolean[c])
+                                {
+                                    // we have to render the the checkbox
+                                    rh = _rowheights[r] - 2;
+
+                                    if (rh > 14)
+                                        rh = 14;
+
+                                    if (rh < 6)
+                                        rh = 6;
+
+                                    rhx = _colwidths[c] / 2 - rh / 2;
+
+                                    if (rhx < 0)
+                                        rhx = 0;
+
+                                    rhy = _rowheights[r] / 2 - rh / 2;
+
+                                    if (rhy < 0)
+                                        rhy = 0;
+
+                                    if ((Strings.UCase(renderstring) ?? "") == "TRUE" | (Strings.UCase(renderstring) ?? "") == "YES" | (Strings.UCase(renderstring) ?? "") == "Y" | (Strings.UCase(renderstring) ?? "") == "1")
+                                        ControlPaint.DrawCheckBox(gr, xof - xxof + rhx, orig.Y + gyofset - yyof + rhy, rh, rh, ButtonState.Checked);
+                                    else if (string.IsNullOrEmpty(Strings.UCase(renderstring)))
+                                        ControlPaint.DrawCheckBox(gr, xof - xxof + rhx, orig.Y + gyofset - yyof + rhy, rh, rh, ButtonState.Inactive);
+                                    else
+                                        ControlPaint.DrawCheckBox(gr, xof - xxof + rhx, orig.Y + gyofset - yyof + rhy, rh, rh, ButtonState.Normal);
+                                }
+                                else
+                                    gr.DrawString(renderstring, _gridCellFontsList[_gridCellFonts[r, c]], new SolidBrush(_gridForeColorList[_gridForeColor[r, c]].Color), new RectangleF(xof - xxof, orig.Y + gyofset - yyof, _colwidths[c], _rowheights[r]), _gridCellAlignmentList[_gridCellAlignment[r, c]]);
+                                if (_CellOutlines)
+                                    gr.DrawRectangle(new Pen(_CellOutlineColor), new Rectangle(xof - xxof, orig.Y + gyofset - yyof, _colwidths[c], _rowheights[r]));
+                            }
+                        }
+                    }
+                }
+
+                // recalc the top area so we can draw the header if its vivible
+                if (_GridTitleVisible)
+                {
+                    orig.X = 0;
+                    orig.Y = _GridTitleHeight;
+                }
+                else
+                {
+                    orig.X = 0;
+                    orig.Y = 0;
+                }
+
+                gr.SetClip(new RectangleF(0, 0, w, h));
+
+                if (_cols != 0 & _GridHeaderVisible)
+                {
+                    var loopTo4 = _cols - 1;
+                    // we need to render the Header
+
+                    for (t = 0; t <= loopTo4; t++)
+                    {
+                        xof = GimmeXOffset(t);
+                        if (_colwidths[t] > 0)
+                        {
+                            gr.FillRectangle(new SolidBrush(_GridHeaderBackcolor), xof - xxof, orig.Y, _colwidths[t], _GridHeaderHeight);
+                            gr.DrawString(_GridHeader[t], _GridHeaderFont, new SolidBrush(_GridHeaderForecolor), new RectangleF(xof - xxof, orig.Y, _colwidths[t], _GridHeaderHeight), _GridHeaderStringFormat);
+                            if (_CellOutlines)
+                                gr.DrawRectangle(new Pen(_CellOutlineColor), new Rectangle(xof - xxof, orig.Y, _colwidths[t], _GridHeaderHeight));
+                        }
+                    }
+                    orig.Y = orig.Y + _GridHeaderHeight;
+                }
+
+                // do we need to display the scrollbars
+
+                RecalcScrollBars();
+
+                if ((int)_BorderStyle == (int)BorderStyle.Fixed3D | (int)_BorderStyle == (int)BorderStyle.FixedSingle)
+                    gr.DrawRectangle(new Pen(_BorderColor, 1), 0, 0, w - 1, h - 1);
+
+                /* TODO ERROR: Skipped IfDirectiveTrivia *//* TODO ERROR: Skipped DisabledTextTrivia *//* TODO ERROR: Skipped EndIfDirectiveTrivia */
+                _Painting = false;
+            }
+
+            grview.DrawImageUnscaled(bmp, 0, 0);
+            gr.Dispose();
+            bmp.Dispose();
+            bmp = null;
+        }
+
+        private void RenderGridToGraphicsContext(Graphics gr, Rectangle Cliprect)
+        {
+            int w = AllColWidths();
+            int h = AllRowHeights();
+            var orig = default(Point);
+            int t;
+            int xof;
+            int xxof, yyof, ofx, ofy;
+            int r, c;
+            int rh, rhy, rhx; // use for checkbox renderings
+            int rowstart = -1;
+            int rowend = -1;
+            int colstart = -1;
+            int colend = -1;
+            int gyofset;
+            string renderstring = "";
+
+            gr.SetClip(Cliprect);
+            ofx = Cliprect.X;
+            ofy = Cliprect.Y;
+
+            if (_gridForeColorList[0] == null)
+                _gridForeColorList[0] = new Pen(_DefaultForeColor);
+
+            if (_gridBackColorList[0] == null)
+                _gridBackColorList[0] = new SolidBrush(_DefaultBackColor);
+
+            if (_GridHeaderVisible)
+                h += _GridHeaderHeight;
+
+            if (_antialias)
+            {
+                gr.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                gr.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+            }
+            else
+            {
+                gr.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
+                gr.TextRenderingHint = System.Drawing.Text.TextRenderingHint.SystemDefault;
+            }
+
+            ClearToBackgroundColor(gr);
+
+            // If we are disallowing selection of columns then make sure the Selected column variable is out of bounds
+            if (!_AllowColumnSelection)
+                _SelectedColumn = -1;
+
+            if (_GridTitleVisible)
+            {
+                // we need to draw the title
+                gr.FillRectangle(new SolidBrush(_GridTitleBackcolor), 0 + ofx, 0 + ofy, w, _GridTitleHeight);
+                gr.DrawString(_GridTitle, _GridTitleFont, new SolidBrush(_GridTitleForeColor), 0 + ofx, 0 + ofy);
+                orig.X = 0;
+                orig.Y = _GridTitleHeight;
+            }
+            else
+            {
+                orig.X = 0;
+                orig.Y = 0;
+            }
+
+            if (_cols != 0 & _GridHeaderVisible)
+                orig.Y = orig.Y + _GridHeaderHeight;
+
+            yyof = 0;
+            xxof = 0;
+
+            if (_rows == 0 & _cols == 0)
+            {
+            }
+            else
+            {
+                rowstart = 0;
+                rowend = _rows - 1;
+
+                colstart = 0;
+                colend = _cols - 1;
+                var loopTo = rowend;
+
+                // time to render the grid here
+                for (r = rowstart; r <= loopTo; r++)
+                {
+                    gyofset = GimmeYOffset(r);
+                    var loopTo1 = colend;
+                    for (c = colstart; c <= loopTo1; c++)
+                    {
+                        xof = GimmeXOffset(c);
+                        if (_colwidths[c] > 0)
+                        {
+                            if (_colPasswords[c] == null)
+                                renderstring = _grid[r, c];
+                            else if (string.IsNullOrEmpty(_colPasswords[c]))
+                                renderstring = _grid[r, c];
+                            else
+                                renderstring = _colPasswords[c];
+
+                            // handle the Max characters display here
+
+                            if (_colMaxCharacters[c] != 0)
+                            {
+                                if (renderstring.Length > _colMaxCharacters[c])
+                                    renderstring = renderstring.Substring(0, _colMaxCharacters[c]) + "...";
+                            }
+
+                            if (r == _SelectedRow | c == _SelectedColumn | _SelectedRows.Contains(r))
+                            {
+                                if (r == _SelectedRow | _SelectedRows.Contains(r))
+                                {
+                                    // we have a selected row override of selected column
+
+                                    gr.FillRectangle(new SolidBrush(_RowHighLiteBackColor), xof - xxof + ofx, orig.Y + gyofset - yyof + ofy, _colwidths[c], _rowheights[r]);
+
+                                    if (_colboolean[c])
+                                    {
+                                        rh = _rowheights[r] - 2;
+
+                                        if (rh > 14)
+                                            rh = 14;
+
+                                        if (rh < 6)
+                                            rh = 6;
+
+                                        rhx = _colwidths[c] / 2 - rh / 2;
+
+                                        if (rhx < 0)
+                                            rhx = 0;
+
+                                        rhy = _rowheights[r] / 2 - rh / 2;
+
+                                        if (rhy < 0)
+                                            rhy = 0;
+
+                                        if ((Strings.UCase(renderstring) ?? "") == "TRUE" | (Strings.UCase(renderstring) ?? "") == "YES" | (Strings.UCase(renderstring) ?? "") == "Y" | (Strings.UCase(renderstring) ?? "") == "1")
+                                            ControlPaint.DrawCheckBox(gr, xof - xxof + rhx, orig.Y + gyofset - yyof + rhy, rh, rh, ButtonState.Checked);
+                                        else if (string.IsNullOrEmpty(Strings.UCase(renderstring)))
+                                            ControlPaint.DrawCheckBox(gr, xof - xxof + rhx, orig.Y + gyofset - yyof + rhy, rh, rh, ButtonState.Inactive);
+                                        else
+                                            ControlPaint.DrawCheckBox(gr, xof - xxof + rhx, orig.Y + gyofset - yyof + rhy, rh, rh, ButtonState.Normal);
+                                    }
+                                    else
+                                        gr.DrawString(renderstring, _gridCellFontsList[_gridCellFonts[r, c]], new SolidBrush(_RowHighLiteForeColor), new RectangleF(xof - xxof, orig.Y + gyofset - yyof, _colwidths[c], _rowheights[r]), _gridCellAlignmentList[_gridCellAlignment[r, c]]);
+
+                                    if (_CellOutlines)
+                                        gr.DrawRectangle(new Pen(_CellOutlineColor), new Rectangle(xof - xxof + ofx, orig.Y + gyofset - yyof + ofy, _colwidths[c], _rowheights[r]));
+                                }
+                                else
+                                {
+                                    // we have a selected Col
+
+                                    gr.FillRectangle(new SolidBrush(_ColHighliteBackColor), xof - xxof + ofx, orig.Y + gyofset - yyof + ofy, _colwidths[c], _rowheights[r]);
+
+                                    if (_colboolean[c])
+                                    {
+                                        // we have to render the the checkbox
+                                        rh = _rowheights[r] - 2;
+
+                                        if (rh > 14)
+                                            rh = 14;
+
+                                        if (rh < 6)
+                                            rh = 6;
+
+                                        rhx = _colwidths[c] / 2 - rh / 2;
+
+                                        if (rhx < 0)
+                                            rhx = 0;
+
+                                        rhy = _rowheights[r] / 2 - rh / 2;
+
+                                        if (rhy < 0)
+                                            rhy = 0;
+
+                                        if ((Strings.UCase(renderstring) ?? "") == "TRUE" | (Strings.UCase(renderstring) ?? "") == "YES" | (Strings.UCase(renderstring) ?? "") == "Y" | (Strings.UCase(renderstring) ?? "") == "1")
+                                            ControlPaint.DrawCheckBox(gr, xof - xxof + rhx, orig.Y + gyofset - yyof + rhy, rh, rh, ButtonState.Checked);
+                                        else if (string.IsNullOrEmpty(Strings.UCase(renderstring)))
+                                            ControlPaint.DrawCheckBox(gr, xof - xxof + rhx, orig.Y + gyofset - yyof + rhy, rh, rh, ButtonState.Inactive);
+                                        else
+                                            ControlPaint.DrawCheckBox(gr, xof - xxof + rhx, orig.Y + gyofset - yyof + rhy, rh, rh, ButtonState.Normal);
+                                    }
+                                    else
+                                        gr.DrawString(renderstring, _gridCellFontsList[_gridCellFonts[r, c]], new SolidBrush(_RowHighLiteForeColor), new RectangleF(xof - xxof, orig.Y + gyofset - yyof, _colwidths[c], _rowheights[r]), _gridCellAlignmentList[_gridCellAlignment[r, c]]);
+
+                                    if (_CellOutlines)
+                                        gr.DrawRectangle(new Pen(_CellOutlineColor), new Rectangle(xof - xxof + ofx, orig.Y + gyofset - yyof + ofy, _colwidths[c], _rowheights[r]));
+                                }
+                            }
+                            else
+                            {
+                                gr.FillRectangle(_gridBackColorList[_gridBackColor[r, c]], xof - xxof + ofx, orig.Y + gyofset - yyof + ofy, _colwidths[c], _rowheights[r]);
+
+                                if (_colboolean[c])
+                                {
+                                    // we have to render the the checkbox
+                                    rh = _rowheights[r] - 2;
+
+                                    if (rh > 14)
+                                        rh = 14;
+
+                                    if (rh < 6)
+                                        rh = 6;
+
+                                    rhx = _colwidths[c] / 2 - rh / 2;
+
+                                    if (rhx < 0)
+                                        rhx = 0;
+
+                                    rhy = _rowheights[r] / 2 - rh / 2;
+
+                                    if (rhy < 0)
+                                        rhy = 0;
+
+                                    if ((Strings.UCase(renderstring) ?? "") == "TRUE" | (Strings.UCase(renderstring) ?? "") == "YES" | (Strings.UCase(renderstring) ?? "") == "Y" | (Strings.UCase(renderstring) ?? "") == "1")
+                                        ControlPaint.DrawCheckBox(gr, xof - xxof + rhx, orig.Y + gyofset - yyof + rhy, rh, rh, ButtonState.Checked);
+                                    else if (string.IsNullOrEmpty(Strings.UCase(renderstring)))
+                                        ControlPaint.DrawCheckBox(gr, xof - xxof + rhx, orig.Y + gyofset - yyof + rhy, rh, rh, ButtonState.Inactive);
+                                    else
+                                        ControlPaint.DrawCheckBox(gr, xof - xxof + rhx, orig.Y + gyofset - yyof + rhy, rh, rh, ButtonState.Normal);
+                                }
+                                else
+                                    gr.DrawString(renderstring, _gridCellFontsList[_gridCellFonts[r, c]], new SolidBrush(_RowHighLiteForeColor), new RectangleF(xof - xxof, orig.Y + gyofset - yyof, _colwidths[c], _rowheights[r]), _gridCellAlignmentList[_gridCellAlignment[r, c]]);
+                                if (_CellOutlines)
+                                    gr.DrawRectangle(new Pen(_CellOutlineColor), new Rectangle(xof - xxof + ofx, orig.Y + gyofset - yyof + ofy, _colwidths[c], _rowheights[r]));
+                            }
+                        }
+                    }
+                }
+
+                // recalc the top area so we can draw the header if its vivible
+                if (_GridTitleVisible)
+                {
+                    orig.X = 0;
+                    orig.Y = _GridTitleHeight;
+                }
+                else
+                {
+                    orig.X = 0;
+                    orig.Y = 0;
+                }
+
+                gr.SetClip(new RectangleF(0 + ofx, 0 + ofy, Cliprect.Width, Cliprect.Height));
+
+                if (_cols != 0 & _GridHeaderVisible)
+                {
+                    var loopTo2 = _cols - 1;
+                    // we need to render the Header
+
+                    for (t = 0; t <= loopTo2; t++)
+                    {
+                        xof = GimmeXOffset(t);
+                        if (_colwidths[t] > 0)
+                        {
+                            gr.FillRectangle(new SolidBrush(_GridHeaderBackcolor), xof - xxof + ofx, orig.Y + ofy, _colwidths[t], _GridHeaderHeight);
+                            gr.DrawString(_GridHeader[t], _GridHeaderFont, new SolidBrush(_GridHeaderForecolor), new RectangleF(xof - xxof + ofx, orig.Y + ofy, _colwidths[t], _GridHeaderHeight), _GridHeaderStringFormat);
+                            if (_CellOutlines)
+                                gr.DrawRectangle(new Pen(_CellOutlineColor), new Rectangle(xof - xxof + ofx, orig.Y + ofy, _colwidths[t], _GridHeaderHeight));
+                        }
+                    }
+                    orig.Y = orig.Y + _GridHeaderHeight;
+                }
+
+                // do we need to display the scrollbars
+
+                // RecalcScrollBars()
+
+                if ((int)_BorderStyle == (int)BorderStyle.Fixed3D | (int)_BorderStyle == (int)BorderStyle.FixedSingle)
+                    gr.DrawRectangle(new Pen(_BorderColor, 1), 0 + ofx, 0 + ofy, Cliprect.Width - 1, Cliprect.Height - 1);
+
+                /* TODO ERROR: Skipped IfDirectiveTrivia *//* TODO ERROR: Skipped DisabledTextTrivia *//* TODO ERROR: Skipped EndIfDirectiveTrivia */
+                _Painting = false;
+            }
+        }
+
+        private string ReturnExcelColumn(int intColumn)
+        {
+            try
+            {
+                var arrAlphabet = new ArrayList();
+                arrAlphabet.Add("A");
+                arrAlphabet.Add("B");
+                arrAlphabet.Add("C");
+                arrAlphabet.Add("D");
+                arrAlphabet.Add("E");
+                arrAlphabet.Add("F");
+                arrAlphabet.Add("G");
+                arrAlphabet.Add("H");
+                arrAlphabet.Add("I");
+                arrAlphabet.Add("J");
+                arrAlphabet.Add("K");
+                arrAlphabet.Add("L");
+                arrAlphabet.Add("M");
+                arrAlphabet.Add("N");
+                arrAlphabet.Add("O");
+                arrAlphabet.Add("P");
+                arrAlphabet.Add("Q");
+                arrAlphabet.Add("R");
+                arrAlphabet.Add("S");
+                arrAlphabet.Add("T");
+                arrAlphabet.Add("U");
+                arrAlphabet.Add("V");
+                arrAlphabet.Add("W");
+                arrAlphabet.Add("X");
+                arrAlphabet.Add("Y");
+                arrAlphabet.Add("Z");
+
+                if (intColumn <= 25)
+                    return arrAlphabet[intColumn].ToString();
+                else
+                {
+                    int idx = intColumn / 26;
+                    if (idx == 0)
+                        idx += 1;
+                    if (idx >= 1)
+                        // If (intColumn - 1) - (idx * 26) < 0 Then
+                        // Return arrAlphabet.Item(idx - 1) + arrAlphabet.Item((intColumn) - (idx * 26))
+                        // Else
+                        return arrAlphabet[idx - 1].ToString() + arrAlphabet[intColumn - idx * 26].ToString();
+                    else
+                        return "A" + arrAlphabet[intColumn - idx * 26];
+                }
+            }
+            catch (Exception ex)
+            {
+                Interaction.MsgBox(ex.ToString(), (MsgBoxStyle)((int)MsgBoxStyle.Information + (int)MsgBoxStyle.OkOnly), "TAIGRIDControl.ExportToExcel.ReturnExcelColumn Error...");
+                return "";
+            }
+        }
+
+        private string ReturnByteArrayAsHexString(byte[] Bytes)
+        {
+            int t;
+            string result = "";
+            string a;
+
+            try
+            {
+                var loopTo = Bytes.GetLength(0) - 1;
+                for (t = 0; t <= loopTo; t++)
+                {
+                    a = Strings.Right("00" + Conversion.Hex(Bytes[t]), 2);
+                    result = result + a;
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+
+            return result;
+        }
+
+        private string ReturnHTMLColor(Color col)
+        {
+            string result = Conversions.ToString((char)34) + "#";
+
+            result += Strings.Right("0" + Conversion.Hex(col.R), 2);
+            result += Strings.Right("0" + Conversion.Hex(col.G), 2);
+            result += Strings.Right("0" + Conversion.Hex(col.B), 2) + Conversions.ToString((char)34);
+
+            return result;
+        }
+
+        private void SetCols(int newColVal)
+        {
+            int t;
+
+            hs.Value = 0;
+
+            if (_cols == 0)
+            {
+                // we have no columns now so lets just set them
+                _colwidths = new int[newColVal + 1];
+                var loopTo = newColVal - 1;
+                for (t = 0; t <= loopTo; t++)
+                    _colwidths[t] = _DefaultColWidth;
+                _cols = newColVal;
+            }
+            else
+                _cols = newColVal;
+
+            RedimTable();
+        }
+
+        private void SetRows(int newRowVal)
+        {
+            int t;
+
+            vs.Value = 0;
+
+            if (_rows == 0)
+            {
+                // we have no rows now so lets start things off
+                _rowheights = new int[newRowVal + 1];
+                var loopTo = newRowVal - 1;
+                for (t = 0; t <= loopTo; t++)
+                    _rowheights[t] = _DefaultRowHeight;
+                _rows = newRowVal;
+            }
+            else
+                _rows = newRowVal;
+
+            RedimTable();
+        }
+
+        private string SplitLongString(string input, int breaklen)
+        {
+            var splitstringarray = input.Split(" ".ToCharArray());
+
+            string ret = "";
+            string subret = "";
+
+            int t = 0;
+            var loopTo = splitstringarray.GetUpperBound(0);
+            for (t = 0; t <= loopTo; t++)
+            {
+                if ((splitstringarray[t].Trim() ?? "") == (Environment.NewLine ?? ""))
+                    splitstringarray[t] = "";
+
+                subret += " " + splitstringarray[t].Trim();
+
+                if (subret.Length >= breaklen)
+                {
+                    ret += subret + Environment.NewLine;
+                    subret = "";
+                }
+            }
+
+
+            ret += subret;
+
+            ret = ret.Trim();
+
+            if (ret.EndsWith(Environment.NewLine))
+                ret = ret.Substring(1, ret.Length - Environment.NewLine.Length);
+
+
+            return ret;
+        }
+
+        private void TearAwayColumID(int id)
+        {
+            if (TearAways.Count > 0)
+            {
+                int t;
+                var loopTo = TearAways.Count - 1;
+                for (t = 0; t <= loopTo; t++)
+                {
+                    TearAwayWindowEntry ta = (TAIGridControl2.TAIGridControl.TearAwayWindowEntry)TearAways[t];
+                    if (ta.ColID == id)
+                    {
+                        // we already got one of these
+                        ta.Winform.BringToFront();
+                        ta.Winform.Focus();
+                        return;
+                    }
+                }
+            }
+
+            var tear = new TearAwayWindowEntry();
+            var TearItem = new frmColumnTearAway(get_HeaderLabel(id));
+            TearItem.Show();
+
+            TearItem.ListItems = GetColAsArrayList(id);
+            TearItem.GridParent = this;
+            TearItem.Colid = id;
+            TearItem.DefaultSelectionColor = _RowHighLiteBackColor;
+            TearItem.GridDefaultBackColor = _DefaultBackColor;
+            TearItem.GridDefaultForeColor = _DefaultForeColor;
+            TearItem.SelectedRow = _SelectedRow;
+
+            tear.Winform = TearItem;
+
+            tear.ColID = id;
+            tear.SetTearAwayScrollParameters(vs.Minimum, vs.Maximum, vs.Visible);
+
+            // tear.ShowTearAway()
+            TearAways.Add(tear);
         }
 
         private void TAIGRIDv2_Paint(object sender, PaintEventArgs e)
@@ -18951,6 +18996,10 @@ namespace TAIGridControl2
             ArrangeTearAwayWindows();
         }
 
+        #endregion
+
+        #region OverRides
+
         protected override void OnPaintBackground(PaintEventArgs pevent)
         {
         }
@@ -19280,6 +19329,10 @@ namespace TAIGridControl2
                 return false;
             } // If _EditMode And kd = Keys.Tab And _AllowInGridEdits
         }
+
+        #endregion
+
+        #region Private Classes
 
         private class frmExportToText : Form
         {
@@ -20454,5 +20507,7 @@ namespace TAIGridControl2
                     _Winform.vscroller.Value = index;
             }
         }
+
+        #endregion
     }
 }

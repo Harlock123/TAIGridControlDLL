@@ -873,23 +873,39 @@
         </member>
         <member name="M:TAIGridControl2.TAIGridControl.get_item(System.Int32,System.Int32)">
             <summary>
-            Gets or sets the contents of the grid cell at row R and col C
+            Gets contents of the grid cell at row R and col C
             </summary>
-            <param name="r"></param>
-            <param name="c"></param>
+            <param name="r">The Row number to fetch contents from</param>
+            <param name="c">The Col number to fetch contents from</param>
             <value></value>
-            <returns></returns>
+            <returns>The String representation of the cells contents located at <c>r</c> Row and <c>c</c> Col. Returns an empty string if out of bounds or the contents of the cell are NULL</returns>
             <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.set_item(System.Int32,System.Int32,System.String)">
+            <summary>
+            will set the value of a cell located as <c>r</c> and <c>c</c> to the value of <c>value</c>
+            </summary>
+            <param name="r">the row number to set</param>
+            <param name="c">the col number to set</param>
+            <param name="value">the value to set for the cell as row, col</param>
         </member>
         <member name="M:TAIGridControl2.TAIGridControl.get_item(System.Int32,System.String)">
             <summary>
-            Gets or sets the contents of the grid cell at row R and column name colname
+            Gets contents of the grid cell at row R and col colname
             </summary>
-            <param name="r"></param>
-            <param name="colname"></param>
+            <param name="r">The Row number to fetch contents from</param>
+            <param name="colname">The string name of the column number to fetch contents from (Taken from the Header of that column)</param>
             <value></value>
-            <returns></returns>
+            <returns>The String representation of the cells contents located at <c>r</c> Row and <c>colname</c> Col. Returns an empty string if out of bounds or the contents of the cell are NULL</returns>
             <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.set_item(System.Int32,System.String,System.String)">
+            <summary>
+            will set the value of a cell located as <c>r</c> and <c>colname</c> the columns name based on its header to the value of <c>value</c>
+            </summary>
+            <param name="r">the row number to set</param>
+            <param name="colname">the column name to set (based on the columns header)</param>
+            <param name="value">the value to set at the cell indicated by r,colname</param>
         </member>
         <member name="P:TAIGridControl2.TAIGridControl.MaxRowsSelected">
             <summary>
@@ -941,8 +957,15 @@
             </summary>
             <param name="idx"></param>
             <value></value>
-            <returns></returns>
+            <returns> Integer in pixels of the <c>idx</c> row height currently</returns>
             <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.set_RowHeight(System.Int32,System.Int32)">
+            <summary>
+            Will explicitly set the hight of <c>idx</c> row to be <c>value</c> pixels in height.
+            </summary>
+            <param name="idx"></param>
+            <param name="value"></param>
         </member>
         <member name="P:TAIGridControl2.TAIGridControl.ScrollBarWeight">
             <summary>
@@ -1987,7 +2010,7 @@
             <param name="ForeColor"></param>
             <remarks></remarks>
         </member>
-        <member name="M:TAIGridControl2.TAIGridControl.PolulateGridWithDataAt(System.String,System.String,System.Int32,System.Drawing.Color,System.Drawing.Color,System.Int32)">
+        <member name="M:TAIGridControl2.TAIGridControl.PopulateGridWithDataAt(System.String,System.String,System.Int32,System.Drawing.Color,System.Drawing.Color,System.Int32)">
             <summary>
             Will allow a database populate of a grid within an already populated grid of data.
             The effect will be to insert data from a carefully crafted query into a rectangular region of an
@@ -2001,15 +2024,15 @@
             <item><c>ColOffset</c> the column offset from the edge to start populating</item>
             </list>
             </summary>
-            <param name="ConnectionString"></param>
-            <param name="Sql"></param>
-            <param name="Atrow"></param>
-            <param name="newbackcolor"></param>
-            <param name="newheadercolor"></param>
-            <param name="ColOffSet"></param>
+            <param name="ConnectionString">A legal connection string representing the database. </param>
+            <param name="Sql">The actual SQL code to execute against the database represented in <c>ConnectionString</c>.</param>
+            <param name="Atrow">The Row from wich you want the insertion to occur.</param>
+            <param name="newbackcolor">The <c>System.Drawing.Color</c> to set the newly inserted rows to use as a background color. </param>
+            <param name="newheadercolor">Newly inserted rows will have a new header applied at the first row inserted, this will be used as the background color for this new header</param>
+            <param name="ColOffSet">New rows inserted will be placed starting the this column offset. Allowing insertion of data into rectangular regions of and existing grid</param>
             <remarks></remarks>
         </member>
-        <member name="M:TAIGridControl2.TAIGridControl.PolulateGridWithDataAt(System.String,System.String,System.Int32,System.Drawing.Color,System.Drawing.Color)">
+        <member name="M:TAIGridControl2.TAIGridControl.PopulateGridWithDataAt(System.String,System.String,System.Int32,System.Drawing.Color,System.Drawing.Color)">
             <summary>
             Will allow a database populate of a grid within an already populated grid of data.
             The effect will be to insert data from a carefully crafted query into a rectangular region of an
@@ -2022,14 +2045,14 @@
             <item><c>newheadercolor</c> the color to use for the header that will be created from the queried data</item>
             </list>
             </summary>
-            <param name="ConnectionString"></param>
-            <param name="Sql"></param>
-            <param name="Atrow"></param>
-            <param name="newbackcolor"></param>
-            <param name="newheadercolor"></param>
+            <param name="ConnectionString">A legal connection string representing the database. </param>
+            <param name="Sql">The actual SQL code to execute against the database represented in <c>ConnectionString</c>.</param>
+            <param name="Atrow">The Row from wich you want the insertion to occur.</param>
+            <param name="newbackcolor">The <c>System.Drawing.Color</c> to set the newly inserted rows to use as a background color. </param>
+            <param name="newheadercolor">Newly inserted rows will have a new header applied at the first row inserted, this will be used as the background color for this new header</param>
             <remarks></remarks>
         </member>
-        <member name="M:TAIGridControl2.TAIGridControl.PolulateGridWithDataAt(System.String,System.String,System.Int32,System.Drawing.Color)">
+        <member name="M:TAIGridControl2.TAIGridControl.PopulateGridWithDataAt(System.String,System.String,System.Int32,System.Drawing.Color)">
             <summary>
             Will allow a database populate of a grid within an already populated grid of data.
             The effect will be to insert data from a carefully crafted query into a rectangular region of an
@@ -2041,13 +2064,13 @@
             <item><c>newbackcolor</c> the color to be used to setup the background of the cells for the new data</item>
             </list>
             </summary>
-            <param name="ConnectionString"></param>
-            <param name="Sql"></param>
-            <param name="Atrow"></param>
-            <param name="newbackcolor"></param>
+            <param name="ConnectionString">A legal connection string representing the database. </param>
+            <param name="Sql">The actual SQL code to execute against the database represented in <c>ConnectionString</c>.</param>
+            <param name="Atrow">The Row from wich you want the insertion to occur.</param>
+            <param name="newbackcolor">The <c>System.Drawing.Color</c> to set the newly inserted rows to use as a background color. </param>
             <remarks></remarks>
         </member>
-        <member name="M:TAIGridControl2.TAIGridControl.PolulateGridWithDataAt(System.String,System.String,System.Int32,System.Drawing.Color,System.Boolean)">
+        <member name="M:TAIGridControl2.TAIGridControl.PopulateGridWithDataAt(System.String,System.String,System.Int32,System.Drawing.Color,System.Boolean)">
             <summary>
             Will allow a database populate of a grid within an already populated grid of data.
             The effect will be to insert data from a carefully crafted query into a rectangular region of an
@@ -2060,11 +2083,11 @@
             <item><c>allowDups></c> Will not insert any rows that already exist in the grid if set to false</item>
             </list>
             </summary>
-            <param name="ConnectionString"></param>
-            <param name="Sql"></param>
-            <param name="Atrow"></param>
-            <param name="newbackcolor"></param>
-            <param name="allowDups"></param>
+            <param name="ConnectionString">A legal connection string representing the database. </param>
+            <param name="Sql">The actual SQL code to execute against the database represented in <c>ConnectionString</c>.</param>
+            <param name="Atrow">The Row from wich you want the insertion to occur.</param>
+            <param name="newbackcolor">The <c>System.Drawing.Color</c> to set the newly inserted rows to use as a background color. </param>
+            <param name="allowDups"> Will not insert any rows that already exist in the grid if set to false</param>
             <remarks></remarks>
         </member>
         <member name="M:TAIGridControl2.TAIGridControl.PopulateGridWithData(System.Data.SqlClient.SqlDataReader@,System.Drawing.Color,System.Drawing.Font)">
@@ -2905,8 +2928,8 @@
             Will attempt to wrap the text data in a specified <c>col</c> at <c>wraplen</c> length.
             The wrap is smat in that it tries to wrap on whitespace boundaries
             </summary>
-            <param name="col"></param>
-            <param name="wraplen"></param>
+            <param name="col">The specific column that you want to set the <c>wraplen</c> on</param>
+            <param name="wraplen">sets the column <c>col</c> to workwrap on <c>wraplen</c> characters</param>
             <remarks></remarks>
         </member>
         <member name="M:TAIGridControl2.TAIGridControl.GetColumnSTDEV(System.Int32)">
