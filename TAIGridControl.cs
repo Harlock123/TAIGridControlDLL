@@ -18920,7 +18920,7 @@ namespace TAIGridControl2
 
             _TearAwayWork = true;
 
-            TearAwayColumID(_ColOverOnMenuButton);
+            TearAwayColumID(_ColOverOnMenuButton-1);
 
             _TearAwayWork = false;
         }
@@ -18935,9 +18935,9 @@ namespace TAIGridControl2
             for (t = TearAways.Count - 1; t >= 0; t += -1)
             {
                 TearAwayWindowEntry ta = (TAIGridControl2.TAIGridControl.TearAwayWindowEntry)TearAways[t];
-                if (ta.ColID == _ColOverOnMenuButton)
+                if (ta.ColID == _ColOverOnMenuButton-1)
                     // call into the child form to start the death spiral a happening
-                    ta.Winform.KillMe(_ColOverOnMenuButton);
+                    ta.Winform.KillMe(_ColOverOnMenuButton-1);
             }
         }
 
