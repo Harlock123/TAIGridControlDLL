@@ -294,30 +294,7 @@ namespace TAIGridControl2
         // 'Private WithEvents TearItem As New frmColumnTearAway
 
         private ArrayList TearAways = new ArrayList();
-        private MenuItem _miStats;
-
-        internal MenuItem miStats
-        {
-            [MethodImpl(MethodImplOptions.Synchronized)]
-            get
-            {
-                return _miStats;
-            }
-
-            [MethodImpl(MethodImplOptions.Synchronized)]
-            set
-            {
-                if (_miStats != null)
-                {
-                }
-
-                _miStats = value;
-                if (_miStats != null)
-                {
-                }
-            }
-        }
-
+       
         /// <summary>
         /// Denotes the form of action necessary to be taken to have a cell in editmode actually have its value
         /// change. Fireing the cell edited event. Either having the user press the enter/return key or having the
@@ -332,11 +309,8 @@ namespace TAIGridControl2
 
         private GridEditModes _GridEditMode = GridEditModes.KeyReturn;
 
-
         [System.Runtime.InteropServices.DllImport("gdi32.dll")]
         private static extern bool BitBlt(IntPtr hdcDest, int nXDest, int nYDest, int nWidth, int nHeight, IntPtr hdcSrc, int nXSrc, int nYSrc, int dwRop);
-
-
 
         public TAIGridControl() : base()
         {
@@ -452,6 +426,8 @@ namespace TAIGridControl2
             }
         }
 
+        #region Context Menu Items
+
         private ContextMenu _menu;
 
         internal ContextMenu menu
@@ -474,6 +450,30 @@ namespace TAIGridControl2
                 if (_menu != null)
                 {
                     _menu.Popup += menu_Popup;
+                }
+            }
+        }
+
+        private MenuItem _miStats;
+
+        internal MenuItem miStats
+        {
+            [MethodImpl(MethodImplOptions.Synchronized)]
+            get
+            {
+                return _miStats;
+            }
+
+            [MethodImpl(MethodImplOptions.Synchronized)]
+            set
+            {
+                if (_miStats != null)
+                {
+                }
+
+                _miStats = value;
+                if (_miStats != null)
+                {
                 }
             }
         }
@@ -1882,32 +1882,6 @@ namespace TAIGridControl2
             }
         }
 
-        private System.Drawing.Printing.PrintDocument _pdoc;
-
-        internal System.Drawing.Printing.PrintDocument pdoc
-        {
-            [MethodImpl(MethodImplOptions.Synchronized)]
-            get
-            {
-                return _pdoc;
-            }
-
-            [MethodImpl(MethodImplOptions.Synchronized)]
-            set
-            {
-                if (_pdoc != null)
-                {
-                    _pdoc.PrintPage -= pdoc_PrintPage;
-                }
-
-                _pdoc = value;
-                if (_pdoc != null)
-                {
-                    _pdoc.PrintPage += pdoc_PrintPage;
-                }
-            }
-        }
-
         private MenuItem _MenuItem1;
 
         internal MenuItem MenuItem1
@@ -2349,31 +2323,7 @@ namespace TAIGridControl2
                 }
             }
         }
-
-        private ToolTip __TTip;
-
-        internal ToolTip _TTip
-        {
-            [MethodImpl(MethodImplOptions.Synchronized)]
-            get
-            {
-                return __TTip;
-            }
-
-            [MethodImpl(MethodImplOptions.Synchronized)]
-            set
-            {
-                if (__TTip != null)
-                {
-                }
-
-                __TTip = value;
-                if (__TTip != null)
-                {
-                }
-            }
-        }
-
+        
         private MenuItem _miMultipleColumnTearAway;
 
         internal MenuItem miMultipleColumnTearAway
@@ -2425,6 +2375,59 @@ namespace TAIGridControl2
                 }
             }
         }
+
+        #endregion
+
+        private ToolTip __TTip;
+
+        internal ToolTip _TTip
+        {
+            [MethodImpl(MethodImplOptions.Synchronized)]
+            get
+            {
+                return __TTip;
+            }
+
+            [MethodImpl(MethodImplOptions.Synchronized)]
+            set
+            {
+                if (__TTip != null)
+                {
+                }
+
+                __TTip = value;
+                if (__TTip != null)
+                {
+                }
+            }
+        }
+
+        private System.Drawing.Printing.PrintDocument _pdoc;
+
+        internal System.Drawing.Printing.PrintDocument pdoc
+        {
+            [MethodImpl(MethodImplOptions.Synchronized)]
+            get
+            {
+                return _pdoc;
+            }
+
+            [MethodImpl(MethodImplOptions.Synchronized)]
+            set
+            {
+                if (_pdoc != null)
+                {
+                    _pdoc.PrintPage -= pdoc_PrintPage;
+                }
+
+                _pdoc = value;
+                if (_pdoc != null)
+                {
+                    _pdoc.PrintPage += pdoc_PrintPage;
+                }
+            }
+        }
+
 
         [DebuggerStepThrough()]
         private void InitializeComponent()
@@ -3053,7 +3056,7 @@ namespace TAIGridControl2
             PerformLayout();
         }
 
-
+        #region Events
 
         // CellClicked
         /// <summary>
@@ -3279,6 +3282,7 @@ namespace TAIGridControl2
 
         public delegate void GridHoverleaveEventHandler(object sender);
 
+        #endregion
 
         /// <summary>
         /// Enmeration for selecting preset color schemes used to configures the theme of the grids display
