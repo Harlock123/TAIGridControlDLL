@@ -2,7 +2,7 @@
 <topic id="8dfc0e09-8413-4ad2-9dd2-0e56160069b2" revisionNumber="1">
 	<developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 		<introduction>
-			<para>Version [TODO: Version] was released on [TODO: Date].
+			<para>Version 2.0.0.0 was released on 5/14/2020.
 			</para>
 		</introduction>
 
@@ -10,14 +10,28 @@
 			<title>Changes in This Release</title>
 			<content>
 
-				<list class="bullet">
-					<listItem>
-						<para>[TODO: Add change items here]</para>
-					</listItem>
+        First C# conversion version. Requires ClosedXML (which requires DocumentFormat.OpenXML)
 
-				</list>
 
-			</content>
+				A Little History 
+        
+        # TAIGridControlDLL
+
+        ## Lonnie Allen Watson
+        ## May 6th 2020
+
+        A Little Back Story from early 2000's
+
+        Being sick and tired of the crappy implimentation of the grid control of VB.net
+        I developed this grid to allow easier programatic access, The current databound grid
+        works better if its used in a databound way, If you want to use the grid in a manner simillar
+        to the way it was used under VB6 you are out of luck. This grid will even expose doubleclick
+        events directly on the cell ( Wow what a concept )
+
+        ### Version 2.0.0.0 First Version in C#
+
+
+      </content>
 		</section>
 
 		<relatedTopics>
