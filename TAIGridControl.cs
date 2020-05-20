@@ -7422,6 +7422,8 @@ namespace TAIGridControl2
                 {
                     SendKeys.Send("{ESC}");
                     SendKeys.Send("{ESC}");
+                    // As this get called from two Layers deep in the context menu lets try 
+                    // to ensure that context menu is closed
                 }
 
                 var frm1 = new frmExcelOutput(this);

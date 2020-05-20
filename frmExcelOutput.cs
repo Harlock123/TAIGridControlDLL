@@ -40,8 +40,8 @@ namespace TAIGridControl2
         private void btnOk_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(txtFileName.Text) && string.IsNullOrEmpty(txtTableName.Text))
-                MessageBox.Show("You must select a file for the resulting Script to be written to\n" +
-                                "as well as a name for the resulting Table that is crafted by that script", "Export to Excel error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("You must select a file for the resulting Excel Document to be written to\n" +
+                                "as well as a name for the resulting Worksheet name that is crafted in the Excel document", "Export to Excel error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             else
             {
