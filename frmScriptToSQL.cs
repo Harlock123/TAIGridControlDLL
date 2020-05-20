@@ -240,100 +240,99 @@ namespace TAIGridControl2
         [DebuggerStepThrough()]
         private void InitializeComponent()
         {
-            _txtFileName = new System.Windows.Forms.TextBox();
-            _btnSelectFile = new System.Windows.Forms.Button();
-            _btnSelectFile.Click += btnSelectFile_Click;
-            _OFD = new System.Windows.Forms.OpenFileDialog();
-            _btnCancel = new System.Windows.Forms.Button();
-            _btnCancel.Click += btnCancel_Click;
-            _btnOk = new System.Windows.Forms.Button();
-            _btnOk.Click += btnOk_Click;
-            _txtTableName = new System.Windows.Forms.TextBox();
-            _Label1 = new System.Windows.Forms.Label();
-            _Label2 = new System.Windows.Forms.Label();
-            _Label2.Click += Label2_Click;
-            SuspendLayout();
+            this._txtFileName = new System.Windows.Forms.TextBox();
+            this._btnSelectFile = new System.Windows.Forms.Button();
+            this._OFD = new System.Windows.Forms.OpenFileDialog();
+            this._btnCancel = new System.Windows.Forms.Button();
+            this._btnOk = new System.Windows.Forms.Button();
+            this._txtTableName = new System.Windows.Forms.TextBox();
+            this._Label1 = new System.Windows.Forms.Label();
+            this._Label2 = new System.Windows.Forms.Label();
+            this.SuspendLayout();
             // 
-            // txtFileName
+            // _txtFileName
             // 
-            _txtFileName.Location = new System.Drawing.Point(4, 44);
-            _txtFileName.Name = "txtFileName";
-            _txtFileName.Size = new System.Drawing.Size(344, 20);
-            _txtFileName.TabIndex = 0;
-            _txtFileName.Text = "";
+            this._txtFileName.Location = new System.Drawing.Point(4, 44);
+            this._txtFileName.Name = "_txtFileName";
+            this._txtFileName.Size = new System.Drawing.Size(344, 20);
+            this._txtFileName.TabIndex = 0;
             // 
-            // btnSelectFile
+            // _btnSelectFile
             // 
-            _btnSelectFile.Location = new System.Drawing.Point(352, 44);
-            _btnSelectFile.Name = "btnSelectFile";
-            _btnSelectFile.Size = new System.Drawing.Size(24, 20);
-            _btnSelectFile.TabIndex = 1;
-            _btnSelectFile.Text = "...";
+            this._btnSelectFile.Location = new System.Drawing.Point(352, 44);
+            this._btnSelectFile.Name = "_btnSelectFile";
+            this._btnSelectFile.Size = new System.Drawing.Size(24, 20);
+            this._btnSelectFile.TabIndex = 1;
+            this._btnSelectFile.Text = "...";
+            this._btnSelectFile.Click += new System.EventHandler(this.btnSelectFile_Click);
             // 
-            // OFD
+            // _OFD
             // 
-            _OFD.CheckFileExists = false;
-            _OFD.DefaultExt = "sql";
-            _OFD.Title = "Select file name to save the script to";
+            this._OFD.CheckFileExists = false;
+            this._OFD.DefaultExt = "sql";
+            this._OFD.Title = "Select file name to save the script to";
             // 
-            // btnCancel
+            // _btnCancel
             // 
-            _btnCancel.Location = new System.Drawing.Point(260, 4);
-            _btnCancel.Name = "btnCancel";
-            _btnCancel.Size = new System.Drawing.Size(56, 20);
-            _btnCancel.TabIndex = 2;
-            _btnCancel.Text = "Cancel";
+            this._btnCancel.Location = new System.Drawing.Point(260, 4);
+            this._btnCancel.Name = "_btnCancel";
+            this._btnCancel.Size = new System.Drawing.Size(56, 20);
+            this._btnCancel.TabIndex = 2;
+            this._btnCancel.Text = "Cancel";
+            this._btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
-            // btnOk
+            // _btnOk
             // 
-            _btnOk.Location = new System.Drawing.Point(320, 4);
-            _btnOk.Name = "btnOk";
-            _btnOk.Size = new System.Drawing.Size(56, 20);
-            _btnOk.TabIndex = 3;
-            _btnOk.Text = "Ok";
+            this._btnOk.Location = new System.Drawing.Point(320, 4);
+            this._btnOk.Name = "_btnOk";
+            this._btnOk.Size = new System.Drawing.Size(56, 20);
+            this._btnOk.TabIndex = 3;
+            this._btnOk.Text = "Ok";
+            this._btnOk.Click += new System.EventHandler(this.btnOk_Click);
             // 
-            // txtTableName
+            // _txtTableName
             // 
-            _txtTableName.Location = new System.Drawing.Point(4, 20);
-            _txtTableName.Name = "txtTableName";
-            _txtTableName.Size = new System.Drawing.Size(152, 20);
-            _txtTableName.TabIndex = 4;
-            _txtTableName.Text = "";
+            this._txtTableName.Location = new System.Drawing.Point(4, 20);
+            this._txtTableName.Name = "_txtTableName";
+            this._txtTableName.Size = new System.Drawing.Size(152, 20);
+            this._txtTableName.TabIndex = 4;
             // 
-            // Label1
+            // _Label1
             // 
-            _Label1.Location = new System.Drawing.Point(8, 4);
-            _Label1.Name = "Label1";
-            _Label1.Size = new System.Drawing.Size(148, 12);
-            _Label1.TabIndex = 5;
-            _Label1.Text = "Name the resulting table";
+            this._Label1.Location = new System.Drawing.Point(8, 4);
+            this._Label1.Name = "_Label1";
+            this._Label1.Size = new System.Drawing.Size(148, 12);
+            this._Label1.TabIndex = 5;
+            this._Label1.Text = "Name the resulting table";
             // 
-            // Label2
+            // _Label2
             // 
-            _Label2.Location = new System.Drawing.Point(8, 68);
-            _Label2.Name = "Label2";
-            _Label2.Size = new System.Drawing.Size(188, 16);
-            _Label2.TabIndex = 6;
-            _Label2.Text = "Save the resulting SQL script to";
+            this._Label2.Location = new System.Drawing.Point(8, 68);
+            this._Label2.Name = "_Label2";
+            this._Label2.Size = new System.Drawing.Size(188, 16);
+            this._Label2.TabIndex = 6;
+            this._Label2.Text = "Save the resulting SQL script to";
             // 
             // frmScriptToSQL
             // 
-            AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-            ClientSize = new System.Drawing.Size(394, 88);
-            ControlBox = false;
-            Controls.Add(_Label2);
-            Controls.Add(_Label1);
-            Controls.Add(_txtTableName);
-            Controls.Add(_btnOk);
-            Controls.Add(_btnCancel);
-            Controls.Add(_btnSelectFile);
-            Controls.Add(_txtFileName);
-            FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            Name = "frmScriptToSQL";
-            ShowInTaskbar = false;
-            StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-            Text = "Script Grid contents to SQL";
-            ResumeLayout(false);
+            this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+            this.ClientSize = new System.Drawing.Size(394, 110);
+            this.ControlBox = false;
+            this.Controls.Add(this._Label2);
+            this.Controls.Add(this._Label1);
+            this.Controls.Add(this._txtTableName);
+            this.Controls.Add(this._btnOk);
+            this.Controls.Add(this._btnCancel);
+            this.Controls.Add(this._btnSelectFile);
+            this.Controls.Add(this._txtFileName);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Name = "frmScriptToSQL";
+            this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
+            this.Text = "Script Grid contents to SQL";
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
         }
 
 

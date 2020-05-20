@@ -7416,78 +7416,100 @@ namespace TAIGridControl2
 
             try
             {
-                var frm = new frmExportingToExcelWorking();
+                string filetogenerate = ""; // System.IO.Path.Combine(System.Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "EXCELOUTPUT.xlsx");
 
-                if (_ShowExcelExportMessage)
+                if (_OldContextMenu != null)
                 {
-                    frm.Show();
-                    frm.Refresh();
+                    SendKeys.Send("{ESC}");
+                    SendKeys.Send("{ESC}");
                 }
 
-                string filetogenerate = System.IO.Path.Combine(System.Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "EXCELOUTPUT.xlsx");
+                var frm1 = new frmExcelOutput(this);
 
-                IXLWorkbook workbook = new XLWorkbook();
+                frm1.ShowDialog();
 
-                IXLWorksheet worksheet = workbook.Worksheets.Add(_excelWorkSheetName);
-
-                for (int h = 0;h<_cols; h++)
+                if (frm1.FRMOK)
                 {
-                    worksheet.Cell(1, h + 1).Value = _GridHeader[h];
+                    filetogenerate = frm1.SELECTEDPATH;
 
-                    if (_excelMatchGridColorScheme)
+                    var frm = new frmExportingToExcelWorking();
+
+                    if (_ShowExcelExportMessage)
                     {
-                        
-                        worksheet.Cell(1, h + 1).Style.Font.Bold = _GridHeaderFont.Bold;
-                        worksheet.Cell(1, h + 1).Style.Fill.BackgroundColor = XLColor.FromColor(_GridHeaderBackcolor);
-                        worksheet.Cell(1, h + 1).Style.Font.FontColor = XLColor.FromColor(_GridHeaderForecolor);
-
-                        worksheet.Cell(1, h + 1).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
-                        worksheet.Cell(1, h + 1).Style.Border.TopBorder = XLBorderStyleValues.Thin;
-                        worksheet.Cell(1, h + 1).Style.Border.LeftBorder = XLBorderStyleValues.Thin;
-                        worksheet.Cell(1, h + 1).Style.Border.RightBorder = XLBorderStyleValues.Thin;
-
-
+                        frm.Show();
+                        frm.Refresh();
                     }
-                }
 
-                for (int r = 0; r < _rows; r++)
-                {
-                    
-                    for (int c = 0; c < _cols; c++)
+                    IXLWorkbook workbook = new XLWorkbook();
+
+                    //IXLWorksheet worksheet = workbook.Worksheets.Add(_excelWorkSheetName);
+                    IXLWorksheet worksheet = workbook.Worksheets.Add(frm1.SELECTEDWORKBOOKNAME);
+
+                    for (int h = 0; h < _cols; h++)
                     {
-                        worksheet.Cell(r + 2, c + 1).Value = _grid[r, c];
+                        worksheet.Cell(1, h + 1).Value = _GridHeader[h];
 
                         if (_excelMatchGridColorScheme)
                         {
 
-                            worksheet.Cell(r + 2, c + 1).Style.Font.Bold = get_CellFont(r, c).Bold;
+                            worksheet.Cell(1, h + 1).Style.Font.Bold = _GridHeaderFont.Bold;
+                            worksheet.Cell(1, h + 1).Style.Fill.BackgroundColor = XLColor.FromColor(_GridHeaderBackcolor);
+                            worksheet.Cell(1, h + 1).Style.Font.FontColor = XLColor.FromColor(_GridHeaderForecolor);
 
-                            SolidBrush bb = (SolidBrush)get_CellBackColor(r, c);
+                            worksheet.Cell(1, h + 1).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+                            worksheet.Cell(1, h + 1).Style.Border.TopBorder = XLBorderStyleValues.Thin;
+                            worksheet.Cell(1, h + 1).Style.Border.LeftBorder = XLBorderStyleValues.Thin;
+                            worksheet.Cell(1, h + 1).Style.Border.RightBorder = XLBorderStyleValues.Thin;
 
-                            worksheet.Cell(r + 2, c + 1).Style.Fill.BackgroundColor = XLColor.FromColor(bb.Color);
 
-                            worksheet.Cell(r + 2, c + 1).Style.Font.FontColor = XLColor.FromColor(get_CellForeColor(r,c).Color);
+                        }
+                    }
 
-                            worksheet.Cell(r + 2, c + 1).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
-                            worksheet.Cell(r + 2, c + 1).Style.Border.TopBorder = XLBorderStyleValues.Thin;
-                            worksheet.Cell(r + 2, c + 1).Style.Border.LeftBorder = XLBorderStyleValues.Thin;
-                            worksheet.Cell(r + 2, c + 1).Style.Border.RightBorder = XLBorderStyleValues.Thin;
+                    for (int r = 0; r < _rows; r++)
+                    {
+
+                        for (int c = 0; c < _cols; c++)
+                        {
+                            string Gval = _grid[r, c];
+
+                            if (frm1.OMITNULLS && Gval.ToUpper().Trim() == "{NULL}")
+                                Gval = "";
+
+                            worksheet.Cell(r + 2, c + 1).Value = Gval;
+
+                            if (_excelMatchGridColorScheme)
+                            {
+
+                                worksheet.Cell(r + 2, c + 1).Style.Font.Bold = get_CellFont(r, c).Bold;
+
+                                SolidBrush bb = (SolidBrush)get_CellBackColor(r, c);
+
+                                worksheet.Cell(r + 2, c + 1).Style.Fill.BackgroundColor = XLColor.FromColor(bb.Color);
+
+                                worksheet.Cell(r + 2, c + 1).Style.Font.FontColor = XLColor.FromColor(get_CellForeColor(r, c).Color);
+
+                                worksheet.Cell(r + 2, c + 1).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+                                worksheet.Cell(r + 2, c + 1).Style.Border.TopBorder = XLBorderStyleValues.Thin;
+                                worksheet.Cell(r + 2, c + 1).Style.Border.LeftBorder = XLBorderStyleValues.Thin;
+                                worksheet.Cell(r + 2, c + 1).Style.Border.RightBorder = XLBorderStyleValues.Thin;
+
+                            }
 
                         }
 
                     }
 
+                    worksheet.Columns().AdjustToContents();
+
+                    workbook.SaveAs(filetogenerate);
+
+                    if (_ShowExcelExportMessage)
+                    {
+                        frm.Hide();
+                        frm = null;
+                    }
                 }
 
-                worksheet.Columns().AdjustToContents();
-
-                workbook.SaveAs(filetogenerate);
-
-                if (_ShowExcelExportMessage)
-                {
-                    frm.Hide();
-                    frm = null;
-                }
 
                 //using ( DocumentFormat.OpenXml.Packaging.SpreadsheetDocument document = SpreadsheetDocument.Create(filetogenerate, SpreadsheetDocumentType.Workbook))
                 //{

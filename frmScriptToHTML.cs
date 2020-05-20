@@ -383,7 +383,8 @@ namespace TAIGridControl2
             // frmScriptToHTML
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-            this.ClientSize = new System.Drawing.Size(376, 83);
+            this.ClientSize = new System.Drawing.Size(376, 110);
+            this.ControlBox = false;
             this.Controls.Add(this._chkOmitNulls);
             this.Controls.Add(this._chkMatchColors);
             this.Controls.Add(this._Label1);
