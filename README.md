@@ -18,4 +18,6 @@
  - Added dialog to on Exporting to excel for selection of filename and worksheet name
  as well as selection of Null omission on resulting excel file.
  
- ### Version 2.0.0.0 First Version in C#
+### Version 2.0.2.0 Fixed a wierd error with Cellfonts and autosizing cells to contents
+
+### Version 2.0.0.0 First Version in C#

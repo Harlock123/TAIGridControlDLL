@@ -13868,6 +13868,9 @@ namespace TAIGridControl2
             int cc = 0;
             string t;
 
+            if (_gridCellFontsList.Length > 0 && _gridCellFontsList[0] == null)
+                _gridCellFontsList[0] = _DefaultCellFont;
+
             int rrr = 0;
             var sz = new SizeF(0, 0);
 
