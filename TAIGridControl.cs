@@ -3043,15 +3043,15 @@ namespace TAIGridControl2
             base.HandleDestroyed += TAIGridControl_HandleDestroyed;
             _gb1.ResumeLayout(false);
             base.Paint += TAIGRIDv2_Paint;
-            base.SizeChanged += TAIGRIDv2_SizeChanged;
-            base.MouseEnter += MouseEnterHandler;
-            base.MouseWheel += MouseWheelHandler;
-            base.MouseUp += MouseUpHandler;
-            base.DoubleClick += DoubleClickHandler;
-            base.MouseDown += MouseDownHandler;
-            base.MouseMove += MouseMoveHandler;
-            base.Load += TAIGRIDControl_Load;
-            base.HandleDestroyed += TAIGridControl_HandleDestroyed;
+            //base.SizeChanged += TAIGRIDv2_SizeChanged;
+            //base.MouseEnter += MouseEnterHandler;
+            //base.MouseWheel += MouseWheelHandler;
+            //base.MouseUp += MouseUpHandler;
+            //base.DoubleClick += DoubleClickHandler;
+            //base.MouseDown += MouseDownHandler;
+            //base.MouseMove += MouseMoveHandler;
+            //base.Load += TAIGRIDControl_Load;
+            //base.HandleDestroyed += TAIGridControl_HandleDestroyed;
             ResumeLayout(false);
             PerformLayout();
         }
@@ -16147,6 +16147,9 @@ namespace TAIGridControl2
             int xoff, yoff, r, c, t;
             string ss;
 
+            _ColOverOnMenuButton = -1;
+            _ColOverOnMouseDown = -1;
+
             // Console.WriteLine("MouseUP")
 
             if (_DoubleClickSemaphore)
@@ -16966,7 +16969,7 @@ namespace TAIGridControl2
         private void vs_Scroll(object sender, ScrollEventArgs e)
         {
         }
-
+                
         private void MouseDownHandler(object sender, MouseEventArgs e)
         {
             Point p;
@@ -17016,6 +17019,7 @@ namespace TAIGridControl2
                     }
 
                     _ColOverOnMenuButton = -1;
+                    
                     _ColOverOnMouseDown = xx;
 
                     _MouseDownOnHeader = true;
@@ -17106,7 +17110,9 @@ namespace TAIGridControl2
                 // End If
                 // End If
 
-                _ColOverOnMenuButton = xx;
+
+                if (_ColOverOnMenuButton == -1)
+                    _ColOverOnMenuButton = xx;
 
                 if (ContextMenu == null)
                 {
@@ -18058,6 +18064,11 @@ namespace TAIGridControl2
             var presortcolwidths = new int[_cols + 1];
             bool oldautosizecells = _AutosizeCellsToContents;
 
+
+            // Kill The Menu ?
+            SendKeys.Send("{ESC}");
+            SendKeys.Send("{ESC}");
+
             Array.Copy(_colwidths, presortcolwidths, _cols);
 
             Refresh();
@@ -18125,6 +18136,10 @@ namespace TAIGridControl2
 
             pBar.Visible = false;
             gb1.Visible = false;
+
+            _ColOverOnMenuButton = -1;
+
+            
         }
 
         private void miSortDescending_Click(object sender, EventArgs e)
@@ -18134,6 +18149,10 @@ namespace TAIGridControl2
             int y, rr, cc;
             var presortcolwidths = new int[_cols + 1];
             bool oldautosizecells = _AutosizeCellsToContents;
+
+            // Kill The Menu ?
+            SendKeys.Send("{ESC}");
+            SendKeys.Send("{ESC}");
 
             Array.Copy(_colwidths, presortcolwidths, _cols);
 
@@ -18200,6 +18219,8 @@ namespace TAIGridControl2
 
             pBar.Visible = false;
             gb1.Visible = false;
+
+            _ColOverOnMenuButton = -1;
         }
 
         private void miDateAsc_Click(object sender, EventArgs e)
@@ -18211,9 +18232,11 @@ namespace TAIGridControl2
             var presortcolwidths = new int[_cols + 1];
             bool oldautosizecells = _AutosizeCellsToContents;
 
+            // Kill The Menu ?
+            SendKeys.Send("{ESC}");
+            SendKeys.Send("{ESC}");
+
             Array.Copy(_colwidths, presortcolwidths, _cols);
-
-
 
             Refresh();
             var loopTo = _rows - 1;
@@ -18295,6 +18318,8 @@ namespace TAIGridControl2
 
             pBar.Visible = false;
             gb1.Visible = false;
+
+            _ColOverOnMenuButton = -1;
         }
 
         private void miDateDesc_Click(object sender, EventArgs e)
@@ -18306,8 +18331,11 @@ namespace TAIGridControl2
             var presortcolwidths = new int[_cols + 1];
             bool oldautosizecells = _AutosizeCellsToContents;
 
-            Array.Copy(_colwidths, presortcolwidths, _cols);
+            // Kill The Menu ?
+            SendKeys.Send("{ESC}");
+            SendKeys.Send("{ESC}");
 
+            Array.Copy(_colwidths, presortcolwidths, _cols);
 
             Refresh();
             var loopTo = _rows - 1;
@@ -18390,6 +18418,8 @@ namespace TAIGridControl2
 
             pBar.Visible = false;
             gb1.Visible = false;
+
+            _ColOverOnMenuButton = -1;
         }
 
         private void miSortNumericAsc_Click(object sender, EventArgs e)
@@ -18401,9 +18431,11 @@ namespace TAIGridControl2
             var presortcolwidths = new int[_cols + 1];
             bool oldautosizecells = _AutosizeCellsToContents;
 
+            // Kill The Menu ?
+            SendKeys.Send("{ESC}");
+            SendKeys.Send("{ESC}");
+
             Array.Copy(_colwidths, presortcolwidths, _cols);
-
-
 
             Refresh();
             var loopTo = _rows - 1;
@@ -18464,6 +18496,7 @@ namespace TAIGridControl2
                     pBar.Refresh();
                 }
                 Application.DoEvents();
+
             }
 
             PrivatePopulateGridFromArray(newgrid, _DefaultCellFont, _DefaultForeColor, false);
@@ -18476,6 +18509,8 @@ namespace TAIGridControl2
 
             pBar.Visible = false;
             gb1.Visible = false;
+
+            _ColOverOnMenuButton = -1;
         }
 
         private void miSortNumericDesc_Click(object sender, EventArgs e)
@@ -18486,6 +18521,10 @@ namespace TAIGridControl2
 
             var presortcolwidths = new int[_cols + 1];
             bool oldautosizecells = _AutosizeCellsToContents;
+
+            // Kill The Menu ?
+            SendKeys.Send("{ESC}");
+            SendKeys.Send("{ESC}");
 
             Array.Copy(_colwidths, presortcolwidths, _cols);
 
@@ -18561,6 +18600,8 @@ namespace TAIGridControl2
 
             pBar.Visible = false;
             gb1.Visible = false;
+
+            _ColOverOnMenuButton = -1;
         }
 
         private void miHideRow_Click(object sender, EventArgs e)

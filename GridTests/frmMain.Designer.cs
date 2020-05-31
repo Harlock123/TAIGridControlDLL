@@ -40,7 +40,7 @@
             // 
             this.btnWQL.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnWQL.Location = new System.Drawing.Point(10, 371);
-            this.btnWQL.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnWQL.Margin = new System.Windows.Forms.Padding(2);
             this.btnWQL.Name = "btnWQL";
             this.btnWQL.Size = new System.Drawing.Size(91, 34);
             this.btnWQL.TabIndex = 1;
@@ -91,8 +91,9 @@
             this.taig.GridHeaderStringFormat = stringFormat1;
             this.taig.GridheaderVisible = true;
             this.taig.Location = new System.Drawing.Point(9, 10);
-            this.taig.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.taig.Margin = new System.Windows.Forms.Padding(2);
             this.taig.Name = "taig";
+            this.taig.OmitNulls = true;
             this.taig.PageSettings = null;
             this.taig.PaginationSize = 0;
             this.taig.Rows = 0;
@@ -150,7 +151,7 @@
             this.Controls.Add(this.btnSQLPopulate);
             this.Controls.Add(this.btnWQL);
             this.Controls.Add(this.taig);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "frmMain";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.frmMain_Load);
