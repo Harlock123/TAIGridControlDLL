@@ -11,6 +11,13 @@
  to the way it was used under VB6 you are out of luck. This grid will even expose doubleclick
  events directly on the cell ( Wow what a concept )
   
+### Version 2.0.5.0
+- Added two Methods <c>TAIGridControl.TaiGridColContentTypes GetColumnType(int ColNumber)<c> and 
+<c>TAIGridControl.TaiGridColContentTypes GetColumnType(String ColName)<c> Will return from the newly added
+enum TaiGridColContentTypes  String, Number or Date
+
+- more code refactoring
+
 
 ### Version 2.0.4.0 
 - Change the internal handleing of menu button (Right mousebutton) tracking and cacheing
