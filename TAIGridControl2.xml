@@ -21,14 +21,6 @@
             the contents of this method with the code editor.
             </summary>
         </member>
-        <member name="T:TAIGridControl2.TAIGridControl.GridEditModes">
-            <summary>
-            Denotes the form of action necessary to be taken to have a cell in editmode actually have its value
-            change. Fireing the cell edited event. Either having the user press the enter/return key or having the
-            user shift focus to another control or cell in the grid itself.
-            </summary>
-            <remarks></remarks>
-        </member>
         <member name="E:TAIGridControl2.TAIGridControl.CellClicked">
             <summary>
             Raised whenever a cell is clicked. Coordinates designated by RowClicked/ColumnClicked
@@ -180,9 +172,23 @@
             <param name="sender"></param>
             <remarks></remarks>
         </member>
+        <member name="T:TAIGridControl2.TAIGridControl.GridEditModes">
+            <summary>
+            Denotes the form of action necessary to be taken to have a cell in editmode actually have its value
+            change. Fireing the cell edited event. Either having the user press the enter/return key or having the
+            user shift focus to another control or cell in the grid itself.
+            </summary>
+            <remarks></remarks>
+        </member>
         <member name="T:TAIGridControl2.TAIGridControl.TaiGridColorSchemes">
             <summary>
             Enmeration for selecting preset color schemes used to configures the theme of the grids display
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="T:TAIGridControl2.TAIGridControl.TaiGridColContentTypes">
+            <summary>
+            Enmeration for gather column information methods
             </summary>
             <remarks></remarks>
         </member>
@@ -1174,624 +1180,6 @@
             <returns></returns>
             <remarks></remarks>
         </member>
-        <member name="M:TAIGridControl2.TAIGridControl.AddRowToGrid(System.String,System.String)">
-            <summary>
-            Takes the DelimitedSTringArray string and splits it up on the Delimiter. Then adds a row to the grids contents
-            filling the newly added row with the split fields from the DelimitedStringArray.
-            </summary>
-            <param name="DelimitedStringArray"></param>
-            <param name="Delimiter"></param>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.AddRowToGrid(System.String)">
-            <summary>
-            Takes the DelimitedSTringArray string and splits it up on the default delimiter of '|'.
-            Then adds a row to the grids contents filling the newly added row with the split fields
-            from the DelimitedStringArray.
-            </summary>
-            <param name="DelimitedStringArray"></param>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.AllCellsUseThisFont(System.Drawing.Font)">
-            <summary>
-            Sets all cells in the grid to be rendered using the Font style specified by fnt
-            </summary>
-            <param name="fnt"></param>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.AllCellsUseThisForeColor(System.Drawing.Color)">
-            <summary>
-            Sets all cells in the grid to use the forgroundcolor specified by fcol
-            </summary>
-            <param name="fcol"></param>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.AllFontsSmaller">
-            <summary>
-            Will decrease the size of all displayed fonts in the grid by a single point
-            </summary>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.AllFontsLarger">
-            <summary>
-            Will increase the size of all displayed fonts in the grid by a single point
-            </summary>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.AllRowsThisColor(System.Drawing.Color)">
-            <summary>
-            Will set all the rows in the grid to use the background color specified by startcolor
-            </summary>
-            <param name="startcolor"></param>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.AllTextThisColor(System.Drawing.Color)">
-            <summary>
-            Will instruct all data represented in the grid to be colored using the specified color Startcolor
-            </summary>
-            <param name="startcolor"></param>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.AlternateRowColoration(System.Drawing.Color,System.Drawing.Color)">
-            <summary>
-            Will take the parmeters startcolor and alternatecolor and color every other row in the grid using these two
-            colors
-            </summary>
-            <param name="startcolor"></param>
-            <param name="alternatecolor"></param>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.AlternateRowColoration">
-            <summary>
-            will take the property defined basecolor and altcolor and apply the alternaterowcoloration
-            process to the contents of the grid
-            </summary>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.ArrangeTearAwayWindows">
-            <summary>
-            Will iterate through the maintained list of tearaway windows attemptiong to place
-            them on the screen so that they dont overlap each other. Simillar to the old windows arrange windows
-            menu item from the wfw 1.1 and windows 95/98 days
-            </summary>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.BlankTheGrid">
-            <summary>
-            Erase's the contents of the grid and sets it up to contain 1 row and 1 column
-            </summary>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.ClearAllGridCheckboxStates">
-            <summary>
-            resets all the columns of the grid to not be displaying boolean datatypes ( CheckBoxes )
-            </summary>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.ClearAllText">
-            <summary>
-            Clears the text in the grid but leaves the columns and rows in place
-            </summary>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.ClearAllColumnEditRestrictionLists">
-            <summary>
-            Clears the internal column restriction list allows all editable columns to contain any arbritrary
-            textual data.
-            </summary>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.ClearSpecificColumnEditRestrictionList(System.Int32)">
-            <summary>
-            Removes the column edit restrinctions from the columnid designated by colid
-            </summary>
-            <param name="colid"></param>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.CopyGridToClipboard">
-            <summary>
-            Takes the contents of the grid and copys it to the clipboard as a Tab delimited array of text elements
-            suitable for pasting into excel or word.
-            </summary>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.ColumnFormat(System.Int32,System.Drawing.StringFormat)">
-            <summary>
-            Applys the designated stringformat object sf to the contents of the colum designated as c
-            </summary>
-            <param name="c"></param>
-            <param name="sf"></param>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.ColumnFormatasMoney(System.Int32)">
-            <summary>
-            applys the standard format specification of currency to the designated column at colume id C
-            </summary>
-            <param name="c"></param>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.ColumnFormatasNumber(System.Int32,System.String)">
-            <summary>
-            applys the standard format specification of numbers to the designated column at colume id C
-            </summary>
-            <param name="c"></param>
-            <param name="sFormat"></param>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.ColumnFormatasShortDate(System.Int32)">
-            <summary>
-            applys the standard format specification of short date to the designated column at colume id C
-            </summary>
-            <param name="c"></param>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.CreatePersistanceScript(System.String)">
-            <summary>
-            Will return a string that is representative of an SQL script that will write the gridshape and its contents
-            to a table in a database that the resulting script is handed to.
-            </summary>
-            <param name="tname"></param>
-            <returns></returns>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.CreateHTMLTableScript(System.Int32,System.Boolean,System.Boolean)">
-            <summary>
-            Will return a string containing an HTML table representation of the grids contents
-            Borderval is the size parameter of the tables borders
-            Matchcolors will turn on or off the attempt to set the colors of the table to match thos of the grid itself
-            OmitNulls will have the rendering of empty cells in the grid or not. (creating holes in the resuting
-            html output)
-            </summary>
-            <param name="BorderVal"></param>
-            <param name="MatchColors"></param>
-            <param name="OmitNulls"></param>
-            <returns></returns>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.CreateHTMLTableScript">
-            <summary>
-            Overload that will set the border to 1 pixel, Matchcolors, and omitnulls
-            </summary>
-            <returns></returns>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.DeSelectAllRows">
-            <summary>
-            Will deslect all rows in the grid if any are selected
-            </summary>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.DisplayGridToolTip(System.Object,System.String)">
-            <summary>
-            Will set the tooltip on the mouse to match the cells contents that its hovering over
-            </summary>
-            <param name="sender"></param>
-            <param name="ttText"></param>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.HideGridToolTip">
-            <summary>
-            Will hide the tooltip on the mouse pointer if its visible
-            </summary>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.DoControlBreakProcessing(System.Collections.ArrayList,System.Collections.ArrayList,System.Boolean,System.Int32,System.String,System.Boolean,System.Drawing.Color,System.Boolean,System.Boolean,System.Boolean)">
-            <summary>
-            The <c>DoControlBreakProcessing</c> method will as its name indicates conduct a good oldfasioned sub-total
-            and grand-total parse on the contents of the grid using the old style Cobol rules for control break processing.
-            <list type="bullet">
-            <item>
-            <c>BreakColIntArrayList</c> list needs to contain the column IDs that will be looked at to determine
-            where to break and subtotal.
-            </item>
-            <item>
-            <c>SumColumnIntegerArrayList</c> a list of column ids on which the sums will
-            be calculated.
-            </item>
-            <item>
-            <c>IgnoreCase</c> will insruct the parser to convert everything to uppercase
-            before it determines if a transition is occuring and thus a break and subtotal operation is necessary.
-            </item>
-            <item>
-            <c>ColumnToPlaceSubTotalTextIn</c> indicates the column to reiterate the criteria for the break into.
-            Think of this as the label to apply to the subtotal rows.
-            </item>
-            <item>
-            <c>SubtotalText</c> is an arbritrary string of text to be appended to the lable defined above.
-            </item>
-            <item>
-            <c>RightAlignSubTotalText</c> will allow or disallow the right aligning of the resulting subtotal lables.
-            </item>
-            <item>
-            <c>ColorForSubTotalRows</c> defines the backgroundcolor to use when inserting a subtotal row into the
-            resulting output.
-            </item>
-            <item>
-            <c>BlankSeperateBreaks</c> will allow or disallow the insertion of an additional blank row after a
-            subtotal operation.
-            </item>
-            <item>
-            <c>EchoBreakFieldsOnSubTotalLines</c> will allow or disallow the echoing of the criteria for the
-            above subtotal operation on the line with the subtotal figures itself.
-            </item>
-            <item>
-            <c>TreatBlanksAsSame</c> will force the parser to treat a blank field in a row to be treated as the
-            most recent previous non blank field for the purposes of determining that the break is necessary.
-            </item>
-            </list>
-            Note:
-            Because the control break process works from top to bottom on the current contents of the grid
-            those contents should be sorted as the results will not have any real meaning if the grids contents
-            are not sorted before the call to this method.
-            </summary>
-            <param name="BreakColIntArrayList"></param>
-            <param name="SumColumnIntegerArraylist"></param>
-            <param name="IgnoreCase"></param>
-            <param name="ColumnToPlaceSubtotalTextIn"></param>
-            <param name="SubtotalText"></param>
-            <param name="RightAlignSubTotalText"></param>
-            <param name="ColorForSubTotalRows"></param>
-            <param name="BlankSeperateBreaks"></param>
-            <param name="EchoBreakFieldsOnSubtotalLines"></param>
-            <param name="TreatBlanksAsSame"></param>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.DoControlBreakProcessing(System.Collections.ArrayList,System.Collections.ArrayList,System.Boolean,System.Int32,System.String,System.Boolean,System.Drawing.Color,System.Boolean,System.Boolean)">
-            <summary>
-            The <c>DoControlBreakProcessing</c> method will as its name indicates conduct a good oldfasioned sub-total
-            and grand-total parse on the contents of the grid using the old style Cobol rules for control break processing.
-            <list type="bullet">
-            <item>
-            <c>BreakColIntArrayList</c> list needs to contain the column IDs that will be looked at to determine
-            where to break and subtotal.
-            </item>
-            <item>
-            <c>SumColumnIntegerArrayList</c> a list of column ids on which the sums will
-            be calculated.
-            </item>
-            <item>
-            <c>IgnoreCase</c> will insruct the parser to convert everything to uppercase
-            before it determines if a transition is occuring and thus a break and subtotal operation is necessary.
-            </item>
-            <item>
-            <c>ColumnToPlaceSubTotalTextIn</c> indicates the column to reiterate the criteria for the break into.
-            Think of this as the label to apply to the subtotal rows.
-            </item>
-            <item>
-            <c>SubtotalText</c> is an arbritrary string of text to be appended to the lable defined above.
-            </item>
-            <item>
-            <c>RightAlignSubTotalText</c> will allow or disallow the right aligning of the resulting subtotal lables.
-            </item>
-            <item>
-            <c>ColorForSubTotalRows</c> defines the backgroundcolor to use when inserting a subtotal row into the
-            resulting output.
-            </item>
-            <item>
-            <c>BlankSeperateBreaks</c> will allow or disallow the insertion of an additional blank row after a
-            subtotal operation.
-            </item>
-            <item>
-            <c>EchoBreakFieldsOnSubTotalLines</c> will allow or disallow the echoing of the criteria for the
-            above subtotal operation on the line with the subtotal figures itself.
-            </item>
-            
-            </list>
-            Note:
-            Because the control break process works from top to bottom on the current contents of the grid
-            those contents should be sorted as the results will not have any real meaning if the grids contents
-            are not sorted before the call to this method.
-            </summary>
-            <param name="BreakColIntArrayList"></param>
-            <param name="SumColumnIntegerArraylist"></param>
-            <param name="IgnoreCase"></param>
-            <param name="ColumnToPlaceSubtotalTextIn"></param>
-            <param name="SubtotalText"></param>
-            <param name="RightAlignSubTotalText"></param>
-            <param name="ColorForSubTotalRows"></param>
-            <param name="BlankSeperateBreaks"></param>
-            <param name="EchoBreakFieldsOnSubtotalLines"></param>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.DoControlBreakColorization(System.Collections.ArrayList,System.Drawing.Color,System.Drawing.Color)">
-            <summary>
-            This will take the supplied <c>BreakColIntArrayList</c> and do a cell colorization operation
-            on the current grids contents alternating between <c>StartColor</c> and <c>AltColor</c> on a change
-            in the cols id'd in the supplied arraylist.
-            </summary>
-            <param name="BreakColIntArrayList"></param>
-            <param name="StartColor"></param>
-            <param name="AltColor"></param>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.DoControlBreakSubTotals(System.Collections.ArrayList,System.Int32,System.Boolean,System.Collections.ArrayList,System.Drawing.Color,System.Int32)">
-            <summary>
-            Another control break process,
-            <list type="bullet">
-            <item>
-            <c>BreakColIntArrayValues</c> list needs to contain the column IDs that will be looked at to determine
-            where to break and subtotal.
-            </item>
-            <item>
-            <c>IgnoreCase</c> will insruct the parser to convert everything to uppercase
-            before it determines if a transition is occuring and thus a break and subtotal operation is necessary.
-            </item>
-            <item>
-            <c>SumColumnIntegerArrayList</c> a list of column ids on which the sums will
-            be calculated.
-            </item>
-            <item>
-            <c>ColorForBreakSubtotals</c> defines the backgroundcolor to use when inserting a subtotal row into the
-            resulting output.
-            </item>
-            <item>
-            <c>CutoffRow</c> The maximum row to search for in the grid for processing.
-            will stop processing at <c>CutoffRow</c>
-            </item>
-            
-            </list>
-            Note:
-            Because the control break process works from top to bottom on the current contents of the grid
-            those contents should be sorted as the results will not have any real meaning if the grids contents
-            are not sorted before the call to this method.
-            </summary>
-            <param name="BreakColArrayValues"></param>
-            <param name="ColToFindValues"></param>
-            <param name="IgnoreCase"></param>
-            <param name="SumColumnIntegerArrayList"></param>
-            <param name="ColorForBreakSubtotals"></param>
-            <param name="CutoffRow"></param>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.DoSelectedRowHighlight(System.Int32)">
-            <summary>
-            Will select and highlight the indicated rownum as if the user had selected it with the mouse
-            </summary>
-            <param name="rownum"></param>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.ExportToExcel">
-            <summary>
-            Will instance Microsoft excel and place the contents of the grid on the first worksheet in the excel application
-            </summary>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.ExportToExcel(Microsoft.Office.Interop.Excel.Application,Microsoft.Office.Interop.Excel.Workbook,System.String)">
-            <summary>
-            Will take the supplied instance of Microsoft excel <c>_excel</c> and place the contents of the grid on the
-            worksheet named <c>wsname</c> in the supplied workbook <c>_Workbook</c>
-            </summary>
-            <param name="_excel"></param>
-            <param name="_WorkBook"></param>
-            <param name="wsname"></param>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.ExportToText">
-            <summary>
-            Will open the internal export filename dialog querying the user for the filename to export to
-            Will then export the contents of the grid to a textfile employing the properties setup by
-            displayed dialog, Filename, Include column headers as fieldname, the field terminator, and the line
-            terminator...
-            </summary>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.ExportToText(System.String)">
-            <summary>
-            Will export the contents of the grid to the supplied filename <c>sFilename</c> employing the internally set properties
-            to control the field delimiters, line terminators, and inclusion of column headers as field names...
-            </summary>
-            <param name="sFilename"></param>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.ExportToText(System.String,System.String)">
-            <summary>
-            Will export the contens of the grid to a file named <c>sFilename</c> with the field delimiters of <c>sDelimiter</c>
-            The internal properties will control the inclusion of column headers as field names and the characters used to terminate
-            the lines of output
-            </summary>
-            <param name="sFilename"></param>
-            <param name="sDelimiter"></param>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.ExportToText(System.String,System.String,System.Boolean)">
-            <summary>
-            Will export the contents of the grid to a textfile name <c>sFilename</c> using <c>sDelimiter</c> for
-            field delimiters and using <c>bIncludeFieldNames</c> to control inclusion of the column headers as field names
-            the interna;l property for the end of the lines termination will be employed.
-            </summary>
-            <param name="sFilename"></param>
-            <param name="sDelimiter"></param>
-            <param name="bIncludeFieldNames"></param>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.ExportToText(System.String,System.String,System.Boolean,System.Boolean)">
-            <summary>
-            Will export the contents of the grid to <c>sFilename</c> employing <c>sDelimiter</c> for the field delimiters
-            <c>bIncludeFieldNames</c> to control inclusion of the column headers as field names, and the <c>bIncludeLineTerminator</c>
-            to control the CRLF at the end of the lines of output
-            </summary>
-            <param name="sFileName"></param>
-            <param name="sDelimiter"></param>
-            <param name="bIncludeFieldNames"></param>
-            <param name="bIncludeLineTerminator"></param>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.DistinctInColumn(System.Int32)">
-            <summary>
-            Will return a list(of string) of the unique values contained in ColId of the current grid contents
-            </summary>
-            <param name="ColId"></param>
-            <returns></returns>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.FindInColumn(System.String,System.Int32)">
-            <summary>
-            will do a case insensitive rip through grid col colvalue searching for strvalue
-            on finding it will return id value of the row where the search was successful
-            -1 otherwise
-            </summary>
-            <param name="strValue"></param>
-            <param name="colvalue"></param>
-            <returns></returns>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.FindInColumn(System.String,System.Int32,System.Boolean)">
-            <summary>
-            will do a case insensative or sensitive  (depending on the CaseSensitive parameter)
-            rip through grid col colvalue searching for strvalue
-            on finding it will return id value of the row where the search was successful
-            -1 otherwise
-            </summary>
-            <param name="strValue"></param>
-            <param name="colvalue"></param>
-            <param name="CaseSensitive"></param>
-            <returns>Will return the first row ID of the search or -1 if the search is unsuccessful</returns>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.FreeGridContentImage">
-            <summary>
-            will free the memory associated with the internal captured image of the grids contents
-            </summary>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.GetColumnIDByName(System.String,System.Boolean)">
-            <summary>
-            Will return the column ID of the first column matching name. CaseSensative will toggle the search matching
-            the case of the searched name.
-            </summary>
-            <param name="name"></param>
-            <param name="CaseSensitive"></param>
-            <returns>Column ID of the first match, -1 if not found</returns>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.GetColumnIDByName(System.String)">
-            <summary>
-            Will return the column ID of the first column matching name. The search is not case sensative.
-            </summary>
-            <param name="name"></param>
-            <returns>Column ID of the first match, -1 if not found</returns>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.GetDistinctColumnEntries(System.Int32)">
-            <summary>
-            Will return an ArrayList of distinct values contained in a given Column within the grids
-            current contents. Column searched indicated by colid. Search will ignore case differences.
-            </summary>
-            <param name="colid"></param>
-            <returns>ArrayList of distinct values sorted</returns>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.GetDistinctColumnEntries(System.Int32,System.Boolean)">
-            <summary>
-            Will return an ArrayList of distinct values contained in a given Column within the grids
-            current contents. Column searched indicated by colid. The ignorecase parameter will
-            allow or disallow the differences in case to be taken into account.
-            </summary>
-            <param name="colid"></param>
-            <param name="ignorecase"></param>
-            <returns>ArrayList of distinct values sorted</returns>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.GetDistinctColumnEntries(System.Int32,System.Collections.ArrayList,System.Boolean)">
-            <summary>
-            Will return an ArrayList of distinct values contained in a given Column within the grids
-            current contents. Column searched indicated by colid. The parameter for the Exclusionlist will
-            contain any values you wish to omit from the results. The ignorecase parameter will
-            allow or disallow the differences in case to be taken into account.
-            </summary>
-            <param name="colid"></param>
-            <param name="exclusionlist"></param>
-            <param name="ignorecase"></param>
-            <returns>ArrayList of distinct values sorted</returns>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.GetGridAsArray">
-            <summary>
-            Returns the grids contents as a two dimensional array of string values
-            </summary>
-            <returns>2 dimensional array of strings representative of the ccurrent contents of the grid</returns>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.SetRowBackgroundsBasedOnValue(System.Int32,System.Collections.Generic.List{System.String},System.Collections.Generic.List{System.Drawing.Color})">
-            <summary>
-            Scans ColID for Values in ColVals and colors each row where ColID contains ColVal with corresponding ColorVal
-            </summary>
-            <param name="Colid"></param>
-            <param name="Colvals"></param>
-            <param name="ColorVals"></param>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.GetGridContentsAsImage">
-            <summary>
-            Returns the contents of the grid as a 24 bit bitmat System.Drawing.Bitmap
-            Useful for when the contents of the grid need to be image mapped onto another
-            surface like a 3D rotating cube (believe it or not) or perhaps a printer page context.
-            </summary>
-            <returns>24 Bit System.Drawing.Bitmap</returns>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.GetRowAsString(System.Int32)">
-            <summary>
-            Will return a row in the grid as a string with '|' character delimitring the columns.
-            </summary>
-            <param name="rowid"></param>
-            <returns>String representation of the row in the grid at rowid with '|' characters between the fields</returns>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.GetColAsArrayList(System.Int32)">
-            <summary>
-            Will return the indicated column at col as an Arraylist of values
-            </summary>
-            <param name="col"></param>
-            <returns>ArrayList indicating the contents of the column at col</returns>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.GetColAsCleanedArrayList(System.Int32)">
-            <summary>
-            Will return the indicated column at col as an Arraylist of values. The values will be cleaned
-            of specific formatting prior to being returned. Dollar values will have the $() and ,'s removed
-            numeric values will be converted represent the numeric string representation. This is useful to
-            subsequent insertion into an excel spreadsheet for example.
-            </summary>
-            <param name="col"></param>
-            <returns>ArrayList indicating the contents of the column at col</returns>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.GetRowAsArrayList(System.Int32)">
-            <summary>
-            Will return the indicated row as an arraylist of values
-            </summary>
-            <param name="row"></param>
-            <returns>Arraylist of values at row</returns>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.InsertRowsIntoGridAt(System.Int32,System.Int32)">
-            <summary>
-            Will insert numrows of blank space into the grid at row atrow.
-            </summary>
-            <param name="atrow"></param>
-            <param name="numrows"></param>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.KillAllTearAwayColumnWindows">
-            <summary>
-            Will close and release all open tearaway windows currentl being maintained by the grid
-            </summary>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.KillTearAwayColumnWindow(System.Int32)">
-            <summary>
-            Will kill any tearaway windows being maintained by the grid for the indicated column it colid
-            </summary>
-            <param name="colid"></param>
-            <remarks></remarks>
-        </member>
-        <member name="M:TAIGridControl2.TAIGridControl.LowerGridHoverEvents">
-            <summary>
-            Will fire the GridHoverleave event if the grid is not maintaining any tearaway windows at the moment
-            </summary>
-            <remarks></remarks>
-        </member>
         <member name="M:TAIGridControl2.TAIGridControl.PopulateFromWQL(System.String)">
             <summary>
             Will populate the grid with the results of a call to the System.Management classes with a properly
@@ -2692,6 +2080,644 @@
             </summary>
             <param name="Dirname"></param>
             <param name="Pattern"></param>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.GetColumnType(System.Int32)">
+            <summary>
+            Takes the column Number and attempts to parse that columns contents as First a date then a Double then Long
+            in an attempt to return one of the enums of TaiGridColContentTypes for String Number or Date
+            Will be used to comsolidate the Sort grid column methods into a single call that will make the menus for
+            sorting simpler, will be simple ASCENDING and DESCENDING no thats it...
+            </summary>
+            <param name="ColNumber"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.GetColumnType(System.String)">
+            <summary>
+            Takes the column Name and attempts to parse that columns contents as First a date then a Double then Long
+            in an attempt to return one of the enums of TaiGridColContentTypes for String Number or Date
+            Will be used to comsolidate the Sort grid column methods into a single call that will make the menus for
+            sorting simpler, will be simple ASCENDING and DESCENDING no thats it...
+            </summary>
+            <param name="ColNumber"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.AddRowToGrid(System.String,System.String)">
+            <summary>
+            Takes the DelimitedSTringArray string and splits it up on the Delimiter. Then adds a row to the grids contents
+            filling the newly added row with the split fields from the DelimitedStringArray.
+            </summary>
+            <param name="DelimitedStringArray"></param>
+            <param name="Delimiter"></param>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.AddRowToGrid(System.String)">
+            <summary>
+            Takes the DelimitedSTringArray string and splits it up on the default delimiter of '|'.
+            Then adds a row to the grids contents filling the newly added row with the split fields
+            from the DelimitedStringArray.
+            </summary>
+            <param name="DelimitedStringArray"></param>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.AllCellsUseThisFont(System.Drawing.Font)">
+            <summary>
+            Sets all cells in the grid to be rendered using the Font style specified by fnt
+            </summary>
+            <param name="fnt"></param>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.AllCellsUseThisForeColor(System.Drawing.Color)">
+            <summary>
+            Sets all cells in the grid to use the forgroundcolor specified by fcol
+            </summary>
+            <param name="fcol"></param>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.AllFontsSmaller">
+            <summary>
+            Will decrease the size of all displayed fonts in the grid by a single point
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.AllFontsLarger">
+            <summary>
+            Will increase the size of all displayed fonts in the grid by a single point
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.AllRowsThisColor(System.Drawing.Color)">
+            <summary>
+            Will set all the rows in the grid to use the background color specified by startcolor
+            </summary>
+            <param name="startcolor"></param>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.AllTextThisColor(System.Drawing.Color)">
+            <summary>
+            Will instruct all data represented in the grid to be colored using the specified color Startcolor
+            </summary>
+            <param name="startcolor"></param>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.AlternateRowColoration(System.Drawing.Color,System.Drawing.Color)">
+            <summary>
+            Will take the parmeters startcolor and alternatecolor and color every other row in the grid using these two
+            colors
+            </summary>
+            <param name="startcolor"></param>
+            <param name="alternatecolor"></param>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.AlternateRowColoration">
+            <summary>
+            will take the property defined basecolor and altcolor and apply the alternaterowcoloration
+            process to the contents of the grid
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.ArrangeTearAwayWindows">
+            <summary>
+            Will iterate through the maintained list of tearaway windows attemptiong to place
+            them on the screen so that they dont overlap each other. Simillar to the old windows arrange windows
+            menu item from the wfw 1.1 and windows 95/98 days
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.BlankTheGrid">
+            <summary>
+            Erase's the contents of the grid and sets it up to contain 1 row and 1 column
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.ClearAllGridCheckboxStates">
+            <summary>
+            resets all the columns of the grid to not be displaying boolean datatypes ( CheckBoxes )
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.ClearAllText">
+            <summary>
+            Clears the text in the grid but leaves the columns and rows in place
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.ClearAllColumnEditRestrictionLists">
+            <summary>
+            Clears the internal column restriction list allows all editable columns to contain any arbritrary
+            textual data.
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.ClearSpecificColumnEditRestrictionList(System.Int32)">
+            <summary>
+            Removes the column edit restrinctions from the columnid designated by colid
+            </summary>
+            <param name="colid"></param>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.CopyGridToClipboard">
+            <summary>
+            Takes the contents of the grid and copys it to the clipboard as a Tab delimited array of text elements
+            suitable for pasting into excel or word.
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.ColumnFormat(System.Int32,System.Drawing.StringFormat)">
+            <summary>
+            Applys the designated stringformat object sf to the contents of the colum designated as c
+            </summary>
+            <param name="c"></param>
+            <param name="sf"></param>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.ColumnFormatasMoney(System.Int32)">
+            <summary>
+            applys the standard format specification of currency to the designated column at colume id C
+            </summary>
+            <param name="c"></param>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.ColumnFormatasNumber(System.Int32,System.String)">
+            <summary>
+            applys the standard format specification of numbers to the designated column at colume id C
+            </summary>
+            <param name="c"></param>
+            <param name="sFormat"></param>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.ColumnFormatasShortDate(System.Int32)">
+            <summary>
+            applys the standard format specification of short date to the designated column at colume id C
+            </summary>
+            <param name="c"></param>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.CreatePersistanceScript(System.String)">
+            <summary>
+            Will return a string that is representative of an SQL script that will write the gridshape and its contents
+            to a table in a database that the resulting script is handed to.
+            </summary>
+            <param name="tname"></param>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.CreateHTMLTableScript(System.Int32,System.Boolean,System.Boolean)">
+            <summary>
+            Will return a string containing an HTML table representation of the grids contents
+            Borderval is the size parameter of the tables borders
+            Matchcolors will turn on or off the attempt to set the colors of the table to match thos of the grid itself
+            OmitNulls will have the rendering of empty cells in the grid or not. (creating holes in the resuting
+            html output)
+            </summary>
+            <param name="BorderVal"></param>
+            <param name="MatchColors"></param>
+            <param name="OmitNulls"></param>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.CreateHTMLTableScript">
+            <summary>
+            Overload that will set the border to 1 pixel, Matchcolors, and omitnulls
+            </summary>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.DeSelectAllRows">
+            <summary>
+            Will deslect all rows in the grid if any are selected
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.DisplayGridToolTip(System.Object,System.String)">
+            <summary>
+            Will set the tooltip on the mouse to match the cells contents that its hovering over
+            </summary>
+            <param name="sender"></param>
+            <param name="ttText"></param>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.HideGridToolTip">
+            <summary>
+            Will hide the tooltip on the mouse pointer if its visible
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.DoControlBreakProcessing(System.Collections.ArrayList,System.Collections.ArrayList,System.Boolean,System.Int32,System.String,System.Boolean,System.Drawing.Color,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            The <c>DoControlBreakProcessing</c> method will as its name indicates conduct a good oldfasioned sub-total
+            and grand-total parse on the contents of the grid using the old style Cobol rules for control break processing.
+            <list type="bullet">
+            <item>
+            <c>BreakColIntArrayList</c> list needs to contain the column IDs that will be looked at to determine
+            where to break and subtotal.
+            </item>
+            <item>
+            <c>SumColumnIntegerArrayList</c> a list of column ids on which the sums will
+            be calculated.
+            </item>
+            <item>
+            <c>IgnoreCase</c> will insruct the parser to convert everything to uppercase
+            before it determines if a transition is occuring and thus a break and subtotal operation is necessary.
+            </item>
+            <item>
+            <c>ColumnToPlaceSubTotalTextIn</c> indicates the column to reiterate the criteria for the break into.
+            Think of this as the label to apply to the subtotal rows.
+            </item>
+            <item>
+            <c>SubtotalText</c> is an arbritrary string of text to be appended to the lable defined above.
+            </item>
+            <item>
+            <c>RightAlignSubTotalText</c> will allow or disallow the right aligning of the resulting subtotal lables.
+            </item>
+            <item>
+            <c>ColorForSubTotalRows</c> defines the backgroundcolor to use when inserting a subtotal row into the
+            resulting output.
+            </item>
+            <item>
+            <c>BlankSeperateBreaks</c> will allow or disallow the insertion of an additional blank row after a
+            subtotal operation.
+            </item>
+            <item>
+            <c>EchoBreakFieldsOnSubTotalLines</c> will allow or disallow the echoing of the criteria for the
+            above subtotal operation on the line with the subtotal figures itself.
+            </item>
+            <item>
+            <c>TreatBlanksAsSame</c> will force the parser to treat a blank field in a row to be treated as the
+            most recent previous non blank field for the purposes of determining that the break is necessary.
+            </item>
+            </list>
+            Note:
+            Because the control break process works from top to bottom on the current contents of the grid
+            those contents should be sorted as the results will not have any real meaning if the grids contents
+            are not sorted before the call to this method.
+            </summary>
+            <param name="BreakColIntArrayList"></param>
+            <param name="SumColumnIntegerArraylist"></param>
+            <param name="IgnoreCase"></param>
+            <param name="ColumnToPlaceSubtotalTextIn"></param>
+            <param name="SubtotalText"></param>
+            <param name="RightAlignSubTotalText"></param>
+            <param name="ColorForSubTotalRows"></param>
+            <param name="BlankSeperateBreaks"></param>
+            <param name="EchoBreakFieldsOnSubtotalLines"></param>
+            <param name="TreatBlanksAsSame"></param>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.DoControlBreakProcessing(System.Collections.ArrayList,System.Collections.ArrayList,System.Boolean,System.Int32,System.String,System.Boolean,System.Drawing.Color,System.Boolean,System.Boolean)">
+            <summary>
+            The <c>DoControlBreakProcessing</c> method will as its name indicates conduct a good oldfasioned sub-total
+            and grand-total parse on the contents of the grid using the old style Cobol rules for control break processing.
+            <list type="bullet">
+            <item>
+            <c>BreakColIntArrayList</c> list needs to contain the column IDs that will be looked at to determine
+            where to break and subtotal.
+            </item>
+            <item>
+            <c>SumColumnIntegerArrayList</c> a list of column ids on which the sums will
+            be calculated.
+            </item>
+            <item>
+            <c>IgnoreCase</c> will insruct the parser to convert everything to uppercase
+            before it determines if a transition is occuring and thus a break and subtotal operation is necessary.
+            </item>
+            <item>
+            <c>ColumnToPlaceSubTotalTextIn</c> indicates the column to reiterate the criteria for the break into.
+            Think of this as the label to apply to the subtotal rows.
+            </item>
+            <item>
+            <c>SubtotalText</c> is an arbritrary string of text to be appended to the lable defined above.
+            </item>
+            <item>
+            <c>RightAlignSubTotalText</c> will allow or disallow the right aligning of the resulting subtotal lables.
+            </item>
+            <item>
+            <c>ColorForSubTotalRows</c> defines the backgroundcolor to use when inserting a subtotal row into the
+            resulting output.
+            </item>
+            <item>
+            <c>BlankSeperateBreaks</c> will allow or disallow the insertion of an additional blank row after a
+            subtotal operation.
+            </item>
+            <item>
+            <c>EchoBreakFieldsOnSubTotalLines</c> will allow or disallow the echoing of the criteria for the
+            above subtotal operation on the line with the subtotal figures itself.
+            </item>
+            
+            </list>
+            Note:
+            Because the control break process works from top to bottom on the current contents of the grid
+            those contents should be sorted as the results will not have any real meaning if the grids contents
+            are not sorted before the call to this method.
+            </summary>
+            <param name="BreakColIntArrayList"></param>
+            <param name="SumColumnIntegerArraylist"></param>
+            <param name="IgnoreCase"></param>
+            <param name="ColumnToPlaceSubtotalTextIn"></param>
+            <param name="SubtotalText"></param>
+            <param name="RightAlignSubTotalText"></param>
+            <param name="ColorForSubTotalRows"></param>
+            <param name="BlankSeperateBreaks"></param>
+            <param name="EchoBreakFieldsOnSubtotalLines"></param>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.DoControlBreakColorization(System.Collections.ArrayList,System.Drawing.Color,System.Drawing.Color)">
+            <summary>
+            This will take the supplied <c>BreakColIntArrayList</c> and do a cell colorization operation
+            on the current grids contents alternating between <c>StartColor</c> and <c>AltColor</c> on a change
+            in the cols id'd in the supplied arraylist.
+            </summary>
+            <param name="BreakColIntArrayList"></param>
+            <param name="StartColor"></param>
+            <param name="AltColor"></param>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.DoControlBreakSubTotals(System.Collections.ArrayList,System.Int32,System.Boolean,System.Collections.ArrayList,System.Drawing.Color,System.Int32)">
+            <summary>
+            Another control break process,
+            <list type="bullet">
+            <item>
+            <c>BreakColIntArrayValues</c> list needs to contain the column IDs that will be looked at to determine
+            where to break and subtotal.
+            </item>
+            <item>
+            <c>IgnoreCase</c> will insruct the parser to convert everything to uppercase
+            before it determines if a transition is occuring and thus a break and subtotal operation is necessary.
+            </item>
+            <item>
+            <c>SumColumnIntegerArrayList</c> a list of column ids on which the sums will
+            be calculated.
+            </item>
+            <item>
+            <c>ColorForBreakSubtotals</c> defines the backgroundcolor to use when inserting a subtotal row into the
+            resulting output.
+            </item>
+            <item>
+            <c>CutoffRow</c> The maximum row to search for in the grid for processing.
+            will stop processing at <c>CutoffRow</c>
+            </item>
+            
+            </list>
+            Note:
+            Because the control break process works from top to bottom on the current contents of the grid
+            those contents should be sorted as the results will not have any real meaning if the grids contents
+            are not sorted before the call to this method.
+            </summary>
+            <param name="BreakColArrayValues"></param>
+            <param name="ColToFindValues"></param>
+            <param name="IgnoreCase"></param>
+            <param name="SumColumnIntegerArrayList"></param>
+            <param name="ColorForBreakSubtotals"></param>
+            <param name="CutoffRow"></param>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.DoSelectedRowHighlight(System.Int32)">
+            <summary>
+            Will select and highlight the indicated rownum as if the user had selected it with the mouse
+            </summary>
+            <param name="rownum"></param>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.ExportToExcel">
+            <summary>
+            Will instance Microsoft excel and place the contents of the grid on the first worksheet in the excel application
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.ExportToExcel(Microsoft.Office.Interop.Excel.Application,Microsoft.Office.Interop.Excel.Workbook,System.String)">
+            <summary>
+            Will take the supplied instance of Microsoft excel <c>_excel</c> and place the contents of the grid on the
+            worksheet named <c>wsname</c> in the supplied workbook <c>_Workbook</c>
+            </summary>
+            <param name="_excel"></param>
+            <param name="_WorkBook"></param>
+            <param name="wsname"></param>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.ExportToText">
+            <summary>
+            Will open the internal export filename dialog querying the user for the filename to export to
+            Will then export the contents of the grid to a textfile employing the properties setup by
+            displayed dialog, Filename, Include column headers as fieldname, the field terminator, and the line
+            terminator...
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.ExportToText(System.String)">
+            <summary>
+            Will export the contents of the grid to the supplied filename <c>sFilename</c> employing the internally set properties
+            to control the field delimiters, line terminators, and inclusion of column headers as field names...
+            </summary>
+            <param name="sFilename"></param>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.ExportToText(System.String,System.String)">
+            <summary>
+            Will export the contens of the grid to a file named <c>sFilename</c> with the field delimiters of <c>sDelimiter</c>
+            The internal properties will control the inclusion of column headers as field names and the characters used to terminate
+            the lines of output
+            </summary>
+            <param name="sFilename"></param>
+            <param name="sDelimiter"></param>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.ExportToText(System.String,System.String,System.Boolean)">
+            <summary>
+            Will export the contents of the grid to a textfile name <c>sFilename</c> using <c>sDelimiter</c> for
+            field delimiters and using <c>bIncludeFieldNames</c> to control inclusion of the column headers as field names
+            the interna;l property for the end of the lines termination will be employed.
+            </summary>
+            <param name="sFilename"></param>
+            <param name="sDelimiter"></param>
+            <param name="bIncludeFieldNames"></param>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.ExportToText(System.String,System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Will export the contents of the grid to <c>sFilename</c> employing <c>sDelimiter</c> for the field delimiters
+            <c>bIncludeFieldNames</c> to control inclusion of the column headers as field names, and the <c>bIncludeLineTerminator</c>
+            to control the CRLF at the end of the lines of output
+            </summary>
+            <param name="sFileName"></param>
+            <param name="sDelimiter"></param>
+            <param name="bIncludeFieldNames"></param>
+            <param name="bIncludeLineTerminator"></param>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.DistinctInColumn(System.Int32)">
+            <summary>
+            Will return a list(of string) of the unique values contained in ColId of the current grid contents
+            </summary>
+            <param name="ColId"></param>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.FindInColumn(System.String,System.Int32)">
+            <summary>
+            will do a case insensitive rip through grid col colvalue searching for strvalue
+            on finding it will return id value of the row where the search was successful
+            -1 otherwise
+            </summary>
+            <param name="strValue"></param>
+            <param name="colvalue"></param>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.FindInColumn(System.String,System.Int32,System.Boolean)">
+            <summary>
+            will do a case insensative or sensitive  (depending on the CaseSensitive parameter)
+            rip through grid col colvalue searching for strvalue
+            on finding it will return id value of the row where the search was successful
+            -1 otherwise
+            </summary>
+            <param name="strValue"></param>
+            <param name="colvalue"></param>
+            <param name="CaseSensitive"></param>
+            <returns>Will return the first row ID of the search or -1 if the search is unsuccessful</returns>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.FreeGridContentImage">
+            <summary>
+            will free the memory associated with the internal captured image of the grids contents
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.GetColumnIDByName(System.String,System.Boolean)">
+            <summary>
+            Will return the column ID of the first column matching name. CaseSensative will toggle the search matching
+            the case of the searched name.
+            </summary>
+            <param name="name"></param>
+            <param name="CaseSensitive"></param>
+            <returns>Column ID of the first match, -1 if not found</returns>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.GetColumnIDByName(System.String)">
+            <summary>
+            Will return the column ID of the first column matching name. The search is not case sensative.
+            </summary>
+            <param name="name"></param>
+            <returns>Column ID of the first match, -1 if not found</returns>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.GetDistinctColumnEntries(System.Int32)">
+            <summary>
+            Will return an ArrayList of distinct values contained in a given Column within the grids
+            current contents. Column searched indicated by colid. Search will ignore case differences.
+            </summary>
+            <param name="colid"></param>
+            <returns>ArrayList of distinct values sorted</returns>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.GetDistinctColumnEntries(System.Int32,System.Boolean)">
+            <summary>
+            Will return an ArrayList of distinct values contained in a given Column within the grids
+            current contents. Column searched indicated by colid. The ignorecase parameter will
+            allow or disallow the differences in case to be taken into account.
+            </summary>
+            <param name="colid"></param>
+            <param name="ignorecase"></param>
+            <returns>ArrayList of distinct values sorted</returns>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.GetDistinctColumnEntries(System.Int32,System.Collections.ArrayList,System.Boolean)">
+            <summary>
+            Will return an ArrayList of distinct values contained in a given Column within the grids
+            current contents. Column searched indicated by colid. The parameter for the Exclusionlist will
+            contain any values you wish to omit from the results. The ignorecase parameter will
+            allow or disallow the differences in case to be taken into account.
+            </summary>
+            <param name="colid"></param>
+            <param name="exclusionlist"></param>
+            <param name="ignorecase"></param>
+            <returns>ArrayList of distinct values sorted</returns>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.GetGridAsArray">
+            <summary>
+            Returns the grids contents as a two dimensional array of string values
+            </summary>
+            <returns>2 dimensional array of strings representative of the ccurrent contents of the grid</returns>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.SetRowBackgroundsBasedOnValue(System.Int32,System.Collections.Generic.List{System.String},System.Collections.Generic.List{System.Drawing.Color})">
+            <summary>
+            Scans ColID for Values in ColVals and colors each row where ColID contains ColVal with corresponding ColorVal
+            </summary>
+            <param name="Colid"></param>
+            <param name="Colvals"></param>
+            <param name="ColorVals"></param>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.GetGridContentsAsImage">
+            <summary>
+            Returns the contents of the grid as a 24 bit bitmat System.Drawing.Bitmap
+            Useful for when the contents of the grid need to be image mapped onto another
+            surface like a 3D rotating cube (believe it or not) or perhaps a printer page context.
+            </summary>
+            <returns>24 Bit System.Drawing.Bitmap</returns>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.GetRowAsString(System.Int32)">
+            <summary>
+            Will return a row in the grid as a string with '|' character delimitring the columns.
+            </summary>
+            <param name="rowid"></param>
+            <returns>String representation of the row in the grid at rowid with '|' characters between the fields</returns>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.GetColAsArrayList(System.Int32)">
+            <summary>
+            Will return the indicated column at col as an Arraylist of values
+            </summary>
+            <param name="col"></param>
+            <returns>ArrayList indicating the contents of the column at col</returns>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.GetColAsCleanedArrayList(System.Int32)">
+            <summary>
+            Will return the indicated column at col as an Arraylist of values. The values will be cleaned
+            of specific formatting prior to being returned. Dollar values will have the $() and ,'s removed
+            numeric values will be converted represent the numeric string representation. This is useful to
+            subsequent insertion into an excel spreadsheet for example.
+            </summary>
+            <param name="col"></param>
+            <returns>ArrayList indicating the contents of the column at col</returns>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.GetRowAsArrayList(System.Int32)">
+            <summary>
+            Will return the indicated row as an arraylist of values
+            </summary>
+            <param name="row"></param>
+            <returns>Arraylist of values at row</returns>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.InsertRowsIntoGridAt(System.Int32,System.Int32)">
+            <summary>
+            Will insert numrows of blank space into the grid at row atrow.
+            </summary>
+            <param name="atrow"></param>
+            <param name="numrows"></param>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.KillAllTearAwayColumnWindows">
+            <summary>
+            Will close and release all open tearaway windows currentl being maintained by the grid
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.KillTearAwayColumnWindow(System.Int32)">
+            <summary>
+            Will kill any tearaway windows being maintained by the grid for the indicated column it colid
+            </summary>
+            <param name="colid"></param>
+            <remarks></remarks>
+        </member>
+        <member name="M:TAIGridControl2.TAIGridControl.LowerGridHoverEvents">
+            <summary>
+            Will fire the GridHoverleave event if the grid is not maintaining any tearaway windows at the moment
+            </summary>
             <remarks></remarks>
         </member>
         <member name="M:TAIGridControl2.TAIGridControl.RaiseCellClickedEvent(System.Int32,System.Int32)">

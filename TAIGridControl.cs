@@ -39,6 +39,8 @@ namespace TAIGridControl2
 
     public class TAIGridControl : UserControl
     {
+        #region Private Stuff
+
         public bool _LoggingEnabled = false;
 
         // Items for the grid Title
@@ -294,18 +296,6 @@ namespace TAIGridControl2
         // 'Private WithEvents TearItem As New frmColumnTearAway
 
         private ArrayList TearAways = new ArrayList();
-       
-        /// <summary>
-        /// Denotes the form of action necessary to be taken to have a cell in editmode actually have its value
-        /// change. Fireing the cell edited event. Either having the user press the enter/return key or having the
-        /// user shift focus to another control or cell in the grid itself.
-        /// </summary>
-        /// <remarks></remarks>
-        public enum GridEditModes
-        {
-            KeyReturn = 0,
-            LostFocus = 1
-        }
 
         private GridEditModes _GridEditMode = GridEditModes.KeyReturn;
 
@@ -2323,7 +2313,7 @@ namespace TAIGridControl2
                 }
             }
         }
-        
+
         private MenuItem _miMultipleColumnTearAway;
 
         internal MenuItem miMultipleColumnTearAway
@@ -2428,6 +2418,7 @@ namespace TAIGridControl2
             }
         }
 
+        #endregion
 
         [DebuggerStepThrough()]
         private void InitializeComponent()
@@ -3284,6 +3275,20 @@ namespace TAIGridControl2
 
         #endregion
 
+        #region Enums
+
+        /// <summary>
+        /// Denotes the form of action necessary to be taken to have a cell in editmode actually have its value
+        /// change. Fireing the cell edited event. Either having the user press the enter/return key or having the
+        /// user shift focus to another control or cell in the grid itself.
+        /// </summary>
+        /// <remarks></remarks>
+        public enum GridEditModes
+        {
+            KeyReturn = 0,
+            LostFocus = 1
+        }
+
         /// <summary>
         /// Enmeration for selecting preset color schemes used to configures the theme of the grids display
         /// </summary>
@@ -3298,7 +3303,21 @@ namespace TAIGridControl2
             _Colorful2
         }
 
+        /// <summary>
+        /// Enmeration for gather column information methods
+        /// </summary>
+        /// <remarks></remarks>
+        public enum TaiGridColContentTypes : int
+        {
+            _String = 0,
+            _Date,
+            _Number,
+            _Bool
+        }
 
+        #endregion
+
+        #region Properties
 
         // AllowTearAwayFunctionality
         /// <summary>
@@ -5810,7 +5829,3204 @@ namespace TAIGridControl2
                 _xmlTableName = value;
             }
         }
-              
+
+        #endregion
+
+        #region WQL Populate Call
+
+        /// <summary>
+        /// Will populate the grid with the results of a call to the System.Management classes with a properly
+        /// formatted wql query (Windows Query Language) call.
+        /// 
+        /// Example:
+        /// <c>Select * from Win32_Printer</c>
+        /// 
+        /// </summary>
+        /// <param name="wql"></param>
+        /// <remarks></remarks>
+        public void PopulateFromWQL(string wql)
+        {
+            StartedDatabasePopulateOperation?.Invoke(this);
+
+            try
+            {
+                System.Management.ManagementObjectCollection moReturn;
+
+                System.Management.ManagementObjectSearcher moSearch;
+
+                //System.Management.ManagementObject mo;
+
+                System.Management.PropertyData prop;
+
+                bool HeaderDone = false;
+
+                // moSearch = New Management.ManagementObjectSearcher("Select * from Win32_Printer")
+
+                moSearch = new System.Management.ManagementObjectSearcher(wql);
+
+                moReturn = moSearch.Get();
+
+                if (_ShowProgressBar)
+                {
+                    pBar.Maximum = moReturn.Count;
+                    pBar.Minimum = 0;
+                    pBar.Value = 0;
+                    pBar.Visible = true;
+                    gb1.Visible = true;
+                    pBar.Refresh();
+                    gb1.Refresh();
+                }
+
+                int x = 0;
+
+                foreach (var mo in moReturn)
+                {
+                    int y = 0;
+
+                    if (!HeaderDone)
+                    {
+                        InitializeTheGrid(moReturn.Count, mo.Properties.Count);
+
+                        foreach (var prop1 in mo.Properties)
+                        {
+                            _GridHeader[y] = prop1.Name;
+                            y += 1;
+                        }
+
+                        HeaderDone = true;
+                    }
+
+                    y = 0;
+
+                    foreach (var prop1 in mo.Properties)
+                    {
+                        _grid[x, y] = Convert.ToString(prop1.Value);
+                        y += 1;
+                    }
+
+                    if (_ShowProgressBar)
+                    {
+                        pBar.Increment(1);
+                        pBar.Refresh();
+                    }
+
+                    x += 1;
+                }
+
+                AllCellsUseThisFont(_DefaultCellFont);
+                AllCellsUseThisForeColor(_DefaultForeColor);
+
+                AutoSizeCellsToContents = true;
+
+                Refresh();
+
+                pBar.Visible = false;
+                gb1.Visible = false;
+
+                FinishedDatabasePopulateOperation?.Invoke(this);
+
+                NormalizeTearaways();
+            }
+            catch (Exception ex)
+            {
+                pBar.Visible = false;
+                gb1.Visible = false;
+
+                FinishedDatabasePopulateOperation?.Invoke(this);
+
+                Interaction.MsgBox(ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region POPULATE CALLS
+
+        #region PopulateGridFromArray Calls
+
+        /// <summary>
+        /// Will populate the grids contents from an 2 dimensional array of stings <c>arr</c>, employing the supplied parameters
+        /// to control
+        /// <list type="Bullet">
+        /// <item><c>gridfont</c> will employ this font for the cell contents</item>
+        /// <item><c>col</c> will be used as the color for the displays cell items</item>
+        /// <item><c>FirstRowHeader</c> if true will treat the first row in the array as the names for each column header</item>
+        /// <item><c>AutoHeader</c> if true will automatically name each column COLUMN - {ordinal} as it populates the grid</item>
+        /// <item><c>hdr</c> an array of strings that will be used as the column labels if the other column options are False</item>
+        /// </list>
+        /// </summary>
+        /// <param name="arr"></param>
+        /// <param name="gridfont"></param>
+        /// <param name="col"></param>
+        /// <param name="FirstRowHeader"></param>
+        /// <param name="AutoHeader"></param>
+        /// <param name="hdr"></param>
+        /// <remarks></remarks>
+        private void PopulateGridFromArray(string[,] arr, Font gridfont, Color col, bool FirstRowHeader, bool AutoHeader, string[] hdr)
+        {
+            int x, y;
+            int r, c;
+
+            r = arr.GetUpperBound(0) + 1;
+            c = arr.GetUpperBound(1) + 1;
+
+            if (FirstRowHeader)
+            {
+                InitializeTheGrid(r - 1, c);
+                var loopTo = c - 1;
+                for (y = 0; y <= loopTo; y++)
+                    _GridHeader[y] = arr[0, y];
+                var loopTo1 = r - 1;
+                for (x = 1; x <= loopTo1; x++)
+                {
+                    var loopTo2 = c - 1;
+                    for (y = 0; y <= loopTo2; y++)
+                        _grid[x - 1, y] = arr[x, y];
+                }
+            }
+            else
+            {
+                InitializeTheGrid(r, c);
+
+                if (AutoHeader)
+                {
+                    var loopTo3 = c - 1;
+                    for (y = 0; y <= loopTo3; y++)
+                        _GridHeader[y] = "Column - " + y.ToString();
+                }
+                else
+                    _GridHeader = hdr;
+                var loopTo4 = r - 1;
+                for (x = 0; x <= loopTo4; x++)
+                {
+                    var loopTo5 = c - 1;
+                    for (y = 0; y <= loopTo5; y++)
+                        _grid[x, y] = arr[x, y];
+                }
+            }
+
+            AllCellsUseThisFont(gridfont);
+            AllCellsUseThisForeColor(col);
+
+            AutoSizeCellsToContents = true;
+            _colEditRestrictions.Clear();
+
+            Refresh();
+
+            NormalizeTearaways();
+        }
+
+        /// <summary>
+        /// Will populate the grids contents from an 2 dimensional array of stings <c>arr</c>, employing the supplied parameters
+        /// to control
+        /// <list type="Bullet">
+        /// <item><c>gridfont</c> will employ this font for the cell contents</item>
+        /// <item><c>col</c> will be used as the color for the displays cell items</item>
+        /// <item><c>FirstRowHeader</c> if true will treat the first row in the array as the names for each column header
+        /// if its false the columns will be automatically named</item>
+        /// </list>
+        /// </summary>
+        /// <param name="arr"></param>
+        /// <param name="gridfont"></param>
+        /// <param name="col"></param>
+        /// <param name="FirstRowHeader"></param>
+        /// <remarks></remarks>
+        public void PopulateGridFromArray(string[,] arr, Font gridfont, Color col, bool FirstRowHeader)
+        {
+            PopulateGridFromArray(arr, gridfont, col, FirstRowHeader, true, _GridHeader);
+        }
+
+        /// <summary>
+        /// Will populate the grids contents from an 2 dimensional array of stings <c>arr</c>, using the first row of values
+        /// to named each column
+        /// </summary>
+        /// <param name="arr"></param>
+        /// <remarks></remarks>
+        public void PopulateGridFromArray(string[,] arr)
+        {
+            PopulateGridFromArray(arr, _DefaultCellFont, _DefaultForeColor, true);
+        }
+
+        /// <summary>
+        /// Will populate the grids contents from an 2 dimensional array of stings <c>arr</c>, using the first row of values
+        /// to name each column each cell will be displayed the the supplied <c>cellfont</c>
+        /// </summary>
+        /// <param name="arr"></param>
+        /// <param name="CellFont"></param>
+        /// <remarks></remarks>
+        public void PopulateGridFromArray(string[,] arr, Font CellFont)
+        {
+            PopulateGridFromArray(arr, CellFont, _DefaultForeColor, true);
+        }
+
+        /// <summary>
+        /// Will populate the grids contents from an 2 dimensional array of stings <c>arr</c>, using the first row of values
+        /// to name each column each cell will be displayed the the supplied <c>Forecolor</c>
+        /// </summary>
+        /// <param name="arr"></param>
+        /// <param name="Forecolor"></param>
+        /// <remarks></remarks>
+        public void PopulateGridFromArray(string[,] arr, Color Forecolor)
+        {
+            PopulateGridFromArray(arr, _DefaultCellFont, Forecolor, true);
+        }
+
+        /// <summary>
+        /// Will populate the grids contents from an 2 dimensional array of stings <c>arr</c>, using the first row of values
+        /// to name each column each cell will be displayed the the supplied <c>cellfont</c> and <c>Forecolor</c>
+        /// </summary>
+        /// <param name="arr"></param>
+        /// <param name="Cellfont"></param>
+        /// <param name="ForeColor"></param>
+        /// <remarks></remarks>
+        public void PopulateGridFromArray(string[,] arr, Font Cellfont, Color ForeColor)
+        {
+            PopulateGridFromArray(arr, Cellfont, ForeColor, true);
+        }
+
+        /// <summary>
+        /// Will populate the grids contents from an 2 dimensional array of stings <c>arr</c>, using the first row of values
+        /// to name each column each cell will be displayed the the supplied <c>gridfont</c> and <c>col</c> color and
+        /// if <c>FirstRowHeader</c> is true will use the first row to label each column, if not, then the first row will be auto
+        /// labled with Column - {ordinal}
+        /// </summary>
+        /// <param name="arr"></param>
+        /// <param name="gridfont"></param>
+        /// <param name="col"></param>
+        /// <param name="FirstRowHeader"></param>
+        /// <remarks></remarks>
+        public void PopulateGridFromArray(int[,] arr, Font gridfont, Color col, bool FirstRowHeader)
+        {
+            int x, y;
+            int r, c;
+
+            r = arr.GetUpperBound(0) + 1;
+            c = arr.GetUpperBound(1) + 1;
+
+            if (FirstRowHeader)
+            {
+                InitializeTheGrid(r - 1, c);
+                var loopTo = c - 1;
+                for (y = 0; y <= loopTo; y++)
+                    _GridHeader[y] = arr[0, y].ToString();
+                var loopTo1 = r - 1;
+                for (x = 1; x <= loopTo1; x++)
+                {
+                    var loopTo2 = c - 1;
+                    for (y = 0; y <= loopTo2; y++)
+                        _grid[x, y] = arr[x, y].ToString();
+                }
+            }
+            else
+            {
+                InitializeTheGrid(r, c);
+                var loopTo3 = c - 1;
+                for (y = 0; y <= loopTo3; y++)
+                    _GridHeader[y] = "Column - " + y.ToString();
+                var loopTo4 = r - 1;
+                for (x = 0; x <= loopTo4; x++)
+                {
+                    var loopTo5 = c - 1;
+                    for (y = 0; y <= loopTo5; y++)
+                        _grid[x, y] = arr[x, y].ToString();
+                }
+            }
+
+            AllCellsUseThisFont(gridfont);
+            AllCellsUseThisForeColor(col);
+
+            AutoSizeCellsToContents = true;
+            _colEditRestrictions.Clear();
+
+            Refresh();
+
+            NormalizeTearaways();
+        }
+
+        /// <summary>
+        /// Will populate the grids contents from an 2 dimensional array of integers <c>arr</c> converted to strings, using the first row of values
+        /// to name each column
+        /// </summary>
+        /// <param name="arr"></param>
+        /// <remarks></remarks>
+        public void PopulateGridFromArray(int[,] arr)
+        {
+            PopulateGridFromArray(arr, _DefaultCellFont, _DefaultForeColor, true);
+        }
+
+        /// <summary>
+        /// Will populate the grids contents from an 2 dimensional array of integers <c>arr</c> converted to strings, using the first row of values
+        /// to name each column. <c>Cellfont</c> will be used as the font for each new cell
+        /// </summary>
+        /// <param name="arr"></param>
+        /// <param name="CellFont"></param>
+        /// <remarks></remarks>
+        public void PopulateGridFromArray(int[,] arr, Font CellFont)
+        {
+            PopulateGridFromArray(arr, CellFont, _DefaultForeColor, true);
+        }
+
+        /// <summary>
+        /// Will populate the grids contents from an 2 dimensional array of integers <c>arr</c> converted to strings, using the first row of values
+        /// to name each column. <c>Forecolor</c> will be used as the foreground color for each new cell
+        /// </summary>
+        /// <param name="arr"></param>
+        /// <param name="Forecolor"></param>
+        /// <remarks></remarks>
+        public void PopulateGridFromArray(int[,] arr, Color Forecolor)
+        {
+            PopulateGridFromArray(arr, _DefaultCellFont, Forecolor, true);
+        }
+
+        /// <summary>
+        /// Will populate the grids contents from an 2 dimensional array of integers <c>arr</c> converted to strings, using the first row of values
+        /// to name each column. <c>Forecolor</c> will be used as the foreground color for each new cell and <c>Cellfont</c> will be used
+        /// for each new cells font
+        /// </summary>
+        /// <param name="arr"></param>
+        /// <param name="Cellfont"></param>
+        /// <param name="ForeColor"></param>
+        /// <remarks></remarks>
+        public void PopulateGridFromArray(int[,] arr, Font Cellfont, Color ForeColor)
+        {
+            PopulateGridFromArray(arr, Cellfont, ForeColor, true);
+        }
+
+        /// <summary>
+        /// Will populate the grids contents from an 2 dimensional array of longs <c>arr</c> converted to strings, using the first row of values
+        /// to name each column. <c>col</c> will be used as the foreground color for each new cell and <c>gridfont</c> will be used if
+        /// <c>FirstRowHeader</c> is true the first row of data in the array will be used to name each column otherwise the columns will be
+        /// named Column - {ordinal}
+        /// </summary>
+        /// <param name="arr"></param>
+        /// <param name="gridfont"></param>
+        /// <param name="col"></param>
+        /// <param name="FirstRowHeader"></param>
+        /// <remarks></remarks>
+        public void PopulateGridFromArray(long[,] arr, Font gridfont, Color col, bool FirstRowHeader)
+        {
+            int x, y;
+            int r, c;
+
+            r = arr.GetUpperBound(0) + 1;
+            c = arr.GetUpperBound(1) + 1;
+
+            if (FirstRowHeader)
+            {
+                InitializeTheGrid(r - 1, c);
+                var loopTo = c - 1;
+                for (y = 0; y <= loopTo; y++)
+                    _GridHeader[y] = arr[0, y].ToString();
+                var loopTo1 = r - 1;
+                for (x = 1; x <= loopTo1; x++)
+                {
+                    var loopTo2 = c - 1;
+                    for (y = 0; y <= loopTo2; y++)
+                        _grid[x, y] = arr[x, y].ToString();
+                }
+            }
+            else
+            {
+                InitializeTheGrid(r, c);
+                var loopTo3 = c - 1;
+                for (y = 0; y <= loopTo3; y++)
+                    _GridHeader[y] = "Column - " + y.ToString();
+                var loopTo4 = r - 1;
+                for (x = 0; x <= loopTo4; x++)
+                {
+                    var loopTo5 = c - 1;
+                    for (y = 0; y <= loopTo5; y++)
+                        _grid[x, y] = arr[x, y].ToString();
+                }
+            }
+
+            AllCellsUseThisFont(gridfont);
+            AllCellsUseThisForeColor(col);
+
+            AutoSizeCellsToContents = true;
+            _colEditRestrictions.Clear();
+
+            Refresh();
+
+            NormalizeTearaways();
+        }
+
+        /// <summary>
+        /// Will populate the grids contents from an 2 dimensional array of longs <c>arr</c> converted to strings, using the first row of values
+        /// to name each column
+        /// </summary>
+        /// <param name="arr"></param>
+        /// <remarks></remarks>
+        public void PopulateGridFromArray(long[,] arr)
+        {
+            PopulateGridFromArray(arr, _DefaultCellFont, _DefaultForeColor, true);
+        }
+
+        /// <summary>
+        /// Will populate the grids contents from an 2 dimensional array of longs <c>arr</c> converted to strings, using the first row of values
+        /// to name each column. <c>Cellfont</c> will be used as the font for each new cell
+        /// </summary>
+        /// <param name="arr"></param>
+        /// <param name="CellFont"></param>
+        /// <remarks></remarks>
+        public void PopulateGridFromArray(long[,] arr, Font CellFont)
+        {
+            PopulateGridFromArray(arr, CellFont, _DefaultForeColor, true);
+        }
+
+        /// <summary>
+        /// Will populate the grids contents from an 2 dimensional array of longs <c>arr</c> converted to strings, using the first row of values
+        /// to name each column. <c>Forecolor</c> will be used as the foreground color for each new cell
+        /// </summary>
+        /// <param name="arr"></param>
+        /// <param name="Forecolor"></param>
+        /// <remarks></remarks>
+        public void PopulateGridFromArray(long[,] arr, Color Forecolor)
+        {
+            PopulateGridFromArray(arr, _DefaultCellFont, Forecolor, true);
+        }
+
+        /// <summary>
+        /// Will populate the grids contents from an 2 dimensional array of longs <c>arr</c> converted to strings, using the first row of values
+        /// to name each column. <c>Forecolor</c> will be used as the foreground color for each new cell and <c>Cellfont</c> will be used
+        /// for each new cells font
+        /// </summary>
+        /// <param name="arr"></param>
+        /// <param name="Cellfont"></param>
+        /// <param name="ForeColor"></param>
+        /// <remarks></remarks>
+        public void PopulateGridFromArray(long[,] arr, Font Cellfont, Color ForeColor)
+        {
+            PopulateGridFromArray(arr, Cellfont, ForeColor, true);
+        }
+
+        /// <summary>
+        /// Will populate the grids contents from an 2 dimensional array of doubles <c>arr</c> converted to strings, using the first row of values
+        /// to name each column. <c>col</c> will be used as the foreground color for each new cell and <c>gridfont</c> will be used if
+        /// <c>FirstRowHeader</c> is true the first row of data in the array will be used to name each column otherwise the columns will be
+        /// named Column - {ordinal}
+        /// </summary>
+        /// <param name="arr"></param>
+        /// <param name="gridfont"></param>
+        /// <param name="col"></param>
+        /// <param name="FirstRowHeader"></param>
+        /// <remarks></remarks>
+        public void PopulateGridFromArray(double[,] arr, Font gridfont, Color col, bool FirstRowHeader)
+        {
+            int x, y;
+            int r, c;
+
+            r = arr.GetUpperBound(0) + 1;
+            c = arr.GetUpperBound(1) + 1;
+
+            if (FirstRowHeader)
+            {
+                InitializeTheGrid(r - 1, c);
+                var loopTo = c - 1;
+                for (y = 0; y <= loopTo; y++)
+                    _GridHeader[y] = arr[0, y].ToString();
+                var loopTo1 = r - 1;
+                for (x = 1; x <= loopTo1; x++)
+                {
+                    var loopTo2 = c - 1;
+                    for (y = 0; y <= loopTo2; y++)
+                        _grid[x, y] = arr[x, y].ToString();
+                }
+            }
+            else
+            {
+                InitializeTheGrid(r, c);
+                var loopTo3 = c - 1;
+                for (y = 0; y <= loopTo3; y++)
+                    _GridHeader[y] = "Column - " + y.ToString();
+                var loopTo4 = r - 1;
+                for (x = 0; x <= loopTo4; x++)
+                {
+                    var loopTo5 = c - 1;
+                    for (y = 0; y <= loopTo5; y++)
+                        _grid[x, y] = arr[x, y].ToString();
+                }
+            }
+
+            AllCellsUseThisFont(gridfont);
+            AllCellsUseThisForeColor(col);
+
+            AutoSizeCellsToContents = true;
+            _colEditRestrictions.Clear();
+
+            Refresh();
+
+            NormalizeTearaways();
+        }
+
+        /// <summary>
+        /// Will populate the grids contents from an 2 dimensional array of Doubles <c>arr</c> converted to strings, using the first row of values
+        /// to name each column
+        /// </summary>
+        /// <param name="arr"></param>
+        /// <remarks></remarks>
+        public void PopulateGridFromArray(double[,] arr)
+        {
+            PopulateGridFromArray(arr, _DefaultCellFont, _DefaultForeColor, true);
+        }
+
+        /// <summary>
+        /// Will populate the grids contents from an 2 dimensional array of Doubles <c>arr</c> converted to strings, using the first row of values
+        /// to name each column. <c>Cellfont</c> will be used as the font for each new cell
+        /// </summary>
+        /// <param name="arr"></param>
+        /// <param name="CellFont"></param>
+        /// <remarks></remarks>
+        public void PopulateGridFromArray(double[,] arr, Font CellFont)
+        {
+            PopulateGridFromArray(arr, CellFont, _DefaultForeColor, true);
+        }
+
+        /// <summary>
+        /// Will populate the grids contents from an 2 dimensional array of Doubles <c>arr</c> converted to strings, using the first row of values
+        /// to name each column. <c>Forecolor</c> will be used as the foreground color for each new cell
+        /// </summary>
+        /// <param name="arr"></param>
+        /// <param name="Forecolor"></param>
+        /// <remarks></remarks>
+        public void PopulateGridFromArray(double[,] arr, Color Forecolor)
+        {
+            PopulateGridFromArray(arr, _DefaultCellFont, Forecolor, true);
+        }
+
+        /// <summary>
+        /// Will populate the grids contents from an 2 dimensional array of Doubles <c>arr</c> converted to strings, using the first row of values
+        /// to name each column. <c>Forecolor</c> will be used as the foreground color for each new cell and <c>Cellfont</c> will be used
+        /// for each new cells font
+        /// </summary>
+        /// <param name="arr"></param>
+        /// <param name="Cellfont"></param>
+        /// <param name="ForeColor"></param>
+        /// <remarks></remarks>
+        public void PopulateGridFromArray(double[,] arr, Font Cellfont, Color ForeColor)
+        {
+            PopulateGridFromArray(arr, Cellfont, ForeColor, true);
+        }
+
+        #endregion
+
+        #region PopulateGridWithDataAt Calls
+
+        /// <summary>
+        /// Will allow a database populate of a grid within an already populated grid of data.
+        /// The effect will be to insert data from a carefully crafted query into a rectangular region of an
+        /// existing grid of data.
+        /// <list type="Bullet">
+        /// <item><c>ConnectionString</c> the database connection to be employed</item>
+        /// <item><c>Sql</c> the sql code to be used to retrieve the data to be inserted</item>
+        /// <item><c>AtRow</c> the integer offset row to start populating the data at</item>
+        /// <item><c>newbackcolor</c> the color to be used to setup the background of the cells for the new data</item>
+        /// <item><c>newheadercolor</c> the color to use for the header that will be created from the queried data</item>
+        /// <item><c>ColOffset</c> the column offset from the edge to start populating</item>
+        /// </list>
+        /// </summary>
+        /// <param name="ConnectionString">A legal connection string representing the database. </param>
+        /// <param name="Sql">The actual SQL code to execute against the database represented in <c>ConnectionString</c>.</param>
+        /// <param name="Atrow">The Row from wich you want the insertion to occur.</param>
+        /// <param name="newbackcolor">The <c>System.Drawing.Color</c> to set the newly inserted rows to use as a background color. </param>
+        /// <param name="newheadercolor">Newly inserted rows will have a new header applied at the first row inserted, this will be used as the background color for this new header</param>
+        /// <param name="ColOffSet">New rows inserted will be placed starting the this column offset. Allowing insertion of data into rectangular regions of and existing grid</param>
+        /// <remarks></remarks>
+        public void PopulateGridWithDataAt(string ConnectionString, string Sql, int Atrow, Color newbackcolor, Color newheadercolor, int ColOffSet)
+        {
+            var cn = new System.Data.SqlClient.SqlConnection(ConnectionString);
+            System.Data.SqlClient.SqlCommand dbc;
+            System.Data.SqlClient.SqlCommand dbc2;
+            System.Data.SqlClient.SqlDataReader dbr;
+            System.Data.SqlClient.SqlDataReader dbr2;
+
+            string sql2;
+            long t;
+            int x, y, yy, xx;
+
+            StartedDatabasePopulateOperation?.Invoke(this);
+
+            // _LastConnectionString = ConnectionString
+            // _LastSQLString = Sql
+
+            try
+            {
+                cn.Open();
+
+                sql2 = Sql;
+                dbc2 = new System.Data.SqlClient.SqlCommand(sql2, cn);
+                dbc2.CommandTimeout = _dataBaseTimeOut;
+                dbr2 = dbc2.ExecuteReader();
+                y = 0;
+                yy = 0;
+
+                while (dbr2.Read())
+                {
+                    y = y + 1;
+                    if (y > MaxRowsSelected & MaxRowsSelected > 0)
+                    {
+                        y = MaxRowsSelected;
+                        yy = -1;
+                        break;
+                    }
+                }
+
+                dbr2.Close();
+                dbc2.Dispose();
+                cn.Close();
+
+                InsertRowsIntoGridAt(Atrow, y + 1);
+
+                cn.Open();
+                dbc = new System.Data.SqlClient.SqlCommand(Sql, cn);
+                dbc.CommandTimeout = _dataBaseTimeOut;
+
+                dbr = dbc.ExecuteReader();
+
+                // Me.Cols = dbr.FieldCount
+
+                // InitializeTheGrid(y, dbr.FieldCount)
+
+                if (_ShowProgressBar)
+                {
+                    pBar.Maximum = y;
+                    pBar.Minimum = 0;
+                    pBar.Value = 0;
+                    pBar.Visible = true;
+                    gb1.Visible = true;
+                    pBar.Refresh();
+                    gb1.Refresh();
+                }
+
+
+                // AllCellsUseThisFont(Gridfont)
+                // AllCellsUseThisForeColor(col)
+
+                if (dbr.FieldCount + ColOffSet < Cols)
+                    xx = dbr.FieldCount;
+                else
+                    xx = Cols - ColOffSet;
+                var loopTo = xx - 1;
+                for (x = 0; x <= loopTo; x++)
+                {
+                    _grid[Atrow, x + ColOffSet] = dbr.GetName(x);
+                    set_CellBackColor(Atrow, x + ColOffSet, new SolidBrush(newheadercolor));
+                }
+
+                // For x = 0 To Me.Cols - 1
+                // _GridHeader(x) = dbr.GetName(x)
+                // Next
+
+                t = Atrow + 1;
+                while (dbr.Read())
+                {
+                    var loopTo1 = xx - 1;
+                    // Me.Rows = t + 1
+                    for (x = 0; x <= loopTo1; x++)
+                    {
+                        if (Information.IsDBNull(dbr[x]))
+                        {
+                            if (_omitNulls)
+                                _grid[Conversions.ToInteger(t), x + ColOffSet] = "";
+                            else
+                                _grid[Conversions.ToInteger(t), x + ColOffSet] = "{NULL}";
+                        }
+                        else
+                        // here we need to do some work on items of certain types
+                        if ((dbr[x].ToString() ?? "") == "System.Byte[]")
+                            _grid[Conversions.ToInteger(t), x + ColOffSet] = ReturnByteArrayAsHexString((byte[])dbr[x]);
+                        else
+                            _grid[Conversions.ToInteger(t), x + ColOffSet] = Conversions.ToString(dbr[x]);
+                        set_CellBackColor(Conversions.ToInteger(t), x + ColOffSet, new SolidBrush(newbackcolor));
+                    }
+                    t = t + 1;
+
+                    if (MaxRowsSelected > 0 & t >= MaxRowsSelected)
+                        break;
+
+                    if (_ShowProgressBar)
+                    {
+                        pBar.Increment(1);
+                        pBar.Refresh();
+                    }
+                }
+
+                if (yy == -1)
+                    PartialSelection?.Invoke(this);
+
+                pBar.Visible = false;
+                gb1.Visible = false;
+
+                AutoSizeCellsToContents = true;
+
+                dbr.Close();
+
+                dbc.Dispose();
+
+                cn.Close();
+
+                FinishedDatabasePopulateOperation?.Invoke(this);
+
+                Refresh();
+            }
+            catch (Exception ex)
+            {
+                pBar.Visible = false;
+                gb1.Visible = false;
+
+                FinishedDatabasePopulateOperation?.Invoke(this);
+
+                Interaction.MsgBox(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Will allow a database populate of a grid within an already populated grid of data.
+        /// The effect will be to insert data from a carefully crafted query into a rectangular region of an
+        /// existing grid of data.
+        /// <list type="Bullet">
+        /// <item><c>ConnectionString</c> the database connection to be employed</item>
+        /// <item><c>Sql</c> the sql code to be used to retrieve the data to be inserted</item>
+        /// <item><c>AtRow</c> the integer offset row to start populating the data at</item>
+        /// <item><c>newbackcolor</c> the color to be used to setup the background of the cells for the new data</item>
+        /// <item><c>newheadercolor</c> the color to use for the header that will be created from the queried data</item>
+        /// </list>
+        /// </summary>
+        /// <param name="ConnectionString">A legal connection string representing the database. </param>
+        /// <param name="Sql">The actual SQL code to execute against the database represented in <c>ConnectionString</c>.</param>
+        /// <param name="Atrow">The Row from wich you want the insertion to occur.</param>
+        /// <param name="newbackcolor">The <c>System.Drawing.Color</c> to set the newly inserted rows to use as a background color. </param>
+        /// <param name="newheadercolor">Newly inserted rows will have a new header applied at the first row inserted, this will be used as the background color for this new header</param>
+        /// <remarks></remarks>
+        public void PopulateGridWithDataAt(string ConnectionString, string Sql, int Atrow, Color newbackcolor, Color newheadercolor)
+        {
+            var cn = new System.Data.SqlClient.SqlConnection(ConnectionString);
+            System.Data.SqlClient.SqlCommand dbc;
+            System.Data.SqlClient.SqlCommand dbc2;
+            System.Data.SqlClient.SqlDataReader dbr;
+            System.Data.SqlClient.SqlDataReader dbr2;
+
+            string sql2;
+            long t;
+            int x, y, yy, xx;
+
+            StartedDatabasePopulateOperation?.Invoke(this);
+
+            // _LastConnectionString = ConnectionString
+            // _LastSQLString = Sql
+
+            try
+            {
+                cn.Open();
+
+                sql2 = Sql;
+                dbc2 = new System.Data.SqlClient.SqlCommand(sql2, cn);
+                dbc2.CommandTimeout = _dataBaseTimeOut;
+                dbr2 = dbc2.ExecuteReader();
+                y = 0;
+                yy = 0;
+
+                while (dbr2.Read())
+                {
+                    y = y + 1;
+                    if (y > MaxRowsSelected & MaxRowsSelected > 0)
+                    {
+                        y = MaxRowsSelected;
+                        yy = -1;
+                        break;
+                    }
+                }
+
+                dbr2.Close();
+                dbc2.Dispose();
+                cn.Close();
+
+                InsertRowsIntoGridAt(Atrow, y + 1);
+
+                cn.Open();
+                dbc = new System.Data.SqlClient.SqlCommand(Sql, cn);
+                dbc.CommandTimeout = _dataBaseTimeOut;
+
+                dbr = dbc.ExecuteReader();
+
+                // Me.Cols = dbr.FieldCount
+
+                // InitializeTheGrid(y, dbr.FieldCount)
+
+                if (_ShowProgressBar)
+                {
+                    pBar.Maximum = y;
+                    pBar.Minimum = 0;
+                    pBar.Value = 0;
+                    pBar.Visible = true;
+                    gb1.Visible = true;
+                    pBar.Refresh();
+                    gb1.Refresh();
+                }
+
+
+                // AllCellsUseThisFont(Gridfont)
+                // AllCellsUseThisForeColor(col)
+
+                if (dbr.FieldCount < Cols)
+                    xx = dbr.FieldCount;
+                else
+                    xx = Cols;
+                var loopTo = xx - 1;
+                for (x = 0; x <= loopTo; x++)
+                {
+                    _grid[Atrow, x] = dbr.GetName(x);
+                    set_CellBackColor(Atrow, x, new SolidBrush(newheadercolor));
+                }
+
+                // For x = 0 To Me.Cols - 1
+                // _GridHeader(x) = dbr.GetName(x)
+                // Next
+
+                t = Atrow + 1;
+                while (dbr.Read())
+                {
+                    var loopTo1 = xx - 1;
+                    // Me.Rows = t + 1
+                    for (x = 0; x <= loopTo1; x++)
+                    {
+                        if (Information.IsDBNull(dbr[x]))
+                        {
+                            if (_omitNulls)
+                                _grid[Conversions.ToInteger(t), x] = "";
+                            else
+                                _grid[Conversions.ToInteger(t), x] = "{NULL}";
+                        }
+                        else
+                        // here we need to do some work on items of certain types
+                        if ((dbr[x].ToString() ?? "") == "System.Byte[]")
+                            _grid[Conversions.ToInteger(t), x] = ReturnByteArrayAsHexString((byte[])dbr[x]);
+                        else
+                            _grid[Conversions.ToInteger(t), x] = Conversions.ToString(dbr[x]);
+                        set_CellBackColor(Conversions.ToInteger(t), x, new SolidBrush(newbackcolor));
+                    }
+                    t = t + 1;
+
+                    if (MaxRowsSelected > 0 & t >= MaxRowsSelected)
+                        break;
+
+                    if (_ShowProgressBar)
+                    {
+                        pBar.Increment(1);
+                        pBar.Refresh();
+                    }
+                }
+
+                if (yy == -1)
+                    PartialSelection?.Invoke(this);
+
+                pBar.Visible = false;
+                gb1.Visible = false;
+
+                AutoSizeCellsToContents = true;
+
+                dbr.Close();
+
+                dbc.Dispose();
+
+                cn.Close();
+
+                FinishedDatabasePopulateOperation?.Invoke(this);
+
+                Refresh();
+            }
+            catch (Exception ex)
+            {
+                pBar.Visible = false;
+                gb1.Visible = false;
+
+                FinishedDatabasePopulateOperation?.Invoke(this);
+
+                Interaction.MsgBox(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Will allow a database populate of a grid within an already populated grid of data.
+        /// The effect will be to insert data from a carefully crafted query into a rectangular region of an
+        /// existing grid of data. this call will omit the header for the inserted result...
+        /// <list type="Bullet">
+        /// <item><c>ConnectionString</c> the database connection to be employed</item>
+        /// <item><c>Sql</c> the sql code to be used to retrieve the data to be inserted</item>
+        /// <item><c>AtRow</c> the integer offset row to start populating the data at</item>
+        /// <item><c>newbackcolor</c> the color to be used to setup the background of the cells for the new data</item>
+        /// </list>
+        /// </summary>
+        /// <param name="ConnectionString">A legal connection string representing the database. </param>
+        /// <param name="Sql">The actual SQL code to execute against the database represented in <c>ConnectionString</c>.</param>
+        /// <param name="Atrow">The Row from wich you want the insertion to occur.</param>
+        /// <param name="newbackcolor">The <c>System.Drawing.Color</c> to set the newly inserted rows to use as a background color. </param>
+        /// <remarks></remarks>
+        public void PopulateGridWithDataAt(string ConnectionString, string Sql, int Atrow, Color newbackcolor)
+        {
+            PopulateGridWithDataAt(ConnectionString, Sql, Atrow, newbackcolor, true);
+        }
+
+        /// <summary>
+        /// Will allow a database populate of a grid within an already populated grid of data.
+        /// The effect will be to insert data from a carefully crafted query into a rectangular region of an
+        /// existing grid of data. this call will omit the header for the inserted result...
+        /// <list type="Bullet">
+        /// <item><c>ConnectionString</c> the database connection to be employed</item>
+        /// <item><c>Sql</c> the sql code to be used to retrieve the data to be inserted</item>
+        /// <item><c>AtRow</c> the integer offset row to start populating the data at</item>
+        /// <item><c>newbackcolor</c> the color to be used to setup the background of the cells for the new data</item>
+        /// <item><c>allowDups></c> Will not insert any rows that already exist in the grid if set to false</item>
+        /// </list>
+        /// </summary>
+        /// <param name="ConnectionString">A legal connection string representing the database. </param>
+        /// <param name="Sql">The actual SQL code to execute against the database represented in <c>ConnectionString</c>.</param>
+        /// <param name="Atrow">The Row from wich you want the insertion to occur.</param>
+        /// <param name="newbackcolor">The <c>System.Drawing.Color</c> to set the newly inserted rows to use as a background color. </param>
+        /// <param name="allowDups"> Will not insert any rows that already exist in the grid if set to false</param>
+        /// <remarks></remarks>
+        public void PopulateGridWithDataAt(string ConnectionString, string Sql, int Atrow, Color newbackcolor, bool allowDups)
+        {
+            var cn = new System.Data.SqlClient.SqlConnection(ConnectionString);
+            System.Data.SqlClient.SqlCommand dbc;
+            System.Data.SqlClient.SqlCommand dbc2;
+            System.Data.SqlClient.SqlDataReader dbr;
+            System.Data.SqlClient.SqlDataReader dbr2;
+
+            string sql2;
+            long t, tt;
+            int x, y, yy, xx;
+            bool fnd = false;
+            string hst = "";
+            string hst2 = "";
+
+            StartedDatabasePopulateOperation?.Invoke(this);
+
+            // _LastConnectionString = ConnectionString
+            // _LastSQLString = Sql
+
+            try
+            {
+
+                // ' here we want to get whats in the grid already as a set of hashes for dup checking
+
+                var ga = new List<string>();
+
+                var sb = new StringBuilder();
+                var loopTo = (long)(Rows - 1);
+                for (t = 0; t <= loopTo; t++)
+                {
+                    sb = new StringBuilder();
+                    var loopTo1 = Cols - 1;
+                    for (x = 0; x <= loopTo1; x++)
+                        sb.Append(x.ToString() + _grid[Conversions.ToInteger(t), x].ToUpper() + "|");
+                    ga.Add(sb.ToString());
+                }
+
+                cn.Open();
+
+                sql2 = Sql;
+                dbc2 = new System.Data.SqlClient.SqlCommand(sql2, cn);
+                dbc2.CommandTimeout = _dataBaseTimeOut;
+                dbr2 = dbc2.ExecuteReader();
+                y = 0;
+                yy = 0;
+
+                if (dbr2.FieldCount < Cols)
+                    xx = dbr2.FieldCount;
+                else
+                    xx = Cols;
+
+                var _ggrid = new string[xx + 1];
+
+                while (dbr2.Read())
+                {
+                    hst = "";
+
+                    if (!allowDups)
+                    {
+                        var loopTo2 = xx - 1;
+                        for (x = 0; x <= loopTo2; x++)
+                        {
+                            if (Information.IsDBNull(dbr2[x]))
+                            {
+                                if (_omitNulls)
+                                    _ggrid[x] = "";
+                                else
+                                    _ggrid[x] = "{NULL}";
+                            }
+                            else
+                            // here we need to do some work on items of certain types
+                            if ((dbr2[x].ToString() ?? "") == "System.Byte[]")
+                                _ggrid[x] = ReturnByteArrayAsHexString((byte[])dbr2[x]);
+                            else
+                                _ggrid[x] = Conversions.ToString(dbr2[x]);
+                        }
+
+                        var loopTo3 = xx - 1;
+                        for (x = 0; x <= loopTo3; x++)
+                            hst += x.ToString() + _ggrid[x].ToUpper() + "|";
+
+                        if (ga.Contains(hst))
+                            fnd = true;
+                        else
+                            fnd = false;
+
+
+                        if (!fnd)
+                        {
+                            y = y + 1;
+                            if (y > MaxRowsSelected & MaxRowsSelected > 0)
+                            {
+                                y = MaxRowsSelected;
+                                yy = -1;
+                                break;
+                            }
+                        }
+                        else
+                            Console.WriteLine("Dupe");
+                    }
+                    else
+                    {
+                        y = y + 1;
+                        if (y > MaxRowsSelected & MaxRowsSelected > 0)
+                        {
+                            y = MaxRowsSelected;
+                            yy = -1;
+                            break;
+                        }
+                    }
+                }
+
+                dbr2.Close();
+                dbc2.Dispose();
+                cn.Close();
+
+                InsertRowsIntoGridAt(Atrow, y);
+
+                cn.Open();
+                dbc = new System.Data.SqlClient.SqlCommand(Sql, cn);
+                dbc.CommandTimeout = _dataBaseTimeOut;
+
+                dbr = dbc.ExecuteReader();
+
+                // Me.Cols = dbr.FieldCount
+
+                // InitializeTheGrid(y, dbr.FieldCount)
+
+                if (_ShowProgressBar)
+                {
+                    pBar.Maximum = y;
+                    pBar.Minimum = 0;
+                    pBar.Value = 0;
+                    pBar.Visible = true;
+                    gb1.Visible = true;
+                    pBar.Refresh();
+                    gb1.Refresh();
+                }
+
+
+                // AllCellsUseThisFont(Gridfont)
+                // AllCellsUseThisForeColor(col)
+
+                if (dbr.FieldCount < Cols)
+                    xx = dbr.FieldCount;
+                else
+                    xx = Cols;
+
+                t = Atrow;
+                if (allowDups)
+                {
+                    while (dbr.Read())
+                    {
+                        var loopTo4 = xx - 1;
+                        // Me.Rows = t + 1
+                        for (x = 0; x <= loopTo4; x++)
+                        {
+                            if (Information.IsDBNull(dbr[x]))
+                            {
+                                if (_omitNulls)
+                                    _grid[Conversions.ToInteger(t), x] = "";
+                                else
+                                    _grid[Conversions.ToInteger(t), x] = "{NULL}";
+                            }
+                            else
+                            // here we need to do some work on items of certain types
+                            if ((dbr[x].ToString() ?? "") == "System.Byte[]")
+                                _grid[Conversions.ToInteger(t), x] = ReturnByteArrayAsHexString((byte[])dbr[x]);
+                            else
+                                _grid[Conversions.ToInteger(t), x] = Conversions.ToString(dbr[x]);
+                            set_CellBackColor(Conversions.ToInteger(t), x, new SolidBrush(newbackcolor));
+                        }
+                        t = t + 1;
+
+                        if (MaxRowsSelected > 0 & t >= MaxRowsSelected)
+                            break;
+
+                        if (_ShowProgressBar)
+                        {
+                            pBar.Increment(1);
+                            pBar.Refresh();
+                        }
+                    }
+                }
+                else
+                {
+                    // ' here we are gonna not import any duplicate rows
+
+                    tt = 0;
+
+                    // 'Dim _ggrid(xx) As String
+
+                    while (dbr.Read())
+                    {
+                        var loopTo5 = xx - 1;
+                        // Me.Rows = t + 1
+                        for (x = 0; x <= loopTo5; x++)
+                        {
+                            if (Information.IsDBNull(dbr[x]))
+                            {
+                                if (_omitNulls)
+                                    _ggrid[x] = "";
+                                else
+                                    _ggrid[x] = "{NULL}";
+                            }
+                            else
+                            // here we need to do some work on items of certain types
+                            if ((dbr[x].ToString() ?? "") == "System.Byte[]")
+                                _ggrid[x] = ReturnByteArrayAsHexString((byte[])dbr[x]);
+                            else
+                                _ggrid[x] = Conversions.ToString(dbr[x]);
+                        }
+
+                        // ' here we want to scan the current contents of the grid to see if these values are already in the thing
+
+                        // ' first we will build a giant hash string of what we are looking for
+
+                        hst = "";
+                        hst2 = "";
+                        var loopTo6 = xx - 1;
+                        for (x = 0; x <= loopTo6; x++)
+                            hst += x.ToString() + _ggrid[x].ToUpper() + "|";
+
+                        if (ga.Contains(hst))
+                            fnd = true;
+                        else
+                            fnd = false;
+
+                        if (!fnd)
+                        {
+                            var loopTo7 = xx - 1;
+                            for (x = 0; x <= loopTo7; x++)
+                            {
+                                _grid[Conversions.ToInteger(t), x] = _ggrid[x];
+                                set_CellBackColor(Conversions.ToInteger(t), x, new SolidBrush(newbackcolor));
+                            }
+
+                            t += 1;
+                        }
+
+                        if (MaxRowsSelected > 0 & t >= MaxRowsSelected)
+                            break;
+
+                        if (_ShowProgressBar)
+                        {
+                            pBar.Increment(1);
+                            pBar.Refresh();
+                        }
+                    }
+                }
+
+                if (yy == -1)
+                    PartialSelection?.Invoke(this);
+
+                pBar.Visible = false;
+                gb1.Visible = false;
+
+                AutoSizeCellsToContents = true;
+
+                dbr.Close();
+
+                dbc.Dispose();
+
+                cn.Close();
+
+                FinishedDatabasePopulateOperation?.Invoke(this);
+
+                Refresh();
+            }
+            catch (Exception ex)
+            {
+                pBar.Visible = false;
+                gb1.Visible = false;
+
+                FinishedDatabasePopulateOperation?.Invoke(this);
+            }
+        }
+
+        #endregion
+
+        #region PopulateGridWithData Calls
+
+        /// <summary>
+        /// Will take the supplied SQLDataReader <c>SQLDR</c> and will automatically populate the grid with its contents using
+        /// <c>col</c> for the foreground color and <c>gridfont</c> for the cells font style
+        /// </summary>
+        /// <param name="SQLDR"></param>
+        /// <param name="col"></param>
+        /// <param name="gridfont"></param>
+        /// <remarks></remarks>
+        public void PopulateGridWithData(ref System.Data.SqlClient.SqlDataReader SQLDR, Color col, Font gridfont)
+        {
+            int x, numrows;
+
+            try
+            {
+                StartedDatabasePopulateOperation?.Invoke(this);
+
+                numrows = 0;
+
+                InitializeTheGrid(0, SQLDR.FieldCount);
+                var loopTo = Cols - 1;
+                for (x = 0; x <= loopTo; x++)
+                    _GridHeader[x] = SQLDR.GetName(x);
+
+                while (SQLDR.Read())
+                {
+                    numrows += 1;
+
+                    if (MaxRowsSelected > 0 & numrows > MaxRowsSelected)
+                    {
+                        PartialSelection?.Invoke(this);
+                        break;
+                    }
+
+
+                    Rows = numrows;
+                    var loopTo1 = Cols - 1;
+                    // For x = 0 To _Cols - 1
+                    for (x = 0; x <= loopTo1; x++)
+                    {
+                        if (Information.IsDBNull(SQLDR[x]))
+                        {
+                            if (_omitNulls)
+                                _grid[numrows - 1, x] = "";
+                            else
+                                _grid[numrows - 1, x] = "{NULL}";
+                        }
+                        else
+                        // here we need to do some work on items of certain types
+                        if ((SQLDR[x].ToString() ?? "") == "System.Byte[]")
+                            _grid[numrows - 1, x] = ReturnByteArrayAsHexString((byte[])SQLDR[x]);
+                        else
+                        // Console.WriteLine(SQLDR.Item(x).GetType.ToString())
+                        if ((SQLDR[x].GetType().ToString().ToUpper() ?? "") == "SYSTEM.DATETIME")
+                        {
+                            if (_ShowDatesWithTime)
+                            {
+                                var _dt = DateTime.Parse(Conversions.ToString(SQLDR[x]));
+
+                                _grid[numrows - 1, x] = _dt.ToShortDateString() + " " + _dt.ToShortTimeString();
+                            }
+                            else
+                            {
+                                var _dt = DateTime.Parse(Conversions.ToString(SQLDR[x]));
+
+                                _grid[numrows - 1, x] = _dt.ToShortDateString();
+                            }
+                        }
+                        else if ((SQLDR[x].GetType().ToString().ToUpper() ?? "") == "SYSTEM.GUID")
+                            _grid[numrows - 1, x] = "This is a GUID";
+                        else
+                            _grid[numrows - 1, x] = Conversions.ToString(SQLDR[x]);
+                    }
+                }
+
+                AllCellsUseThisForeColor(col);
+
+                AllCellsUseThisFont(gridfont);
+
+                AutoSizeCellsToContents = true;
+                _colEditRestrictions.Clear();
+
+                FinishedDatabasePopulateOperation?.Invoke(this);
+
+                Refresh();
+
+                NormalizeTearaways();
+            }
+            catch (Exception ex)
+            {
+                FinishedDatabasePopulateOperation?.Invoke(this);
+
+                Interaction.MsgBox(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Will take the supplied SQLDataReader <c>SQLDR</c> and will automatically populate the grid with its contents using
+        /// the grids default coloring and fonts for the cells content (settable using the propertries of the grid itself
+        /// </summary>
+        /// <param name="SQLDR"></param>
+        /// <remarks></remarks>
+        public void PopulateGridWithData(ref System.Data.SqlClient.SqlDataReader SQLDR)
+        {
+            PopulateGridWithData(ref SQLDR, _DefaultForeColor, _DefaultCellFont);
+        }
+
+        /// <summary>
+        /// Will take the supplied SQLDataReader <c>SQLDR</c> and will automatically populate the grid with its contents using
+        /// <c>ForeColor</c> for the foreground color and <c>gridfont</c> for the cells font style
+        /// </summary>
+        /// <param name="SQLDR"></param>
+        /// <param name="ForeColor"></param>
+        /// <remarks></remarks>
+        public void PopulateGridWithData(ref System.Data.SqlClient.SqlDataReader SQLDR, Color ForeColor)
+        {
+            PopulateGridWithData(ref SQLDR, ForeColor, _DefaultCellFont);
+        }
+
+        /// <summary>
+        /// Will take the supplied SQLDataReader <c>SQLDR</c> and will automatically populate the grid with its contents using
+        /// <c>GridFont</c> for the cells font style
+        /// </summary>
+        /// <param name="SQLDR"></param>
+        /// <param name="GridFont"></param>
+        /// <remarks></remarks>
+        public void PopulateGridWithData(ref System.Data.SqlClient.SqlDataReader SQLDR, Font GridFont)
+        {
+            PopulateGridWithData(ref SQLDR, _DefaultForeColor, GridFont);
+        }
+
+        /// <summary>
+        /// Will take the supplied <c>ConnectionString</c> and <c>Sql</c> code and query the database gathering the results and populaating the grid
+        /// with those results. <c>GridFont</c> and <c>col</c> be used to generate the font and the foreground color for the cell contents
+        /// </summary>
+        /// <param name="ConnectionString"></param>
+        /// <param name="Sql"></param>
+        /// <param name="Gridfont"></param>
+        /// <param name="col"></param>
+        /// <remarks></remarks>
+        public void PopulateGridWithData(string ConnectionString, string Sql, Font Gridfont, Color col)
+        {
+            System.Data.SqlClient.SqlCommand dbc;
+            System.Data.SqlClient.SqlCommand dbc2;
+            string sql2;
+            long t;
+            int y, yy;
+
+            StartedDatabasePopulateOperation?.Invoke(this);
+
+            try
+            {
+                Cursor.Current = Cursors.WaitCursor;
+                y = 0;
+                yy = 0;
+
+                // Gets a count of the number of records returned by the query
+                using (var cn = new System.Data.SqlClient.SqlConnection())
+                {
+                    cn.ConnectionString = ConnectionString;
+                    cn.Open();
+                    sql2 = Sql;
+                    dbc2 = new System.Data.SqlClient.SqlCommand(sql2, cn);
+                    dbc2.CommandTimeout = _dataBaseTimeOut;
+
+                    using (var dbr2 = dbc2.ExecuteReader())
+                    {
+                        while (dbr2.Read())
+                        {
+                            y = y + 1;
+                            if (y > MaxRowsSelected & MaxRowsSelected > 0)
+                            {
+                                y = MaxRowsSelected;
+                                yy = -1;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                if (_ShowProgressBar)
+                {
+                    pBar.Maximum = y;
+                    pBar.Minimum = 0;
+                    pBar.Value = 0;
+                    pBar.Visible = true;
+                    pBar.Style = ProgressBarStyle.Continuous;
+                    gb1.Visible = true;
+                    pBar.Step = 1;
+                    pBar.Refresh();
+                    gb1.Refresh();
+                }
+
+                using (var cn2 = new System.Data.SqlClient.SqlConnection())
+                {
+                    cn2.ConnectionString = ConnectionString;
+                    cn2.Open();
+                    dbc = new System.Data.SqlClient.SqlCommand(Sql, cn2);
+                    dbc.CommandTimeout = _dataBaseTimeOut;
+
+                    using (var dbr = dbc.ExecuteReader())
+                    {
+                        InitializeTheGrid(y, dbr.FieldCount);
+                        AllCellsUseThisFont(Gridfont);
+                        AllCellsUseThisForeColor(col);
+
+                        for (int x = 0, loopTo = Cols - 1; x <= loopTo; x++)
+                            _GridHeader[x] = dbr.GetName(x);
+
+                        t = 0;
+
+                        while (dbr.Read())
+                        {
+                            var dbrRow = new List<object>();
+                            int x = 0;
+
+                            for (int i = 0, loopTo1 = Cols - 1; i <= loopTo1; i++)
+                                dbrRow.Add(dbr[i]);
+
+                            // Process the row item from the data reader
+                            foreach (object o in dbrRow)
+                            {
+                                if (o.Equals(DBNull.Value))
+                                {
+                                    if (_omitNulls)
+                                        _grid[Conversions.ToInteger(t), x] = "";
+                                    else
+                                        _grid[Conversions.ToInteger(t), x] = "{NULL}";
+                                }
+                                else if ((o.ToString() ?? "") == "System.Byte[]")
+                                    _grid[Conversions.ToInteger(t), x] = ReturnByteArrayAsHexString((byte[])o);
+                                else if ((o.GetType().ToString().ToUpper() ?? "") == "SYSTEM.DATETIME")
+                                {
+                                    var _dt = Convert.ToDateTime(o); // DateTime.Parse(o)
+                                    if (_ShowDatesWithTime)
+                                        _grid[Conversions.ToInteger(t), x] = _dt.ToShortDateString() + " " + _dt.ToShortTimeString();
+                                    else
+                                        _grid[Conversions.ToInteger(t), x] = _dt.ToShortDateString();
+                                }
+                                else if ((o.GetType().ToString().ToUpper() ?? "") == "SYSTEM.GUID")
+                                {
+                                    string s = o.ToString();
+                                    _grid[Conversions.ToInteger(t), x] = s;
+                                }
+                                else
+                                    _grid[Conversions.ToInteger(t), x] = Conversions.ToString(o);
+                                // increment column index
+                                x += 1;
+                            }
+
+                            // increment the row index
+                            t = t + 1;
+
+                            if (MaxRowsSelected > 0 & t >= MaxRowsSelected)
+                                break;
+
+                            if (_ShowProgressBar)
+                                pBar.PerformStep();
+                        }
+                    }
+                }
+
+                if (yy == -1)
+                    PartialSelection?.Invoke(this);
+
+                if (_ShowProgressBar)
+                {
+                    pBar.PerformStep();
+                    pBar.Visible = false;
+                    gb1.Visible = false;
+                }
+
+                AutoSizeCellsToContents = true;
+                _colEditRestrictions.Clear();
+
+                FinishedDatabasePopulateOperation?.Invoke(this);
+
+                Refresh();
+
+                NormalizeTearaways();
+            }
+            catch (Exception ex)
+            {
+                pBar.Visible = false;
+                gb1.Visible = false;
+
+                FinishedDatabasePopulateOperation?.Invoke(this);
+
+                Interaction.MsgBox(ex.Message);
+            }
+
+            finally
+            {
+
+                // Set the cursor back to the default cursor
+                Cursor.Current = Cursors.Default;
+            }
+        }
+
+        /// <summary>
+        /// Will take the supplied <c>ConnectionString</c> and <c>Sql</c> code and query the database gathering the results and populaating the grid
+        /// the grids defauls will be used for the cells fonts and coloring characteristics
+        /// </summary>
+        /// <param name="ConnectionString"></param>
+        /// <param name="Sql"></param>
+        /// <remarks></remarks>
+        public void PopulateGridWithData(string ConnectionString, string Sql)
+        {
+            PopulateGridWithData(ConnectionString, Sql, _DefaultCellFont, _DefaultForeColor);
+        }
+
+        /// <summary>
+        /// Will take the supplied <c>ConnectionString</c> and <c>Sql</c> code and query the database gathering the results and populaating the grid
+        /// the <c>col</c> parameter wwill be used for the cell foreground coloring
+        /// the grids defauls will be used for the cells fonts and other coloring characteristics
+        /// </summary>
+        /// <param name="ConnectionString"></param>
+        /// <param name="Sql"></param>
+        /// <param name="Col"></param>
+        /// <remarks></remarks>
+        public void PopulateGridWithData(string ConnectionString, string Sql, Color Col)
+        {
+            PopulateGridWithData(ConnectionString, Sql, _DefaultCellFont, Col);
+        }
+
+        /// <summary>
+        /// Will take the supplied <c>ConnectionString</c> and <c>Sql</c> code and query the database gathering the results and populaating the grid
+        /// the <c>fnt</c> parameter wwill be used for the cell fonts
+        /// the grids defauls will be used for the cells other coloring characteristics
+        /// </summary>
+        /// <param name="ConnectionString"></param>
+        /// <param name="Sql"></param>
+        /// <param name="fnt"></param>
+        /// <remarks></remarks>
+        public void PopulateGridWithData(string ConnectionString, string Sql, Font fnt)
+        {
+            PopulateGridWithData(ConnectionString, Sql, fnt, _DefaultForeColor);
+        }
+
+        #endregion
+
+        #region SQLPopulateGridWithData Calls
+
+        /// <summary>
+        /// A synonym for the PopulateGridWithData method of the same signature
+        /// </summary>
+        /// <param name="SQLDR"></param>
+        /// <param name="col"></param>
+        /// <param name="gridfont"></param>
+        /// <remarks></remarks>
+        public void SQLPopulateGridWithData(ref System.Data.SqlClient.SqlDataReader SQLDR, Color col, Font gridfont)
+        {
+            PopulateGridWithData(ref SQLDR, col, gridfont);
+        }
+
+        /// <summary>
+        /// A synonym for the PopulateGridWithData method of the same signature
+        /// </summary>
+        /// <param name="SQLDR"></param>
+        /// <remarks></remarks>
+        public void SQLPopulateGridWithData(ref System.Data.SqlClient.SqlDataReader SQLDR)
+        {
+            PopulateGridWithData(ref SQLDR, _DefaultForeColor, _DefaultCellFont);
+        }
+
+        /// <summary>
+        /// A synonym for the PopulateGridWithData method of the same signature
+        /// </summary>
+        /// <param name="SQLDR"></param>
+        /// <param name="ForeColor"></param>
+        /// <remarks></remarks>
+        public void SQLPopulateGridWithData(ref System.Data.SqlClient.SqlDataReader SQLDR, Color ForeColor)
+        {
+            PopulateGridWithData(ref SQLDR, ForeColor, _DefaultCellFont);
+        }
+
+        /// <summary>
+        /// A synonym for the PopulateGridWithData method of the same signature
+        /// </summary>
+        /// <param name="SQLDR"></param>
+        /// <param name="GridFont"></param>
+        /// <remarks></remarks>
+        public void SQLPopulateGridWithData(ref System.Data.SqlClient.SqlDataReader SQLDR, Font GridFont)
+        {
+            PopulateGridWithData(ref SQLDR, _DefaultForeColor, GridFont);
+        }
+
+        /// <summary>
+        /// A synonym for the PopulateGridWithData method of the same signature
+        /// </summary>
+        /// <param name="ConnectionString"></param>
+        /// <param name="Sql"></param>
+        /// <param name="Gridfont"></param>
+        /// <param name="col"></param>
+        /// <remarks></remarks>
+        public void SQLPopulateGridWithData(string ConnectionString, string Sql, Font Gridfont, Color col)
+        {
+            PopulateGridWithData(ConnectionString, Sql, Gridfont, col);
+        }
+
+        /// <summary>
+        /// A synonym for the PopulateGridWithData method of the same signature
+        /// </summary>
+        /// <param name="ConnectionString"></param>
+        /// <param name="Sql"></param>
+        /// <remarks></remarks>
+        public void SQLPopulateGridWithData(string ConnectionString, string Sql)
+        {
+            PopulateGridWithData(ConnectionString, Sql, _DefaultCellFont, _DefaultForeColor);
+        }
+
+        /// <summary>
+        /// A synonym for the PopulateGridWithData method of the same signature
+        /// </summary>
+        /// <param name="ConnectionString"></param>
+        /// <param name="Sql"></param>
+        /// <param name="Col"></param>
+        /// <remarks></remarks>
+        public void SQLPopulateGridWithData(string ConnectionString, string Sql, Color Col)
+        {
+            PopulateGridWithData(ConnectionString, Sql, _DefaultCellFont, Col);
+        }
+
+        /// <summary>
+        /// A synonym for the PopulateGridWithData method of the same signature
+        /// </summary>
+        /// <param name="ConnectionString"></param>
+        /// <param name="Sql"></param>
+        /// <param name="fnt"></param>
+        /// <remarks></remarks>
+        public void SQLPopulateGridWithData(string ConnectionString, string Sql, Font fnt)
+        {
+            PopulateGridWithData(ConnectionString, Sql, fnt, _DefaultForeColor);
+        }
+
+        #endregion
+
+        #region OLEPopulateGridWithData Calls
+        // OLE Populate Data Calls
+
+        /// <summary>
+        /// As the PopulateGridWithData method of the same signature but uses an OleDbDataReader <c>OLEDR</c> instead
+        /// </summary>
+        /// <param name="OLEDR"></param>
+        /// <param name="col"></param>
+        /// <param name="gridfont"></param>
+        /// <remarks></remarks>
+        public void OLEPopulateGridWithData(ref System.Data.OleDb.OleDbDataReader OLEDR, Color col, Font gridfont)
+        {
+            int x, numrows;
+
+            try
+            {
+                StartedDatabasePopulateOperation?.Invoke(this);
+
+                numrows = 0;
+
+                InitializeTheGrid(1, OLEDR.FieldCount);
+                var loopTo = Cols - 1;
+                for (x = 0; x <= loopTo; x++)
+                    _GridHeader[x] = OLEDR.GetName(x);
+
+                while (OLEDR.Read())
+                {
+                    numrows += 1;
+                    if (MaxRowsSelected > 0 & numrows < MaxRowsSelected)
+                    {
+                        Rows = numrows;
+                        var loopTo1 = _cols;
+                        for (x = 0; x <= loopTo1; x++)
+                        {
+                            if (Information.IsDBNull(OLEDR[x]))
+                            {
+                                if (_omitNulls)
+                                    _grid[numrows - 1, x] = "";
+                                else
+                                    _grid[numrows - 1, x] = "{NULL}";
+                            }
+                            else
+                            // here we need to do some work on items of certain types
+                            if ((OLEDR[x].ToString() ?? "") == "System.Byte[]")
+                                _grid[numrows - 1, x] = ReturnByteArrayAsHexString((byte[])OLEDR[x]);
+                            else if ((OLEDR[x].GetType().ToString().ToUpper() ?? "") == "SYSTEM.DATETIME")
+                            {
+                                if (_ShowDatesWithTime)
+                                {
+                                    var _dt = DateTime.Parse(Conversions.ToString(OLEDR[x]));
+
+                                    _grid[numrows - 1, x] = _dt.ToShortDateString() + " " + _dt.ToShortTimeString();
+                                }
+                                else
+                                {
+                                    var _dt = DateTime.Parse(Conversions.ToString(OLEDR[x]));
+
+                                    _grid[numrows - 1, x] = _dt.ToShortDateString();
+                                }
+                            }
+                            else
+                                _grid[numrows - 1, x] = Conversions.ToString(OLEDR[x]);
+                        }
+                    }
+                    else
+                    {
+                        PartialSelection?.Invoke(this);
+                        break;
+                    }
+                }
+
+                AllCellsUseThisForeColor(col);
+
+                AllCellsUseThisFont(gridfont);
+
+                AutoSizeCellsToContents = true;
+                _colEditRestrictions.Clear();
+
+                FinishedDatabasePopulateOperation?.Invoke(this);
+
+                Refresh();
+
+                NormalizeTearaways();
+            }
+            catch (Exception ex)
+            {
+                FinishedDatabasePopulateOperation?.Invoke(this);
+
+                Interaction.MsgBox(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// As the PopulateGridWithData method of the same signature but uses an OleDbDataReader <c>OLEDR</c> instead
+        /// </summary>
+        /// <param name="OLEDR"></param>
+        /// <remarks></remarks>
+        public void OLEPopulateGridWithData(ref System.Data.OleDb.OleDbDataReader OLEDR)
+        {
+            OLEPopulateGridWithData(ref OLEDR, _DefaultForeColor, _DefaultCellFont);
+        }
+
+        /// <summary>
+        /// As the PopulateGridWithData method of the same signature but uses an OleDbDataReader <c>OLEDR</c> instead
+        /// </summary>
+        /// <param name="OLEDR"></param>
+        /// <param name="ForeColor"></param>
+        /// <remarks></remarks>
+        public void OLEPopulateGridWithData(ref System.Data.OleDb.OleDbDataReader OLEDR, Color ForeColor)
+        {
+            OLEPopulateGridWithData(ref OLEDR, ForeColor, _DefaultCellFont);
+        }
+
+        /// <summary>
+        /// As the PopulateGridWithData method of the same signature but uses an OleDbDataReader <c>OLEDR</c> instead
+        /// </summary>
+        /// <param name="OLEDR"></param>
+        /// <param name="GridFont"></param>
+        /// <remarks></remarks>
+        public void OLEPopulateGridWithData(ref System.Data.OleDb.OleDbDataReader OLEDR, Font GridFont)
+        {
+            OLEPopulateGridWithData(ref OLEDR, _DefaultForeColor, GridFont);
+        }
+
+        /// <summary>
+        /// As the PopulateGridWithData method of the same signature but <c>ConnectionString</c> parameter must be in the correct
+        /// syntax for OLE data access
+        /// </summary>
+        /// <param name="ConnectionString"></param>
+        /// <param name="Sql"></param>
+        /// <param name="Gridfont"></param>
+        /// <param name="col"></param>
+        /// <remarks></remarks>
+        public void OLEPopulateGridWithData(string ConnectionString, string Sql, Font Gridfont, Color col)
+        {
+            var cn = new System.Data.OleDb.OleDbConnection(ConnectionString);
+            System.Data.OleDb.OleDbCommand dbc;
+            System.Data.OleDb.OleDbCommand dbc2;
+            System.Data.OleDb.OleDbDataReader dbr;
+            System.Data.OleDb.OleDbDataReader dbr2;
+
+            string sql2;
+            long t;
+            int x, y, yy;
+
+            StartedDatabasePopulateOperation?.Invoke(this);
+
+            // _LastConnectionString = ConnectionString
+            // _LastSQLString = Sql
+
+
+            try
+            {
+                cn.Open();
+
+                sql2 = Sql;
+                dbc2 = new System.Data.OleDb.OleDbCommand(sql2, cn);
+                dbc2.CommandTimeout = _dataBaseTimeOut;
+                dbr2 = dbc2.ExecuteReader();
+                y = 0;
+                yy = 0;
+
+                while (dbr2.Read())
+                {
+                    y = y + 1;
+                    if (y > MaxRowsSelected & MaxRowsSelected > 0)
+                    {
+                        y = MaxRowsSelected;
+                        yy = -1;
+                        break;
+                    }
+                }
+
+                dbr2.Close();
+                dbc2.Dispose();
+                cn.Close();
+
+                cn.Open();
+                dbc = new System.Data.OleDb.OleDbCommand(Sql, cn);
+                dbc.CommandTimeout = _dataBaseTimeOut;
+
+                dbr = dbc.ExecuteReader();
+
+                // Me.Cols = dbr.FieldCount
+
+                InitializeTheGrid(y, dbr.FieldCount);
+
+                if (_ShowProgressBar)
+                {
+                    pBar.Maximum = y;
+                    pBar.Minimum = 0;
+                    pBar.Value = 0;
+                    pBar.Visible = true;
+                    gb1.Visible = true;
+                    pBar.Refresh();
+                    gb1.Refresh();
+                }
+
+
+                AllCellsUseThisFont(Gridfont);
+                AllCellsUseThisForeColor(col);
+                var loopTo = Cols - 1;
+                for (x = 0; x <= loopTo; x++)
+                    _GridHeader[x] = dbr.GetName(x);
+
+                t = 0;
+                while (dbr.Read())
+                {
+                    var loopTo1 = Cols - 1;
+                    // Me.Rows = t + 1
+                    for (x = 0; x <= loopTo1; x++)
+                    {
+                        if (Information.IsDBNull(dbr[x]))
+                        {
+                            if (_omitNulls)
+                                _grid[Conversions.ToInteger(t), x] = "";
+                            else
+                                _grid[Conversions.ToInteger(t), x] = "{NULL}";
+                        }
+                        else
+                        // here we need to do some work on items of certain types
+                        if ((dbr[x].ToString() ?? "") == "System.Byte[]")
+                            _grid[Conversions.ToInteger(t), x] = ReturnByteArrayAsHexString((byte[])dbr[x]);
+                        else if ((dbr[x].GetType().ToString().ToUpper() ?? "") == "SYSTEM.DATETIME")
+                        {
+                            if (_ShowDatesWithTime)
+                            {
+                                var _dt = DateTime.Parse(Conversions.ToString(dbr[x]));
+
+                                _grid[Conversions.ToInteger(t), x] = _dt.ToShortDateString() + " " + _dt.ToShortTimeString();
+                            }
+                            else
+                            {
+                                var _dt = DateTime.Parse(Conversions.ToString(dbr[x]));
+
+                                _grid[Conversions.ToInteger(t), x] = _dt.ToShortDateString();
+                            }
+                        }
+                        else if ((dbr[x].GetType().ToString().ToUpper() ?? "") == "SYSTEM.GUID")
+                            _grid[Conversions.ToInteger(t), x] = dbr[x].ToString();
+                        else
+                            _grid[Conversions.ToInteger(t), x] = Conversions.ToString(dbr[x]);
+                    }
+                    t = t + 1;
+
+                    if (MaxRowsSelected > 0 & t >= MaxRowsSelected)
+                        break;
+
+                    if (_ShowProgressBar)
+                    {
+                        pBar.Increment(1);
+                        pBar.Refresh();
+                    }
+                }
+
+                if (yy == -1)
+                    PartialSelection?.Invoke(this);
+
+                pBar.Visible = false;
+                gb1.Visible = false;
+
+                AutoSizeCellsToContents = true;
+                _colEditRestrictions.Clear();
+
+                dbr.Close();
+
+                dbc.Dispose();
+
+                cn.Close();
+
+                FinishedDatabasePopulateOperation?.Invoke(this);
+
+                Refresh();
+
+                NormalizeTearaways();
+            }
+            catch (Exception ex)
+            {
+                pBar.Visible = false;
+                gb1.Visible = false;
+
+                FinishedDatabasePopulateOperation?.Invoke(this);
+
+                Interaction.MsgBox(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// As the PopulateGridWithData method of the same signature but <c>ConnectionString</c> parameter must be in the correct
+        /// syntax for OLE data access
+        /// </summary>
+        /// <param name="ConnectionString"></param>
+        /// <param name="Sql"></param>
+        /// <remarks></remarks>
+        public void OLEPopulateGridWithData(string ConnectionString, string Sql)
+        {
+            OLEPopulateGridWithData(ConnectionString, Sql, _DefaultCellFont, _DefaultForeColor);
+        }
+
+        /// <summary>
+        /// As the PopulateGridWithData method of the same signature but <c>ConnectionString</c> parameter must be in the correct
+        /// syntax for OLE data access
+        /// </summary>
+        /// <param name="ConnectionString"></param>
+        /// <param name="Sql"></param>
+        /// <param name="Col"></param>
+        /// <remarks></remarks>
+        public void OLEPopulateGridWithData(string ConnectionString, string Sql, Color Col)
+        {
+            OLEPopulateGridWithData(ConnectionString, Sql, _DefaultCellFont, Col);
+        }
+
+        /// <summary>
+        /// As the PopulateGridWithData method of the same signature but <c>ConnectionString</c> parameter must be in the correct
+        /// syntax for OLE data access
+        /// </summary>
+        /// <param name="ConnectionString"></param>
+        /// <param name="Sql"></param>
+        /// <param name="fnt"></param>
+        /// <remarks></remarks>
+        public void OLEPopulateGridWithData(string ConnectionString, string Sql, Font fnt)
+        {
+            OLEPopulateGridWithData(ConnectionString, Sql, fnt, _DefaultForeColor);
+        }
+
+        #endregion
+
+        #region ODBCPopulateGridWithData Calls
+
+        // ODBC Populate Data Calls
+
+        /// <summary>
+        /// As the PopulateGridWithData method of the same signature but uses an OdbcDataReader <c>OdbcDR</c> instead
+        /// </summary>
+        /// <param name="OdbcDR"></param>
+        /// <param name="col"></param>
+        /// <param name="gridfont"></param>
+        /// <remarks></remarks>
+        public void ODBCPopulateGridWithData(ref System.Data.Odbc.OdbcDataReader OdbcDR, Color col, Font gridfont)
+        {
+            int x, numrows;
+
+            try
+            {
+                StartedDatabasePopulateOperation?.Invoke(this);
+
+                numrows = 0;
+
+                InitializeTheGrid(1, OdbcDR.FieldCount);
+                var loopTo = Cols - 1;
+                for (x = 0; x <= loopTo; x++)
+                    _GridHeader[x] = OdbcDR.GetName(x);
+
+                while (OdbcDR.Read())
+                {
+                    numrows += 1;
+                    if (MaxRowsSelected > 0 & numrows < MaxRowsSelected)
+                    {
+                        Rows = numrows;
+                        var loopTo1 = _cols;
+                        for (x = 0; x <= loopTo1; x++)
+                        {
+                            if (Information.IsDBNull(OdbcDR[x]))
+                            {
+                                if (_omitNulls)
+                                    _grid[numrows - 1, x] = "";
+                                else
+                                    _grid[numrows - 1, x] = "{NULL}";
+                            }
+                            else
+                            // here we need to do some work on items of certain types
+                            if ((OdbcDR[x].ToString() ?? "") == "System.Byte[]")
+                                _grid[numrows - 1, x] = ReturnByteArrayAsHexString((byte[])OdbcDR[x]);
+                            else if ((OdbcDR[x].GetType().ToString().ToUpper() ?? "") == "SYSTEM.DATETIME")
+                            {
+                                if (_ShowDatesWithTime)
+                                {
+                                    var _dt = DateTime.Parse(Conversions.ToString(OdbcDR[x]));
+
+                                    _grid[numrows - 1, x] = _dt.ToShortDateString() + " " + _dt.ToShortTimeString();
+                                }
+                                else
+                                {
+                                    var _dt = DateTime.Parse(Conversions.ToString(OdbcDR[x]));
+
+                                    _grid[numrows - 1, x] = _dt.ToShortDateString();
+                                }
+                            }
+                            else
+                                _grid[numrows - 1, x] = Conversions.ToString(OdbcDR[x]);
+                        }
+                    }
+                    else
+                    {
+                        PartialSelection?.Invoke(this);
+                        break;
+                    }
+                }
+
+                AllCellsUseThisForeColor(col);
+
+                AllCellsUseThisFont(gridfont);
+
+                AutoSizeCellsToContents = true;
+                _colEditRestrictions.Clear();
+
+                FinishedDatabasePopulateOperation?.Invoke(this);
+
+                Refresh();
+
+                NormalizeTearaways();
+            }
+            catch (Exception ex)
+            {
+                FinishedDatabasePopulateOperation?.Invoke(this);
+
+                Interaction.MsgBox(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// As the PopulateGridWithData method of the same signature but uses an OdbcDataReader <c>OdbcDR</c> instead
+        /// </summary>
+        /// <param name="OdbcDR"></param>
+        /// <remarks></remarks>
+        public void ODBCPopulateGridWithData(ref System.Data.Odbc.OdbcDataReader OdbcDR)
+        {
+            ODBCPopulateGridWithData(ref OdbcDR, _DefaultForeColor, _DefaultCellFont);
+        }
+
+        /// <summary>
+        /// As the PopulateGridWithData method of the same signature but uses an OdbcDataReader <c>OdbcDR</c> instead
+        /// </summary>
+        /// <param name="OdbcDR"></param>
+        /// <param name="ForeColor"></param>
+        /// <remarks></remarks>
+        public void ODBCPopulateGridWithData(ref System.Data.Odbc.OdbcDataReader OdbcDR, Color ForeColor)
+        {
+            ODBCPopulateGridWithData(ref OdbcDR, ForeColor, _DefaultCellFont);
+        }
+
+        /// <summary>
+        /// As the PopulateGridWithData method of the same signature but uses an OdbcDataReader <c>OdbcDR</c> instead
+        /// </summary>
+        /// <param name="OdbcDR"></param>
+        /// <param name="GridFont"></param>
+        /// <remarks></remarks>
+        public void ODBCPopulateGridWithData(ref System.Data.Odbc.OdbcDataReader OdbcDR, Font GridFont)
+        {
+            ODBCPopulateGridWithData(ref OdbcDR, _DefaultForeColor, GridFont);
+        }
+
+        /// <summary>
+        /// As the PopulateGridWithData method of the same signature but <c>ConnectionString</c> parameter must be in the correct
+        /// syntax for ODBC data access
+        /// </summary>
+        /// <param name="ConnectionString"></param>
+        /// <param name="Sql"></param>
+        /// <param name="Gridfont"></param>
+        /// <param name="col"></param>
+        /// <remarks></remarks>
+        public void ODBCPopulateGridWithData(string ConnectionString, string Sql, Font Gridfont, Color col)
+        {
+            var cn = new System.Data.Odbc.OdbcConnection(ConnectionString);
+            System.Data.Odbc.OdbcCommand dbc;
+            System.Data.Odbc.OdbcCommand dbc2;
+            System.Data.Odbc.OdbcDataReader dbr;
+            System.Data.Odbc.OdbcDataReader dbr2;
+
+            string sql2;
+            long t;
+            int x, y, yy;
+
+            StartedDatabasePopulateOperation?.Invoke(this);
+
+            // _LastConnectionString = ConnectionString
+            // _LastSQLString = Sql
+
+
+            try
+            {
+                cn.Open();
+
+                sql2 = Sql;
+                dbc2 = new System.Data.Odbc.OdbcCommand(sql2, cn);
+                dbc2.CommandTimeout = _dataBaseTimeOut;
+                dbr2 = dbc2.ExecuteReader();
+                y = 0;
+                yy = 0;
+
+                while (dbr2.Read())
+                {
+                    y = y + 1;
+                    if (y > MaxRowsSelected & MaxRowsSelected > 0)
+                    {
+                        y = MaxRowsSelected;
+                        yy = -1;
+                        break;
+                    }
+                }
+
+                dbr2.Close();
+                dbc2.Dispose();
+                cn.Close();
+
+                cn.Open();
+                dbc = new System.Data.Odbc.OdbcCommand(Sql, cn);
+                dbc.CommandTimeout = _dataBaseTimeOut;
+
+                dbr = dbc.ExecuteReader();
+
+                // Me.Cols = dbr.FieldCount
+
+                InitializeTheGrid(y, dbr.FieldCount);
+
+                if (_ShowProgressBar)
+                {
+                    pBar.Maximum = y;
+                    pBar.Minimum = 0;
+                    pBar.Value = 0;
+                    pBar.Visible = true;
+                    gb1.Visible = true;
+                    pBar.Refresh();
+                    gb1.Refresh();
+                }
+
+                AllCellsUseThisFont(Gridfont);
+                AllCellsUseThisForeColor(col);
+                var loopTo = Cols - 1;
+                for (x = 0; x <= loopTo; x++)
+                    _GridHeader[x] = dbr.GetName(x);
+
+                t = 0;
+                while (dbr.Read())
+                {
+                    var loopTo1 = Cols - 1;
+                    // Me.Rows = t + 1
+                    for (x = 0; x <= loopTo1; x++)
+                    {
+                        if (Information.IsDBNull(dbr[x]))
+                        {
+                            if (_omitNulls)
+                                _grid[Conversions.ToInteger(t), x] = "";
+                            else
+                                _grid[Conversions.ToInteger(t), x] = "{NULL}";
+                        }
+                        else
+                        // here we need to do some work on items of certain types
+                        if ((dbr[x].ToString() ?? "") == "System.Byte[]")
+                            _grid[Conversions.ToInteger(t), x] = ReturnByteArrayAsHexString((byte[])dbr[x]);
+                        else if ((dbr[x].GetType().ToString().ToUpper() ?? "") == "SYSTEM.DATETIME")
+                        {
+                            if (_ShowDatesWithTime)
+                            {
+                                var _dt = DateTime.Parse(Conversions.ToString(dbr[x]));
+
+                                _grid[Conversions.ToInteger(t), x] = _dt.ToShortDateString() + " " + _dt.ToShortTimeString();
+                            }
+                            else
+                            {
+                                var _dt = DateTime.Parse(Conversions.ToString(dbr[x]));
+
+                                _grid[Conversions.ToInteger(t), x] = _dt.ToShortDateString();
+                            }
+                        }
+                        else if ((dbr[x].GetType().ToString().ToUpper() ?? "") == "SYSTEM.GUID")
+                            _grid[Conversions.ToInteger(t), x] = dbr[x].ToString();
+                        else
+                            _grid[Conversions.ToInteger(t), x] = Conversions.ToString(dbr[x]);
+                    }
+                    t = t + 1;
+
+                    if (MaxRowsSelected > 0 & t >= MaxRowsSelected)
+                        break;
+
+                    if (_ShowProgressBar)
+                    {
+                        pBar.Increment(1);
+                        pBar.Refresh();
+                    }
+                }
+
+                if (yy == -1)
+                    PartialSelection?.Invoke(this);
+
+                pBar.Visible = false;
+                gb1.Visible = false;
+
+                AutoSizeCellsToContents = true;
+                _colEditRestrictions.Clear();
+
+                dbr.Close();
+
+                dbc.Dispose();
+
+                cn.Close();
+
+                FinishedDatabasePopulateOperation?.Invoke(this);
+
+                Refresh();
+
+                NormalizeTearaways();
+            }
+            catch (Exception ex)
+            {
+                pBar.Visible = false;
+                gb1.Visible = false;
+
+                FinishedDatabasePopulateOperation?.Invoke(this);
+
+                Interaction.MsgBox(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// As the PopulateGridWithData method of the same signature but <c>ConnectionString</c> parameter must be in the correct
+        /// syntax for ODBC data access
+        /// </summary>
+        /// <param name="ConnectionString"></param>
+        /// <param name="Sql"></param>
+        /// <remarks></remarks>
+        public void ODBCPopulateGridWithData(string ConnectionString, string Sql)
+        {
+            ODBCPopulateGridWithData(ConnectionString, Sql, _DefaultCellFont, _DefaultForeColor);
+        }
+
+        /// <summary>
+        /// As the PopulateGridWithData method of the same signature but <c>ConnectionString</c> parameter must be in the correct
+        /// syntax for ODBC data access
+        /// </summary>
+        /// <param name="ConnectionString"></param>
+        /// <param name="Sql"></param>
+        /// <param name="Col"></param>
+        /// <remarks></remarks>
+        public void ODBCPopulateGridWithData(string ConnectionString, string Sql, Color Col)
+        {
+            ODBCPopulateGridWithData(ConnectionString, Sql, _DefaultCellFont, Col);
+        }
+
+        /// <summary>
+        /// As the PopulateGridWithData method of the same signature but <c>ConnectionString</c> parameter must be in the correct
+        /// syntax for ODBC data access
+        /// </summary>
+        /// <param name="ConnectionString"></param>
+        /// <param name="Sql"></param>
+        /// <param name="fnt"></param>
+        /// <remarks></remarks>
+        public void ODBCPopulateGridWithData(string ConnectionString, string Sql, Font fnt)
+        {
+            ODBCPopulateGridWithData(ConnectionString, Sql, fnt, _DefaultForeColor);
+        }
+
+        #endregion
+
+        #region PopulateViaWebServiceString Calls
+
+        /// <summary>
+        /// The Webservice set of populators actually are forms of populators from formatted string similar to populat from text files
+        /// The difference being that defines webservices were returning these formatted strings of text. Back before the days of being
+        /// able to send complex data types across the HTTP wire. Carefully crafted webservices could spit out their results as streams
+        /// of delimited text. These methods would then parse that text and rehydrate the results into the grid for viuual presentation.
+        /// the TAIClient Time Tracking tool employes this technique. The various parameters are self explanitory
+        /// </summary>
+        /// <param name="WebServiceResults"></param>
+        /// <remarks></remarks>
+        public void PopulateViaWebServiceString(string WebServiceResults)
+        {
+            PopulateViaWebServiceString(WebServiceResults, _DefaultForeColor, _DefaultCellFont);
+        }
+
+        /// <summary>
+        /// The Webservice set of populators actually are forms of populators from formatted string similar to populat from text files
+        /// The difference being that defines webservices were returning these formatted strings of text. Back before the days of being
+        /// able to send complex data types across the HTTP wire. Carefully crafted webservices could spit out their results as streams
+        /// of delimited text. These methods would then parse that text and rehydrate the results into the grid for viuual presentation.
+        /// the TAIClient Time Tracking tool employes this technique. The various parameters are self explanitory
+        /// </summary>
+        /// <param name="WebServiceResults"></param>
+        /// <param name="col"></param>
+        /// <remarks></remarks>
+        public void PopulateViaWebServiceString(string WebServiceResults, Color col)
+        {
+            PopulateViaWebServiceString(WebServiceResults, col, _DefaultCellFont);
+        }
+
+        /// <summary>
+        /// The Webservice set of populators actually are forms of populators from formatted string similar to populat from text files
+        /// The difference being that defines webservices were returning these formatted strings of text. Back before the days of being
+        /// able to send complex data types across the HTTP wire. Carefully crafted webservices could spit out their results as streams
+        /// of delimited text. These methods would then parse that text and rehydrate the results into the grid for viuual presentation.
+        /// the TAIClient Time Tracking tool employes this technique. The various parameters are self explanitory
+        /// </summary>
+        /// <param name="WebServiceResults"></param>
+        /// <param name="fnt"></param>
+        /// <remarks></remarks>
+        public void PopulateViaWebServiceString(string WebServiceResults, Font fnt)
+        {
+            PopulateViaWebServiceString(WebServiceResults, _DefaultForeColor, fnt);
+        }
+
+        /// <summary>
+        /// The Webservice set of populators actually are forms of populators from formatted string similar to populat from text files
+        /// The difference being that defines webservices were returning these formatted strings of text. Back before the days of being
+        /// able to send complex data types across the HTTP wire. Carefully crafted webservices could spit out their results as streams
+        /// of delimited text. These methods would then parse that text and rehydrate the results into the grid for viuual presentation.
+        /// the TAIClient Time Tracking tool employes this technique. The various parameters are self explanitory
+        /// </summary>
+        /// <param name="WebServiceResults"></param>
+        /// <param name="col"></param>
+        /// <param name="fnt"></param>
+        /// <remarks></remarks>
+        public void PopulateViaWebServiceString(string WebServiceResults, Color col, Font fnt)
+        {
+            var argarray = WebServiceResults.Split('|');
+            int x, y;
+            int r, c;
+            r = Conversions.ToInteger(Conversion.Val(argarray[argarray.GetUpperBound(0)]));
+            c = Conversions.ToInteger(Conversion.Val(Conversions.ToDouble(argarray[argarray.GetUpperBound(0) - 1]) + 1) - 1);
+
+            // Me.Rows = Val(argarray(argarray.GetUpperBound(0))) + 1
+            // Me.Cols = Val(argarray(argarray.GetUpperBound(0) - 1) + 1) - 1
+
+            InitializeTheGrid(r, c);
+            var loopTo = Cols - 1;
+            for (y = 0; y <= loopTo; y++)
+                _GridHeader[y] = argarray[y];
+
+            if (OmitNulls)
+            {
+                var loopTo1 = _rows;
+                for (x = 1; x <= loopTo1; x++)
+                {
+                    var loopTo2 = _cols - 1;
+                    for (y = 0; y <= loopTo2; y++)
+                    {
+                        if ((Strings.UCase(argarray[x * _cols + y]) ?? "") == "{NULL}")
+                            argarray[x * _cols + y] = "";
+                    }
+                }
+            }
+
+            var loopTo3 = _rows;
+            for (x = 1; x <= loopTo3; x++)
+            {
+                var loopTo4 = _cols - 1;
+                for (y = 0; y <= loopTo4; y++)
+                    _grid[x - 1, y] = argarray[x * _cols + y];
+            }
+
+            AllCellsUseThisForeColor(col);
+            AllCellsUseThisFont(fnt);
+            AutoSizeCellsToContents = true;
+            _colEditRestrictions.Clear();
+
+            Refresh();
+
+            NormalizeTearaways();
+        }
+
+        /// <summary>
+        /// The Webservice set of populators actually are forms of populators from formatted string similar to populat from text files
+        /// The difference being that defines webservices were returning these formatted strings of text. Back before the days of being
+        /// able to send complex data types across the HTTP wire. Carefully crafted webservices could spit out their results as streams
+        /// of delimited text. These methods would then parse that text and rehydrate the results into the grid for viuual presentation.
+        /// the TAIClient Time Tracking tool employes this technique. The various parameters are self explanitory
+        /// </summary>
+        /// <param name="WebServiceResults"></param>
+        /// <param name="delimiter"></param>
+        /// <remarks></remarks>
+        public void PopulateViaWebServiceString(string WebServiceResults, string delimiter)
+        {
+            PopulateViaWebServiceString(WebServiceResults, delimiter, _DefaultForeColor, _DefaultCellFont);
+        }
+
+        /// <summary>
+        /// The Webservice set of populators actually are forms of populators from formatted string similar to populat from text files
+        /// The difference being that defines webservices were returning these formatted strings of text. Back before the days of being
+        /// able to send complex data types across the HTTP wire. Carefully crafted webservices could spit out their results as streams
+        /// of delimited text. These methods would then parse that text and rehydrate the results into the grid for viuual presentation.
+        /// the TAIClient Time Tracking tool employes this technique. The various parameters are self explanitory
+        /// </summary>
+        /// <param name="WebServiceResults"></param>
+        /// <param name="delimiter"></param>
+        /// <param name="col"></param>
+        /// <remarks></remarks>
+        public void PopulateViaWebServiceString(string WebServiceResults, string delimiter, Color col)
+        {
+            PopulateViaWebServiceString(WebServiceResults, delimiter, col, _DefaultCellFont);
+        }
+
+        /// <summary>
+        /// The Webservice set of populators actually are forms of populators from formatted string similar to populat from text files
+        /// The difference being that defines webservices were returning these formatted strings of text. Back before the days of being
+        /// able to send complex data types across the HTTP wire. Carefully crafted webservices could spit out their results as streams
+        /// of delimited text. These methods would then parse that text and rehydrate the results into the grid for viuual presentation.
+        /// the TAIClient Time Tracking tool employes this technique. The various parameters are self explanitory
+        /// </summary>
+        /// <param name="WebServiceResults"></param>
+        /// <param name="delimiter"></param>
+        /// <param name="fnt"></param>
+        /// <remarks></remarks>
+        public void PopulateViaWebServiceString(string WebServiceResults, string delimiter, Font fnt)
+        {
+            PopulateViaWebServiceString(WebServiceResults, delimiter, _DefaultForeColor, fnt);
+        }
+
+        /// <summary>
+        /// The Webservice set of populators actually are forms of populators from formatted string similar to populat from text files
+        /// The difference being that defines webservices were returning these formatted strings of text. Back before the days of being
+        /// able to send complex data types across the HTTP wire. Carefully crafted webservices could spit out their results as streams
+        /// of delimited text. These methods would then parse that text and rehydrate the results into the grid for viuual presentation.
+        /// the TAIClient Time Tracking tool employes this technique. The various parameters are self explanitory
+        /// </summary>
+        /// <param name="WebServiceResults"></param>
+        /// <param name="Delimiter"></param>
+        /// <param name="col"></param>
+        /// <param name="fnt"></param>
+        /// <remarks></remarks>
+        public void PopulateViaWebServiceString(string WebServiceResults, string Delimiter, Color col, Font fnt)
+        {
+            // parse the rows and colmuns off the string
+            int rows = Conversions.ToInteger(WebServiceResults.Substring(WebServiceResults.LastIndexOf(Delimiter) + Delimiter.Length));
+            WebServiceResults = WebServiceResults.Substring(0, WebServiceResults.LastIndexOf(Delimiter));
+            int cols = Conversions.ToInteger(WebServiceResults.Substring(WebServiceResults.LastIndexOf(Delimiter) + Delimiter.Length));
+            WebServiceResults = WebServiceResults.Substring(0, WebServiceResults.LastIndexOf(Delimiter));
+
+            //string[,] argarray = ReturnDelimitedStringAsArray(WebServiceResults, cols, rows, Delimiter);
+
+            string[,] argarray = (string[,])ReturnDelimitedStringAsArray(WebServiceResults, cols, rows, Delimiter);
+
+            InitializeTheGrid(rows - 1, cols);
+            int x, y;
+            var loopTo = cols - 1;
+            for (y = 0; y <= loopTo; y++)
+                _GridHeader[y] = argarray[0, y];
+
+            if (OmitNulls)
+            {
+                var loopTo1 = _rows;
+                for (x = 1; x <= loopTo1; x++)
+                {
+                    var loopTo2 = _cols - 1;
+                    for (y = 0; y <= loopTo2; y++)
+                    {
+                        if ((Strings.UCase(argarray[x, y]) ?? "") == "{NULL}")
+                            argarray[x, y] = "";
+                    }
+                }
+            }
+
+            var loopTo3 = _rows - 1;
+            for (x = 1; x <= loopTo3; x++)
+            {
+                var loopTo4 = _cols - 1;
+                for (y = 0; y <= loopTo4; y++)
+                    _grid[x, y] = argarray[x, y];
+            }
+
+            AllCellsUseThisFont(fnt);
+            AutoSizeCellsToContents = true;
+            _colEditRestrictions.Clear();
+            AllCellsUseThisForeColor(col);
+
+            Refresh();
+
+            NormalizeTearaways();
+        }
+
+        #endregion
+
+        #region PivotPopulate Calls
+
+        /// <summary>
+        /// The pivot populate calls simulate pivot table functionality in excel.
+        /// The instance grid that the pethod is called on will be populated with data from a source grid <c>sgrid</c>
+        /// The defined <c>xcol</c> and <c>ycol</c> parameters will be used to search the source grid for unique values
+        /// then for each unique value set in each of the two columns the
+        /// </summary>
+        /// <param name="sgrid"></param>
+        /// <param name="xcol"></param>
+        /// <param name="ycol"></param>
+        /// <param name="scol"></param>
+        /// <param name="FormatSpec"></param>
+        /// <remarks></remarks>
+        public void PivotPopulate(TAIGridControl sgrid, int xcol, int ycol, int scol, string FormatSpec)
+        {
+            PivotPopulate(sgrid, xcol, ycol, scol, FormatSpec, _DefaultForeColor, _DefaultCellFont);
+        }
+
+        /// <summary>
+        /// The pivot populate calls simulate pivot table functionality in excel.
+        /// The instance grid that the pethod is called on will be populated with data from a source grid <c>sgrid</c>
+        /// The defined <c>xcol</c> and <c>ycol</c> parameters will be used to search the source grid for unique values
+        /// then for each unique value set in each of the two columns the
+        /// </summary>
+        /// <param name="sgrid"></param>
+        /// <param name="xcol"></param>
+        /// <param name="ycol"></param>
+        /// <param name="scol"></param>
+        /// <remarks></remarks>
+        public void PivotPopulate(TAIGridControl sgrid, int xcol, int ycol, int scol)
+        {
+            PivotPopulate(sgrid, xcol, ycol, scol, "0.0000", _DefaultForeColor, _DefaultCellFont);
+        }
+
+        /// <summary>
+        /// The pivot populate calls simulate pivot table functionality in excel.
+        /// The instance grid that the pethod is called on will be populated with data from a source grid <c>sgrid</c>
+        /// The defined <c>xcol</c> and <c>ycol</c> parameters will be used to search the source grid for unique values
+        /// then for each unique value set in each of the two columns the
+        /// </summary>
+        /// <param name="sgrid"></param>
+        /// <param name="xcol"></param>
+        /// <param name="ycol"></param>
+        /// <param name="scol"></param>
+        /// <param name="formatspec"></param>
+        /// <param name="col"></param>
+        /// <remarks></remarks>
+        public void PivotPopulate(TAIGridControl sgrid, int xcol, int ycol, int scol, string formatspec, Color col)
+        {
+            PivotPopulate(sgrid, xcol, ycol, scol, formatspec, col, _DefaultCellFont);
+        }
+
+        /// <summary>
+        /// The pivot populate calls simulate pivot table functionality in excel.
+        /// The instance grid that the pethod is called on will be populated with data from a source grid <c>sgrid</c>
+        /// The defined <c>xcol</c> and <c>ycol</c> parameters will be used to search the source grid for unique values
+        /// then for each unique value set in each of the two columns the
+        /// </summary>
+        /// <param name="sgrid"></param>
+        /// <param name="xcol"></param>
+        /// <param name="ycol"></param>
+        /// <param name="scol"></param>
+        /// <param name="formatspec"></param>
+        /// <param name="col"></param>
+        /// <param name="fnt"></param>
+        /// <remarks></remarks>
+        public void PivotPopulate(TAIGridControl sgrid, int xcol, int ycol, int scol, string formatspec, Color col, Font fnt)
+        {
+            int x, y, xxx;
+            string a, b, c;
+            double aa;
+            int sx = sgrid.Cols - 1;
+            int sy = sgrid.Rows - 1;
+            var uniquerows = new string[sy + 1];
+            var uniquecols = new string[sx + 1];
+            // Dim formatspec As String = "0.0000"
+
+            var u = new ArrayList();
+            var uu = new ArrayList();
+
+            u.Clear();
+            uu.Clear();
+            var loopTo = sy;
+
+
+            // how many unique vals do we have in the Xcol
+
+            for (x = 0; x <= loopTo; x++)
+            {
+                a = sgrid.get_item(x, xcol);
+                if (!u.Contains(a))
+                    u.Add(a);
+            }
+
+            Cols = u.Count + 1;
+            var loopTo1 = sy;
+
+            // how many unique vals do we have in the Ycol
+
+            for (x = 0; x <= loopTo1; x++)
+            {
+                a = sgrid.get_item(x, ycol);
+                if (!uu.Contains(a))
+                    uu.Add(a);
+            }
+
+            Rows = uu.Count;
+            var loopTo2 = u.Count;
+
+            // here we will populate the header and the y column with the values being rolled up
+            for (x = 1; x <= loopTo2; x++)
+                this.set_HeaderLabel(x, u[x - 1].ToString());
+
+            set_HeaderLabel(0, sgrid.get_HeaderLabel(ycol));
+            var loopTo3 = uu.Count - 1;
+            for (y = 0; y <= loopTo3; y++)
+                this.set_item(y, 0, uu[y].ToString());
+            var loopTo4 = u.Count - 1;
+
+            // here we will actually populate the values
+
+            for (x = 0; x <= loopTo4; x++)
+            {
+                b = Conversions.ToString(u[x]);
+                var loopTo5 = uu.Count - 1;
+                for (y = 0; y <= loopTo5; y++)
+                {
+                    c = Conversions.ToString(uu[y]);
+                    aa = 0;
+                    var loopTo6 = sy;
+                    for (xxx = 0; xxx <= loopTo6; xxx++)
+                    {
+                        if ((sgrid.get_item(xxx, xcol) ?? "") == (b ?? "") & (sgrid.get_item(xxx, ycol) ?? "") == (c ?? ""))
+                            aa = aa + Conversion.Val(sgrid.get_item(xxx, scol));
+                    }
+
+                    set_item(y, x + 1, Strings.Format(aa, formatspec));
+                }
+            }
+
+            AutoSizeCellsToContents = true;
+            _colEditRestrictions.Clear();
+            AllCellsUseThisForeColor(col);
+            AllCellsUseThisFont(fnt);
+            Refresh();
+
+            NormalizeTearaways();
+        }
+
+        /// <summary>
+        /// The pivot populate calls simulate pivot table functionality in excel.
+        /// The instance grid that the pethod is called on will be populated with data from a source grid <c>sgrid</c>
+        /// The defined <c>xcol</c> and <c>ycol</c> parameters will be used to search the source grid for unique values
+        /// then for each unique value set in each of the two columns the
+        /// </summary>
+        /// <param name="sgrid"></param>
+        /// <param name="xcol"></param>
+        /// <param name="ycol"></param>
+        /// <param name="scol"></param>
+        /// <param name="formatspec"></param>
+        /// <param name="fnt"></param>
+        /// <remarks></remarks>
+        public void PivotPopulate(TAIGridControl sgrid, int xcol, int ycol, int scol, string formatspec, Font fnt)
+        {
+            PivotPopulate(sgrid, xcol, ycol, scol, formatspec, _DefaultForeColor, fnt);
+        }
+
+        #endregion
+
+        #region FrequencyDistribution Calls
+        public void FrequencyDistribution(TAIGridControl sgrid, int ColForFrequency)
+        {
+            var codes = new ArrayList();
+
+            int t;
+            int tt;
+            var loopTo = sgrid.Rows - 1;
+            for (t = 0; t <= loopTo; t++)
+            {
+                string cd = sgrid.get_item(t, ColForFrequency);
+                if (!codes.Contains(cd))
+                    codes.Add(cd);
+            }
+
+            Rows = codes.Count;
+            Cols = 2;
+            set_HeaderLabel(0, sgrid.get_HeaderLabel(ColForFrequency));
+            set_HeaderLabel(1, "Frequency");
+            var loopTo1 = codes.Count - 1;
+            for (t = 0; t <= loopTo1; t++)
+            {
+                this.set_item(t, 0, codes[t].ToString());
+
+                int result = 0;
+                var loopTo2 = sgrid.Rows - 1;
+                for (tt = 0; tt <= loopTo2; tt++)
+                {
+                    if (Conversions.ToBoolean(Operators.ConditionalCompareObjectEqual(sgrid.get_item(tt, ColForFrequency), codes[t], false)))
+                        result += 1;
+                }
+
+                set_item(t, 1, result.ToString());
+            }
+
+            AutoSizeCellsToContents = true;
+            Refresh();
+
+            NormalizeTearaways();
+        }
+
+        public void FrequencyDistribution(TAIGridControl sgrid, int ColForFrequency, bool SortDescending)
+        {
+            FrequencyDistribution(sgrid, ColForFrequency);
+
+            SortGridOnColumnNumeric(1, SortDescending);
+
+            AutoSizeCellsToContents = true;
+            Refresh();
+        }
+
+        #endregion
+
+        #region PopulateGridWithDataTable Calls
+
+        /// <summary>
+        /// Will take the supplied dataSet and extract the first table from that dataset and populate the grid with the
+        /// contents of that datatable
+        /// </summary>
+        /// <param name="dset"></param>
+        /// <remarks></remarks>
+        public void PopulateGridWithADataTable(DataSet dset)
+        {
+            PopulateGridWithADataTable(dset.Tables[0]);
+        }
+
+        /// <summary>
+        /// Will take thge supplied datatable and populate the grid with the contents oif that datatable
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <remarks></remarks>
+        public void PopulateGridWithADataTable(DataTable dt)
+        {
+            int t = 0;
+            int x = 0;
+            int y = 0;
+            string typ;
+
+            InitializeTheGrid(dt.Rows.Count, dt.Columns.Count);
+            var loopTo = dt.Columns.Count - 1;
+            for (t = 0; t <= loopTo; t++)
+                set_HeaderLabel(t, dt.Columns[t].ColumnName);
+            var loopTo1 = dt.Rows.Count - 1;
+            for (x = 0; x <= loopTo1; x++)
+            {
+                var loopTo2 = dt.Columns.Count - 1;
+                for (y = 0; y <= loopTo2; y++)
+                {
+                    typ = dt.Rows[x][y].GetType().ToString().ToUpper();
+
+                    if ((typ ?? "") == "SYSTEM.STRING")
+                        _grid[x, y] = Convert.ToString(dt.Rows[x][y]);
+                    else if ((typ ?? "") == "SYSTEM.DBNULL")
+                    {
+                        if (_omitNulls)
+                            _grid[x, y] = "";
+                        else
+                            _grid[x, y] = "{NULL}";
+                    }
+                    else if ((typ ?? "") == "SYSTEM.DATETIME")
+                    {
+                        if (_ShowDatesWithTime)
+                            _grid[x, y] = Convert.ToDateTime(dt.Rows[x][y]).ToString();
+                        else
+                            _grid[x, y] = Convert.ToDateTime(dt.Rows[x][y]).ToShortDateString();
+                    }
+                    else if ((typ ?? "") == "SYSTEM.SINGLE")
+                        _grid[x, y] = Convert.ToSingle(dt.Rows[x][y]).ToString();
+                    else if ((typ ?? "") == "SYSTEM.INT32")
+                        _grid[x, y] = Convert.ToInt32(dt.Rows[x][y]).ToString();
+                    else if ((typ ?? "") == "SYSTEM.INT16")
+                        _grid[x, y] = Convert.ToInt16(dt.Rows[x][y]).ToString();
+                    else if ((typ ?? "") == "SYSTEM.INT64")
+                        _grid[x, y] = Convert.ToInt64(dt.Rows[x][y]).ToString();
+                    else if ((typ ?? "") == "SYSTEM.BOOLEAN")
+                    {
+                        if (Convert.ToBoolean(dt.Rows[x][y]))
+                            _grid[x, y] = "TRUE";
+                        else
+                            _grid[x, y] = "FALSE";
+                    }
+                    else if ((typ ?? "") == "SYSTEM.DECIMAL")
+                        _grid[x, y] = Convert.ToDecimal(dt.Rows[x][y]).ToString();
+                    else if ((typ ?? "") == "SYSTEM.DOUBLE")
+                        _grid[x, y] = Convert.ToDouble(dt.Rows[x][y]).ToString();
+                    else if ((typ ?? "") == "SYSTEM.RUNTIMETYPE")
+                        _grid[x, y] = Convert.ToString(dt.Rows[x][y]);
+                    else
+                        _grid[x, y] = dt.Rows[x][y].GetType().ToString();
+                }
+            }
+
+            AutoSizeCellsToContents = true;
+            _colEditRestrictions.Clear();
+
+            Refresh();
+
+            NormalizeTearaways();
+        }
+
+        #endregion
+
+        #region PopulateFrimADirectory Calls
+
+        /// <summary>
+        /// Will open the directory specified by <c>Dirname</c> and will enumerate its contents.
+        /// The grid will then be cleared and the results enumerated in the grids
+        /// contents showing the FileName, Last Update Time, and physical size.
+        /// </summary>
+        /// <param name="Dirname"></param>
+        /// <remarks></remarks>
+        public void PopulateFromADirectory(string Dirname)
+        {
+            PopulateFromADirectory(Dirname, _DefaultCellFont, _DefaultForeColor, "*");
+        }
+
+        /// <summary>
+        /// Will open the directory specified by <c>Dirname</c> and will enumerate its contents.
+        /// The grid will then be cleared and the results enumerated in the grids
+        /// contents showing the FileName, Last Update Time, and physical size. The supplied
+        /// <c>gridfont</c> font will be used to show the content generated.
+        /// </summary>
+        /// <param name="Dirname"></param>
+        /// <param name="Gridfont"></param>
+        /// <remarks></remarks>
+        public void PopulateFromADirectory(string Dirname, Font Gridfont)
+        {
+            PopulateFromADirectory(Dirname, Gridfont, _DefaultForeColor, "*");
+        }
+
+        /// <summary>
+        /// Will open the directory specified by <c>Dirname</c> and will enumerate its contents.
+        /// The grid will then be cleared and the results enumerated in the grids
+        /// contents showing the FileName, Last Update Time, and physical size. The supplied
+        /// <c>col</c> color will be used to show the content generated.
+        /// </summary>
+        /// <param name="Dirname"></param>
+        /// <param name="col"></param>
+        /// <remarks></remarks>
+        public void PopulateFromADirectory(string Dirname, Color col)
+        {
+            PopulateFromADirectory(Dirname, _DefaultCellFont, col, "*");
+        }
+
+        /// <summary>
+        /// Will open the directory specified by <c>Dirname</c> and will enumerate its contents.
+        /// The grid will then be cleared and the results enumerated in the grids
+        /// contents showing the FileName, Last Update Time, and physical size. The supplied
+        /// <c>col</c> color and <c>gridfont</c> font will be used to show the content generated.
+        /// </summary>
+        /// <param name="Dirname"></param>
+        /// <param name="Gridfont"></param>
+        /// <param name="col"></param>
+        /// <remarks></remarks>
+        public void PopulateFromADirectory(string Dirname, Font Gridfont, Color col)
+        {
+            PopulateFromADirectory(Dirname, Gridfont, col, "*");
+        }
+
+        /// <summary>
+        /// Will open the directory specified by <c>Dirname</c> and will enumerate its contents via the supplied
+        /// pattern <c>Pattern</c>. The grid will then be clears and the results enumerated in the grids
+        /// contents showing the FileName, Last Update Time, and physical size.
+        /// </summary>
+        /// <param name="Dirname"></param>
+        /// <param name="Pattern"></param>
+        /// <remarks></remarks>
+        public void PopulateFromADirectory(string Dirname, string Pattern)
+        {
+            PopulateFromADirectory(Dirname, _DefaultCellFont, _DefaultForeColor, Pattern);
+        }
+
+        /// <summary>
+        /// Will open the directory specified by <c>Dirname</c> and will enumerate its contents via the supplied
+        /// pattern <c>Pattern</c>. The grid will then be clears and the results enumerated in the grids
+        /// contents showing the FileName, Last Update Time, and physical size. The supplied
+        /// <c>gridfont</c> font will be used to show the content generated.
+        /// </summary>
+        /// <param name="Dirname"></param>
+        /// <param name="Gridfont"></param>
+        /// <param name="Pattern"></param>
+        /// <remarks></remarks>
+        public void PopulateFromADirectory(string Dirname, Font Gridfont, string Pattern)
+        {
+            PopulateFromADirectory(Dirname, Gridfont, _DefaultForeColor, Pattern);
+        }
+
+        /// <summary>
+        /// Will open the directory specified by <c>Dirname</c> and will enumerate its contents via the supplied
+        /// pattern <c>Pattern</c>. The grid will then be clears and the results enumerated in the grids
+        /// contents showing the FileName, Last Update Time, and physical size. The supplied
+        /// <c>col</c> color will be used to show the content generated.
+        /// </summary>
+        /// <param name="Dirname"></param>
+        /// <param name="col"></param>
+        /// <param name="Pattern"></param>
+        /// <remarks></remarks>
+        public void PopulateFromADirectory(string Dirname, Color col, string Pattern)
+        {
+            PopulateFromADirectory(Dirname, _DefaultCellFont, col, Pattern);
+        }
+
+        /// <summary>
+        /// Will open the directory specified by <c>Dirname</c> and will enumerate its contents via the supplied
+        /// pattern <c>Pattern</c>. The grid will then be clears and the results enumerated in the grids
+        /// contents showing the FileName, Last Update Time, and physical size. The supplied
+        /// <c>col</c> color and <c>gridfont</c> font will be used to show the content generated.
+        /// </summary>
+        /// <param name="Dirname"></param>
+        /// <param name="gridfont"></param>
+        /// <param name="col"></param>
+        /// <param name="Pattern"></param>
+        /// <remarks></remarks>
+        public void PopulateFromADirectory(string Dirname, Font gridfont, Color col, string Pattern)
+        {
+            try
+            {
+                var dinf = new System.IO.DirectoryInfo(Dirname);
+
+                var finf = dinf.GetFiles(Pattern);
+                int y;
+                int r, c;
+
+                r = finf.GetUpperBound(0);
+                c = 3;
+
+                InitializeTheGrid(r + 1, c);
+
+                _GridTitle = "Files in " + Dirname;
+
+                _GridHeader[0] = "File Name";
+                _GridHeader[1] = "File Time";
+                _GridHeader[2] = "File Size";
+                var loopTo = r;
+                for (y = 0; y <= loopTo; y++)
+                {
+                    _grid[y, 0] = finf[y].FullName;
+                    _grid[y, 1] = Conversions.ToString(finf[y].LastAccessTime);
+                    _grid[y, 2] = finf[y].Length.ToString();
+                }
+
+                AllCellsUseThisFont(gridfont);
+                AllCellsUseThisForeColor(col);
+
+                AutoSizeCellsToContents = true;
+                _colEditRestrictions.Clear();
+
+                Refresh();
+
+                NormalizeTearaways();
+            }
+            catch (Exception ex)
+            {
+                InitializeTheGrid(1, 3);
+                _GridTitle = "Files in " + "We got a problem...";
+
+                _GridHeader[0] = "File Name";
+                _GridHeader[1] = "File Time";
+                _GridHeader[2] = "File Size";
+
+                Refresh();
+
+                NormalizeTearaways();
+            }
+        }
+
+        /// <summary>
+        /// Attempts to open the directory specfied by <c>Dirname</c> and enumerate the entire contents
+        /// The results are the appended to the current grids contents
+        /// The FileName, Last Update Time, and physical size are enumerated.
+        /// </summary>
+        /// <param name="Dirname"></param>
+        /// <remarks></remarks>
+        public void AppendPopulate(string Dirname)
+        {
+            AppendPopulate(Dirname, "*");
+        }
+
+        /// <summary>
+        /// Attempts to open the directory specfied by <c>Dirname</c> and enumerate the contents via the supplied <c>Pattern</c>
+        /// The results are the appended to the current grids contents
+        /// The FileName, Last Update Time, and physical size are enumerated.
+        /// </summary>
+        /// <param name="Dirname"></param>
+        /// <param name="Pattern"></param>
+        /// <remarks></remarks>
+        public void AppendPopulate(string Dirname, string Pattern)
+        {
+            var dinf = new System.IO.DirectoryInfo(Dirname);
+
+            var finf = dinf.GetFiles(Pattern);
+            int y;
+            int r;
+
+            r = finf.GetUpperBound(0);
+
+            _GridTitle = "Files in...";
+
+            if (_cols != 3)
+            {
+                _cols = 3;
+
+                _GridHeader[0] = "File Name";
+                _GridHeader[1] = "File Time";
+                _GridHeader[2] = "File Size";
+            }
+
+            int oldrows = _rows - 1;
+
+            Rows += r + 1;
+            var loopTo = r;
+            for (y = 0; y <= loopTo; y++)
+            {
+                _grid[y + oldrows, 0] = finf[y].FullName;
+                _grid[y + oldrows, 1] = Conversions.ToString(finf[y].LastAccessTime);
+                _grid[y + oldrows, 2] = finf[y].Length.ToString();
+            }
+
+            AllCellsUseThisFont(_DefaultCellFont);
+            AllCellsUseThisForeColor(_DefaultForeColor);
+
+            AutoSizeCellsToContents = true;
+            _colEditRestrictions.Clear();
+
+            Refresh();
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Public Methods
+
+        /// <summary>
+        /// Takes the column Number and attempts to parse that columns contents as First a date then a Double then Long
+        /// in an attempt to return one of the enums of TaiGridColContentTypes for String Number or Date
+        /// Will be used to comsolidate the Sort grid column methods into a single call that will make the menus for
+        /// sorting simpler, will be simple ASCENDING and DESCENDING no thats it...
+        /// </summary>
+        /// <param name="ColNumber"></param>
+        /// <returns></returns>
+        public TAIGridControl.TaiGridColContentTypes GetColumnType(int ColNumber)
+        {
+            TAIGridControl.TaiGridColContentTypes result = TaiGridColContentTypes._String;
+
+            if (ColNumber >= 0 && ColNumber < _cols)
+            {
+                // we are in range
+
+                bool Passed = true;
+
+                for (int row =0;row<_rows;row++)
+                {
+                    // Iterate over the rows
+
+                    // Try for all dates first then numbers TODO: handle BOOLS?
+
+                    if (_grid[row,ColNumber].Trim() != "" && !DateTime.TryParse(_grid[row,ColNumber],out _))
+                    {
+                        Passed = false;
+                        break;
+                    }
+                }
+
+                if (Passed)
+                {
+                    // OK Its potentially a date Lets use that
+
+                    result = TaiGridColContentTypes._Date;
+
+                }
+                else
+                {
+                    // Ok Check if its still a string and if so check for Numeric
+
+                    Passed = true;
+
+                    for (int row = 0; row < _rows; row++)
+                    {
+                        // Iterate over the rows
+                        
+                        // Try for all dates first then numbers TODO: handle BOOLS?
+
+                        if (_grid[row, ColNumber].Trim() != "" && !Double.TryParse(_grid[row, ColNumber],out _))
+                        {
+                            Passed = false;
+                            break;
+                        }
+                    }
+
+                    if (Passed)
+                    {
+                        // OK Its potentially a date Lets use that
+
+                        result = TaiGridColContentTypes._Number;
+
+                    }
+                    else
+                    {
+                        Passed = true;
+
+                        for (int row = 0; row < _rows; row++)
+                        {
+                            // Iterate over the rows
+
+                            // Try for all dates first then numbers TODO: handle BOOLS?
+
+                            if (_grid[row, ColNumber].Trim() != "" && !long.TryParse(_grid[row, ColNumber], out _))
+                            {
+                                Passed = false;
+                                break;
+                            }
+                        }
+
+                        if (Passed)
+                        {
+                            // OK Its potentially a date Lets use that
+
+                            result = TaiGridColContentTypes._Number;
+
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Takes the column Name and attempts to parse that columns contents as First a date then a Double then Long
+        /// in an attempt to return one of the enums of TaiGridColContentTypes for String Number or Date
+        /// Will be used to comsolidate the Sort grid column methods into a single call that will make the menus for
+        /// sorting simpler, will be simple ASCENDING and DESCENDING no thats it...
+        /// </summary>
+        /// <param name="ColNumber"></param>
+        /// <returns></returns>
+        public TAIGridControl.TaiGridColContentTypes GetColumnType(string ColName)
+        {
+            int colNumber = GetColumnIDByName(ColName);
+
+            return GetColumnType(colNumber);
+        }
+
 
         /// <summary>
         /// Takes the DelimitedSTringArray string and splits it up on the Delimiter. Then adds a row to the grids contents
@@ -8791,3083 +12007,6 @@ namespace TAIGridControl2
                 GridHoverleave?.Invoke(this);
         }
 
-        // New stuff as of May 31 2005
-
-        /// <summary>
-        /// Will populate the grid with the results of a call to the System.Management classes with a properly
-        /// formatted wql query (Windows Query Language) call.
-        /// 
-        /// Example:
-        /// <c>Select * from Win32_Printer</c>
-        /// 
-        /// </summary>
-        /// <param name="wql"></param>
-        /// <remarks></remarks>
-        public void PopulateFromWQL(string wql)
-        {
-            StartedDatabasePopulateOperation?.Invoke(this);
-
-            try
-            {
-                System.Management.ManagementObjectCollection moReturn;
-
-                System.Management.ManagementObjectSearcher moSearch;
-
-                //System.Management.ManagementObject mo;
-
-                System.Management.PropertyData prop;
-
-                bool HeaderDone = false;
-
-                // moSearch = New Management.ManagementObjectSearcher("Select * from Win32_Printer")
-
-                moSearch = new System.Management.ManagementObjectSearcher(wql);
-
-                moReturn = moSearch.Get();
-
-                if (_ShowProgressBar)
-                {
-                    pBar.Maximum = moReturn.Count;
-                    pBar.Minimum = 0;
-                    pBar.Value = 0;
-                    pBar.Visible = true;
-                    gb1.Visible = true;
-                    pBar.Refresh();
-                    gb1.Refresh();
-                }
-
-                int x = 0;
-
-                foreach (var mo in moReturn)
-                {
-                    int y = 0;
-
-                    if (!HeaderDone)
-                    {
-                        InitializeTheGrid(moReturn.Count, mo.Properties.Count);
-
-                        foreach (var prop1 in mo.Properties)
-                        {
-                            _GridHeader[y] = prop1.Name;
-                            y += 1;
-                        }
-
-                        HeaderDone = true;
-                    }
-
-                    y = 0;
-
-                    foreach (var prop1 in mo.Properties)
-                    {
-                        _grid[x, y] = Convert.ToString(prop1.Value);
-                        y += 1;
-                    }
-
-                    if (_ShowProgressBar)
-                    {
-                        pBar.Increment(1);
-                        pBar.Refresh();
-                    }
-
-                    x += 1;
-                }
-
-                AllCellsUseThisFont(_DefaultCellFont);
-                AllCellsUseThisForeColor(_DefaultForeColor);
-
-                AutoSizeCellsToContents = true;
-
-                Refresh();
-
-                pBar.Visible = false;
-                gb1.Visible = false;
-
-                FinishedDatabasePopulateOperation?.Invoke(this);
-
-                NormalizeTearaways();
-            }
-            catch (Exception ex)
-            {
-                pBar.Visible = false;
-                gb1.Visible = false;
-
-                FinishedDatabasePopulateOperation?.Invoke(this);
-
-                Interaction.MsgBox(ex.Message);
-            }
-        }
-
-        #region PopulateGridFromArray Calls
-
-        /// <summary>
-        /// Will populate the grids contents from an 2 dimensional array of stings <c>arr</c>, employing the supplied parameters
-        /// to control
-        /// <list type="Bullet">
-        /// <item><c>gridfont</c> will employ this font for the cell contents</item>
-        /// <item><c>col</c> will be used as the color for the displays cell items</item>
-        /// <item><c>FirstRowHeader</c> if true will treat the first row in the array as the names for each column header</item>
-        /// <item><c>AutoHeader</c> if true will automatically name each column COLUMN - {ordinal} as it populates the grid</item>
-        /// <item><c>hdr</c> an array of strings that will be used as the column labels if the other column options are False</item>
-        /// </list>
-        /// </summary>
-        /// <param name="arr"></param>
-        /// <param name="gridfont"></param>
-        /// <param name="col"></param>
-        /// <param name="FirstRowHeader"></param>
-        /// <param name="AutoHeader"></param>
-        /// <param name="hdr"></param>
-        /// <remarks></remarks>
-        private void PopulateGridFromArray(string[,] arr, Font gridfont, Color col, bool FirstRowHeader, bool AutoHeader, string[] hdr)
-        {
-            int x, y;
-            int r, c;
-
-            r = arr.GetUpperBound(0) + 1;
-            c = arr.GetUpperBound(1) + 1;
-
-            if (FirstRowHeader)
-            {
-                InitializeTheGrid(r - 1, c);
-                var loopTo = c - 1;
-                for (y = 0; y <= loopTo; y++)
-                    _GridHeader[y] = arr[0, y];
-                var loopTo1 = r - 1;
-                for (x = 1; x <= loopTo1; x++)
-                {
-                    var loopTo2 = c - 1;
-                    for (y = 0; y <= loopTo2; y++)
-                        _grid[x - 1, y] = arr[x, y];
-                }
-            }
-            else
-            {
-                InitializeTheGrid(r, c);
-
-                if (AutoHeader)
-                {
-                    var loopTo3 = c - 1;
-                    for (y = 0; y <= loopTo3; y++)
-                        _GridHeader[y] = "Column - " + y.ToString();
-                }
-                else
-                    _GridHeader = hdr;
-                var loopTo4 = r - 1;
-                for (x = 0; x <= loopTo4; x++)
-                {
-                    var loopTo5 = c - 1;
-                    for (y = 0; y <= loopTo5; y++)
-                        _grid[x, y] = arr[x, y];
-                }
-            }
-
-            AllCellsUseThisFont(gridfont);
-            AllCellsUseThisForeColor(col);
-
-            AutoSizeCellsToContents = true;
-            _colEditRestrictions.Clear();
-
-            Refresh();
-
-            NormalizeTearaways();
-        }
-
-        /// <summary>
-        /// Will populate the grids contents from an 2 dimensional array of stings <c>arr</c>, employing the supplied parameters
-        /// to control
-        /// <list type="Bullet">
-        /// <item><c>gridfont</c> will employ this font for the cell contents</item>
-        /// <item><c>col</c> will be used as the color for the displays cell items</item>
-        /// <item><c>FirstRowHeader</c> if true will treat the first row in the array as the names for each column header
-        /// if its false the columns will be automatically named</item>
-        /// </list>
-        /// </summary>
-        /// <param name="arr"></param>
-        /// <param name="gridfont"></param>
-        /// <param name="col"></param>
-        /// <param name="FirstRowHeader"></param>
-        /// <remarks></remarks>
-        public void PopulateGridFromArray(string[,] arr, Font gridfont, Color col, bool FirstRowHeader)
-        {
-            PopulateGridFromArray(arr, gridfont, col, FirstRowHeader, true, _GridHeader);
-        }
-
-        /// <summary>
-        /// Will populate the grids contents from an 2 dimensional array of stings <c>arr</c>, using the first row of values
-        /// to named each column
-        /// </summary>
-        /// <param name="arr"></param>
-        /// <remarks></remarks>
-        public void PopulateGridFromArray(string[,] arr)
-        {
-            PopulateGridFromArray(arr, _DefaultCellFont, _DefaultForeColor, true);
-        }
-
-        /// <summary>
-        /// Will populate the grids contents from an 2 dimensional array of stings <c>arr</c>, using the first row of values
-        /// to name each column each cell will be displayed the the supplied <c>cellfont</c>
-        /// </summary>
-        /// <param name="arr"></param>
-        /// <param name="CellFont"></param>
-        /// <remarks></remarks>
-        public void PopulateGridFromArray(string[,] arr, Font CellFont)
-        {
-            PopulateGridFromArray(arr, CellFont, _DefaultForeColor, true);
-        }
-
-        /// <summary>
-        /// Will populate the grids contents from an 2 dimensional array of stings <c>arr</c>, using the first row of values
-        /// to name each column each cell will be displayed the the supplied <c>Forecolor</c>
-        /// </summary>
-        /// <param name="arr"></param>
-        /// <param name="Forecolor"></param>
-        /// <remarks></remarks>
-        public void PopulateGridFromArray(string[,] arr, Color Forecolor)
-        {
-            PopulateGridFromArray(arr, _DefaultCellFont, Forecolor, true);
-        }
-
-        /// <summary>
-        /// Will populate the grids contents from an 2 dimensional array of stings <c>arr</c>, using the first row of values
-        /// to name each column each cell will be displayed the the supplied <c>cellfont</c> and <c>Forecolor</c>
-        /// </summary>
-        /// <param name="arr"></param>
-        /// <param name="Cellfont"></param>
-        /// <param name="ForeColor"></param>
-        /// <remarks></remarks>
-        public void PopulateGridFromArray(string[,] arr, Font Cellfont, Color ForeColor)
-        {
-            PopulateGridFromArray(arr, Cellfont, ForeColor, true);
-        }
-
-        /// <summary>
-        /// Will populate the grids contents from an 2 dimensional array of stings <c>arr</c>, using the first row of values
-        /// to name each column each cell will be displayed the the supplied <c>gridfont</c> and <c>col</c> color and
-        /// if <c>FirstRowHeader</c> is true will use the first row to label each column, if not, then the first row will be auto
-        /// labled with Column - {ordinal}
-        /// </summary>
-        /// <param name="arr"></param>
-        /// <param name="gridfont"></param>
-        /// <param name="col"></param>
-        /// <param name="FirstRowHeader"></param>
-        /// <remarks></remarks>
-        public void PopulateGridFromArray(int[,] arr, Font gridfont, Color col, bool FirstRowHeader)
-        {
-            int x, y;
-            int r, c;
-
-            r = arr.GetUpperBound(0) + 1;
-            c = arr.GetUpperBound(1) + 1;
-
-            if (FirstRowHeader)
-            {
-                InitializeTheGrid(r - 1, c);
-                var loopTo = c - 1;
-                for (y = 0; y <= loopTo; y++)
-                    _GridHeader[y] = arr[0, y].ToString();
-                var loopTo1 = r - 1;
-                for (x = 1; x <= loopTo1; x++)
-                {
-                    var loopTo2 = c - 1;
-                    for (y = 0; y <= loopTo2; y++)
-                        _grid[x, y] = arr[x, y].ToString();
-                }
-            }
-            else
-            {
-                InitializeTheGrid(r, c);
-                var loopTo3 = c - 1;
-                for (y = 0; y <= loopTo3; y++)
-                    _GridHeader[y] = "Column - " + y.ToString();
-                var loopTo4 = r - 1;
-                for (x = 0; x <= loopTo4; x++)
-                {
-                    var loopTo5 = c - 1;
-                    for (y = 0; y <= loopTo5; y++)
-                        _grid[x, y] = arr[x, y].ToString();
-                }
-            }
-
-            AllCellsUseThisFont(gridfont);
-            AllCellsUseThisForeColor(col);
-
-            AutoSizeCellsToContents = true;
-            _colEditRestrictions.Clear();
-
-            Refresh();
-
-            NormalizeTearaways();
-        }
-
-        /// <summary>
-        /// Will populate the grids contents from an 2 dimensional array of integers <c>arr</c> converted to strings, using the first row of values
-        /// to name each column
-        /// </summary>
-        /// <param name="arr"></param>
-        /// <remarks></remarks>
-        public void PopulateGridFromArray(int[,] arr)
-        {
-            PopulateGridFromArray(arr, _DefaultCellFont, _DefaultForeColor, true);
-        }
-
-        /// <summary>
-        /// Will populate the grids contents from an 2 dimensional array of integers <c>arr</c> converted to strings, using the first row of values
-        /// to name each column. <c>Cellfont</c> will be used as the font for each new cell
-        /// </summary>
-        /// <param name="arr"></param>
-        /// <param name="CellFont"></param>
-        /// <remarks></remarks>
-        public void PopulateGridFromArray(int[,] arr, Font CellFont)
-        {
-            PopulateGridFromArray(arr, CellFont, _DefaultForeColor, true);
-        }
-
-        /// <summary>
-        /// Will populate the grids contents from an 2 dimensional array of integers <c>arr</c> converted to strings, using the first row of values
-        /// to name each column. <c>Forecolor</c> will be used as the foreground color for each new cell
-        /// </summary>
-        /// <param name="arr"></param>
-        /// <param name="Forecolor"></param>
-        /// <remarks></remarks>
-        public void PopulateGridFromArray(int[,] arr, Color Forecolor)
-        {
-            PopulateGridFromArray(arr, _DefaultCellFont, Forecolor, true);
-        }
-
-        /// <summary>
-        /// Will populate the grids contents from an 2 dimensional array of integers <c>arr</c> converted to strings, using the first row of values
-        /// to name each column. <c>Forecolor</c> will be used as the foreground color for each new cell and <c>Cellfont</c> will be used
-        /// for each new cells font
-        /// </summary>
-        /// <param name="arr"></param>
-        /// <param name="Cellfont"></param>
-        /// <param name="ForeColor"></param>
-        /// <remarks></remarks>
-        public void PopulateGridFromArray(int[,] arr, Font Cellfont, Color ForeColor)
-        {
-            PopulateGridFromArray(arr, Cellfont, ForeColor, true);
-        }
-
-        /// <summary>
-        /// Will populate the grids contents from an 2 dimensional array of longs <c>arr</c> converted to strings, using the first row of values
-        /// to name each column. <c>col</c> will be used as the foreground color for each new cell and <c>gridfont</c> will be used if
-        /// <c>FirstRowHeader</c> is true the first row of data in the array will be used to name each column otherwise the columns will be
-        /// named Column - {ordinal}
-        /// </summary>
-        /// <param name="arr"></param>
-        /// <param name="gridfont"></param>
-        /// <param name="col"></param>
-        /// <param name="FirstRowHeader"></param>
-        /// <remarks></remarks>
-        public void PopulateGridFromArray(long[,] arr, Font gridfont, Color col, bool FirstRowHeader)
-        {
-            int x, y;
-            int r, c;
-
-            r = arr.GetUpperBound(0) + 1;
-            c = arr.GetUpperBound(1) + 1;
-
-            if (FirstRowHeader)
-            {
-                InitializeTheGrid(r - 1, c);
-                var loopTo = c - 1;
-                for (y = 0; y <= loopTo; y++)
-                    _GridHeader[y] = arr[0, y].ToString();
-                var loopTo1 = r - 1;
-                for (x = 1; x <= loopTo1; x++)
-                {
-                    var loopTo2 = c - 1;
-                    for (y = 0; y <= loopTo2; y++)
-                        _grid[x, y] = arr[x, y].ToString();
-                }
-            }
-            else
-            {
-                InitializeTheGrid(r, c);
-                var loopTo3 = c - 1;
-                for (y = 0; y <= loopTo3; y++)
-                    _GridHeader[y] = "Column - " + y.ToString();
-                var loopTo4 = r - 1;
-                for (x = 0; x <= loopTo4; x++)
-                {
-                    var loopTo5 = c - 1;
-                    for (y = 0; y <= loopTo5; y++)
-                        _grid[x, y] = arr[x, y].ToString();
-                }
-            }
-
-            AllCellsUseThisFont(gridfont);
-            AllCellsUseThisForeColor(col);
-
-            AutoSizeCellsToContents = true;
-            _colEditRestrictions.Clear();
-
-            Refresh();
-
-            NormalizeTearaways();
-        }
-
-        /// <summary>
-        /// Will populate the grids contents from an 2 dimensional array of longs <c>arr</c> converted to strings, using the first row of values
-        /// to name each column
-        /// </summary>
-        /// <param name="arr"></param>
-        /// <remarks></remarks>
-        public void PopulateGridFromArray(long[,] arr)
-        {
-            PopulateGridFromArray(arr, _DefaultCellFont, _DefaultForeColor, true);
-        }
-
-        /// <summary>
-        /// Will populate the grids contents from an 2 dimensional array of longs <c>arr</c> converted to strings, using the first row of values
-        /// to name each column. <c>Cellfont</c> will be used as the font for each new cell
-        /// </summary>
-        /// <param name="arr"></param>
-        /// <param name="CellFont"></param>
-        /// <remarks></remarks>
-        public void PopulateGridFromArray(long[,] arr, Font CellFont)
-        {
-            PopulateGridFromArray(arr, CellFont, _DefaultForeColor, true);
-        }
-
-        /// <summary>
-        /// Will populate the grids contents from an 2 dimensional array of longs <c>arr</c> converted to strings, using the first row of values
-        /// to name each column. <c>Forecolor</c> will be used as the foreground color for each new cell
-        /// </summary>
-        /// <param name="arr"></param>
-        /// <param name="Forecolor"></param>
-        /// <remarks></remarks>
-        public void PopulateGridFromArray(long[,] arr, Color Forecolor)
-        {
-            PopulateGridFromArray(arr, _DefaultCellFont, Forecolor, true);
-        }
-
-        /// <summary>
-        /// Will populate the grids contents from an 2 dimensional array of longs <c>arr</c> converted to strings, using the first row of values
-        /// to name each column. <c>Forecolor</c> will be used as the foreground color for each new cell and <c>Cellfont</c> will be used
-        /// for each new cells font
-        /// </summary>
-        /// <param name="arr"></param>
-        /// <param name="Cellfont"></param>
-        /// <param name="ForeColor"></param>
-        /// <remarks></remarks>
-        public void PopulateGridFromArray(long[,] arr, Font Cellfont, Color ForeColor)
-        {
-            PopulateGridFromArray(arr, Cellfont, ForeColor, true);
-        }
-
-        /// <summary>
-        /// Will populate the grids contents from an 2 dimensional array of doubles <c>arr</c> converted to strings, using the first row of values
-        /// to name each column. <c>col</c> will be used as the foreground color for each new cell and <c>gridfont</c> will be used if
-        /// <c>FirstRowHeader</c> is true the first row of data in the array will be used to name each column otherwise the columns will be
-        /// named Column - {ordinal}
-        /// </summary>
-        /// <param name="arr"></param>
-        /// <param name="gridfont"></param>
-        /// <param name="col"></param>
-        /// <param name="FirstRowHeader"></param>
-        /// <remarks></remarks>
-        public void PopulateGridFromArray(double[,] arr, Font gridfont, Color col, bool FirstRowHeader)
-        {
-            int x, y;
-            int r, c;
-
-            r = arr.GetUpperBound(0) + 1;
-            c = arr.GetUpperBound(1) + 1;
-
-            if (FirstRowHeader)
-            {
-                InitializeTheGrid(r - 1, c);
-                var loopTo = c - 1;
-                for (y = 0; y <= loopTo; y++)
-                    _GridHeader[y] = arr[0, y].ToString();
-                var loopTo1 = r - 1;
-                for (x = 1; x <= loopTo1; x++)
-                {
-                    var loopTo2 = c - 1;
-                    for (y = 0; y <= loopTo2; y++)
-                        _grid[x, y] = arr[x, y].ToString();
-                }
-            }
-            else
-            {
-                InitializeTheGrid(r, c);
-                var loopTo3 = c - 1;
-                for (y = 0; y <= loopTo3; y++)
-                    _GridHeader[y] = "Column - " + y.ToString();
-                var loopTo4 = r - 1;
-                for (x = 0; x <= loopTo4; x++)
-                {
-                    var loopTo5 = c - 1;
-                    for (y = 0; y <= loopTo5; y++)
-                        _grid[x, y] = arr[x, y].ToString();
-                }
-            }
-
-            AllCellsUseThisFont(gridfont);
-            AllCellsUseThisForeColor(col);
-
-            AutoSizeCellsToContents = true;
-            _colEditRestrictions.Clear();
-
-            Refresh();
-
-            NormalizeTearaways();
-        }
-
-        /// <summary>
-        /// Will populate the grids contents from an 2 dimensional array of Doubles <c>arr</c> converted to strings, using the first row of values
-        /// to name each column
-        /// </summary>
-        /// <param name="arr"></param>
-        /// <remarks></remarks>
-        public void PopulateGridFromArray(double[,] arr)
-        {
-            PopulateGridFromArray(arr, _DefaultCellFont, _DefaultForeColor, true);
-        }
-
-        /// <summary>
-        /// Will populate the grids contents from an 2 dimensional array of Doubles <c>arr</c> converted to strings, using the first row of values
-        /// to name each column. <c>Cellfont</c> will be used as the font for each new cell
-        /// </summary>
-        /// <param name="arr"></param>
-        /// <param name="CellFont"></param>
-        /// <remarks></remarks>
-        public void PopulateGridFromArray(double[,] arr, Font CellFont)
-        {
-            PopulateGridFromArray(arr, CellFont, _DefaultForeColor, true);
-        }
-
-        /// <summary>
-        /// Will populate the grids contents from an 2 dimensional array of Doubles <c>arr</c> converted to strings, using the first row of values
-        /// to name each column. <c>Forecolor</c> will be used as the foreground color for each new cell
-        /// </summary>
-        /// <param name="arr"></param>
-        /// <param name="Forecolor"></param>
-        /// <remarks></remarks>
-        public void PopulateGridFromArray(double[,] arr, Color Forecolor)
-        {
-            PopulateGridFromArray(arr, _DefaultCellFont, Forecolor, true);
-        }
-
-        /// <summary>
-        /// Will populate the grids contents from an 2 dimensional array of Doubles <c>arr</c> converted to strings, using the first row of values
-        /// to name each column. <c>Forecolor</c> will be used as the foreground color for each new cell and <c>Cellfont</c> will be used
-        /// for each new cells font
-        /// </summary>
-        /// <param name="arr"></param>
-        /// <param name="Cellfont"></param>
-        /// <param name="ForeColor"></param>
-        /// <remarks></remarks>
-        public void PopulateGridFromArray(double[,] arr, Font Cellfont, Color ForeColor)
-        {
-            PopulateGridFromArray(arr, Cellfont, ForeColor, true);
-        }
-
-        #endregion
-
-        #region PopulateGridWithDataAt Calls
-
-        /// <summary>
-        /// Will allow a database populate of a grid within an already populated grid of data.
-        /// The effect will be to insert data from a carefully crafted query into a rectangular region of an
-        /// existing grid of data.
-        /// <list type="Bullet">
-        /// <item><c>ConnectionString</c> the database connection to be employed</item>
-        /// <item><c>Sql</c> the sql code to be used to retrieve the data to be inserted</item>
-        /// <item><c>AtRow</c> the integer offset row to start populating the data at</item>
-        /// <item><c>newbackcolor</c> the color to be used to setup the background of the cells for the new data</item>
-        /// <item><c>newheadercolor</c> the color to use for the header that will be created from the queried data</item>
-        /// <item><c>ColOffset</c> the column offset from the edge to start populating</item>
-        /// </list>
-        /// </summary>
-        /// <param name="ConnectionString">A legal connection string representing the database. </param>
-        /// <param name="Sql">The actual SQL code to execute against the database represented in <c>ConnectionString</c>.</param>
-        /// <param name="Atrow">The Row from wich you want the insertion to occur.</param>
-        /// <param name="newbackcolor">The <c>System.Drawing.Color</c> to set the newly inserted rows to use as a background color. </param>
-        /// <param name="newheadercolor">Newly inserted rows will have a new header applied at the first row inserted, this will be used as the background color for this new header</param>
-        /// <param name="ColOffSet">New rows inserted will be placed starting the this column offset. Allowing insertion of data into rectangular regions of and existing grid</param>
-        /// <remarks></remarks>
-        public void PopulateGridWithDataAt(string ConnectionString, string Sql, int Atrow, Color newbackcolor, Color newheadercolor, int ColOffSet)
-        {
-            var cn = new System.Data.SqlClient.SqlConnection(ConnectionString);
-            System.Data.SqlClient.SqlCommand dbc;
-            System.Data.SqlClient.SqlCommand dbc2;
-            System.Data.SqlClient.SqlDataReader dbr;
-            System.Data.SqlClient.SqlDataReader dbr2;
-
-            string sql2;
-            long t;
-            int x, y, yy, xx;
-
-            StartedDatabasePopulateOperation?.Invoke(this);
-
-            // _LastConnectionString = ConnectionString
-            // _LastSQLString = Sql
-
-            try
-            {
-                cn.Open();
-
-                sql2 = Sql;
-                dbc2 = new System.Data.SqlClient.SqlCommand(sql2, cn);
-                dbc2.CommandTimeout = _dataBaseTimeOut;
-                dbr2 = dbc2.ExecuteReader();
-                y = 0;
-                yy = 0;
-
-                while (dbr2.Read())
-                {
-                    y = y + 1;
-                    if (y > MaxRowsSelected & MaxRowsSelected > 0)
-                    {
-                        y = MaxRowsSelected;
-                        yy = -1;
-                        break;
-                    }
-                }
-
-                dbr2.Close();
-                dbc2.Dispose();
-                cn.Close();
-
-                InsertRowsIntoGridAt(Atrow, y + 1);
-
-                cn.Open();
-                dbc = new System.Data.SqlClient.SqlCommand(Sql, cn);
-                dbc.CommandTimeout = _dataBaseTimeOut;
-
-                dbr = dbc.ExecuteReader();
-
-                // Me.Cols = dbr.FieldCount
-
-                // InitializeTheGrid(y, dbr.FieldCount)
-
-                if (_ShowProgressBar)
-                {
-                    pBar.Maximum = y;
-                    pBar.Minimum = 0;
-                    pBar.Value = 0;
-                    pBar.Visible = true;
-                    gb1.Visible = true;
-                    pBar.Refresh();
-                    gb1.Refresh();
-                }
-
-
-                // AllCellsUseThisFont(Gridfont)
-                // AllCellsUseThisForeColor(col)
-
-                if (dbr.FieldCount + ColOffSet < Cols)
-                    xx = dbr.FieldCount;
-                else
-                    xx = Cols - ColOffSet;
-                var loopTo = xx - 1;
-                for (x = 0; x <= loopTo; x++)
-                {
-                    _grid[Atrow, x + ColOffSet] = dbr.GetName(x);
-                    set_CellBackColor(Atrow, x + ColOffSet, new SolidBrush(newheadercolor));
-                }
-
-                // For x = 0 To Me.Cols - 1
-                // _GridHeader(x) = dbr.GetName(x)
-                // Next
-
-                t = Atrow + 1;
-                while (dbr.Read())
-                {
-                    var loopTo1 = xx - 1;
-                    // Me.Rows = t + 1
-                    for (x = 0; x <= loopTo1; x++)
-                    {
-                        if (Information.IsDBNull(dbr[x]))
-                        {
-                            if (_omitNulls)
-                                _grid[Conversions.ToInteger(t), x + ColOffSet] = "";
-                            else
-                                _grid[Conversions.ToInteger(t), x + ColOffSet] = "{NULL}";
-                        }
-                        else
-                        // here we need to do some work on items of certain types
-                        if ((dbr[x].ToString() ?? "") == "System.Byte[]")
-                            _grid[Conversions.ToInteger(t), x + ColOffSet] = ReturnByteArrayAsHexString((byte[])dbr[x]);
-                        else
-                            _grid[Conversions.ToInteger(t), x + ColOffSet] = Conversions.ToString(dbr[x]);
-                        set_CellBackColor(Conversions.ToInteger(t), x + ColOffSet, new SolidBrush(newbackcolor));
-                    }
-                    t = t + 1;
-
-                    if (MaxRowsSelected > 0 & t >= MaxRowsSelected)
-                        break;
-
-                    if (_ShowProgressBar)
-                    {
-                        pBar.Increment(1);
-                        pBar.Refresh();
-                    }
-                }
-
-                if (yy == -1)
-                    PartialSelection?.Invoke(this);
-
-                pBar.Visible = false;
-                gb1.Visible = false;
-
-                AutoSizeCellsToContents = true;
-
-                dbr.Close();
-
-                dbc.Dispose();
-
-                cn.Close();
-
-                FinishedDatabasePopulateOperation?.Invoke(this);
-
-                Refresh();
-            }
-            catch (Exception ex)
-            {
-                pBar.Visible = false;
-                gb1.Visible = false;
-
-                FinishedDatabasePopulateOperation?.Invoke(this);
-
-                Interaction.MsgBox(ex.Message);
-            }
-        }
-
-        /// <summary>
-        /// Will allow a database populate of a grid within an already populated grid of data.
-        /// The effect will be to insert data from a carefully crafted query into a rectangular region of an
-        /// existing grid of data.
-        /// <list type="Bullet">
-        /// <item><c>ConnectionString</c> the database connection to be employed</item>
-        /// <item><c>Sql</c> the sql code to be used to retrieve the data to be inserted</item>
-        /// <item><c>AtRow</c> the integer offset row to start populating the data at</item>
-        /// <item><c>newbackcolor</c> the color to be used to setup the background of the cells for the new data</item>
-        /// <item><c>newheadercolor</c> the color to use for the header that will be created from the queried data</item>
-        /// </list>
-        /// </summary>
-        /// <param name="ConnectionString">A legal connection string representing the database. </param>
-        /// <param name="Sql">The actual SQL code to execute against the database represented in <c>ConnectionString</c>.</param>
-        /// <param name="Atrow">The Row from wich you want the insertion to occur.</param>
-        /// <param name="newbackcolor">The <c>System.Drawing.Color</c> to set the newly inserted rows to use as a background color. </param>
-        /// <param name="newheadercolor">Newly inserted rows will have a new header applied at the first row inserted, this will be used as the background color for this new header</param>
-        /// <remarks></remarks>
-        public void PopulateGridWithDataAt(string ConnectionString, string Sql, int Atrow, Color newbackcolor, Color newheadercolor)
-        {
-            var cn = new System.Data.SqlClient.SqlConnection(ConnectionString);
-            System.Data.SqlClient.SqlCommand dbc;
-            System.Data.SqlClient.SqlCommand dbc2;
-            System.Data.SqlClient.SqlDataReader dbr;
-            System.Data.SqlClient.SqlDataReader dbr2;
-
-            string sql2;
-            long t;
-            int x, y, yy, xx;
-
-            StartedDatabasePopulateOperation?.Invoke(this);
-
-            // _LastConnectionString = ConnectionString
-            // _LastSQLString = Sql
-
-            try
-            {
-                cn.Open();
-
-                sql2 = Sql;
-                dbc2 = new System.Data.SqlClient.SqlCommand(sql2, cn);
-                dbc2.CommandTimeout = _dataBaseTimeOut;
-                dbr2 = dbc2.ExecuteReader();
-                y = 0;
-                yy = 0;
-
-                while (dbr2.Read())
-                {
-                    y = y + 1;
-                    if (y > MaxRowsSelected & MaxRowsSelected > 0)
-                    {
-                        y = MaxRowsSelected;
-                        yy = -1;
-                        break;
-                    }
-                }
-
-                dbr2.Close();
-                dbc2.Dispose();
-                cn.Close();
-
-                InsertRowsIntoGridAt(Atrow, y + 1);
-
-                cn.Open();
-                dbc = new System.Data.SqlClient.SqlCommand(Sql, cn);
-                dbc.CommandTimeout = _dataBaseTimeOut;
-
-                dbr = dbc.ExecuteReader();
-
-                // Me.Cols = dbr.FieldCount
-
-                // InitializeTheGrid(y, dbr.FieldCount)
-
-                if (_ShowProgressBar)
-                {
-                    pBar.Maximum = y;
-                    pBar.Minimum = 0;
-                    pBar.Value = 0;
-                    pBar.Visible = true;
-                    gb1.Visible = true;
-                    pBar.Refresh();
-                    gb1.Refresh();
-                }
-
-
-                // AllCellsUseThisFont(Gridfont)
-                // AllCellsUseThisForeColor(col)
-
-                if (dbr.FieldCount < Cols)
-                    xx = dbr.FieldCount;
-                else
-                    xx = Cols;
-                var loopTo = xx - 1;
-                for (x = 0; x <= loopTo; x++)
-                {
-                    _grid[Atrow, x] = dbr.GetName(x);
-                    set_CellBackColor(Atrow, x, new SolidBrush(newheadercolor));
-                }
-
-                // For x = 0 To Me.Cols - 1
-                // _GridHeader(x) = dbr.GetName(x)
-                // Next
-
-                t = Atrow + 1;
-                while (dbr.Read())
-                {
-                    var loopTo1 = xx - 1;
-                    // Me.Rows = t + 1
-                    for (x = 0; x <= loopTo1; x++)
-                    {
-                        if (Information.IsDBNull(dbr[x]))
-                        {
-                            if (_omitNulls)
-                                _grid[Conversions.ToInteger(t), x] = "";
-                            else
-                                _grid[Conversions.ToInteger(t), x] = "{NULL}";
-                        }
-                        else
-                        // here we need to do some work on items of certain types
-                        if ((dbr[x].ToString() ?? "") == "System.Byte[]")
-                            _grid[Conversions.ToInteger(t), x] = ReturnByteArrayAsHexString((byte[])dbr[x]);
-                        else
-                            _grid[Conversions.ToInteger(t), x] = Conversions.ToString(dbr[x]);
-                        set_CellBackColor(Conversions.ToInteger(t), x, new SolidBrush(newbackcolor));
-                    }
-                    t = t + 1;
-
-                    if (MaxRowsSelected > 0 & t >= MaxRowsSelected)
-                        break;
-
-                    if (_ShowProgressBar)
-                    {
-                        pBar.Increment(1);
-                        pBar.Refresh();
-                    }
-                }
-
-                if (yy == -1)
-                    PartialSelection?.Invoke(this);
-
-                pBar.Visible = false;
-                gb1.Visible = false;
-
-                AutoSizeCellsToContents = true;
-
-                dbr.Close();
-
-                dbc.Dispose();
-
-                cn.Close();
-
-                FinishedDatabasePopulateOperation?.Invoke(this);
-
-                Refresh();
-            }
-            catch (Exception ex)
-            {
-                pBar.Visible = false;
-                gb1.Visible = false;
-
-                FinishedDatabasePopulateOperation?.Invoke(this);
-
-                Interaction.MsgBox(ex.Message);
-            }
-        }
-
-        /// <summary>
-        /// Will allow a database populate of a grid within an already populated grid of data.
-        /// The effect will be to insert data from a carefully crafted query into a rectangular region of an
-        /// existing grid of data. this call will omit the header for the inserted result...
-        /// <list type="Bullet">
-        /// <item><c>ConnectionString</c> the database connection to be employed</item>
-        /// <item><c>Sql</c> the sql code to be used to retrieve the data to be inserted</item>
-        /// <item><c>AtRow</c> the integer offset row to start populating the data at</item>
-        /// <item><c>newbackcolor</c> the color to be used to setup the background of the cells for the new data</item>
-        /// </list>
-        /// </summary>
-        /// <param name="ConnectionString">A legal connection string representing the database. </param>
-        /// <param name="Sql">The actual SQL code to execute against the database represented in <c>ConnectionString</c>.</param>
-        /// <param name="Atrow">The Row from wich you want the insertion to occur.</param>
-        /// <param name="newbackcolor">The <c>System.Drawing.Color</c> to set the newly inserted rows to use as a background color. </param>
-        /// <remarks></remarks>
-        public void PopulateGridWithDataAt(string ConnectionString, string Sql, int Atrow, Color newbackcolor)
-        {
-            PopulateGridWithDataAt(ConnectionString, Sql, Atrow, newbackcolor, true);
-        }
-
-        /// <summary>
-        /// Will allow a database populate of a grid within an already populated grid of data.
-        /// The effect will be to insert data from a carefully crafted query into a rectangular region of an
-        /// existing grid of data. this call will omit the header for the inserted result...
-        /// <list type="Bullet">
-        /// <item><c>ConnectionString</c> the database connection to be employed</item>
-        /// <item><c>Sql</c> the sql code to be used to retrieve the data to be inserted</item>
-        /// <item><c>AtRow</c> the integer offset row to start populating the data at</item>
-        /// <item><c>newbackcolor</c> the color to be used to setup the background of the cells for the new data</item>
-        /// <item><c>allowDups></c> Will not insert any rows that already exist in the grid if set to false</item>
-        /// </list>
-        /// </summary>
-        /// <param name="ConnectionString">A legal connection string representing the database. </param>
-        /// <param name="Sql">The actual SQL code to execute against the database represented in <c>ConnectionString</c>.</param>
-        /// <param name="Atrow">The Row from wich you want the insertion to occur.</param>
-        /// <param name="newbackcolor">The <c>System.Drawing.Color</c> to set the newly inserted rows to use as a background color. </param>
-        /// <param name="allowDups"> Will not insert any rows that already exist in the grid if set to false</param>
-        /// <remarks></remarks>
-        public void PopulateGridWithDataAt(string ConnectionString, string Sql, int Atrow, Color newbackcolor, bool allowDups)
-        {
-            var cn = new System.Data.SqlClient.SqlConnection(ConnectionString);
-            System.Data.SqlClient.SqlCommand dbc;
-            System.Data.SqlClient.SqlCommand dbc2;
-            System.Data.SqlClient.SqlDataReader dbr;
-            System.Data.SqlClient.SqlDataReader dbr2;
-
-            string sql2;
-            long t, tt;
-            int x, y, yy, xx;
-            bool fnd = false;
-            string hst = "";
-            string hst2 = "";
-
-            StartedDatabasePopulateOperation?.Invoke(this);
-
-            // _LastConnectionString = ConnectionString
-            // _LastSQLString = Sql
-
-            try
-            {
-
-                // ' here we want to get whats in the grid already as a set of hashes for dup checking
-
-                var ga = new List<string>();
-
-                var sb = new StringBuilder();
-                var loopTo = (long)(Rows - 1);
-                for (t = 0; t <= loopTo; t++)
-                {
-                    sb = new StringBuilder();
-                    var loopTo1 = Cols - 1;
-                    for (x = 0; x <= loopTo1; x++)
-                        sb.Append(x.ToString() + _grid[Conversions.ToInteger(t), x].ToUpper() + "|");
-                    ga.Add(sb.ToString());
-                }
-
-                cn.Open();
-
-                sql2 = Sql;
-                dbc2 = new System.Data.SqlClient.SqlCommand(sql2, cn);
-                dbc2.CommandTimeout = _dataBaseTimeOut;
-                dbr2 = dbc2.ExecuteReader();
-                y = 0;
-                yy = 0;
-
-                if (dbr2.FieldCount < Cols)
-                    xx = dbr2.FieldCount;
-                else
-                    xx = Cols;
-
-                var _ggrid = new string[xx + 1];
-
-                while (dbr2.Read())
-                {
-                    hst = "";
-
-                    if (!allowDups)
-                    {
-                        var loopTo2 = xx - 1;
-                        for (x = 0; x <= loopTo2; x++)
-                        {
-                            if (Information.IsDBNull(dbr2[x]))
-                            {
-                                if (_omitNulls)
-                                    _ggrid[x] = "";
-                                else
-                                    _ggrid[x] = "{NULL}";
-                            }
-                            else
-                            // here we need to do some work on items of certain types
-                            if ((dbr2[x].ToString() ?? "") == "System.Byte[]")
-                                _ggrid[x] = ReturnByteArrayAsHexString((byte[])dbr2[x]);
-                            else
-                                _ggrid[x] = Conversions.ToString(dbr2[x]);
-                        }
-
-                        var loopTo3 = xx - 1;
-                        for (x = 0; x <= loopTo3; x++)
-                            hst += x.ToString() + _ggrid[x].ToUpper() + "|";
-
-                        if (ga.Contains(hst))
-                            fnd = true;
-                        else
-                            fnd = false;
-
-
-                        if (!fnd)
-                        {
-                            y = y + 1;
-                            if (y > MaxRowsSelected & MaxRowsSelected > 0)
-                            {
-                                y = MaxRowsSelected;
-                                yy = -1;
-                                break;
-                            }
-                        }
-                        else
-                            Console.WriteLine("Dupe");
-                    }
-                    else
-                    {
-                        y = y + 1;
-                        if (y > MaxRowsSelected & MaxRowsSelected > 0)
-                        {
-                            y = MaxRowsSelected;
-                            yy = -1;
-                            break;
-                        }
-                    }
-                }
-
-                dbr2.Close();
-                dbc2.Dispose();
-                cn.Close();
-
-                InsertRowsIntoGridAt(Atrow, y);
-
-                cn.Open();
-                dbc = new System.Data.SqlClient.SqlCommand(Sql, cn);
-                dbc.CommandTimeout = _dataBaseTimeOut;
-
-                dbr = dbc.ExecuteReader();
-
-                // Me.Cols = dbr.FieldCount
-
-                // InitializeTheGrid(y, dbr.FieldCount)
-
-                if (_ShowProgressBar)
-                {
-                    pBar.Maximum = y;
-                    pBar.Minimum = 0;
-                    pBar.Value = 0;
-                    pBar.Visible = true;
-                    gb1.Visible = true;
-                    pBar.Refresh();
-                    gb1.Refresh();
-                }
-
-
-                // AllCellsUseThisFont(Gridfont)
-                // AllCellsUseThisForeColor(col)
-
-                if (dbr.FieldCount < Cols)
-                    xx = dbr.FieldCount;
-                else
-                    xx = Cols;
-
-                t = Atrow;
-                if (allowDups)
-                {
-                    while (dbr.Read())
-                    {
-                        var loopTo4 = xx - 1;
-                        // Me.Rows = t + 1
-                        for (x = 0; x <= loopTo4; x++)
-                        {
-                            if (Information.IsDBNull(dbr[x]))
-                            {
-                                if (_omitNulls)
-                                    _grid[Conversions.ToInteger(t), x] = "";
-                                else
-                                    _grid[Conversions.ToInteger(t), x] = "{NULL}";
-                            }
-                            else
-                            // here we need to do some work on items of certain types
-                            if ((dbr[x].ToString() ?? "") == "System.Byte[]")
-                                _grid[Conversions.ToInteger(t), x] = ReturnByteArrayAsHexString((byte[])dbr[x]);
-                            else
-                                _grid[Conversions.ToInteger(t), x] = Conversions.ToString(dbr[x]);
-                            set_CellBackColor(Conversions.ToInteger(t), x, new SolidBrush(newbackcolor));
-                        }
-                        t = t + 1;
-
-                        if (MaxRowsSelected > 0 & t >= MaxRowsSelected)
-                            break;
-
-                        if (_ShowProgressBar)
-                        {
-                            pBar.Increment(1);
-                            pBar.Refresh();
-                        }
-                    }
-                }
-                else
-                {
-                    // ' here we are gonna not import any duplicate rows
-
-                    tt = 0;
-
-                    // 'Dim _ggrid(xx) As String
-
-                    while (dbr.Read())
-                    {
-                        var loopTo5 = xx - 1;
-                        // Me.Rows = t + 1
-                        for (x = 0; x <= loopTo5; x++)
-                        {
-                            if (Information.IsDBNull(dbr[x]))
-                            {
-                                if (_omitNulls)
-                                    _ggrid[x] = "";
-                                else
-                                    _ggrid[x] = "{NULL}";
-                            }
-                            else
-                            // here we need to do some work on items of certain types
-                            if ((dbr[x].ToString() ?? "") == "System.Byte[]")
-                                _ggrid[x] = ReturnByteArrayAsHexString((byte[])dbr[x]);
-                            else
-                                _ggrid[x] = Conversions.ToString(dbr[x]);
-                        }
-
-                        // ' here we want to scan the current contents of the grid to see if these values are already in the thing
-
-                        // ' first we will build a giant hash string of what we are looking for
-
-                        hst = "";
-                        hst2 = "";
-                        var loopTo6 = xx - 1;
-                        for (x = 0; x <= loopTo6; x++)
-                            hst += x.ToString() + _ggrid[x].ToUpper() + "|";
-
-                        if (ga.Contains(hst))
-                            fnd = true;
-                        else
-                            fnd = false;
-
-                        if (!fnd)
-                        {
-                            var loopTo7 = xx - 1;
-                            for (x = 0; x <= loopTo7; x++)
-                            {
-                                _grid[Conversions.ToInteger(t), x] = _ggrid[x];
-                                set_CellBackColor(Conversions.ToInteger(t), x, new SolidBrush(newbackcolor));
-                            }
-
-                            t += 1;
-                        }
-
-                        if (MaxRowsSelected > 0 & t >= MaxRowsSelected)
-                            break;
-
-                        if (_ShowProgressBar)
-                        {
-                            pBar.Increment(1);
-                            pBar.Refresh();
-                        }
-                    }
-                }
-
-                if (yy == -1)
-                    PartialSelection?.Invoke(this);
-
-                pBar.Visible = false;
-                gb1.Visible = false;
-
-                AutoSizeCellsToContents = true;
-
-                dbr.Close();
-
-                dbc.Dispose();
-
-                cn.Close();
-
-                FinishedDatabasePopulateOperation?.Invoke(this);
-
-                Refresh();
-            }
-            catch (Exception ex)
-            {
-                pBar.Visible = false;
-                gb1.Visible = false;
-
-                FinishedDatabasePopulateOperation?.Invoke(this);
-            }
-        }
-
-        #endregion
-
-        #region PopulateGridWithData Calls
-
-        /// <summary>
-        /// Will take the supplied SQLDataReader <c>SQLDR</c> and will automatically populate the grid with its contents using
-        /// <c>col</c> for the foreground color and <c>gridfont</c> for the cells font style
-        /// </summary>
-        /// <param name="SQLDR"></param>
-        /// <param name="col"></param>
-        /// <param name="gridfont"></param>
-        /// <remarks></remarks>
-        public void PopulateGridWithData(ref System.Data.SqlClient.SqlDataReader SQLDR, Color col, Font gridfont)
-        {
-            int x, numrows;
-
-            try
-            {
-                StartedDatabasePopulateOperation?.Invoke(this);
-
-                numrows = 0;
-
-                InitializeTheGrid(0, SQLDR.FieldCount);
-                var loopTo = Cols - 1;
-                for (x = 0; x <= loopTo; x++)
-                    _GridHeader[x] = SQLDR.GetName(x);
-
-                while (SQLDR.Read())
-                {
-                    numrows += 1;
-
-                    if (MaxRowsSelected > 0 & numrows > MaxRowsSelected)
-                    {
-                        PartialSelection?.Invoke(this);
-                        break;
-                    }
-
-
-                    Rows = numrows;
-                    var loopTo1 = Cols - 1;
-                    // For x = 0 To _Cols - 1
-                    for (x = 0; x <= loopTo1; x++)
-                    {
-                        if (Information.IsDBNull(SQLDR[x]))
-                        {
-                            if (_omitNulls)
-                                _grid[numrows - 1, x] = "";
-                            else
-                                _grid[numrows - 1, x] = "{NULL}";
-                        }
-                        else
-                        // here we need to do some work on items of certain types
-                        if ((SQLDR[x].ToString() ?? "") == "System.Byte[]")
-                            _grid[numrows - 1, x] = ReturnByteArrayAsHexString((byte[])SQLDR[x]);
-                        else
-                        // Console.WriteLine(SQLDR.Item(x).GetType.ToString())
-                        if ((SQLDR[x].GetType().ToString().ToUpper() ?? "") == "SYSTEM.DATETIME")
-                        {
-                            if (_ShowDatesWithTime)
-                            {
-                                var _dt = DateTime.Parse(Conversions.ToString(SQLDR[x]));
-
-                                _grid[numrows - 1, x] = _dt.ToShortDateString() + " " + _dt.ToShortTimeString();
-                            }
-                            else
-                            {
-                                var _dt = DateTime.Parse(Conversions.ToString(SQLDR[x]));
-
-                                _grid[numrows - 1, x] = _dt.ToShortDateString();
-                            }
-                        }
-                        else if ((SQLDR[x].GetType().ToString().ToUpper() ?? "") == "SYSTEM.GUID")
-                            _grid[numrows - 1, x] = "This is a GUID";
-                        else
-                            _grid[numrows - 1, x] = Conversions.ToString(SQLDR[x]);
-                    }
-                }
-
-                AllCellsUseThisForeColor(col);
-
-                AllCellsUseThisFont(gridfont);
-
-                AutoSizeCellsToContents = true;
-                _colEditRestrictions.Clear();
-
-                FinishedDatabasePopulateOperation?.Invoke(this);
-
-                Refresh();
-
-                NormalizeTearaways();
-            }
-            catch (Exception ex)
-            {
-                FinishedDatabasePopulateOperation?.Invoke(this);
-
-                Interaction.MsgBox(ex.Message);
-            }
-        }
-
-        /// <summary>
-        /// Will take the supplied SQLDataReader <c>SQLDR</c> and will automatically populate the grid with its contents using
-        /// the grids default coloring and fonts for the cells content (settable using the propertries of the grid itself
-        /// </summary>
-        /// <param name="SQLDR"></param>
-        /// <remarks></remarks>
-        public void PopulateGridWithData(ref System.Data.SqlClient.SqlDataReader SQLDR)
-        {
-            PopulateGridWithData(ref SQLDR, _DefaultForeColor, _DefaultCellFont);
-        }
-
-        /// <summary>
-        /// Will take the supplied SQLDataReader <c>SQLDR</c> and will automatically populate the grid with its contents using
-        /// <c>ForeColor</c> for the foreground color and <c>gridfont</c> for the cells font style
-        /// </summary>
-        /// <param name="SQLDR"></param>
-        /// <param name="ForeColor"></param>
-        /// <remarks></remarks>
-        public void PopulateGridWithData(ref System.Data.SqlClient.SqlDataReader SQLDR, Color ForeColor)
-        {
-            PopulateGridWithData(ref SQLDR, ForeColor, _DefaultCellFont);
-        }
-
-        /// <summary>
-        /// Will take the supplied SQLDataReader <c>SQLDR</c> and will automatically populate the grid with its contents using
-        /// <c>GridFont</c> for the cells font style
-        /// </summary>
-        /// <param name="SQLDR"></param>
-        /// <param name="GridFont"></param>
-        /// <remarks></remarks>
-        public void PopulateGridWithData(ref System.Data.SqlClient.SqlDataReader SQLDR, Font GridFont)
-        {
-            PopulateGridWithData(ref SQLDR, _DefaultForeColor, GridFont);
-        }
-
-        /// <summary>
-        /// Will take the supplied <c>ConnectionString</c> and <c>Sql</c> code and query the database gathering the results and populaating the grid
-        /// with those results. <c>GridFont</c> and <c>col</c> be used to generate the font and the foreground color for the cell contents
-        /// </summary>
-        /// <param name="ConnectionString"></param>
-        /// <param name="Sql"></param>
-        /// <param name="Gridfont"></param>
-        /// <param name="col"></param>
-        /// <remarks></remarks>
-        public void PopulateGridWithData(string ConnectionString, string Sql, Font Gridfont, Color col)
-        {
-            System.Data.SqlClient.SqlCommand dbc;
-            System.Data.SqlClient.SqlCommand dbc2;
-            string sql2;
-            long t;
-            int y, yy;
-
-            StartedDatabasePopulateOperation?.Invoke(this);
-
-            try
-            {
-                Cursor.Current = Cursors.WaitCursor;
-                y = 0;
-                yy = 0;
-
-                // Gets a count of the number of records returned by the query
-                using (var cn = new System.Data.SqlClient.SqlConnection())
-                {
-                    cn.ConnectionString = ConnectionString;
-                    cn.Open();
-                    sql2 = Sql;
-                    dbc2 = new System.Data.SqlClient.SqlCommand(sql2, cn);
-                    dbc2.CommandTimeout = _dataBaseTimeOut;
-
-                    using (var dbr2 = dbc2.ExecuteReader())
-                    {
-                        while (dbr2.Read())
-                        {
-                            y = y + 1;
-                            if (y > MaxRowsSelected & MaxRowsSelected > 0)
-                            {
-                                y = MaxRowsSelected;
-                                yy = -1;
-                                break;
-                            }
-                        }
-                    }
-                }
-
-                if (_ShowProgressBar)
-                {
-                    pBar.Maximum = y;
-                    pBar.Minimum = 0;
-                    pBar.Value = 0;
-                    pBar.Visible = true;
-                    pBar.Style = ProgressBarStyle.Continuous;
-                    gb1.Visible = true;
-                    pBar.Step = 1;
-                    pBar.Refresh();
-                    gb1.Refresh();
-                }
-
-                using (var cn2 = new System.Data.SqlClient.SqlConnection())
-                {
-                    cn2.ConnectionString = ConnectionString;
-                    cn2.Open();
-                    dbc = new System.Data.SqlClient.SqlCommand(Sql, cn2);
-                    dbc.CommandTimeout = _dataBaseTimeOut;
-
-                    using (var dbr = dbc.ExecuteReader())
-                    {
-                        InitializeTheGrid(y, dbr.FieldCount);
-                        AllCellsUseThisFont(Gridfont);
-                        AllCellsUseThisForeColor(col);
-
-                        for (int x = 0, loopTo = Cols - 1; x <= loopTo; x++)
-                            _GridHeader[x] = dbr.GetName(x);
-
-                        t = 0;
-
-                        while (dbr.Read())
-                        {
-                            var dbrRow = new List<object>();
-                            int x = 0;
-
-                            for (int i = 0, loopTo1 = Cols - 1; i <= loopTo1; i++)
-                                dbrRow.Add(dbr[i]);
-
-                            // Process the row item from the data reader
-                            foreach (object o in dbrRow)
-                            {
-                                if (o.Equals(DBNull.Value))
-                                {
-                                    if (_omitNulls)
-                                        _grid[Conversions.ToInteger(t), x] = "";
-                                    else
-                                        _grid[Conversions.ToInteger(t), x] = "{NULL}";
-                                }
-                                else if ((o.ToString() ?? "") == "System.Byte[]")
-                                    _grid[Conversions.ToInteger(t), x] = ReturnByteArrayAsHexString((byte[])o);
-                                else if ((o.GetType().ToString().ToUpper() ?? "") == "SYSTEM.DATETIME")
-                                {
-                                    var _dt = Convert.ToDateTime(o); // DateTime.Parse(o)
-                                    if (_ShowDatesWithTime)
-                                        _grid[Conversions.ToInteger(t), x] = _dt.ToShortDateString() + " " + _dt.ToShortTimeString();
-                                    else
-                                        _grid[Conversions.ToInteger(t), x] = _dt.ToShortDateString();
-                                }
-                                else if ((o.GetType().ToString().ToUpper() ?? "") == "SYSTEM.GUID")
-                                {
-                                    string s = o.ToString();
-                                    _grid[Conversions.ToInteger(t), x] = s;
-                                }
-                                else
-                                    _grid[Conversions.ToInteger(t), x] = Conversions.ToString(o);
-                                // increment column index
-                                x += 1;
-                            }
-
-                            // increment the row index
-                            t = t + 1;
-
-                            if (MaxRowsSelected > 0 & t >= MaxRowsSelected)
-                                break;
-
-                            if (_ShowProgressBar)
-                                pBar.PerformStep();
-                        }
-                    }
-                }
-
-                if (yy == -1)
-                    PartialSelection?.Invoke(this);
-
-                if (_ShowProgressBar)
-                {
-                    pBar.PerformStep();
-                    pBar.Visible = false;
-                    gb1.Visible = false;
-                }
-
-                AutoSizeCellsToContents = true;
-                _colEditRestrictions.Clear();
-
-                FinishedDatabasePopulateOperation?.Invoke(this);
-
-                Refresh();
-
-                NormalizeTearaways();
-            }
-            catch (Exception ex)
-            {
-                pBar.Visible = false;
-                gb1.Visible = false;
-
-                FinishedDatabasePopulateOperation?.Invoke(this);
-
-                Interaction.MsgBox(ex.Message);
-            }
-
-            finally
-            {
-
-                // Set the cursor back to the default cursor
-                Cursor.Current = Cursors.Default;
-            }
-        }
-
-        /// <summary>
-        /// Will take the supplied <c>ConnectionString</c> and <c>Sql</c> code and query the database gathering the results and populaating the grid
-        /// the grids defauls will be used for the cells fonts and coloring characteristics
-        /// </summary>
-        /// <param name="ConnectionString"></param>
-        /// <param name="Sql"></param>
-        /// <remarks></remarks>
-        public void PopulateGridWithData(string ConnectionString, string Sql)
-        {
-            PopulateGridWithData(ConnectionString, Sql, _DefaultCellFont, _DefaultForeColor);
-        }
-
-        /// <summary>
-        /// Will take the supplied <c>ConnectionString</c> and <c>Sql</c> code and query the database gathering the results and populaating the grid
-        /// the <c>col</c> parameter wwill be used for the cell foreground coloring
-        /// the grids defauls will be used for the cells fonts and other coloring characteristics
-        /// </summary>
-        /// <param name="ConnectionString"></param>
-        /// <param name="Sql"></param>
-        /// <param name="Col"></param>
-        /// <remarks></remarks>
-        public void PopulateGridWithData(string ConnectionString, string Sql, Color Col)
-        {
-            PopulateGridWithData(ConnectionString, Sql, _DefaultCellFont, Col);
-        }
-
-        /// <summary>
-        /// Will take the supplied <c>ConnectionString</c> and <c>Sql</c> code and query the database gathering the results and populaating the grid
-        /// the <c>fnt</c> parameter wwill be used for the cell fonts
-        /// the grids defauls will be used for the cells other coloring characteristics
-        /// </summary>
-        /// <param name="ConnectionString"></param>
-        /// <param name="Sql"></param>
-        /// <param name="fnt"></param>
-        /// <remarks></remarks>
-        public void PopulateGridWithData(string ConnectionString, string Sql, Font fnt)
-        {
-            PopulateGridWithData(ConnectionString, Sql, fnt, _DefaultForeColor);
-        }
-
-        #endregion
-
-        #region SQLPopulateGridWithData Calls
-
-        /// <summary>
-        /// A synonym for the PopulateGridWithData method of the same signature
-        /// </summary>
-        /// <param name="SQLDR"></param>
-        /// <param name="col"></param>
-        /// <param name="gridfont"></param>
-        /// <remarks></remarks>
-        public void SQLPopulateGridWithData(ref System.Data.SqlClient.SqlDataReader SQLDR, Color col, Font gridfont)
-        {
-            PopulateGridWithData(ref SQLDR, col, gridfont);
-        }
-
-        /// <summary>
-        /// A synonym for the PopulateGridWithData method of the same signature
-        /// </summary>
-        /// <param name="SQLDR"></param>
-        /// <remarks></remarks>
-        public void SQLPopulateGridWithData(ref System.Data.SqlClient.SqlDataReader SQLDR)
-        {
-            PopulateGridWithData(ref SQLDR, _DefaultForeColor, _DefaultCellFont);
-        }
-
-        /// <summary>
-        /// A synonym for the PopulateGridWithData method of the same signature
-        /// </summary>
-        /// <param name="SQLDR"></param>
-        /// <param name="ForeColor"></param>
-        /// <remarks></remarks>
-        public void SQLPopulateGridWithData(ref System.Data.SqlClient.SqlDataReader SQLDR, Color ForeColor)
-        {
-            PopulateGridWithData(ref SQLDR, ForeColor, _DefaultCellFont);
-        }
-
-        /// <summary>
-        /// A synonym for the PopulateGridWithData method of the same signature
-        /// </summary>
-        /// <param name="SQLDR"></param>
-        /// <param name="GridFont"></param>
-        /// <remarks></remarks>
-        public void SQLPopulateGridWithData(ref System.Data.SqlClient.SqlDataReader SQLDR, Font GridFont)
-        {
-            PopulateGridWithData(ref SQLDR, _DefaultForeColor, GridFont);
-        }
-
-        /// <summary>
-        /// A synonym for the PopulateGridWithData method of the same signature
-        /// </summary>
-        /// <param name="ConnectionString"></param>
-        /// <param name="Sql"></param>
-        /// <param name="Gridfont"></param>
-        /// <param name="col"></param>
-        /// <remarks></remarks>
-        public void SQLPopulateGridWithData(string ConnectionString, string Sql, Font Gridfont, Color col)
-        {
-            PopulateGridWithData(ConnectionString, Sql, Gridfont, col);
-        }
-
-        /// <summary>
-        /// A synonym for the PopulateGridWithData method of the same signature
-        /// </summary>
-        /// <param name="ConnectionString"></param>
-        /// <param name="Sql"></param>
-        /// <remarks></remarks>
-        public void SQLPopulateGridWithData(string ConnectionString, string Sql)
-        {
-            PopulateGridWithData(ConnectionString, Sql, _DefaultCellFont, _DefaultForeColor);
-        }
-
-        /// <summary>
-        /// A synonym for the PopulateGridWithData method of the same signature
-        /// </summary>
-        /// <param name="ConnectionString"></param>
-        /// <param name="Sql"></param>
-        /// <param name="Col"></param>
-        /// <remarks></remarks>
-        public void SQLPopulateGridWithData(string ConnectionString, string Sql, Color Col)
-        {
-            PopulateGridWithData(ConnectionString, Sql, _DefaultCellFont, Col);
-        }
-
-        /// <summary>
-        /// A synonym for the PopulateGridWithData method of the same signature
-        /// </summary>
-        /// <param name="ConnectionString"></param>
-        /// <param name="Sql"></param>
-        /// <param name="fnt"></param>
-        /// <remarks></remarks>
-        public void SQLPopulateGridWithData(string ConnectionString, string Sql, Font fnt)
-        {
-            PopulateGridWithData(ConnectionString, Sql, fnt, _DefaultForeColor);
-        }
-
-        #endregion
-
-        #region OLEPopulateGridWithData Calls
-        // OLE Populate Data Calls
-
-        /// <summary>
-        /// As the PopulateGridWithData method of the same signature but uses an OleDbDataReader <c>OLEDR</c> instead
-        /// </summary>
-        /// <param name="OLEDR"></param>
-        /// <param name="col"></param>
-        /// <param name="gridfont"></param>
-        /// <remarks></remarks>
-        public void OLEPopulateGridWithData(ref System.Data.OleDb.OleDbDataReader OLEDR, Color col, Font gridfont)
-        {
-            int x, numrows;
-
-            try
-            {
-                StartedDatabasePopulateOperation?.Invoke(this);
-
-                numrows = 0;
-
-                InitializeTheGrid(1, OLEDR.FieldCount);
-                var loopTo = Cols - 1;
-                for (x = 0; x <= loopTo; x++)
-                    _GridHeader[x] = OLEDR.GetName(x);
-
-                while (OLEDR.Read())
-                {
-                    numrows += 1;
-                    if (MaxRowsSelected > 0 & numrows < MaxRowsSelected)
-                    {
-                        Rows = numrows;
-                        var loopTo1 = _cols;
-                        for (x = 0; x <= loopTo1; x++)
-                        {
-                            if (Information.IsDBNull(OLEDR[x]))
-                            {
-                                if (_omitNulls)
-                                    _grid[numrows - 1, x] = "";
-                                else
-                                    _grid[numrows - 1, x] = "{NULL}";
-                            }
-                            else
-                            // here we need to do some work on items of certain types
-                            if ((OLEDR[x].ToString() ?? "") == "System.Byte[]")
-                                _grid[numrows - 1, x] = ReturnByteArrayAsHexString((byte[])OLEDR[x]);
-                            else if ((OLEDR[x].GetType().ToString().ToUpper() ?? "") == "SYSTEM.DATETIME")
-                            {
-                                if (_ShowDatesWithTime)
-                                {
-                                    var _dt = DateTime.Parse(Conversions.ToString(OLEDR[x]));
-
-                                    _grid[numrows - 1, x] = _dt.ToShortDateString() + " " + _dt.ToShortTimeString();
-                                }
-                                else
-                                {
-                                    var _dt = DateTime.Parse(Conversions.ToString(OLEDR[x]));
-
-                                    _grid[numrows - 1, x] = _dt.ToShortDateString();
-                                }
-                            }
-                            else
-                                _grid[numrows - 1, x] = Conversions.ToString(OLEDR[x]);
-                        }
-                    }
-                    else
-                    {
-                        PartialSelection?.Invoke(this);
-                        break;
-                    }
-                }
-
-                AllCellsUseThisForeColor(col);
-
-                AllCellsUseThisFont(gridfont);
-
-                AutoSizeCellsToContents = true;
-                _colEditRestrictions.Clear();
-
-                FinishedDatabasePopulateOperation?.Invoke(this);
-
-                Refresh();
-
-                NormalizeTearaways();
-            }
-            catch (Exception ex)
-            {
-                FinishedDatabasePopulateOperation?.Invoke(this);
-
-                Interaction.MsgBox(ex.Message);
-            }
-        }
-
-        /// <summary>
-        /// As the PopulateGridWithData method of the same signature but uses an OleDbDataReader <c>OLEDR</c> instead
-        /// </summary>
-        /// <param name="OLEDR"></param>
-        /// <remarks></remarks>
-        public void OLEPopulateGridWithData(ref System.Data.OleDb.OleDbDataReader OLEDR)
-        {
-            OLEPopulateGridWithData(ref OLEDR, _DefaultForeColor, _DefaultCellFont);
-        }
-
-        /// <summary>
-        /// As the PopulateGridWithData method of the same signature but uses an OleDbDataReader <c>OLEDR</c> instead
-        /// </summary>
-        /// <param name="OLEDR"></param>
-        /// <param name="ForeColor"></param>
-        /// <remarks></remarks>
-        public void OLEPopulateGridWithData(ref System.Data.OleDb.OleDbDataReader OLEDR, Color ForeColor)
-        {
-            OLEPopulateGridWithData(ref OLEDR, ForeColor, _DefaultCellFont);
-        }
-
-        /// <summary>
-        /// As the PopulateGridWithData method of the same signature but uses an OleDbDataReader <c>OLEDR</c> instead
-        /// </summary>
-        /// <param name="OLEDR"></param>
-        /// <param name="GridFont"></param>
-        /// <remarks></remarks>
-        public void OLEPopulateGridWithData(ref System.Data.OleDb.OleDbDataReader OLEDR, Font GridFont)
-        {
-            OLEPopulateGridWithData(ref OLEDR, _DefaultForeColor, GridFont);
-        }
-
-        /// <summary>
-        /// As the PopulateGridWithData method of the same signature but <c>ConnectionString</c> parameter must be in the correct
-        /// syntax for OLE data access
-        /// </summary>
-        /// <param name="ConnectionString"></param>
-        /// <param name="Sql"></param>
-        /// <param name="Gridfont"></param>
-        /// <param name="col"></param>
-        /// <remarks></remarks>
-        public void OLEPopulateGridWithData(string ConnectionString, string Sql, Font Gridfont, Color col)
-        {
-            var cn = new System.Data.OleDb.OleDbConnection(ConnectionString);
-            System.Data.OleDb.OleDbCommand dbc;
-            System.Data.OleDb.OleDbCommand dbc2;
-            System.Data.OleDb.OleDbDataReader dbr;
-            System.Data.OleDb.OleDbDataReader dbr2;
-
-            string sql2;
-            long t;
-            int x, y, yy;
-
-            StartedDatabasePopulateOperation?.Invoke(this);
-
-            // _LastConnectionString = ConnectionString
-            // _LastSQLString = Sql
-
-
-            try
-            {
-                cn.Open();
-
-                sql2 = Sql;
-                dbc2 = new System.Data.OleDb.OleDbCommand(sql2, cn);
-                dbc2.CommandTimeout = _dataBaseTimeOut;
-                dbr2 = dbc2.ExecuteReader();
-                y = 0;
-                yy = 0;
-
-                while (dbr2.Read())
-                {
-                    y = y + 1;
-                    if (y > MaxRowsSelected & MaxRowsSelected > 0)
-                    {
-                        y = MaxRowsSelected;
-                        yy = -1;
-                        break;
-                    }
-                }
-
-                dbr2.Close();
-                dbc2.Dispose();
-                cn.Close();
-
-                cn.Open();
-                dbc = new System.Data.OleDb.OleDbCommand(Sql, cn);
-                dbc.CommandTimeout = _dataBaseTimeOut;
-
-                dbr = dbc.ExecuteReader();
-
-                // Me.Cols = dbr.FieldCount
-
-                InitializeTheGrid(y, dbr.FieldCount);
-
-                if (_ShowProgressBar)
-                {
-                    pBar.Maximum = y;
-                    pBar.Minimum = 0;
-                    pBar.Value = 0;
-                    pBar.Visible = true;
-                    gb1.Visible = true;
-                    pBar.Refresh();
-                    gb1.Refresh();
-                }
-
-
-                AllCellsUseThisFont(Gridfont);
-                AllCellsUseThisForeColor(col);
-                var loopTo = Cols - 1;
-                for (x = 0; x <= loopTo; x++)
-                    _GridHeader[x] = dbr.GetName(x);
-
-                t = 0;
-                while (dbr.Read())
-                {
-                    var loopTo1 = Cols - 1;
-                    // Me.Rows = t + 1
-                    for (x = 0; x <= loopTo1; x++)
-                    {
-                        if (Information.IsDBNull(dbr[x]))
-                        {
-                            if (_omitNulls)
-                                _grid[Conversions.ToInteger(t), x] = "";
-                            else
-                                _grid[Conversions.ToInteger(t), x] = "{NULL}";
-                        }
-                        else
-                        // here we need to do some work on items of certain types
-                        if ((dbr[x].ToString() ?? "") == "System.Byte[]")
-                            _grid[Conversions.ToInteger(t), x] = ReturnByteArrayAsHexString((byte[])dbr[x]);
-                        else if ((dbr[x].GetType().ToString().ToUpper() ?? "") == "SYSTEM.DATETIME")
-                        {
-                            if (_ShowDatesWithTime)
-                            {
-                                var _dt = DateTime.Parse(Conversions.ToString(dbr[x]));
-
-                                _grid[Conversions.ToInteger(t), x] = _dt.ToShortDateString() + " " + _dt.ToShortTimeString();
-                            }
-                            else
-                            {
-                                var _dt = DateTime.Parse(Conversions.ToString(dbr[x]));
-
-                                _grid[Conversions.ToInteger(t), x] = _dt.ToShortDateString();
-                            }
-                        }
-                        else if ((dbr[x].GetType().ToString().ToUpper() ?? "") == "SYSTEM.GUID")
-                            _grid[Conversions.ToInteger(t), x] = dbr[x].ToString();
-                        else
-                            _grid[Conversions.ToInteger(t), x] = Conversions.ToString(dbr[x]);
-                    }
-                    t = t + 1;
-
-                    if (MaxRowsSelected > 0 & t >= MaxRowsSelected)
-                        break;
-
-                    if (_ShowProgressBar)
-                    {
-                        pBar.Increment(1);
-                        pBar.Refresh();
-                    }
-                }
-
-                if (yy == -1)
-                    PartialSelection?.Invoke(this);
-
-                pBar.Visible = false;
-                gb1.Visible = false;
-
-                AutoSizeCellsToContents = true;
-                _colEditRestrictions.Clear();
-
-                dbr.Close();
-
-                dbc.Dispose();
-
-                cn.Close();
-
-                FinishedDatabasePopulateOperation?.Invoke(this);
-
-                Refresh();
-
-                NormalizeTearaways();
-            }
-            catch (Exception ex)
-            {
-                pBar.Visible = false;
-                gb1.Visible = false;
-
-                FinishedDatabasePopulateOperation?.Invoke(this);
-
-                Interaction.MsgBox(ex.Message);
-            }
-        }
-
-        /// <summary>
-        /// As the PopulateGridWithData method of the same signature but <c>ConnectionString</c> parameter must be in the correct
-        /// syntax for OLE data access
-        /// </summary>
-        /// <param name="ConnectionString"></param>
-        /// <param name="Sql"></param>
-        /// <remarks></remarks>
-        public void OLEPopulateGridWithData(string ConnectionString, string Sql)
-        {
-            OLEPopulateGridWithData(ConnectionString, Sql, _DefaultCellFont, _DefaultForeColor);
-        }
-
-        /// <summary>
-        /// As the PopulateGridWithData method of the same signature but <c>ConnectionString</c> parameter must be in the correct
-        /// syntax for OLE data access
-        /// </summary>
-        /// <param name="ConnectionString"></param>
-        /// <param name="Sql"></param>
-        /// <param name="Col"></param>
-        /// <remarks></remarks>
-        public void OLEPopulateGridWithData(string ConnectionString, string Sql, Color Col)
-        {
-            OLEPopulateGridWithData(ConnectionString, Sql, _DefaultCellFont, Col);
-        }
-
-        /// <summary>
-        /// As the PopulateGridWithData method of the same signature but <c>ConnectionString</c> parameter must be in the correct
-        /// syntax for OLE data access
-        /// </summary>
-        /// <param name="ConnectionString"></param>
-        /// <param name="Sql"></param>
-        /// <param name="fnt"></param>
-        /// <remarks></remarks>
-        public void OLEPopulateGridWithData(string ConnectionString, string Sql, Font fnt)
-        {
-            OLEPopulateGridWithData(ConnectionString, Sql, fnt, _DefaultForeColor);
-        }
-
-        #endregion
-
-        #region ODBCPopulateGridWithData Calls
-
-        // ODBC Populate Data Calls
-
-        /// <summary>
-        /// As the PopulateGridWithData method of the same signature but uses an OdbcDataReader <c>OdbcDR</c> instead
-        /// </summary>
-        /// <param name="OdbcDR"></param>
-        /// <param name="col"></param>
-        /// <param name="gridfont"></param>
-        /// <remarks></remarks>
-        public void ODBCPopulateGridWithData(ref System.Data.Odbc.OdbcDataReader OdbcDR, Color col, Font gridfont)
-        {
-            int x, numrows;
-
-            try
-            {
-                StartedDatabasePopulateOperation?.Invoke(this);
-
-                numrows = 0;
-
-                InitializeTheGrid(1, OdbcDR.FieldCount);
-                var loopTo = Cols - 1;
-                for (x = 0; x <= loopTo; x++)
-                    _GridHeader[x] = OdbcDR.GetName(x);
-
-                while (OdbcDR.Read())
-                {
-                    numrows += 1;
-                    if (MaxRowsSelected > 0 & numrows < MaxRowsSelected)
-                    {
-                        Rows = numrows;
-                        var loopTo1 = _cols;
-                        for (x = 0; x <= loopTo1; x++)
-                        {
-                            if (Information.IsDBNull(OdbcDR[x]))
-                            {
-                                if (_omitNulls)
-                                    _grid[numrows - 1, x] = "";
-                                else
-                                    _grid[numrows - 1, x] = "{NULL}";
-                            }
-                            else
-                            // here we need to do some work on items of certain types
-                            if ((OdbcDR[x].ToString() ?? "") == "System.Byte[]")
-                                _grid[numrows - 1, x] = ReturnByteArrayAsHexString((byte[])OdbcDR[x]);
-                            else if ((OdbcDR[x].GetType().ToString().ToUpper() ?? "") == "SYSTEM.DATETIME")
-                            {
-                                if (_ShowDatesWithTime)
-                                {
-                                    var _dt = DateTime.Parse(Conversions.ToString(OdbcDR[x]));
-
-                                    _grid[numrows - 1, x] = _dt.ToShortDateString() + " " + _dt.ToShortTimeString();
-                                }
-                                else
-                                {
-                                    var _dt = DateTime.Parse(Conversions.ToString(OdbcDR[x]));
-
-                                    _grid[numrows - 1, x] = _dt.ToShortDateString();
-                                }
-                            }
-                            else
-                                _grid[numrows - 1, x] = Conversions.ToString(OdbcDR[x]);
-                        }
-                    }
-                    else
-                    {
-                        PartialSelection?.Invoke(this);
-                        break;
-                    }
-                }
-
-                AllCellsUseThisForeColor(col);
-
-                AllCellsUseThisFont(gridfont);
-
-                AutoSizeCellsToContents = true;
-                _colEditRestrictions.Clear();
-
-                FinishedDatabasePopulateOperation?.Invoke(this);
-
-                Refresh();
-
-                NormalizeTearaways();
-            }
-            catch (Exception ex)
-            {
-                FinishedDatabasePopulateOperation?.Invoke(this);
-
-                Interaction.MsgBox(ex.Message);
-            }
-        }
-
-        /// <summary>
-        /// As the PopulateGridWithData method of the same signature but uses an OdbcDataReader <c>OdbcDR</c> instead
-        /// </summary>
-        /// <param name="OdbcDR"></param>
-        /// <remarks></remarks>
-        public void ODBCPopulateGridWithData(ref System.Data.Odbc.OdbcDataReader OdbcDR)
-        {
-            ODBCPopulateGridWithData(ref OdbcDR, _DefaultForeColor, _DefaultCellFont);
-        }
-
-        /// <summary>
-        /// As the PopulateGridWithData method of the same signature but uses an OdbcDataReader <c>OdbcDR</c> instead
-        /// </summary>
-        /// <param name="OdbcDR"></param>
-        /// <param name="ForeColor"></param>
-        /// <remarks></remarks>
-        public void ODBCPopulateGridWithData(ref System.Data.Odbc.OdbcDataReader OdbcDR, Color ForeColor)
-        {
-            ODBCPopulateGridWithData(ref OdbcDR, ForeColor, _DefaultCellFont);
-        }
-
-        /// <summary>
-        /// As the PopulateGridWithData method of the same signature but uses an OdbcDataReader <c>OdbcDR</c> instead
-        /// </summary>
-        /// <param name="OdbcDR"></param>
-        /// <param name="GridFont"></param>
-        /// <remarks></remarks>
-        public void ODBCPopulateGridWithData(ref System.Data.Odbc.OdbcDataReader OdbcDR, Font GridFont)
-        {
-            ODBCPopulateGridWithData(ref OdbcDR, _DefaultForeColor, GridFont);
-        }
-
-        /// <summary>
-        /// As the PopulateGridWithData method of the same signature but <c>ConnectionString</c> parameter must be in the correct
-        /// syntax for ODBC data access
-        /// </summary>
-        /// <param name="ConnectionString"></param>
-        /// <param name="Sql"></param>
-        /// <param name="Gridfont"></param>
-        /// <param name="col"></param>
-        /// <remarks></remarks>
-        public void ODBCPopulateGridWithData(string ConnectionString, string Sql, Font Gridfont, Color col)
-        {
-            var cn = new System.Data.Odbc.OdbcConnection(ConnectionString);
-            System.Data.Odbc.OdbcCommand dbc;
-            System.Data.Odbc.OdbcCommand dbc2;
-            System.Data.Odbc.OdbcDataReader dbr;
-            System.Data.Odbc.OdbcDataReader dbr2;
-
-            string sql2;
-            long t;
-            int x, y, yy;
-
-            StartedDatabasePopulateOperation?.Invoke(this);
-
-            // _LastConnectionString = ConnectionString
-            // _LastSQLString = Sql
-
-
-            try
-            {
-                cn.Open();
-
-                sql2 = Sql;
-                dbc2 = new System.Data.Odbc.OdbcCommand(sql2, cn);
-                dbc2.CommandTimeout = _dataBaseTimeOut;
-                dbr2 = dbc2.ExecuteReader();
-                y = 0;
-                yy = 0;
-
-                while (dbr2.Read())
-                {
-                    y = y + 1;
-                    if (y > MaxRowsSelected & MaxRowsSelected > 0)
-                    {
-                        y = MaxRowsSelected;
-                        yy = -1;
-                        break;
-                    }
-                }
-
-                dbr2.Close();
-                dbc2.Dispose();
-                cn.Close();
-
-                cn.Open();
-                dbc = new System.Data.Odbc.OdbcCommand(Sql, cn);
-                dbc.CommandTimeout = _dataBaseTimeOut;
-
-                dbr = dbc.ExecuteReader();
-
-                // Me.Cols = dbr.FieldCount
-
-                InitializeTheGrid(y, dbr.FieldCount);
-
-                if (_ShowProgressBar)
-                {
-                    pBar.Maximum = y;
-                    pBar.Minimum = 0;
-                    pBar.Value = 0;
-                    pBar.Visible = true;
-                    gb1.Visible = true;
-                    pBar.Refresh();
-                    gb1.Refresh();
-                }
-
-                AllCellsUseThisFont(Gridfont);
-                AllCellsUseThisForeColor(col);
-                var loopTo = Cols - 1;
-                for (x = 0; x <= loopTo; x++)
-                    _GridHeader[x] = dbr.GetName(x);
-
-                t = 0;
-                while (dbr.Read())
-                {
-                    var loopTo1 = Cols - 1;
-                    // Me.Rows = t + 1
-                    for (x = 0; x <= loopTo1; x++)
-                    {
-                        if (Information.IsDBNull(dbr[x]))
-                        {
-                            if (_omitNulls)
-                                _grid[Conversions.ToInteger(t), x] = "";
-                            else
-                                _grid[Conversions.ToInteger(t), x] = "{NULL}";
-                        }
-                        else
-                        // here we need to do some work on items of certain types
-                        if ((dbr[x].ToString() ?? "") == "System.Byte[]")
-                            _grid[Conversions.ToInteger(t), x] = ReturnByteArrayAsHexString((byte[])dbr[x]);
-                        else if ((dbr[x].GetType().ToString().ToUpper() ?? "") == "SYSTEM.DATETIME")
-                        {
-                            if (_ShowDatesWithTime)
-                            {
-                                var _dt = DateTime.Parse(Conversions.ToString(dbr[x]));
-
-                                _grid[Conversions.ToInteger(t), x] = _dt.ToShortDateString() + " " + _dt.ToShortTimeString();
-                            }
-                            else
-                            {
-                                var _dt = DateTime.Parse(Conversions.ToString(dbr[x]));
-
-                                _grid[Conversions.ToInteger(t), x] = _dt.ToShortDateString();
-                            }
-                        }
-                        else if ((dbr[x].GetType().ToString().ToUpper() ?? "") == "SYSTEM.GUID")
-                            _grid[Conversions.ToInteger(t), x] = dbr[x].ToString();
-                        else
-                            _grid[Conversions.ToInteger(t), x] = Conversions.ToString(dbr[x]);
-                    }
-                    t = t + 1;
-
-                    if (MaxRowsSelected > 0 & t >= MaxRowsSelected)
-                        break;
-
-                    if (_ShowProgressBar)
-                    {
-                        pBar.Increment(1);
-                        pBar.Refresh();
-                    }
-                }
-
-                if (yy == -1)
-                    PartialSelection?.Invoke(this);
-
-                pBar.Visible = false;
-                gb1.Visible = false;
-
-                AutoSizeCellsToContents = true;
-                _colEditRestrictions.Clear();
-
-                dbr.Close();
-
-                dbc.Dispose();
-
-                cn.Close();
-
-                FinishedDatabasePopulateOperation?.Invoke(this);
-
-                Refresh();
-
-                NormalizeTearaways();
-            }
-            catch (Exception ex)
-            {
-                pBar.Visible = false;
-                gb1.Visible = false;
-
-                FinishedDatabasePopulateOperation?.Invoke(this);
-
-                Interaction.MsgBox(ex.Message);
-            }
-        }
-
-        /// <summary>
-        /// As the PopulateGridWithData method of the same signature but <c>ConnectionString</c> parameter must be in the correct
-        /// syntax for ODBC data access
-        /// </summary>
-        /// <param name="ConnectionString"></param>
-        /// <param name="Sql"></param>
-        /// <remarks></remarks>
-        public void ODBCPopulateGridWithData(string ConnectionString, string Sql)
-        {
-            ODBCPopulateGridWithData(ConnectionString, Sql, _DefaultCellFont, _DefaultForeColor);
-        }
-
-        /// <summary>
-        /// As the PopulateGridWithData method of the same signature but <c>ConnectionString</c> parameter must be in the correct
-        /// syntax for ODBC data access
-        /// </summary>
-        /// <param name="ConnectionString"></param>
-        /// <param name="Sql"></param>
-        /// <param name="Col"></param>
-        /// <remarks></remarks>
-        public void ODBCPopulateGridWithData(string ConnectionString, string Sql, Color Col)
-        {
-            ODBCPopulateGridWithData(ConnectionString, Sql, _DefaultCellFont, Col);
-        }
-
-        /// <summary>
-        /// As the PopulateGridWithData method of the same signature but <c>ConnectionString</c> parameter must be in the correct
-        /// syntax for ODBC data access
-        /// </summary>
-        /// <param name="ConnectionString"></param>
-        /// <param name="Sql"></param>
-        /// <param name="fnt"></param>
-        /// <remarks></remarks>
-        public void ODBCPopulateGridWithData(string ConnectionString, string Sql, Font fnt)
-        {
-            ODBCPopulateGridWithData(ConnectionString, Sql, fnt, _DefaultForeColor);
-        }
-
-        #endregion
-
-        #region PopulateViaWebServiceString Calls
-
-        /// <summary>
-        /// The Webservice set of populators actually are forms of populators from formatted string similar to populat from text files
-        /// The difference being that defines webservices were returning these formatted strings of text. Back before the days of being
-        /// able to send complex data types across the HTTP wire. Carefully crafted webservices could spit out their results as streams
-        /// of delimited text. These methods would then parse that text and rehydrate the results into the grid for viuual presentation.
-        /// the TAIClient Time Tracking tool employes this technique. The various parameters are self explanitory
-        /// </summary>
-        /// <param name="WebServiceResults"></param>
-        /// <remarks></remarks>
-        public void PopulateViaWebServiceString(string WebServiceResults)
-        {
-            PopulateViaWebServiceString(WebServiceResults, _DefaultForeColor, _DefaultCellFont);
-        }
-
-        /// <summary>
-        /// The Webservice set of populators actually are forms of populators from formatted string similar to populat from text files
-        /// The difference being that defines webservices were returning these formatted strings of text. Back before the days of being
-        /// able to send complex data types across the HTTP wire. Carefully crafted webservices could spit out their results as streams
-        /// of delimited text. These methods would then parse that text and rehydrate the results into the grid for viuual presentation.
-        /// the TAIClient Time Tracking tool employes this technique. The various parameters are self explanitory
-        /// </summary>
-        /// <param name="WebServiceResults"></param>
-        /// <param name="col"></param>
-        /// <remarks></remarks>
-        public void PopulateViaWebServiceString(string WebServiceResults, Color col)
-        {
-            PopulateViaWebServiceString(WebServiceResults, col, _DefaultCellFont);
-        }
-
-        /// <summary>
-        /// The Webservice set of populators actually are forms of populators from formatted string similar to populat from text files
-        /// The difference being that defines webservices were returning these formatted strings of text. Back before the days of being
-        /// able to send complex data types across the HTTP wire. Carefully crafted webservices could spit out their results as streams
-        /// of delimited text. These methods would then parse that text and rehydrate the results into the grid for viuual presentation.
-        /// the TAIClient Time Tracking tool employes this technique. The various parameters are self explanitory
-        /// </summary>
-        /// <param name="WebServiceResults"></param>
-        /// <param name="fnt"></param>
-        /// <remarks></remarks>
-        public void PopulateViaWebServiceString(string WebServiceResults, Font fnt)
-        {
-            PopulateViaWebServiceString(WebServiceResults, _DefaultForeColor, fnt);
-        }
-
-        /// <summary>
-        /// The Webservice set of populators actually are forms of populators from formatted string similar to populat from text files
-        /// The difference being that defines webservices were returning these formatted strings of text. Back before the days of being
-        /// able to send complex data types across the HTTP wire. Carefully crafted webservices could spit out their results as streams
-        /// of delimited text. These methods would then parse that text and rehydrate the results into the grid for viuual presentation.
-        /// the TAIClient Time Tracking tool employes this technique. The various parameters are self explanitory
-        /// </summary>
-        /// <param name="WebServiceResults"></param>
-        /// <param name="col"></param>
-        /// <param name="fnt"></param>
-        /// <remarks></remarks>
-        public void PopulateViaWebServiceString(string WebServiceResults, Color col, Font fnt)
-        {
-            var argarray = WebServiceResults.Split('|');
-            int x, y;
-            int r, c;
-            r = Conversions.ToInteger(Conversion.Val(argarray[argarray.GetUpperBound(0)]));
-            c = Conversions.ToInteger(Conversion.Val(Conversions.ToDouble(argarray[argarray.GetUpperBound(0) - 1]) + 1) - 1);
-
-            // Me.Rows = Val(argarray(argarray.GetUpperBound(0))) + 1
-            // Me.Cols = Val(argarray(argarray.GetUpperBound(0) - 1) + 1) - 1
-
-            InitializeTheGrid(r, c);
-            var loopTo = Cols - 1;
-            for (y = 0; y <= loopTo; y++)
-                _GridHeader[y] = argarray[y];
-
-            if (OmitNulls)
-            {
-                var loopTo1 = _rows;
-                for (x = 1; x <= loopTo1; x++)
-                {
-                    var loopTo2 = _cols - 1;
-                    for (y = 0; y <= loopTo2; y++)
-                    {
-                        if ((Strings.UCase(argarray[x * _cols + y]) ?? "") == "{NULL}")
-                            argarray[x * _cols + y] = "";
-                    }
-                }
-            }
-
-            var loopTo3 = _rows;
-            for (x = 1; x <= loopTo3; x++)
-            {
-                var loopTo4 = _cols - 1;
-                for (y = 0; y <= loopTo4; y++)
-                    _grid[x - 1, y] = argarray[x * _cols + y];
-            }
-
-            AllCellsUseThisForeColor(col);
-            AllCellsUseThisFont(fnt);
-            AutoSizeCellsToContents = true;
-            _colEditRestrictions.Clear();
-
-            Refresh();
-
-            NormalizeTearaways();
-        }
-
-        /// <summary>
-        /// The Webservice set of populators actually are forms of populators from formatted string similar to populat from text files
-        /// The difference being that defines webservices were returning these formatted strings of text. Back before the days of being
-        /// able to send complex data types across the HTTP wire. Carefully crafted webservices could spit out their results as streams
-        /// of delimited text. These methods would then parse that text and rehydrate the results into the grid for viuual presentation.
-        /// the TAIClient Time Tracking tool employes this technique. The various parameters are self explanitory
-        /// </summary>
-        /// <param name="WebServiceResults"></param>
-        /// <param name="delimiter"></param>
-        /// <remarks></remarks>
-        public void PopulateViaWebServiceString(string WebServiceResults, string delimiter)
-        {
-            PopulateViaWebServiceString(WebServiceResults, delimiter, _DefaultForeColor, _DefaultCellFont);
-        }
-
-        /// <summary>
-        /// The Webservice set of populators actually are forms of populators from formatted string similar to populat from text files
-        /// The difference being that defines webservices were returning these formatted strings of text. Back before the days of being
-        /// able to send complex data types across the HTTP wire. Carefully crafted webservices could spit out their results as streams
-        /// of delimited text. These methods would then parse that text and rehydrate the results into the grid for viuual presentation.
-        /// the TAIClient Time Tracking tool employes this technique. The various parameters are self explanitory
-        /// </summary>
-        /// <param name="WebServiceResults"></param>
-        /// <param name="delimiter"></param>
-        /// <param name="col"></param>
-        /// <remarks></remarks>
-        public void PopulateViaWebServiceString(string WebServiceResults, string delimiter, Color col)
-        {
-            PopulateViaWebServiceString(WebServiceResults, delimiter, col, _DefaultCellFont);
-        }
-
-        /// <summary>
-        /// The Webservice set of populators actually are forms of populators from formatted string similar to populat from text files
-        /// The difference being that defines webservices were returning these formatted strings of text. Back before the days of being
-        /// able to send complex data types across the HTTP wire. Carefully crafted webservices could spit out their results as streams
-        /// of delimited text. These methods would then parse that text and rehydrate the results into the grid for viuual presentation.
-        /// the TAIClient Time Tracking tool employes this technique. The various parameters are self explanitory
-        /// </summary>
-        /// <param name="WebServiceResults"></param>
-        /// <param name="delimiter"></param>
-        /// <param name="fnt"></param>
-        /// <remarks></remarks>
-        public void PopulateViaWebServiceString(string WebServiceResults, string delimiter, Font fnt)
-        {
-            PopulateViaWebServiceString(WebServiceResults, delimiter, _DefaultForeColor, fnt);
-        }
-
-        /// <summary>
-        /// The Webservice set of populators actually are forms of populators from formatted string similar to populat from text files
-        /// The difference being that defines webservices were returning these formatted strings of text. Back before the days of being
-        /// able to send complex data types across the HTTP wire. Carefully crafted webservices could spit out their results as streams
-        /// of delimited text. These methods would then parse that text and rehydrate the results into the grid for viuual presentation.
-        /// the TAIClient Time Tracking tool employes this technique. The various parameters are self explanitory
-        /// </summary>
-        /// <param name="WebServiceResults"></param>
-        /// <param name="Delimiter"></param>
-        /// <param name="col"></param>
-        /// <param name="fnt"></param>
-        /// <remarks></remarks>
-        public void PopulateViaWebServiceString(string WebServiceResults, string Delimiter, Color col, Font fnt)
-        {
-            // parse the rows and colmuns off the string
-            int rows = Conversions.ToInteger(WebServiceResults.Substring(WebServiceResults.LastIndexOf(Delimiter) + Delimiter.Length));
-            WebServiceResults = WebServiceResults.Substring(0, WebServiceResults.LastIndexOf(Delimiter));
-            int cols = Conversions.ToInteger(WebServiceResults.Substring(WebServiceResults.LastIndexOf(Delimiter) + Delimiter.Length));
-            WebServiceResults = WebServiceResults.Substring(0, WebServiceResults.LastIndexOf(Delimiter));
-
-            //string[,] argarray = ReturnDelimitedStringAsArray(WebServiceResults, cols, rows, Delimiter);
-
-            string[,] argarray = (string[,])ReturnDelimitedStringAsArray(WebServiceResults, cols, rows, Delimiter);
-
-            InitializeTheGrid(rows - 1, cols);
-            int x, y;
-            var loopTo = cols - 1;
-            for (y = 0; y <= loopTo; y++)
-                _GridHeader[y] = argarray[0, y];
-
-            if (OmitNulls)
-            {
-                var loopTo1 = _rows;
-                for (x = 1; x <= loopTo1; x++)
-                {
-                    var loopTo2 = _cols - 1;
-                    for (y = 0; y <= loopTo2; y++)
-                    {
-                        if ((Strings.UCase(argarray[x, y]) ?? "") == "{NULL}")
-                            argarray[x, y] = "";
-                    }
-                }
-            }
-
-            var loopTo3 = _rows - 1;
-            for (x = 1; x <= loopTo3; x++)
-            {
-                var loopTo4 = _cols - 1;
-                for (y = 0; y <= loopTo4; y++)
-                    _grid[x, y] = argarray[x, y];
-            }
-
-            AllCellsUseThisFont(fnt);
-            AutoSizeCellsToContents = true;
-            _colEditRestrictions.Clear();
-            AllCellsUseThisForeColor(col);
-
-            Refresh();
-
-            NormalizeTearaways();
-        }
-
-        #endregion
-
-        #region PivotPopulate Calls
-
-        /// <summary>
-        /// The pivot populate calls simulate pivot table functionality in excel.
-        /// The instance grid that the pethod is called on will be populated with data from a source grid <c>sgrid</c>
-        /// The defined <c>xcol</c> and <c>ycol</c> parameters will be used to search the source grid for unique values
-        /// then for each unique value set in each of the two columns the
-        /// </summary>
-        /// <param name="sgrid"></param>
-        /// <param name="xcol"></param>
-        /// <param name="ycol"></param>
-        /// <param name="scol"></param>
-        /// <param name="FormatSpec"></param>
-        /// <remarks></remarks>
-        public void PivotPopulate(TAIGridControl sgrid, int xcol, int ycol, int scol, string FormatSpec)
-        {
-            PivotPopulate(sgrid, xcol, ycol, scol, FormatSpec, _DefaultForeColor, _DefaultCellFont);
-        }
-
-        /// <summary>
-        /// The pivot populate calls simulate pivot table functionality in excel.
-        /// The instance grid that the pethod is called on will be populated with data from a source grid <c>sgrid</c>
-        /// The defined <c>xcol</c> and <c>ycol</c> parameters will be used to search the source grid for unique values
-        /// then for each unique value set in each of the two columns the
-        /// </summary>
-        /// <param name="sgrid"></param>
-        /// <param name="xcol"></param>
-        /// <param name="ycol"></param>
-        /// <param name="scol"></param>
-        /// <remarks></remarks>
-        public void PivotPopulate(TAIGridControl sgrid, int xcol, int ycol, int scol)
-        {
-            PivotPopulate(sgrid, xcol, ycol, scol, "0.0000", _DefaultForeColor, _DefaultCellFont);
-        }
-
-        /// <summary>
-        /// The pivot populate calls simulate pivot table functionality in excel.
-        /// The instance grid that the pethod is called on will be populated with data from a source grid <c>sgrid</c>
-        /// The defined <c>xcol</c> and <c>ycol</c> parameters will be used to search the source grid for unique values
-        /// then for each unique value set in each of the two columns the
-        /// </summary>
-        /// <param name="sgrid"></param>
-        /// <param name="xcol"></param>
-        /// <param name="ycol"></param>
-        /// <param name="scol"></param>
-        /// <param name="formatspec"></param>
-        /// <param name="col"></param>
-        /// <remarks></remarks>
-        public void PivotPopulate(TAIGridControl sgrid, int xcol, int ycol, int scol, string formatspec, Color col)
-        {
-            PivotPopulate(sgrid, xcol, ycol, scol, formatspec, col, _DefaultCellFont);
-        }
-
-        /// <summary>
-        /// The pivot populate calls simulate pivot table functionality in excel.
-        /// The instance grid that the pethod is called on will be populated with data from a source grid <c>sgrid</c>
-        /// The defined <c>xcol</c> and <c>ycol</c> parameters will be used to search the source grid for unique values
-        /// then for each unique value set in each of the two columns the
-        /// </summary>
-        /// <param name="sgrid"></param>
-        /// <param name="xcol"></param>
-        /// <param name="ycol"></param>
-        /// <param name="scol"></param>
-        /// <param name="formatspec"></param>
-        /// <param name="col"></param>
-        /// <param name="fnt"></param>
-        /// <remarks></remarks>
-        public void PivotPopulate(TAIGridControl sgrid, int xcol, int ycol, int scol, string formatspec, Color col, Font fnt)
-        {
-            int x, y, xxx;
-            string a, b, c;
-            double aa;
-            int sx = sgrid.Cols - 1;
-            int sy = sgrid.Rows - 1;
-            var uniquerows = new string[sy + 1];
-            var uniquecols = new string[sx + 1];
-            // Dim formatspec As String = "0.0000"
-
-            var u = new ArrayList();
-            var uu = new ArrayList();
-
-            u.Clear();
-            uu.Clear();
-            var loopTo = sy;
-
-
-            // how many unique vals do we have in the Xcol
-
-            for (x = 0; x <= loopTo; x++)
-            {
-                a = sgrid.get_item(x, xcol);
-                if (!u.Contains(a))
-                    u.Add(a);
-            }
-
-            Cols = u.Count + 1;
-            var loopTo1 = sy;
-
-            // how many unique vals do we have in the Ycol
-
-            for (x = 0; x <= loopTo1; x++)
-            {
-                a = sgrid.get_item(x, ycol);
-                if (!uu.Contains(a))
-                    uu.Add(a);
-            }
-
-            Rows = uu.Count;
-            var loopTo2 = u.Count;
-
-            // here we will populate the header and the y column with the values being rolled up
-            for (x = 1; x <= loopTo2; x++)
-                this.set_HeaderLabel(x, u[x - 1].ToString());
-
-            set_HeaderLabel(0, sgrid.get_HeaderLabel(ycol));
-            var loopTo3 = uu.Count - 1;
-            for (y = 0; y <= loopTo3; y++)
-                this.set_item(y, 0, uu[y].ToString());
-            var loopTo4 = u.Count - 1;
-
-            // here we will actually populate the values
-
-            for (x = 0; x <= loopTo4; x++)
-            {
-                b = Conversions.ToString(u[x]);
-                var loopTo5 = uu.Count - 1;
-                for (y = 0; y <= loopTo5; y++)
-                {
-                    c = Conversions.ToString(uu[y]);
-                    aa = 0;
-                    var loopTo6 = sy;
-                    for (xxx = 0; xxx <= loopTo6; xxx++)
-                    {
-                        if ((sgrid.get_item(xxx, xcol) ?? "") == (b ?? "") & (sgrid.get_item(xxx, ycol) ?? "") == (c ?? ""))
-                            aa = aa + Conversion.Val(sgrid.get_item(xxx, scol));
-                    }
-
-                    set_item(y, x + 1, Strings.Format(aa, formatspec));
-                }
-            }
-
-            AutoSizeCellsToContents = true;
-            _colEditRestrictions.Clear();
-            AllCellsUseThisForeColor(col);
-            AllCellsUseThisFont(fnt);
-            Refresh();
-
-            NormalizeTearaways();
-        }
-
-        /// <summary>
-        /// The pivot populate calls simulate pivot table functionality in excel.
-        /// The instance grid that the pethod is called on will be populated with data from a source grid <c>sgrid</c>
-        /// The defined <c>xcol</c> and <c>ycol</c> parameters will be used to search the source grid for unique values
-        /// then for each unique value set in each of the two columns the
-        /// </summary>
-        /// <param name="sgrid"></param>
-        /// <param name="xcol"></param>
-        /// <param name="ycol"></param>
-        /// <param name="scol"></param>
-        /// <param name="formatspec"></param>
-        /// <param name="fnt"></param>
-        /// <remarks></remarks>
-        public void PivotPopulate(TAIGridControl sgrid, int xcol, int ycol, int scol, string formatspec, Font fnt)
-        {
-            PivotPopulate(sgrid, xcol, ycol, scol, formatspec, _DefaultForeColor, fnt);
-        }
-
-        #endregion
-
-        #region FrequencyDistribution Calls
-        public void FrequencyDistribution(TAIGridControl sgrid, int ColForFrequency)
-        {
-            var codes = new ArrayList();
-
-            int t;
-            int tt;
-            var loopTo = sgrid.Rows - 1;
-            for (t = 0; t <= loopTo; t++)
-            {
-                string cd = sgrid.get_item(t, ColForFrequency);
-                if (!codes.Contains(cd))
-                    codes.Add(cd);
-            }
-
-            Rows = codes.Count;
-            Cols = 2;
-            set_HeaderLabel(0, sgrid.get_HeaderLabel(ColForFrequency));
-            set_HeaderLabel(1, "Frequency");
-            var loopTo1 = codes.Count - 1;
-            for (t = 0; t <= loopTo1; t++)
-            {
-                this.set_item(t, 0, codes[t].ToString());
-
-                int result = 0;
-                var loopTo2 = sgrid.Rows - 1;
-                for (tt = 0; tt <= loopTo2; tt++)
-                {
-                    if (Conversions.ToBoolean(Operators.ConditionalCompareObjectEqual(sgrid.get_item(tt, ColForFrequency), codes[t], false)))
-                        result += 1;
-                }
-
-                set_item(t, 1, result.ToString());
-            }
-
-            AutoSizeCellsToContents = true;
-            Refresh();
-
-            NormalizeTearaways();
-        }
-
-        public void FrequencyDistribution(TAIGridControl sgrid, int ColForFrequency, bool SortDescending)
-        {
-            FrequencyDistribution(sgrid, ColForFrequency);
-
-            SortGridOnColumnNumeric(1, SortDescending);
-
-            AutoSizeCellsToContents = true;
-            Refresh();
-        }
-
-        #endregion
-
-        #region PopulateGridWithDataTable Calls
-
-        /// <summary>
-        /// Will take the supplied dataSet and extract the first table from that dataset and populate the grid with the
-        /// contents of that datatable
-        /// </summary>
-        /// <param name="dset"></param>
-        /// <remarks></remarks>
-        public void PopulateGridWithADataTable(DataSet dset)
-        {
-            PopulateGridWithADataTable(dset.Tables[0]);
-        }
-
-        /// <summary>
-        /// Will take thge supplied datatable and populate the grid with the contents oif that datatable
-        /// </summary>
-        /// <param name="dt"></param>
-        /// <remarks></remarks>
-        public void PopulateGridWithADataTable(DataTable dt)
-        {
-            int t = 0;
-            int x = 0;
-            int y = 0;
-            string typ;
-
-            InitializeTheGrid(dt.Rows.Count, dt.Columns.Count);
-            var loopTo = dt.Columns.Count - 1;
-            for (t = 0; t <= loopTo; t++)
-                set_HeaderLabel(t, dt.Columns[t].ColumnName);
-            var loopTo1 = dt.Rows.Count - 1;
-            for (x = 0; x <= loopTo1; x++)
-            {
-                var loopTo2 = dt.Columns.Count - 1;
-                for (y = 0; y <= loopTo2; y++)
-                {
-                    typ = dt.Rows[x][y].GetType().ToString().ToUpper();
-
-                    if ((typ ?? "") == "SYSTEM.STRING")
-                        _grid[x, y] = Convert.ToString(dt.Rows[x][y]);
-                    else if ((typ ?? "") == "SYSTEM.DBNULL")
-                    {
-                        if (_omitNulls)
-                            _grid[x, y] = "";
-                        else
-                            _grid[x, y] = "{NULL}";
-                    }
-                    else if ((typ ?? "") == "SYSTEM.DATETIME")
-                    {
-                        if (_ShowDatesWithTime)
-                            _grid[x, y] = Convert.ToDateTime(dt.Rows[x][y]).ToString();
-                        else
-                            _grid[x, y] = Convert.ToDateTime(dt.Rows[x][y]).ToShortDateString();
-                    }
-                    else if ((typ ?? "") == "SYSTEM.SINGLE")
-                        _grid[x, y] = Convert.ToSingle(dt.Rows[x][y]).ToString();
-                    else if ((typ ?? "") == "SYSTEM.INT32")
-                        _grid[x, y] = Convert.ToInt32(dt.Rows[x][y]).ToString();
-                    else if ((typ ?? "") == "SYSTEM.INT16")
-                        _grid[x, y] = Convert.ToInt16(dt.Rows[x][y]).ToString();
-                    else if ((typ ?? "") == "SYSTEM.INT64")
-                        _grid[x, y] = Convert.ToInt64(dt.Rows[x][y]).ToString();
-                    else if ((typ ?? "") == "SYSTEM.BOOLEAN")
-                    {
-                        if (Convert.ToBoolean(dt.Rows[x][y]))
-                            _grid[x, y] = "TRUE";
-                        else
-                            _grid[x, y] = "FALSE";
-                    }
-                    else if ((typ ?? "") == "SYSTEM.DECIMAL")
-                        _grid[x, y] = Convert.ToDecimal(dt.Rows[x][y]).ToString();
-                    else if ((typ ?? "") == "SYSTEM.DOUBLE")
-                        _grid[x, y] = Convert.ToDouble(dt.Rows[x][y]).ToString();
-                    else if ((typ ?? "") == "SYSTEM.RUNTIMETYPE")
-                        _grid[x, y] = Convert.ToString(dt.Rows[x][y]);
-                    else
-                        _grid[x, y] = dt.Rows[x][y].GetType().ToString();
-                }
-            }
-
-            AutoSizeCellsToContents = true;
-            _colEditRestrictions.Clear();
-
-            Refresh();
-
-            NormalizeTearaways();
-        }
-
-        #endregion
-
-        #region PopulateFrimADirectory Calls
-
-        /// <summary>
-        /// Will open the directory specified by <c>Dirname</c> and will enumerate its contents.
-        /// The grid will then be cleared and the results enumerated in the grids
-        /// contents showing the FileName, Last Update Time, and physical size.
-        /// </summary>
-        /// <param name="Dirname"></param>
-        /// <remarks></remarks>
-        public void PopulateFromADirectory(string Dirname)
-        {
-            PopulateFromADirectory(Dirname, _DefaultCellFont, _DefaultForeColor, "*");
-        }
-
-        /// <summary>
-        /// Will open the directory specified by <c>Dirname</c> and will enumerate its contents.
-        /// The grid will then be cleared and the results enumerated in the grids
-        /// contents showing the FileName, Last Update Time, and physical size. The supplied
-        /// <c>gridfont</c> font will be used to show the content generated.
-        /// </summary>
-        /// <param name="Dirname"></param>
-        /// <param name="Gridfont"></param>
-        /// <remarks></remarks>
-        public void PopulateFromADirectory(string Dirname, Font Gridfont)
-        {
-            PopulateFromADirectory(Dirname, Gridfont, _DefaultForeColor, "*");
-        }
-
-        /// <summary>
-        /// Will open the directory specified by <c>Dirname</c> and will enumerate its contents.
-        /// The grid will then be cleared and the results enumerated in the grids
-        /// contents showing the FileName, Last Update Time, and physical size. The supplied
-        /// <c>col</c> color will be used to show the content generated.
-        /// </summary>
-        /// <param name="Dirname"></param>
-        /// <param name="col"></param>
-        /// <remarks></remarks>
-        public void PopulateFromADirectory(string Dirname, Color col)
-        {
-            PopulateFromADirectory(Dirname, _DefaultCellFont, col, "*");
-        }
-
-        /// <summary>
-        /// Will open the directory specified by <c>Dirname</c> and will enumerate its contents.
-        /// The grid will then be cleared and the results enumerated in the grids
-        /// contents showing the FileName, Last Update Time, and physical size. The supplied
-        /// <c>col</c> color and <c>gridfont</c> font will be used to show the content generated.
-        /// </summary>
-        /// <param name="Dirname"></param>
-        /// <param name="Gridfont"></param>
-        /// <param name="col"></param>
-        /// <remarks></remarks>
-        public void PopulateFromADirectory(string Dirname, Font Gridfont, Color col)
-        {
-            PopulateFromADirectory(Dirname, Gridfont, col, "*");
-        }
-
-        /// <summary>
-        /// Will open the directory specified by <c>Dirname</c> and will enumerate its contents via the supplied
-        /// pattern <c>Pattern</c>. The grid will then be clears and the results enumerated in the grids
-        /// contents showing the FileName, Last Update Time, and physical size.
-        /// </summary>
-        /// <param name="Dirname"></param>
-        /// <param name="Pattern"></param>
-        /// <remarks></remarks>
-        public void PopulateFromADirectory(string Dirname, string Pattern)
-        {
-            PopulateFromADirectory(Dirname, _DefaultCellFont, _DefaultForeColor, Pattern);
-        }
-
-        /// <summary>
-        /// Will open the directory specified by <c>Dirname</c> and will enumerate its contents via the supplied
-        /// pattern <c>Pattern</c>. The grid will then be clears and the results enumerated in the grids
-        /// contents showing the FileName, Last Update Time, and physical size. The supplied
-        /// <c>gridfont</c> font will be used to show the content generated.
-        /// </summary>
-        /// <param name="Dirname"></param>
-        /// <param name="Gridfont"></param>
-        /// <param name="Pattern"></param>
-        /// <remarks></remarks>
-        public void PopulateFromADirectory(string Dirname, Font Gridfont, string Pattern)
-        {
-            PopulateFromADirectory(Dirname, Gridfont, _DefaultForeColor, Pattern);
-        }
-
-        /// <summary>
-        /// Will open the directory specified by <c>Dirname</c> and will enumerate its contents via the supplied
-        /// pattern <c>Pattern</c>. The grid will then be clears and the results enumerated in the grids
-        /// contents showing the FileName, Last Update Time, and physical size. The supplied
-        /// <c>col</c> color will be used to show the content generated.
-        /// </summary>
-        /// <param name="Dirname"></param>
-        /// <param name="col"></param>
-        /// <param name="Pattern"></param>
-        /// <remarks></remarks>
-        public void PopulateFromADirectory(string Dirname, Color col, string Pattern)
-        {
-            PopulateFromADirectory(Dirname, _DefaultCellFont, col, Pattern);
-        }
-
-        /// <summary>
-        /// Will open the directory specified by <c>Dirname</c> and will enumerate its contents via the supplied
-        /// pattern <c>Pattern</c>. The grid will then be clears and the results enumerated in the grids
-        /// contents showing the FileName, Last Update Time, and physical size. The supplied
-        /// <c>col</c> color and <c>gridfont</c> font will be used to show the content generated.
-        /// </summary>
-        /// <param name="Dirname"></param>
-        /// <param name="gridfont"></param>
-        /// <param name="col"></param>
-        /// <param name="Pattern"></param>
-        /// <remarks></remarks>
-        public void PopulateFromADirectory(string Dirname, Font gridfont, Color col, string Pattern)
-        {
-            try
-            {
-                var dinf = new System.IO.DirectoryInfo(Dirname);
-
-                var finf = dinf.GetFiles(Pattern);
-                int y;
-                int r, c;
-
-                r = finf.GetUpperBound(0);
-                c = 3;
-
-                InitializeTheGrid(r + 1, c);
-
-                _GridTitle = "Files in " + Dirname;
-
-                _GridHeader[0] = "File Name";
-                _GridHeader[1] = "File Time";
-                _GridHeader[2] = "File Size";
-                var loopTo = r;
-                for (y = 0; y <= loopTo; y++)
-                {
-                    _grid[y, 0] = finf[y].FullName;
-                    _grid[y, 1] = Conversions.ToString(finf[y].LastAccessTime);
-                    _grid[y, 2] = finf[y].Length.ToString();
-                }
-
-                AllCellsUseThisFont(gridfont);
-                AllCellsUseThisForeColor(col);
-
-                AutoSizeCellsToContents = true;
-                _colEditRestrictions.Clear();
-
-                Refresh();
-
-                NormalizeTearaways();
-            }
-            catch (Exception ex)
-            {
-                InitializeTheGrid(1, 3);
-                _GridTitle = "Files in " + "We got a problem...";
-
-                _GridHeader[0] = "File Name";
-                _GridHeader[1] = "File Time";
-                _GridHeader[2] = "File Size";
-
-                Refresh();
-
-                NormalizeTearaways();
-            }
-        }
-
-        /// <summary>
-        /// Attempts to open the directory specfied by <c>Dirname</c> and enumerate the entire contents
-        /// The results are the appended to the current grids contents
-        /// The FileName, Last Update Time, and physical size are enumerated.
-        /// </summary>
-        /// <param name="Dirname"></param>
-        /// <remarks></remarks>
-        public void AppendPopulate(string Dirname)
-        {
-            AppendPopulate(Dirname, "*");
-        }
-
-        /// <summary>
-        /// Attempts to open the directory specfied by <c>Dirname</c> and enumerate the contents via the supplied <c>Pattern</c>
-        /// The results are the appended to the current grids contents
-        /// The FileName, Last Update Time, and physical size are enumerated.
-        /// </summary>
-        /// <param name="Dirname"></param>
-        /// <param name="Pattern"></param>
-        /// <remarks></remarks>
-        public void AppendPopulate(string Dirname, string Pattern)
-        {
-            var dinf = new System.IO.DirectoryInfo(Dirname);
-
-            var finf = dinf.GetFiles(Pattern);
-            int y;
-            int r;
-
-            r = finf.GetUpperBound(0);
-
-            _GridTitle = "Files in...";
-
-            if (_cols != 3)
-            {
-                _cols = 3;
-
-                _GridHeader[0] = "File Name";
-                _GridHeader[1] = "File Time";
-                _GridHeader[2] = "File Size";
-            }
-
-            int oldrows = _rows - 1;
-
-            Rows += r + 1;
-            var loopTo = r;
-            for (y = 0; y <= loopTo; y++)
-            {
-                _grid[y + oldrows, 0] = finf[y].FullName;
-                _grid[y + oldrows, 1] = Conversions.ToString(finf[y].LastAccessTime);
-                _grid[y + oldrows, 2] = finf[y].Length.ToString();
-            }
-
-            AllCellsUseThisFont(_DefaultCellFont);
-            AllCellsUseThisForeColor(_DefaultForeColor);
-
-            AutoSizeCellsToContents = true;
-            _colEditRestrictions.Clear();
-
-            Refresh();
-        }
-
-        #endregion
-
         /// <summary>
         /// Will fire the CellClicked event from the outside world
         /// </summary>
@@ -12335,7 +12474,7 @@ namespace TAIGridControl2
 
             _colEditRestrictions.Add(reslist);
         }
-        
+
         public Array ReturnDelimitedStringAsArray(string StringToParse, int Columns, int rows, string Delimiter)
         {
             // add a delimiter to the begning and the end of the string
@@ -13721,6 +13860,8 @@ namespace TAIGridControl2
             _Painting = false;
             Refresh();
         }
+
+        #endregion
 
         #region Private Methods
         private int AllColWidths()
@@ -16969,7 +17110,7 @@ namespace TAIGridControl2
         private void vs_Scroll(object sender, ScrollEventArgs e)
         {
         }
-                
+
         private void MouseDownHandler(object sender, MouseEventArgs e)
         {
             Point p;
@@ -17019,7 +17160,7 @@ namespace TAIGridControl2
                     }
 
                     _ColOverOnMenuButton = -1;
-                    
+
                     _ColOverOnMouseDown = xx;
 
                     _MouseDownOnHeader = true;
@@ -18139,7 +18280,7 @@ namespace TAIGridControl2
 
             _ColOverOnMenuButton = -1;
 
-            
+
         }
 
         private void miSortDescending_Click(object sender, EventArgs e)
@@ -18988,7 +19129,7 @@ namespace TAIGridControl2
 
             _TearAwayWork = true;
 
-            TearAwayColumID(_ColOverOnMenuButton-1);
+            TearAwayColumID(_ColOverOnMenuButton - 1);
 
             _TearAwayWork = false;
         }
@@ -19003,9 +19144,9 @@ namespace TAIGridControl2
             for (t = TearAways.Count - 1; t >= 0; t += -1)
             {
                 TearAwayWindowEntry ta = (TAIGridControl2.TAIGridControl.TearAwayWindowEntry)TearAways[t];
-                if (ta.ColID == _ColOverOnMenuButton-1)
+                if (ta.ColID == _ColOverOnMenuButton - 1)
                     // call into the child form to start the death spiral a happening
-                    ta.Winform.KillMe(_ColOverOnMenuButton-1);
+                    ta.Winform.KillMe(_ColOverOnMenuButton - 1);
             }
         }
 
@@ -19950,9 +20091,9 @@ namespace TAIGridControl2
             private string _filename;
 
             private bool _includeFieldNames = true;
-            
+
             private bool _includeLineTerminator = true;
-            
+
             private frmPageSetup _PageSetupForm;
 
             private void cmdBrowse_Click(object sender, EventArgs e)
