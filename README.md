@@ -12,9 +12,9 @@
  events directly on the cell ( Wow what a concept )
   
 ### Version 2.0.5.0
-- Added two Methods <c>TAIGridControl.TaiGridColContentTypes GetColumnType(int ColNumber)<c> and 
-<c>TAIGridControl.TaiGridColContentTypes GetColumnType(String ColName)<c> Will return from the newly added
-enum TaiGridColContentTypes  String, Number or Date
+- Added two Methods **TAIGridControl.TaiGridColContentTypes GetColumnType(int ColNumber)** and 
+**TAIGridControl.TaiGridColContentTypes GetColumnType(String ColName)** Will return from the newly added
+enum **TaiGridColContentTypes**  String, Number or Date
 
 - more code refactoring
 
