@@ -15,6 +15,8 @@
 - Augmented the new **TAIGridControl.TaiGridColContentTypes GetColumnType(int ColNumber)** to
 differentiat Numbers between integer types and floating point types. 
 Adding to the ENUM WholeNumber and FloatingPointNumber
+
+- change the behavior of the columncheck to favor string if everything in the column is empty used to default to date.
   
 ### Version 2.0.5.0
 - Added two Methods **TAIGridControl.TaiGridColContentTypes GetColumnType(int ColNumber)** and 

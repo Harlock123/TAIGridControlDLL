@@ -9010,6 +9010,25 @@ namespace TAIGridControl2
                 }
             }
 
+            // do one more pass on the full column to see if everything is = string.empty then set the field type to string
+
+            bool allempty = true;
+
+            for (int row = 0; row < _rows; row++)
+            {
+                if (_grid[row, ColNumber].Trim() != "")
+                {
+                    allempty = false;
+                    break;
+                }
+            }
+
+            if (allempty)
+            {
+                result = TaiGridColContentTypes._String;
+            }
+
+
             return result;
         }
 
