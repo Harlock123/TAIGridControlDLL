@@ -3311,7 +3311,8 @@ namespace TAIGridControl2
         {
             _String = 0,
             _Date,
-            _Number,
+            _WholeNumber,
+            _FloatingPointNumber,
             _Bool
         }
 
@@ -8967,7 +8968,7 @@ namespace TAIGridControl2
                         
                         // Try for all dates first then numbers TODO: handle BOOLS?
 
-                        if (_grid[row, ColNumber].Trim() != "" && !Double.TryParse(_grid[row, ColNumber],out _))
+                        if (_grid[row, ColNumber].Trim() != "" && !long.TryParse(_grid[row, ColNumber],out _))
                         {
                             Passed = false;
                             break;
@@ -8978,7 +8979,7 @@ namespace TAIGridControl2
                     {
                         // OK Its potentially a date Lets use that
 
-                        result = TaiGridColContentTypes._Number;
+                        result = TaiGridColContentTypes._WholeNumber;
 
                     }
                     else
@@ -8991,7 +8992,7 @@ namespace TAIGridControl2
 
                             // Try for all dates first then numbers TODO: handle BOOLS?
 
-                            if (_grid[row, ColNumber].Trim() != "" && !long.TryParse(_grid[row, ColNumber], out _))
+                            if (_grid[row, ColNumber].Trim() != "" && !double.TryParse(_grid[row, ColNumber], out _))
                             {
                                 Passed = false;
                                 break;
@@ -9002,7 +9003,7 @@ namespace TAIGridControl2
                         {
                             // OK Its potentially a date Lets use that
 
-                            result = TaiGridColContentTypes._Number;
+                            result = TaiGridColContentTypes._FloatingPointNumber;
 
                         }
                     }

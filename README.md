@@ -10,6 +10,11 @@
  works better if its used in a databound way, If you want to use the grid in a manner simillar
  to the way it was used under VB6 you are out of luck. This grid will even expose doubleclick
  events directly on the cell ( Wow what a concept )
+
+### Version 2.0.6.0
+- Augmented the new **TAIGridControl.TaiGridColContentTypes GetColumnType(int ColNumber)** to
+differentiat Numbers between integer types and floating point types. 
+Adding to the ENUM WholeNumber and FloatingPointNumber
   
 ### Version 2.0.5.0
 - Added two Methods **TAIGridControl.TaiGridColContentTypes GetColumnType(int ColNumber)** and 
