@@ -11,6 +11,15 @@
  to the way it was used under VB6 you are out of luck. This grid will even expose doubleclick
  events directly on the cell ( Wow what a concept )
 
+### Version 2.0.7.0
+- Change the Excel output dialog to contain a new feature OPEN FILE WHEN SAVED option that is Checked by default
+This will attempt to execute the file that was just saved to the users system. Resulting in that file being opened 
+in the registered application for XLXS files. (Usually thats Excel but can be other things like Libra Office for example)
+
+- Removed the 6 things in the SORT context menu and now just has ASCENDING and DESCENDING. Will attempt to Sort dates first
+the numbers and finally ASCII in that order. So as to not be confusing as it was with seperate sort options for
+dates and number as well as ASCII text..
+
 ### Version 2.0.6.0
 - Augmented the new **TAIGridControl.TaiGridColContentTypes GetColumnType(int ColNumber)** to
 differentiat Numbers between integer types and floating point types. 

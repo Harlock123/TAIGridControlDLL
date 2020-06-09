@@ -18,6 +18,7 @@ namespace TAIGridControl2
         public string SELECTEDPATH = "";
         public bool FRMOK = false;
         public bool OMITNULLS = true;
+        public bool OPENWHENSAVED = true;
 
         public frmExcelOutput()
         {
@@ -49,6 +50,7 @@ namespace TAIGridControl2
                 SELECTEDWORKBOOKNAME = txtTableName.Text;
                 FRMOK = true;
                 OMITNULLS = chkOmitNulls.Checked;
+                OPENWHENSAVED = chkOpenFileWhenSaved.Checked;
                 Hide();
             }
         }
@@ -59,6 +61,7 @@ namespace TAIGridControl2
             SELECTEDWORKBOOKNAME = "";
             FRMOK = false;
             OMITNULLS = false;
+            OPENWHENSAVED = false;
             Hide();
         }
 

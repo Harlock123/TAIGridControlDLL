@@ -2511,17 +2511,17 @@ namespace TAIGridControl2
             _miAllowUserColumnResizing.Click += miAllowUserColumnResizing_Click;
             _MenuItem3 = new MenuItem();
             _miSortAscending = new MenuItem();
-            _miSortAscending.Click += miSortAscending_Click;
+            _miSortAscending.Click += DoMenuSortASC;
             _miSortDescending = new MenuItem();
-            _miSortDescending.Click += miSortDescending_Click;
-            _miDateAsc = new MenuItem();
-            _miDateAsc.Click += miDateAsc_Click;
-            _miDateDesc = new MenuItem();
-            _miDateDesc.Click += miDateDesc_Click;
-            _miSortNumericAsc = new MenuItem();
-            _miSortNumericAsc.Click += miSortNumericAsc_Click;
-            _miSortNumericDesc = new MenuItem();
-            _miSortNumericDesc.Click += miSortNumericDesc_Click;
+            _miSortDescending.Click += DoMenuSortDESC;
+            //_miDateAsc = new MenuItem();
+            //_miDateAsc.Click += miDateAsc_Click;
+            //_miDateDesc = new MenuItem();
+            //_miDateDesc.Click += miDateDesc_Click;
+            //_miSortNumericAsc = new MenuItem();
+            //_miSortNumericAsc.Click += miSortNumericAsc_Click;
+            //_miSortNumericDesc = new MenuItem();
+            //_miSortNumericDesc.Click += miSortNumericDesc_Click;
             _MenuItem4 = new MenuItem();
             _miHideRow = new MenuItem();
             _miHideRow.Click += miHideRow_Click;
@@ -2818,38 +2818,38 @@ namespace TAIGridControl2
             // MenuItem3
             // 
             _MenuItem3.Index = 11;
-            _MenuItem3.MenuItems.AddRange(new MenuItem[] { _miSortAscending, _miSortDescending, _miDateAsc, _miDateDesc, _miSortNumericAsc, _miSortNumericDesc });
+            _MenuItem3.MenuItems.AddRange(new MenuItem[] { _miSortAscending, _miSortDescending }); //, _miDateAsc, _miDateDesc, _miSortNumericAsc, _miSortNumericDesc });
             _MenuItem3.Text = "Sort";
             // 
             // miSortAscending
             // 
             _miSortAscending.Index = 0;
-            _miSortAscending.Text = "Ascii Ascending";
+            _miSortAscending.Text = "Ascending";
             // 
             // miSortDescending
             // 
             _miSortDescending.Index = 1;
-            _miSortDescending.Text = "Ascii Descending";
-            // 
-            // miDateAsc
-            // 
-            _miDateAsc.Index = 2;
-            _miDateAsc.Text = "Date Ascending";
-            // 
-            // miDateDesc
-            // 
-            _miDateDesc.Index = 3;
-            _miDateDesc.Text = "Date Descending";
-            // 
-            // miSortNumericAsc
-            // 
-            _miSortNumericAsc.Index = 4;
-            _miSortNumericAsc.Text = "Numeric Ascending";
-            // 
-            // miSortNumericDesc
-            // 
-            _miSortNumericDesc.Index = 5;
-            _miSortNumericDesc.Text = "Numeric Descending";
+            _miSortDescending.Text = "Descending";
+            //// 
+            //// miDateAsc
+            //// 
+            //_miDateAsc.Index = 2;
+            //_miDateAsc.Text = "Date Ascending";
+            //// 
+            //// miDateDesc
+            //// 
+            //_miDateDesc.Index = 3;
+            //_miDateDesc.Text = "Date Descending";
+            //// 
+            //// miSortNumericAsc
+            //// 
+            //_miSortNumericAsc.Index = 4;
+            //_miSortNumericAsc.Text = "Numeric Ascending";
+            //// 
+            //// miSortNumericDesc
+            //// 
+            //_miSortNumericDesc.Index = 5;
+            //_miSortNumericDesc.Text = "Numeric Descending";
             // 
             // MenuItem4
             // 
@@ -10746,6 +10746,20 @@ namespace TAIGridControl2
                         frm.Hide();
                         frm = null;
                     }
+
+                    if (frm1.OPENWHENSAVED)
+                    {
+
+                        try
+                        {
+
+                            System.Diagnostics.Process.Start(filetogenerate);
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("Had a problem trying to open the Excel file \n" + filetogenerate + "\n\n" + ex.Message);
+                        }
+                    }
                 }
 
 
@@ -18214,6 +18228,44 @@ namespace TAIGridControl2
         private void miAllowUserColumnResizing_Click(object sender, EventArgs e)
         {
             _AllowUserColumnResizing = !_AllowUserColumnResizing;
+        }
+
+        private void DoMenuSortASC(object sender, EventArgs e)
+        {
+            switch (GetColumnType(_ColOverOnMenuButton))
+            {
+                case TaiGridColContentTypes._Date:
+                    miDateAsc_Click(sender, e);
+                    break;
+                case TaiGridColContentTypes._FloatingPointNumber:
+                case TaiGridColContentTypes._WholeNumber:
+                    miSortNumericAsc_Click(sender, e);
+                    break;
+                case TaiGridColContentTypes._Bool:
+                case TaiGridColContentTypes._String:
+                default:
+                    miSortAscending_Click(sender, e);
+                    break;
+            }
+        }
+
+        private void DoMenuSortDESC(object sender, EventArgs e)
+        {
+            switch (GetColumnType(_ColOverOnMenuButton))
+            {
+                case TaiGridColContentTypes._Date:
+                    miDateDesc_Click(sender, e);
+                    break;
+                case TaiGridColContentTypes._FloatingPointNumber:
+                case TaiGridColContentTypes._WholeNumber:
+                    miSortNumericDesc_Click(sender, e);
+                    break;
+                case TaiGridColContentTypes._Bool:
+                case TaiGridColContentTypes._String:
+                default:
+                    miSortDescending_Click(sender, e);
+                    break;
+            }
         }
 
         private void miSortAscending_Click(object sender, EventArgs e)

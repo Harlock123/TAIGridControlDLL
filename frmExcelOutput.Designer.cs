@@ -37,6 +37,7 @@
             this.OFD = new System.Windows.Forms.OpenFileDialog();
             this.Label1 = new System.Windows.Forms.Label();
             this.chkOmitNulls = new System.Windows.Forms.CheckBox();
+            this.chkOpenFileWhenSaved = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // _Label2
@@ -56,7 +57,7 @@
             // 
             // btnOk
             // 
-            this.btnOk.Location = new System.Drawing.Point(318, 5);
+            this.btnOk.Location = new System.Drawing.Point(319, 2);
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(56, 20);
             this.btnOk.TabIndex = 10;
@@ -65,7 +66,7 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(258, 5);
+            this.btnCancel.Location = new System.Drawing.Point(259, 2);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(56, 20);
             this.btnCancel.TabIndex = 9;
@@ -107,12 +108,24 @@
             this.chkOmitNulls.AutoSize = true;
             this.chkOmitNulls.Checked = true;
             this.chkOmitNulls.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkOmitNulls.Location = new System.Drawing.Point(161, 22);
+            this.chkOmitNulls.Location = new System.Drawing.Point(161, 24);
             this.chkOmitNulls.Name = "chkOmitNulls";
             this.chkOmitNulls.Size = new System.Drawing.Size(81, 17);
             this.chkOmitNulls.TabIndex = 14;
             this.chkOmitNulls.Text = "Omit {Nulls}";
             this.chkOmitNulls.UseVisualStyleBackColor = true;
+            // 
+            // chkOpenFileWhenSaved
+            // 
+            this.chkOpenFileWhenSaved.AutoSize = true;
+            this.chkOpenFileWhenSaved.Checked = true;
+            this.chkOpenFileWhenSaved.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkOpenFileWhenSaved.Location = new System.Drawing.Point(248, 24);
+            this.chkOpenFileWhenSaved.Name = "chkOpenFileWhenSaved";
+            this.chkOpenFileWhenSaved.Size = new System.Drawing.Size(137, 17);
+            this.chkOpenFileWhenSaved.TabIndex = 15;
+            this.chkOpenFileWhenSaved.Text = "Open File When Saved";
+            this.chkOpenFileWhenSaved.UseVisualStyleBackColor = true;
             // 
             // frmExcelOutput
             // 
@@ -120,6 +133,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(389, 88);
             this.ControlBox = false;
+            this.Controls.Add(this.chkOpenFileWhenSaved);
             this.Controls.Add(this.chkOmitNulls);
             this.Controls.Add(this._Label2);
             this.Controls.Add(this.Label1);
@@ -146,5 +160,6 @@
         private System.Windows.Forms.OpenFileDialog OFD;
         private System.Windows.Forms.Label Label1;
         private System.Windows.Forms.CheckBox chkOmitNulls;
+        private System.Windows.Forms.CheckBox chkOpenFileWhenSaved;
     }
 }
