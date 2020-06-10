@@ -32,7 +32,7 @@ namespace GridTests
         {
             //string cn = "Server=(local);Database=HIDATA;Trusted_Connection=True;"; // My test env has this running locally
 
-            string cn = "Server=172.16.252.1;User ID=sa;password=LaserMaster#1;Database=HIDATA;"; // My test env in Windows VM in Linux has SQL on a docker container
+            string cn = "Server=(local);User ID=sa;password=P@ssw0rd;Database=HIDATA;"; // My test env in Windows VM in Linux has SQL on a docker container
 
 
             string sql = "SELECT TOP 1000 * from tblMEMBERMAIN";
@@ -44,7 +44,7 @@ namespace GridTests
         {
             //string cn = "Server=(local);Database=HIDATA;Trusted_Connection=True;"; // My test env has this running locally
 
-            string cn = "Server=172.16.252.1;User ID=sa;password=LaserMaster#1;Database=HIDATA;"; // My test env in Windows VM in Linux has SQL on a docker container
+            string cn = "Server=(local);User ID=sa;password=P@ssw0rd;Database=HIDATA;"; // My test env in Windows VM in Linux has SQL on a docker container
 
 
             string sql = "SELECT * from tblMEMBERMAIN"; // In my test env it shouild grab over 14000 rows

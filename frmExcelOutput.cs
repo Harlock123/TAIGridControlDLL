@@ -34,8 +34,10 @@ namespace TAIGridControl2
             InitializeComponent();
             _taig = TAIG;
 
+            var fname = "EXCELOUTPUT_" + DateTime.Now.ToString("MMddyyyy_HHmmss") + ".xlsx";
+
             txtTableName.Text = TAIG.ExcelWorksheetName;
-            txtFileName.Text = System.IO.Path.Combine(System.Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "EXCELOUTPUT.xlsx");
+            txtFileName.Text = System.IO.Path.Combine(System.Environment.GetFolderPath(Environment.SpecialFolder.Desktop), fname);
         }
 
         private void btnOk_Click(object sender, EventArgs e)
