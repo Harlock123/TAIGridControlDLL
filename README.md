@@ -11,6 +11,11 @@
  to the way it was used under VB6 you are out of luck. This grid will even expose doubleclick
  events directly on the cell ( Wow what a concept )
 
+### Version 2.0.8.0
+- Excel output now defaults to naming the file with date and time to avoid colissions
+EXCELOUTPUT_MMDDYYYY_HHMMSS.xlsx is the default name now for the excel output files
+Ths avoids colissions with file locks and prevents overwriting old exports accidentally
+
 ### Version 2.0.7.0
 - Change the Excel output dialog to contain a new feature OPEN FILE WHEN SAVED option that is Checked by default
 This will attempt to execute the file that was just saved to the users system. Resulting in that file being opened 
