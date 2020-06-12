@@ -11,6 +11,10 @@
  to the way it was used under VB6 you are out of luck. This grid will even expose doubleclick
  events directly on the cell ( Wow what a concept )
 
+### Version 2.0.9.0
+- Holding the CONTROL key down while using the mousewheel will not adjust the font size of the
+items in the grid as opposed to scrolling up and down or left and right through the grid
+
 ### Version 2.0.8.0
 - Excel output now defaults to naming the file with date and time to avoid colissions
 EXCELOUTPUT_MMDDYYYY_HHMMSS.xlsx is the default name now for the excel output files

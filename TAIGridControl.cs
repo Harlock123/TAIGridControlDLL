@@ -16,6 +16,7 @@ using Excel = Microsoft.Office.Interop.Excel;
 //using DocumentFormat.OpenXml.Packaging;
 
 using ClosedXML.Excel;
+using System.Windows.Input;
 //using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace TAIGridControl2
@@ -42,6 +43,11 @@ namespace TAIGridControl2
         #region Private Stuff
 
         public bool _LoggingEnabled = false;
+
+        // Stuff for KeyHandleing and other functions like MouseSchrool
+        private bool CTRLKeyPRESSED = false;
+        private bool ALTKeyPRESSED = false;
+
 
         // Items for the grid Title
         private string _GridTitle = "Grid Title";
@@ -3030,6 +3036,8 @@ namespace TAIGridControl2
             base.DoubleClick += DoubleClickHandler;
             base.MouseDown += MouseDownHandler;
             base.MouseMove += MouseMoveHandler;
+            //base.KeyDown += MainGridKeyDown_Handler;
+            //base.KeyUp += MainGridKeyUp_Handler;
             base.Load += TAIGRIDControl_Load;
             base.HandleDestroyed += TAIGridControl_HandleDestroyed;
             _gb1.ResumeLayout(false);
@@ -16287,33 +16295,52 @@ namespace TAIGridControl2
             int v;
             int del = e.Delta;
 
-            if (del < 0)
-                del = -_MouseWheelScrollAmount;
-            else if (del > 0)
-                del = _MouseWheelScrollAmount;
-
-            if (vs.Visible)
+            if ((ModifierKeys & Keys.Control) == Keys.Control)
             {
-                v = vs.Value - del;
+                // We are holding down the CTRL key we should do a fons thing rather than a scroll thing
 
-                if (v < 0)
-                    v = 0;
-                if (v > _rows)
-                    v = _rows;
-
-                // _SelectedRow = -1
-                vs.Value = v;
+                if (del > 0)
+                {
+                    miFontsSmaller_Click(sender, new EventArgs());
+                    miHeaderFontSmaller_Click(sender, new EventArgs());
+                }
+                else
+                {
+                    miFontsLarger_Click(sender, new EventArgs());
+                    miHeaderFontLarger_Click(sender, new EventArgs());
+                }
             }
-            else if (hs.Visible)
+            else
             {
-                v = hs.Value - del;
 
-                if (v < 0)
-                    v = 0;
-                if (v > _cols)
-                    v = _cols;
+                if (del < 0)
+                    del = -_MouseWheelScrollAmount;
+                else if (del > 0)
+                    del = _MouseWheelScrollAmount;
 
-                hs.Value = v;
+                if (vs.Visible)
+                {
+                    v = vs.Value - del;
+
+                    if (v < 0)
+                        v = 0;
+                    if (v > _rows)
+                        v = _rows;
+
+                    // _SelectedRow = -1
+                    vs.Value = v;
+                }
+                else if (hs.Visible)
+                {
+                    v = hs.Value - del;
+
+                    if (v < 0)
+                        v = 0;
+                    if (v > _cols)
+                        v = _cols;
+
+                    hs.Value = v;
+                }
             }
         }
 
@@ -17139,6 +17166,21 @@ namespace TAIGridControl2
                     }
                 }
             }
+        }
+        
+        private void MainGridKeyDown_Handler(object sender, KeyEventArgs e)
+        {
+
+            Console.WriteLine(e.KeyValue + " " + e.KeyCode + " " + e.Control);
+            if (e.Control)
+                this.CTRLKeyPRESSED = true;
+        }
+
+        private void MainGridKeyUp_Handler(object sender, KeyEventArgs e)
+        {
+            Console.WriteLine(e.KeyValue + " " + e.KeyCode + " " + e.Control);
+            if (e.Control)
+                this.CTRLKeyPRESSED = false;
         }
 
         private void vs_Scroll(object sender, ScrollEventArgs e)

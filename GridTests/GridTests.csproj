@@ -79,7 +79,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TAIGridControlDLL.csproj">
-      <Project>{1D1B7979-94DF-005C-00BB-2D5A57AF3245}</Project>
+      <Project>{1d1b7979-94df-005c-00bb-2d5a57af3245}</Project>
       <Name>TAIGridControlDLL</Name>
     </ProjectReference>
   </ItemGroup>

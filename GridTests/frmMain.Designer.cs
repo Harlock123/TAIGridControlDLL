@@ -56,6 +56,7 @@
             this.taig.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.taig.AutoFocus = true;
             this.taig.BorderColor = System.Drawing.Color.Black;
             this.taig.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.taig.CellOutlines = true;
