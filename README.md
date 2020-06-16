@@ -16,7 +16,7 @@
 - Addressed issues where the Grids cell contents might be NULL on exporting to excel
 
 ### Version 2.0.9.0
-- Holding the CONTROL key down while using the mousewheel will not adjust the font size of the
+- Holding the CONTROL key down while using the mousewheel will now adjust the font size of the
 items in the grid as opposed to scrolling up and down or left and right through the grid
 
 ### Version 2.0.8.0
