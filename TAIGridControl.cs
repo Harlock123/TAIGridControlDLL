@@ -10716,7 +10716,7 @@ namespace TAIGridControl2
 
                         for (int c = 0; c < _cols; c++)
                         {
-                            string Gval = _grid[r, c];
+                            string Gval = _grid[r, c] + ""; // sometimes the grids cell contents are NULL (WTF!)
 
                             if (frm1.OMITNULLS && Gval.ToUpper().Trim() == "{NULL}")
                                 Gval = "";
@@ -10870,7 +10870,7 @@ namespace TAIGridControl2
             //}
             catch (Exception ex)
             {
-                Interaction.MsgBox(ex.ToString(), (MsgBoxStyle)((int)MsgBoxStyle.Information + (int)MsgBoxStyle.OkOnly), "TAIGRIDControl.ExportToExcel Error...");
+                Interaction.MsgBox(ex.Message, (MsgBoxStyle)((int)MsgBoxStyle.Information + (int)MsgBoxStyle.OkOnly), "TAIGRIDControl.ExportToExcel Error...");
                 return;
             }
         }

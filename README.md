@@ -11,6 +11,10 @@
  to the way it was used under VB6 you are out of luck. This grid will even expose doubleclick
  events directly on the cell ( Wow what a concept )
 
+
+### Version 2.0.10.0
+- Addressed issues where the Grids cell contents might be NULL on exporting to excel
+
 ### Version 2.0.9.0
 - Holding the CONTROL key down while using the mousewheel will not adjust the font size of the
 items in the grid as opposed to scrolling up and down or left and right through the grid
@@ -42,7 +46,6 @@ Adding to the ENUM WholeNumber and FloatingPointNumber
 enum **TaiGridColContentTypes**  String, Number or Date
 
 - more code refactoring
-
 
 ### Version 2.0.4.0 
 - Change the internal handleing of menu button (Right mousebutton) tracking and cacheing
