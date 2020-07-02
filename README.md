@@ -11,7 +11,7 @@
  to the way it was used under VB6 you are out of luck. This grid will even expose double-click
  events directly on the cell ( Wow what a concept )
 
-### Version 2.0.11.0
+### Version 2.0.12.0
 - minor changes to excel output and library dependence requiring specific versions
 
 ### Version 2.0.10.0

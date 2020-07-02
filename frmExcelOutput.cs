@@ -34,11 +34,13 @@ namespace TAIGridControl2
             InitializeComponent();
             _taig = TAIG;
 
-            txtTableName.Text = TAIG.TitleText;
-
             var fname = "EXCELOUTPUT_" + DateTime.Now.ToString("MMddyyyy_HHmmss") + ".xlsx";
 
-            txtTableName.Text = TAIG.ExcelWorksheetName;
+            if (TAIG.ExcelWorksheetName.ToUpper() == "GRID OUTPUT")
+                txtTableName.Text = TAIG.TitleText;
+            else
+                txtTableName.Text = TAIG.ExcelWorksheetName;
+
             txtFileName.Text = System.IO.Path.Combine(System.Environment.GetFolderPath(Environment.SpecialFolder.Desktop), fname);
         }
 
