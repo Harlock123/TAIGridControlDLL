@@ -34,6 +34,8 @@ namespace TAIGridControl2
             InitializeComponent();
             _taig = TAIG;
 
+            txtTableName.Text = TAIG.TitleText;
+
             var fname = "EXCELOUTPUT_" + DateTime.Now.ToString("MMddyyyy_HHmmss") + ".xlsx";
 
             txtTableName.Text = TAIG.ExcelWorksheetName;
