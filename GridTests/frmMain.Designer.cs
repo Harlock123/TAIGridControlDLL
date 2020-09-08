@@ -34,6 +34,7 @@
             this.taig = new TAIGridControl2.TAIGridControl();
             this.btnSQLPopulate = new System.Windows.Forms.Button();
             this.btnBigSqlPopulate = new System.Windows.Forms.Button();
+            this.btnSmallSQL = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnWQL
@@ -143,11 +144,24 @@
             this.btnBigSqlPopulate.UseVisualStyleBackColor = true;
             this.btnBigSqlPopulate.Click += new System.EventHandler(this.btnBigSqlPopulate_Click);
             // 
+            // btnSmallSQL
+            // 
+            this.btnSmallSQL.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnSmallSQL.Location = new System.Drawing.Point(313, 371);
+            this.btnSmallSQL.Margin = new System.Windows.Forms.Padding(2);
+            this.btnSmallSQL.Name = "btnSmallSQL";
+            this.btnSmallSQL.Size = new System.Drawing.Size(91, 34);
+            this.btnSmallSQL.TabIndex = 4;
+            this.btnSmallSQL.Text = "Small SQL Populate";
+            this.btnSmallSQL.UseVisualStyleBackColor = true;
+            this.btnSmallSQL.Click += new System.EventHandler(this.btnSmallSQL_Click);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(758, 416);
+            this.Controls.Add(this.btnSmallSQL);
             this.Controls.Add(this.btnBigSqlPopulate);
             this.Controls.Add(this.btnSQLPopulate);
             this.Controls.Add(this.btnWQL);
@@ -166,6 +180,7 @@
         private System.Windows.Forms.Button btnWQL;
         private System.Windows.Forms.Button btnSQLPopulate;
         private System.Windows.Forms.Button btnBigSqlPopulate;
+        private System.Windows.Forms.Button btnSmallSQL;
     }
 }
 

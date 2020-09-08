@@ -17688,6 +17688,7 @@ namespace TAIGridControl2
                     }
                     else
                         _gridReportCurrentColumn = 0;
+                    
                     e.HasMorePages = true;
                     _gridReportPageNumbers += 1;
                 }
@@ -17708,8 +17709,11 @@ namespace TAIGridControl2
                 }
                 else
                     _gridReportCurrentColumn = 0;
+                
                 e.HasMorePages = true;
                 _gridReportPageNumbers += 1;
+                //if (_gridReportPageNumbers > 100)
+                //    e.HasMorePages = false;
             }
         }
 

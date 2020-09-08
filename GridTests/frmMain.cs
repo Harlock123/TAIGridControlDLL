@@ -51,5 +51,21 @@ namespace GridTests
 
             taig.PopulateGridWithData(cn, sql);
         }
+
+        private void btnSmallSQL_Click(object sender, EventArgs e)
+        {
+            //string cn = "Server=(local);Database=HIDATA;Trusted_Connection=True;"; // My test env has this running locally
+
+            string cn = "Server=(local);User ID=sa;password=P@ssw0rd;Database=HIDATA;"; // My test env in Windows VM in Linux has SQL on a docker container
+
+
+            string sql = "SELECT TOP 1 MMID,FIRSTNAME,MIDDLENAME,LASTNAME,DOB," +
+                         "(SELECT TOP 1 DESCRIPTION FROM TBLLOOKUPGENDER B where B.CODE=A.GENDER) as 'GENDER'," +
+                         "SSN,CREATEDDATE,CREATEDBY,UPDATEDBY,UPDATEDDATE,Phone1,Phone1Type,Phone1Ext," +
+                         "Phone2,Phone2Type,Phone2Ext,Email,ParentGuardian,ParentGuardPhone,CLIENTID,STATEMODDATE," +
+                         "STATEMODUSER,STATEMODTIME,NOMSID,LOCATIONDATE from tblMEMBERMAIN A";
+
+            taig.PopulateGridWithData(cn, sql);
+        }
     }
 }
