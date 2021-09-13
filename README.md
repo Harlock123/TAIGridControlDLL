@@ -1,7 +1,7 @@
 # TAIGridControlDLL 
 
 ## Lonnie Allen Watson
-## May 6th 2020
+## Sept 13th 2021
  
  A Little Back Story from early 2000's
 
@@ -10,6 +10,17 @@
  works better if its used in a data bound way, If you want to use the grid in a manner similar
  to the way it was used under VB6 you are out of luck. This grid will even expose double-click
  events directly on the cell ( Wow what a concept )
+ Through the Years this was used in everything I ever wrote for Winforms and is still in use 
+ today in our Cares project as well as some other test applications and log monitoring 
+ applications I have written for my workplace. Converted to C# like a decade ago...
+
+
+### Version 2.0.14.0
+- Fixed wordwrap bug 
+- removed the old sandcastle document subproject as its broken now for VS2019
+- fixed a few spelling errors
+- set the Grid Test project to be the startup
+- Added some new test buttons to the Grid Test Project
 
 ### Version 2.0.12.0
 - minor changes to excel output and library dependence requiring specific versions
