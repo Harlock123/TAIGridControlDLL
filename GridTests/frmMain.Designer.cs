@@ -35,6 +35,7 @@
             this.btnSQLPopulate = new System.Windows.Forms.Button();
             this.btnBigSqlPopulate = new System.Windows.Forms.Button();
             this.btnSmallSQL = new System.Windows.Forms.Button();
+            this.btnDirPop = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnWQL
@@ -156,11 +157,24 @@
             this.btnSmallSQL.UseVisualStyleBackColor = true;
             this.btnSmallSQL.Click += new System.EventHandler(this.btnSmallSQL_Click);
             // 
+            // btnDirPop
+            // 
+            this.btnDirPop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnDirPop.Location = new System.Drawing.Point(408, 371);
+            this.btnDirPop.Margin = new System.Windows.Forms.Padding(2);
+            this.btnDirPop.Name = "btnDirPop";
+            this.btnDirPop.Size = new System.Drawing.Size(91, 34);
+            this.btnDirPop.TabIndex = 5;
+            this.btnDirPop.Text = "Directory Populate";
+            this.btnDirPop.UseVisualStyleBackColor = true;
+            this.btnDirPop.Click += new System.EventHandler(this.btnDirPop_Click);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(758, 416);
+            this.Controls.Add(this.btnDirPop);
             this.Controls.Add(this.btnSmallSQL);
             this.Controls.Add(this.btnBigSqlPopulate);
             this.Controls.Add(this.btnSQLPopulate);
@@ -181,6 +195,7 @@
         private System.Windows.Forms.Button btnSQLPopulate;
         private System.Windows.Forms.Button btnBigSqlPopulate;
         private System.Windows.Forms.Button btnSmallSQL;
+        private System.Windows.Forms.Button btnDirPop;
     }
 }
 

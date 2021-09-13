@@ -8695,7 +8695,7 @@ namespace TAIGridControl2
 
         #endregion
 
-        #region PopulateFrimADirectory Calls
+        #region PopulateFromADirectory Calls
 
         /// <summary>
         /// Will open the directory specified by <c>Dirname</c> and will enumerate its contents.
@@ -16138,7 +16138,15 @@ namespace TAIGridControl2
 
                 if (subret.Length >= breaklen)
                 {
-                    ret += subret + Environment.NewLine;
+                    while (subret.Length >= breaklen)
+                    {
+                        ret += subret.Substring(0, breaklen) + Environment.NewLine;
+                        subret = subret.Substring(breaklen);
+                    }
+
+                    if (subret.Trim().Length > 0)
+                        ret += subret + Environment.NewLine;
+
                     subret = "";
                 }
             }

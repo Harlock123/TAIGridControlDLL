@@ -67,5 +67,11 @@ namespace GridTests
 
             taig.PopulateGridWithData(cn, sql);
         }
+
+        private void btnDirPop_Click(object sender, EventArgs e)
+        {
+            taig.PopulateFromADirectory(@"C:\Windows");
+            taig.WordWrapColumn(0, 30);
+        }
     }
 }
