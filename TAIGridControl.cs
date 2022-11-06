@@ -3281,6 +3281,11 @@ namespace TAIGridControl2
 
         public delegate void GridHoverleaveEventHandler(object sender);
 
+        [Description("Raidsed when the user employes the builtin conext menu to change colorization characteristics of a row or a cell in the grids output")]
+        public event GridColorChangeHandler GridColorChange;
+
+        public delegate void GridColorChangeHandler(object sender, int row, int col, Color TheColorChangedTo);
+
         #endregion
 
         #region Enums
@@ -18907,6 +18912,9 @@ namespace TAIGridControl2
                 var loopTo = _cols - 1;
                 for (r = 0; r <= loopTo; r++)
                     _gridBackColor[_RowOverOnMenuButton, r] = ccol;
+
+                GridColorChange?.Invoke(this, _RowOverOnMenuButton,_ColOverOnMenuButton,clrdlg.Color);
+
                 Invalidate();
             }
         }

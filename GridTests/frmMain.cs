@@ -73,5 +73,13 @@ namespace GridTests
             taig.PopulateFromADirectory(@"C:\Windows");
             taig.WordWrapColumn(0, 30);
         }
+
+        private void HandleGridColorChange(object sender, int row, int col, Color TheColorChangedTo)
+        {
+            MessageBox.Show("Grids colors were context menu changed\n " +
+                            "The Row selected was " + row.ToString() + "\n" +
+                            "The color changed to was R-" + TheColorChangedTo.R.ToString() + " G-" +
+                            TheColorChangedTo.G.ToString() + " B-" + TheColorChangedTo.B.ToString());
+        }
     }
 }
