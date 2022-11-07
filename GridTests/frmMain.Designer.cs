@@ -120,7 +120,7 @@
             this.taig.XMLIncludeSchema = false;
             this.taig.XMLNameSpace = "TAI_Grid_Ouptut";
             this.taig.XMLTableName = "Table";
-            this.taig.GridColorChange += new TAIGridControl2.TAIGridControl.GridColorChangeHandler(this.HandleGridColorChange);
+            this.taig.GridRowColorChange += new TAIGridControl2.TAIGridControl.GridRowColorChangeHandler(this.HandleGridColorChange);
             // 
             // btnSQLPopulate
             // 

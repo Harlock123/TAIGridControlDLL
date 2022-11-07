@@ -3281,10 +3281,22 @@ namespace TAIGridControl2
 
         public delegate void GridHoverleaveEventHandler(object sender);
 
-        [Description("Raidsed when the user employes the builtin conext menu to change colorization characteristics of a row or a cell in the grids output")]
-        public event GridColorChangeHandler GridColorChange;
+        [Description("Raised when the user employes the builtin conext menu to change colorization characteristics of a row in the grids output")]
+        public event GridRowColorChangeHandler GridRowColorChange;
 
-        public delegate void GridColorChangeHandler(object sender, int row, int col, Color TheColorChangedTo);
+        public delegate void GridRowColorChangeHandler(object sender, int row, int col, Color TheColorChangedTo);
+
+        [Description("Raised when the user employes the builtin conext menu to change colorization characteristics of a col in the grids output")]
+        public event GridColColorChangeHandler GridColColorChange;
+
+        public delegate void GridColColorChangeHandler(object sender, int row, int col, Color TheColorChangedTo);
+
+        [Description("Raised when the user employes the builtin conext menu to change colorization characteristics of a Cell in the grids output")]
+        public event GridCelColorChangeHandler GridCellColorChange;
+
+        public delegate void GridCelColorChangeHandler(object sender, int row, int col, Color TheColorChangedTo);
+
+
 
         #endregion
 
@@ -18913,9 +18925,10 @@ namespace TAIGridControl2
                 for (r = 0; r <= loopTo; r++)
                     _gridBackColor[_RowOverOnMenuButton, r] = ccol;
 
-                GridColorChange?.Invoke(this, _RowOverOnMenuButton,_ColOverOnMenuButton,clrdlg.Color);
-
                 Invalidate();
+                
+                GridRowColorChange?.Invoke(this, _RowOverOnMenuButton,_ColOverOnMenuButton,clrdlg.Color);
+                
             }
         }
 
@@ -18930,6 +18943,8 @@ namespace TAIGridControl2
                 for (r = 0; r <= loopTo; r++)
                     _gridBackColor[r, _ColOverOnMenuButton] = ccol;
                 Invalidate();
+
+                GridColColorChange?.Invoke(this, _RowOverOnMenuButton, _ColOverOnMenuButton, clrdlg.Color);
             }
         }
 
@@ -18938,7 +18953,10 @@ namespace TAIGridControl2
             if ((int)clrdlg.ShowDialog() == (int)DialogResult.OK)
             {
                 _gridBackColor[_RowOverOnMenuButton, _ColOverOnMenuButton] = GetGridBackColorListEntry(new SolidBrush(clrdlg.Color));
+                
                 Invalidate();
+
+                GridCellColorChange?.Invoke(this, _RowOverOnMenuButton, _ColOverOnMenuButton, clrdlg.Color);
             }
         }
 
