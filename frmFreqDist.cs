@@ -171,6 +171,7 @@ namespace TAIGridControl2
             this._btnClose.Size = new System.Drawing.Size(88, 20);
             this._btnClose.TabIndex = 1;
             this._btnClose.Text = "Close";
+            this._btnClose.Click += new System.EventHandler(this._btnClose_Click);
             // 
             // frmFreqDist
             // 
@@ -190,6 +191,11 @@ namespace TAIGridControl2
         private void btnClose_Click(object sender, EventArgs e)
         {
             Hide();
+        }
+
+        private void _btnClose_Click(object sender, EventArgs e)
+        {
+            btnClose_Click(sender, e);
         }
     }
 }

@@ -3281,17 +3281,17 @@ namespace TAIGridControl2
 
         public delegate void GridHoverleaveEventHandler(object sender);
 
-        [Description("Raised when the user employes the builtin conext menu to change colorization characteristics of a row in the grids output")]
+        [Description("Raised when the user employes the builtin context menu to change colorization characteristics of a row in the grids output")]
         public event GridRowColorChangeHandler GridRowColorChange;
 
         public delegate void GridRowColorChangeHandler(object sender, int row, int col, Color TheColorChangedTo);
 
-        [Description("Raised when the user employes the builtin conext menu to change colorization characteristics of a col in the grids output")]
+        [Description("Raised when the user employes the builtin context menu to change colorization characteristics of a col in the grids output")]
         public event GridColColorChangeHandler GridColColorChange;
 
         public delegate void GridColColorChangeHandler(object sender, int row, int col, Color TheColorChangedTo);
 
-        [Description("Raised when the user employes the builtin conext menu to change colorization characteristics of a Cell in the grids output")]
+        [Description("Raised when the user employes the builtin context menu to change colorization characteristics of a Cell in the grids output")]
         public event GridCelColorChangeHandler GridCellColorChange;
 
         public delegate void GridCelColorChangeHandler(object sender, int row, int col, Color TheColorChangedTo);
