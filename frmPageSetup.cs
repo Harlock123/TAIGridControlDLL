@@ -587,6 +587,7 @@ namespace TAIGridControl2
             this._btnCancel.Size = new System.Drawing.Size(60, 20);
             this._btnCancel.TabIndex = 0;
             this._btnCancel.Text = "Cancel";
+            this._btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // _btnOk
             // 
@@ -595,6 +596,7 @@ namespace TAIGridControl2
             this._btnOk.Size = new System.Drawing.Size(60, 20);
             this._btnOk.TabIndex = 1;
             this._btnOk.Text = "Accept";
+            this._btnOk.Click += new System.EventHandler(this.btnOk_Click);
             // 
             // _cmboPaperSize
             // 
@@ -717,6 +719,7 @@ namespace TAIGridControl2
             this._btnPrint.Size = new System.Drawing.Size(60, 20);
             this._btnPrint.TabIndex = 8;
             this._btnPrint.Text = "Print";
+            this._btnPrint.Click += new System.EventHandler(this.btnPrint_Click);
             // 
             // _btnPreview
             // 
@@ -725,6 +728,7 @@ namespace TAIGridControl2
             this._btnPreview.Size = new System.Drawing.Size(60, 20);
             this._btnPreview.TabIndex = 9;
             this._btnPreview.Text = "Preview";
+            this._btnPreview.Click += new System.EventHandler(this.btnPreview_Click);
             // 
             // frmPageSetup
             // 

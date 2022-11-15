@@ -196,84 +196,85 @@ namespace TAIGridControl2
         [DebuggerStepThrough()]
         private void InitializeComponent()
         {
-            _Label1 = new System.Windows.Forms.Label();
-            _btnFontsSmaller = new System.Windows.Forms.Button();
-            _btnFontsSmaller.Click += btnFontsSmaller_Click;
-            _btnFontsLarger = new System.Windows.Forms.Button();
-            _btnFontsLarger.Click += btnFontsLarger_Click;
-            _btnExit = new System.Windows.Forms.Button();
-            _btnExit.Click += btnExit_Click;
-            _chkShowTitle = new System.Windows.Forms.CheckBox();
-            _chkShowTitle.CheckedChanged += chkShowTitle_CheckedChanged;
-            _chkShowHeaders = new System.Windows.Forms.CheckBox();
-            _chkShowHeaders.CheckedChanged += chkShowHeaders_CheckedChanged;
-            SuspendLayout();
+            this._Label1 = new System.Windows.Forms.Label();
+            this._btnFontsSmaller = new System.Windows.Forms.Button();
+            this._btnFontsLarger = new System.Windows.Forms.Button();
+            this._btnExit = new System.Windows.Forms.Button();
+            this._chkShowTitle = new System.Windows.Forms.CheckBox();
+            this._chkShowHeaders = new System.Windows.Forms.CheckBox();
+            this.SuspendLayout();
             // 
-            // Label1
+            // _Label1
             // 
-            _Label1.Location = new System.Drawing.Point(8, 8);
-            _Label1.Name = "Label1";
-            _Label1.Size = new System.Drawing.Size(76, 16);
-            _Label1.TabIndex = 0;
-            _Label1.Text = "Grids Fonts";
+            this._Label1.Location = new System.Drawing.Point(8, 8);
+            this._Label1.Name = "_Label1";
+            this._Label1.Size = new System.Drawing.Size(76, 16);
+            this._Label1.TabIndex = 0;
+            this._Label1.Text = "Grids Fonts";
             // 
-            // btnFontsSmaller
+            // _btnFontsSmaller
             // 
-            _btnFontsSmaller.Location = new System.Drawing.Point(12, 28);
-            _btnFontsSmaller.Name = "btnFontsSmaller";
-            _btnFontsSmaller.Size = new System.Drawing.Size(16, 20);
-            _btnFontsSmaller.TabIndex = 1;
-            _btnFontsSmaller.Text = "<";
+            this._btnFontsSmaller.Location = new System.Drawing.Point(12, 28);
+            this._btnFontsSmaller.Name = "_btnFontsSmaller";
+            this._btnFontsSmaller.Size = new System.Drawing.Size(16, 20);
+            this._btnFontsSmaller.TabIndex = 1;
+            this._btnFontsSmaller.Text = "<";
+            this._btnFontsSmaller.Click += new System.EventHandler(this.btnFontsSmaller_Click);
             // 
-            // btnFontsLarger
+            // _btnFontsLarger
             // 
-            _btnFontsLarger.Location = new System.Drawing.Point(44, 28);
-            _btnFontsLarger.Name = "btnFontsLarger";
-            _btnFontsLarger.Size = new System.Drawing.Size(16, 20);
-            _btnFontsLarger.TabIndex = 2;
-            _btnFontsLarger.Text = ">";
+            this._btnFontsLarger.Location = new System.Drawing.Point(44, 28);
+            this._btnFontsLarger.Name = "_btnFontsLarger";
+            this._btnFontsLarger.Size = new System.Drawing.Size(16, 20);
+            this._btnFontsLarger.TabIndex = 2;
+            this._btnFontsLarger.Text = ">";
+            this._btnFontsLarger.Click += new System.EventHandler(this.btnFontsLarger_Click);
             // 
-            // btnExit
+            // _btnExit
             // 
-            _btnExit.Location = new System.Drawing.Point(364, 20);
-            _btnExit.Name = "btnExit";
-            _btnExit.Size = new System.Drawing.Size(72, 24);
-            _btnExit.TabIndex = 3;
-            _btnExit.Text = "Close";
+            this._btnExit.Location = new System.Drawing.Point(364, 20);
+            this._btnExit.Name = "_btnExit";
+            this._btnExit.Size = new System.Drawing.Size(72, 24);
+            this._btnExit.TabIndex = 3;
+            this._btnExit.Text = "Close";
+            this._btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
-            // chkShowTitle
+            // _chkShowTitle
             // 
-            _chkShowTitle.Location = new System.Drawing.Point(144, 16);
-            _chkShowTitle.Name = "chkShowTitle";
-            _chkShowTitle.Size = new System.Drawing.Size(152, 16);
-            _chkShowTitle.TabIndex = 4;
-            _chkShowTitle.Text = "Show Grid Title Bar";
+            this._chkShowTitle.Location = new System.Drawing.Point(144, 16);
+            this._chkShowTitle.Name = "_chkShowTitle";
+            this._chkShowTitle.Size = new System.Drawing.Size(152, 16);
+            this._chkShowTitle.TabIndex = 4;
+            this._chkShowTitle.Text = "Show Grid Title Bar";
+            this._chkShowTitle.Click += new System.EventHandler(this.chkShowTitle_CheckedChanged);
             // 
-            // chkShowHeaders
+            // _chkShowHeaders
             // 
-            _chkShowHeaders.Location = new System.Drawing.Point(144, 36);
-            _chkShowHeaders.Name = "chkShowHeaders";
-            _chkShowHeaders.Size = new System.Drawing.Size(172, 16);
-            _chkShowHeaders.TabIndex = 5;
-            _chkShowHeaders.Text = "Show Grid Column Headers";
+            this._chkShowHeaders.Location = new System.Drawing.Point(144, 36);
+            this._chkShowHeaders.Name = "_chkShowHeaders";
+            this._chkShowHeaders.Size = new System.Drawing.Size(172, 16);
+            this._chkShowHeaders.TabIndex = 5;
+            this._chkShowHeaders.Text = "Show Grid Column Headers";
+            this._chkShowHeaders.Click += new System.EventHandler(this.chkShowHeaders_CheckedChanged);
             // 
             // frmGridProperties
             // 
-            AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-            BackColor = System.Drawing.SystemColors.Info;
-            ClientSize = new System.Drawing.Size(442, 68);
-            Controls.Add(_chkShowHeaders);
-            Controls.Add(_chkShowTitle);
-            Controls.Add(_btnExit);
-            Controls.Add(_btnFontsLarger);
-            Controls.Add(_btnFontsSmaller);
-            Controls.Add(_Label1);
-            FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            MaximizeBox = false;
-            MinimizeBox = false;
-            Name = "frmGridProperties";
-            Text = "Properties for the Grid";
-            ResumeLayout(false);
+            this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+            this.BackColor = System.Drawing.SystemColors.Info;
+            this.ClientSize = new System.Drawing.Size(442, 68);
+            this.Controls.Add(this._chkShowHeaders);
+            this.Controls.Add(this._chkShowTitle);
+            this.Controls.Add(this._btnExit);
+            this.Controls.Add(this._btnFontsLarger);
+            this.Controls.Add(this._btnFontsSmaller);
+            this.Controls.Add(this._Label1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.Name = "frmGridProperties";
+            this.Text = "Properties for the Grid";
+            this.ResumeLayout(false);
+
         }
 
 

@@ -314,6 +314,7 @@ namespace TAIGridControl2
             this._btnOk.Size = new System.Drawing.Size(56, 20);
             this._btnOk.TabIndex = 10;
             this._btnOk.Text = "Ok";
+            this._btnOk.Click += new System.EventHandler(this._btnOk_Click);
             // 
             // _btnCancel
             // 
@@ -322,6 +323,7 @@ namespace TAIGridControl2
             this._btnCancel.Size = new System.Drawing.Size(56, 20);
             this._btnCancel.TabIndex = 9;
             this._btnCancel.Text = "Cancel";
+            this._btnCancel.Click += new System.EventHandler(this._btnCancel_Click);
             // 
             // _btnSelectFile
             // 
@@ -433,6 +435,16 @@ namespace TAIGridControl2
 
                 Hide();
             }
+        }
+
+        private void _btnCancel_Click(object sender, EventArgs e)
+        {
+            btnCancel_Click(sender, e);
+        }
+
+        private void _btnOk_Click(object sender, EventArgs e)
+        {
+            btnOk_Click(sender, e);
         }
     }
 }

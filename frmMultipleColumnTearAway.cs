@@ -173,79 +173,80 @@ namespace TAIGridControl2
         [DebuggerStepThrough()]
         private void InitializeComponent()
         {
-            _chkList = new System.Windows.Forms.CheckedListBox();
-            _btnOk = new System.Windows.Forms.Button();
-            _btnOk.Click += btnOk_Click;
-            _btnCancel = new System.Windows.Forms.Button();
-            _btnCancel.Click += btnCancel_Click;
-            _btnAll = new System.Windows.Forms.Button();
-            _btnAll.Click += btnAll_Click;
-            _btnNone = new System.Windows.Forms.Button();
-            _btnNone.Click += btnNone_Click;
-            SuspendLayout();
+            this._chkList = new System.Windows.Forms.CheckedListBox();
+            this._btnOk = new System.Windows.Forms.Button();
+            this._btnCancel = new System.Windows.Forms.Button();
+            this._btnAll = new System.Windows.Forms.Button();
+            this._btnNone = new System.Windows.Forms.Button();
+            this.SuspendLayout();
             // 
-            // chkList
+            // _chkList
             // 
-            _chkList.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom
-                        | System.Windows.Forms.AnchorStyles.Left
-                        | System.Windows.Forms.AnchorStyles.Right;
-            _chkList.CheckOnClick = true;
-            _chkList.Location = new System.Drawing.Point(4, 24);
-            _chkList.Name = "chkList";
-            _chkList.Size = new System.Drawing.Size(232, 304);
-            _chkList.TabIndex = 0;
+            this._chkList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this._chkList.CheckOnClick = true;
+            this._chkList.Location = new System.Drawing.Point(4, 24);
+            this._chkList.Name = "_chkList";
+            this._chkList.Size = new System.Drawing.Size(232, 304);
+            this._chkList.TabIndex = 0;
             // 
-            // btnOk
+            // _btnOk
             // 
-            _btnOk.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
-            _btnOk.Location = new System.Drawing.Point(20, 335);
-            _btnOk.Name = "btnOk";
-            _btnOk.Size = new System.Drawing.Size(76, 24);
-            _btnOk.TabIndex = 1;
-            _btnOk.Text = "Ok";
+            this._btnOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this._btnOk.Location = new System.Drawing.Point(20, 335);
+            this._btnOk.Name = "_btnOk";
+            this._btnOk.Size = new System.Drawing.Size(76, 24);
+            this._btnOk.TabIndex = 1;
+            this._btnOk.Text = "Ok";
+            this._btnOk.Click += new System.EventHandler(this.btnOk_Click);
             // 
-            // btnCancel
+            // _btnCancel
             // 
-            _btnCancel.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right;
-            _btnCancel.Location = new System.Drawing.Point(136, 335);
-            _btnCancel.Name = "btnCancel";
-            _btnCancel.Size = new System.Drawing.Size(76, 24);
-            _btnCancel.TabIndex = 2;
-            _btnCancel.Text = "Cancel";
+            this._btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this._btnCancel.Location = new System.Drawing.Point(136, 335);
+            this._btnCancel.Name = "_btnCancel";
+            this._btnCancel.Size = new System.Drawing.Size(76, 24);
+            this._btnCancel.TabIndex = 2;
+            this._btnCancel.Text = "Cancel";
+            this._btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
-            // btnAll
+            // _btnAll
             // 
-            _btnAll.Location = new System.Drawing.Point(4, 0);
-            _btnAll.Name = "btnAll";
-            _btnAll.Size = new System.Drawing.Size(40, 20);
-            _btnAll.TabIndex = 3;
-            _btnAll.Text = "All";
+            this._btnAll.Location = new System.Drawing.Point(4, 0);
+            this._btnAll.Name = "_btnAll";
+            this._btnAll.Size = new System.Drawing.Size(40, 20);
+            this._btnAll.TabIndex = 3;
+            this._btnAll.Text = "All";
+            this._btnAll.Click += new System.EventHandler(this.btnAll_Click);
             // 
-            // btnNone
+            // _btnNone
             // 
-            _btnNone.Location = new System.Drawing.Point(48, 0);
-            _btnNone.Name = "btnNone";
-            _btnNone.Size = new System.Drawing.Size(40, 20);
-            _btnNone.TabIndex = 4;
-            _btnNone.Text = "None";
+            this._btnNone.Location = new System.Drawing.Point(48, 0);
+            this._btnNone.Name = "_btnNone";
+            this._btnNone.Size = new System.Drawing.Size(40, 20);
+            this._btnNone.TabIndex = 4;
+            this._btnNone.Text = "None";
+            this._btnNone.Click += new System.EventHandler(this.btnNone_Click);
             // 
             // frmMultipleColumnTearAway
             // 
-            AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-            ClientSize = new System.Drawing.Size(240, 364);
-            Controls.Add(_btnNone);
-            Controls.Add(_btnAll);
-            Controls.Add(_btnCancel);
-            Controls.Add(_btnOk);
-            Controls.Add(_chkList);
-            FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
-            MaximizeBox = false;
-            MinimizeBox = false;
-            MinimumSize = new System.Drawing.Size(212, 184);
-            Name = "frmMultipleColumnTearAway";
-            Text = "Select Columns to Tear Away";
-            TopMost = true;
-            ResumeLayout(false);
+            this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+            this.ClientSize = new System.Drawing.Size(240, 364);
+            this.Controls.Add(this._btnNone);
+            this.Controls.Add(this._btnAll);
+            this.Controls.Add(this._btnCancel);
+            this.Controls.Add(this._btnOk);
+            this.Controls.Add(this._chkList);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(212, 184);
+            this.Name = "frmMultipleColumnTearAway";
+            this.Text = "Select Columns to Tear Away";
+            this.TopMost = true;
+            this.ResumeLayout(false);
+
         }
 
 
