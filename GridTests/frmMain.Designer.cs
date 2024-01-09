@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Drawing.StringFormat stringFormat1 = new System.Drawing.StringFormat();
+            System.Drawing.StringFormat stringFormat2 = new System.Drawing.StringFormat();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
             this.btnWQL = new System.Windows.Forms.Button();
             this.taig = new TAIGridControl2.TAIGridControl();
@@ -36,6 +36,7 @@
             this.btnBigSqlPopulate = new System.Windows.Forms.Button();
             this.btnSmallSQL = new System.Windows.Forms.Button();
             this.btnDirPop = new System.Windows.Forms.Button();
+            this.btnAzureSQLTest = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnWQL
@@ -87,11 +88,11 @@
             this.taig.GridHeaderFont = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Bold);
             this.taig.GridHeaderForeColor = System.Drawing.Color.Black;
             this.taig.GridHeaderHeight = 16;
-            stringFormat1.Alignment = System.Drawing.StringAlignment.Near;
-            stringFormat1.HotkeyPrefix = System.Drawing.Text.HotkeyPrefix.None;
-            stringFormat1.LineAlignment = System.Drawing.StringAlignment.Near;
-            stringFormat1.Trimming = System.Drawing.StringTrimming.Character;
-            this.taig.GridHeaderStringFormat = stringFormat1;
+            stringFormat2.Alignment = System.Drawing.StringAlignment.Near;
+            stringFormat2.HotkeyPrefix = System.Drawing.Text.HotkeyPrefix.None;
+            stringFormat2.LineAlignment = System.Drawing.StringAlignment.Near;
+            stringFormat2.Trimming = System.Drawing.StringTrimming.Character;
+            this.taig.GridHeaderStringFormat = stringFormat2;
             this.taig.GridheaderVisible = true;
             this.taig.Location = new System.Drawing.Point(9, 10);
             this.taig.Margin = new System.Windows.Forms.Padding(2);
@@ -170,11 +171,23 @@
             this.btnDirPop.UseVisualStyleBackColor = true;
             this.btnDirPop.Click += new System.EventHandler(this.btnDirPop_Click);
             // 
+            // btnAzureSQLTest
+            // 
+            this.btnAzureSQLTest.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnAzureSQLTest.Location = new System.Drawing.Point(505, 372);
+            this.btnAzureSQLTest.Name = "btnAzureSQLTest";
+            this.btnAzureSQLTest.Size = new System.Drawing.Size(143, 32);
+            this.btnAzureSQLTest.TabIndex = 6;
+            this.btnAzureSQLTest.Text = "Azure SQL TEST for Cares";
+            this.btnAzureSQLTest.UseVisualStyleBackColor = true;
+            this.btnAzureSQLTest.Click += new System.EventHandler(this.btnAzureSQLTest_Click);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(758, 416);
+            this.Controls.Add(this.btnAzureSQLTest);
             this.Controls.Add(this.btnDirPop);
             this.Controls.Add(this.btnSmallSQL);
             this.Controls.Add(this.btnBigSqlPopulate);
@@ -197,6 +210,7 @@
         private System.Windows.Forms.Button btnBigSqlPopulate;
         private System.Windows.Forms.Button btnSmallSQL;
         private System.Windows.Forms.Button btnDirPop;
+        private System.Windows.Forms.Button btnAzureSQLTest;
     }
 }
 
