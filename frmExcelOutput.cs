@@ -60,6 +60,11 @@ namespace TAIGridControl2
                     .Replace("*","_")
                     .Replace("[","_")
                     .Replace("]","_");
+                // They cannot be more than 31 characers as well
+
+                if (SELECTEDWORKBOOKNAME.Length > 31)
+                    SELECTEDWORKBOOKNAME = SELECTEDWORKBOOKNAME.Substring(0, 31);
+
                 FRMOK = true;
                 OMITNULLS = chkOmitNulls.Checked;
                 OPENWHENSAVED = chkOpenFileWhenSaved.Checked;
