@@ -53,7 +53,13 @@ namespace TAIGridControl2
             else
             {
                 SELECTEDPATH = txtFileName.Text;
-                SELECTEDWORKBOOKNAME = txtTableName.Text;
+                SELECTEDWORKBOOKNAME = txtTableName.Text.Replace(":","_")
+                    .Replace(@"\","_")
+                    .Replace(@"/","_")
+                    .Replace("?","_")
+                    .Replace("*","_")
+                    .Replace("[","_")
+                    .Replace("]","_");
                 FRMOK = true;
                 OMITNULLS = chkOmitNulls.Checked;
                 OPENWHENSAVED = chkOpenFileWhenSaved.Checked;

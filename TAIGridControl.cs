@@ -3041,7 +3041,7 @@ namespace TAIGridControl2
             base.Load += TAIGRIDControl_Load;
             base.HandleDestroyed += TAIGridControl_HandleDestroyed;
             _gb1.ResumeLayout(false);
-            base.Paint += TAIGRIDv2_Paint;
+            //base.Paint += TAIGRIDv2_Paint;
             //base.SizeChanged += TAIGRIDv2_SizeChanged;
             //base.MouseEnter += MouseEnterHandler;
             //base.MouseWheel += MouseWheelHandler;
