@@ -2484,16 +2484,6 @@
             </summary>
             <remarks></remarks>
         </member>
-        <member name="M:TAIGridControl2.TAIGridControl.ExportToExcel(Microsoft.Office.Interop.Excel.Application,Microsoft.Office.Interop.Excel.Workbook,System.String)">
-            <summary>
-            Will take the supplied instance of Microsoft excel <c>_excel</c> and place the contents of the grid on the
-            worksheet named <c>wsname</c> in the supplied workbook <c>_Workbook</c>
-            </summary>
-            <param name="_excel"></param>
-            <param name="_WorkBook"></param>
-            <param name="wsname"></param>
-            <remarks></remarks>
-        </member>
         <member name="M:TAIGridControl2.TAIGridControl.ExportToText">
             <summary>
             Will open the internal export filename dialog querying the user for the filename to export to

@@ -10,7 +10,7 @@ using System.Text;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Microsoft.VisualBasic.CompilerServices;
-using Excel = Microsoft.Office.Interop.Excel;
+//using Excel = Microsoft.Office.Interop.Excel;
 //using DocumentFormat;
 //using DocumentFormat.OpenXml;
 //using DocumentFormat.OpenXml.Packaging;
@@ -10900,302 +10900,302 @@ namespace TAIGridControl2
         /// <param name="_WorkBook"></param>
         /// <param name="wsname"></param>
         /// <remarks></remarks>
-        public void ExportToExcel(Excel.Application _excel, Excel.Workbook _WorkBook, string wsname)
-        {
-            var frm = new frmExportingToExcelWorking();
-            string lastsheetname;
+        //public void ExportToExcel(Excel.Application _excel, Excel.Workbook _WorkBook, string wsname)
+        //{
+        //    var frm = new frmExportingToExcelWorking();
+        //    string lastsheetname;
 
-            if (_ShowExcelExportMessage)
-            {
-                frm.Show();
-                frm.Refresh();
-            }
+        //    if (_ShowExcelExportMessage)
+        //    {
+        //        frm.Show();
+        //        frm.Refresh();
+        //    }
 
-            Refresh();
-            Application.DoEvents();
+        //    Refresh();
+        //    Application.DoEvents();
 
-            int TotalRows = -1;
-            Excel.Worksheet sh;
-            try
-            {
-                SolidBrush _br;
-                string rng;
-                int idx = 0;
-                string FirstColumn = "A";
-                string LastColumn = ReturnExcelColumn(Cols - 1);
-                int CurrentSHidx = 1;
-                int ccidx = 0;
+        //    int TotalRows = -1;
+        //    Excel.Worksheet sh;
+        //    try
+        //    {
+        //        SolidBrush _br;
+        //        string rng;
+        //        int idx = 0;
+        //        string FirstColumn = "A";
+        //        string LastColumn = ReturnExcelColumn(Cols - 1);
+        //        int CurrentSHidx = 1;
+        //        int ccidx = 0;
 
-                int rows = Rows;
-                _WorkBook = _excel.Workbooks.Add();
+        //        int rows = Rows;
+        //        _WorkBook = _excel.Workbooks.Add();
 
-                if (rows > _excelMaxRowsPerSheet)
-                {
-                    idx = Conversions.ToInteger(rows / (double)_excelMaxRowsPerSheet);
+        //        if (rows > _excelMaxRowsPerSheet)
+        //        {
+        //            idx = Conversions.ToInteger(rows / (double)_excelMaxRowsPerSheet);
 
-                    // get around the Int round up problem of VB
+        //            // get around the Int round up problem of VB
 
-                    if (idx * _excelMaxRowsPerSheet > rows)
-                        idx -= 1;
-                }
+        //            if (idx * _excelMaxRowsPerSheet > rows)
+        //                idx -= 1;
+        //        }
 
-                // _WorkBook.Worksheets("Sheet2").Delete()
-                // _WorkBook.Worksheets("Sheet3").Delete()
+        //        // _WorkBook.Worksheets("Sheet2").Delete()
+        //        // _WorkBook.Worksheets("Sheet3").Delete()
 
-                while (idx != -1)
-                {
-                    if (idx > 0)
-                        rows = _excelMaxRowsPerSheet;
-                    else
-                        rows = Rows - TotalRows;
+        //        while (idx != -1)
+        //        {
+        //            if (idx > 0)
+        //                rows = _excelMaxRowsPerSheet;
+        //            else
+        //                rows = Rows - TotalRows;
 
-                    if (CurrentSHidx == 1)
-                    {
-                        lastsheetname = wsname + " " + CurrentSHidx.ToString();
-                        Excel.Worksheet sheet = (Excel.Worksheet)_WorkBook.Worksheets["Sheet1"];
+        //            if (CurrentSHidx == 1)
+        //            {
+        //                lastsheetname = wsname + " " + CurrentSHidx.ToString();
+        //                Excel.Worksheet sheet = (Excel.Worksheet)_WorkBook.Worksheets["Sheet1"];
 
-                        sheet.Name = lastsheetname;
+        //                sheet.Name = lastsheetname;
 
-                        sh = (Excel.Worksheet)_WorkBook.ActiveSheet;
-                    }
-                    else
-                    {
-                        _WorkBook.Worksheets.Add();
-                        sh = (Excel.Worksheet)_WorkBook.ActiveSheet;
+        //                sh = (Excel.Worksheet)_WorkBook.ActiveSheet;
+        //            }
+        //            else
+        //            {
+        //                _WorkBook.Worksheets.Add();
+        //                sh = (Excel.Worksheet)_WorkBook.ActiveSheet;
 
-                        // Dim cmd As String = "After:=Sheets(" + Chr(34) + lastsheetname + Chr(34) + ")"
+        //                // Dim cmd As String = "After:=Sheets(" + Chr(34) + lastsheetname + Chr(34) + ")"
 
-                        // sh.move(cmd)
-                        lastsheetname = wsname + " " + CurrentSHidx.ToString();
-                        sh.Name = lastsheetname;
-                    }
+        //                // sh.move(cmd)
+        //                lastsheetname = wsname + " " + CurrentSHidx.ToString();
+        //                sh.Name = lastsheetname;
+        //            }
 
-                    _excel.MaxChange = 0.001;
+        //            _excel.MaxChange = 0.001;
 
-                    _excel.ActiveWorkbook.PrecisionAsDisplayed = false;
-                    var arr = new object[rows + 1 + 1, Cols + 1];
-                    int r, c, rmod;
+        //            _excel.ActiveWorkbook.PrecisionAsDisplayed = false;
+        //            var arr = new object[rows + 1 + 1, Cols + 1];
+        //            int r, c, rmod;
 
-                    rmod = 0;
-                    r = 0;
-                    c = 0;
+        //            rmod = 0;
+        //            r = 0;
+        //            c = 0;
 
-                    while (r != rows + 1)
-                    {
-                        while (c != Cols)
-                        {
-                            if (r > 0)
-                                arr[r, c] = get_item(TotalRows, c);
-                            else
-                                arr[r, c] = get_HeaderLabel(c);
-                            c += 1;
-                        }
-                        r += 1;
-                        c = 0;
-                        TotalRows += 1;
-                    }
+        //            while (r != rows + 1)
+        //            {
+        //                while (c != Cols)
+        //                {
+        //                    if (r > 0)
+        //                        arr[r, c] = get_item(TotalRows, c);
+        //                    else
+        //                        arr[r, c] = get_HeaderLabel(c);
+        //                    c += 1;
+        //                }
+        //                r += 1;
+        //                c = 0;
+        //                TotalRows += 1;
+        //            }
 
-                    rng = FirstColumn + "1:" + LastColumn + (rows + 1).ToString();
+        //            rng = FirstColumn + "1:" + LastColumn + (rows + 1).ToString();
 
-                    sh.Range[rng].NumberFormat = "General";
+        //            sh.Range[rng].NumberFormat = "General";
 
-                    sh.Range[rng].Value = arr;
+        //            sh.Range[rng].Value = arr;
 
-                    if (_excelMatchGridColorScheme)
-                    {
-                        // header always on row 1 of the sheet
-                        c = 1;
-                        rng = FirstColumn + "1:" + LastColumn + "1";
-                        sh.Range[rng].Interior.Color = Information.RGB(_GridHeaderBackcolor.R, _GridHeaderBackcolor.G, _GridHeaderBackcolor.B);
+        //            if (_excelMatchGridColorScheme)
+        //            {
+        //                // header always on row 1 of the sheet
+        //                c = 1;
+        //                rng = FirstColumn + "1:" + LastColumn + "1";
+        //                sh.Range[rng].Interior.Color = Information.RGB(_GridHeaderBackcolor.R, _GridHeaderBackcolor.G, _GridHeaderBackcolor.B);
 
-                        r = (CurrentSHidx - 1) * _excelMaxRowsPerSheet;
+        //                r = (CurrentSHidx - 1) * _excelMaxRowsPerSheet;
 
-                        int rmax = r + _excelMaxRowsPerSheet;
+        //                int rmax = r + _excelMaxRowsPerSheet;
 
-                        if (rmax > Rows)
-                            rmax = Rows;
+        //                if (rmax > Rows)
+        //                    rmax = Rows;
 
-                        c = 0;
+        //                c = 0;
 
-                        // here we will blast the first range of standard color in a single shot
+        //                // here we will blast the first range of standard color in a single shot
 
-                        rng = FirstColumn + "2:" + LastColumn + (rows + 1).ToString();
-                        _br = (System.Drawing.SolidBrush)_gridBackColorList[0]; // element 0 is the default/first backcolor
+        //                rng = FirstColumn + "2:" + LastColumn + (rows + 1).ToString();
+        //                _br = (System.Drawing.SolidBrush)_gridBackColorList[0]; // element 0 is the default/first backcolor
 
-                        // now lets blast this color into the background of the grid
-                        sh.Range[rng].Interior.Color = Information.RGB(_br.Color.R, _br.Color.G, _br.Color.B);
+        //                // now lets blast this color into the background of the grid
+        //                sh.Range[rng].Interior.Color = Information.RGB(_br.Color.R, _br.Color.G, _br.Color.B);
 
-                        ccidx = 1;
+        //                ccidx = 1;
 
-                        while (ccidx != _gridBackColorList.GetUpperBound(0))
-                        {
-                            if (_gridBackColorList[ccidx] == null)
-                            {
-                            }
-                            else
-                            {
-                                r = (CurrentSHidx - 1) * _excelMaxRowsPerSheet;
-                                rmod = (CurrentSHidx - 1) * _excelMaxRowsPerSheet;
-                                while (r != rmax)
-                                {
-                                    c = 0;
-                                    while (c != Cols)
-                                    {
-                                        if (_gridBackColor[r, c] == ccidx)
-                                        {
-                                            // we got a color thats different than the blasted backcolor
-
-
-                                            rng = ReturnExcelColumn(c) + (r - rmod + 2).ToString();
-                                            rng = rng + ":" + rng;
-                                            _br = (System.Drawing.SolidBrush)_gridBackColorList[ccidx];
-                                            //sh.Range[rng]
-                                            sh.Range[rng].Interior.Color = Information.RGB(_br.Color.R, _br.Color.G, _br.Color.B);
-                                        }
-                                        c += 1;
-                                    }
-                                    r += 1;
-                                }
-                            }
-                            ccidx += 1;
-                        }
-                    }
-                    else
-                    {
-                        r = 2;
-                        if (ExcelUseAlternateRowColor)
-                        {
-                            // 38 seconds to load 5000 lines of claims data same as previous loop
-                            while (r < rows)
-                            {
-                                rng = FirstColumn + r.ToString() + ":" + LastColumn + r.ToString();
-                                // there are 56 possible colors, Lonnie uses number 35 in the grid.  Maybe 57, I didn't try index# 0...
-                                sh.Range[rng].Interior.ColorIndex = 35;
-                                r += 2;
-                            }
-                        }
-                    }
-
-                    if (_excelIncludeColumnHeaders)
-                    {
-
-                        sh.Range["1:1"].Font.Bold = true;
-                        sh.Range["1:1"].HorizontalAlignment = xlCenter;
-                    }
-
-                    if (_excelShowBorders | _excelOutlineCells)
-                    {
-
-                        // try to catch errors here just in case someone is putting massive amounts of text into
-                        // cells and the range selection diddys are breaking in excel versions less then 2007
-
-                        try
-                        {
-                            FirstColumn = "A";
-                            LastColumn = ReturnExcelColumn(Cols - 1);
-                            rng = FirstColumn + "1:" + LastColumn + (rows + 1).ToString();
-
-                            Excel.Range tRange = sh.Range[rng];
-
-                            tRange.Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
-                            tRange.Borders.Weight = Excel.XlBorderWeight.xlThin;
-                            tRange.Borders.ColorIndex = Excel.XlColorIndex.xlColorIndexAutomatic;
+        //                while (ccidx != _gridBackColorList.GetUpperBound(0))
+        //                {
+        //                    if (_gridBackColorList[ccidx] == null)
+        //                    {
+        //                    }
+        //                    else
+        //                    {
+        //                        r = (CurrentSHidx - 1) * _excelMaxRowsPerSheet;
+        //                        rmod = (CurrentSHidx - 1) * _excelMaxRowsPerSheet;
+        //                        while (r != rmax)
+        //                        {
+        //                            c = 0;
+        //                            while (c != Cols)
+        //                            {
+        //                                if (_gridBackColor[r, c] == ccidx)
+        //                                {
+        //                                    // we got a color thats different than the blasted backcolor
 
 
-                            //sh.Range[rng].Borders[xlEdgeRight].LineStyle = xlContinuous;
-                            //sh.Range[rng].Borders(xlEdgeRight).Weight = xlThin;
-                            //sh.Range[rng].Borders(xlEdgeRight).ColorIndex = xlAutomatic;
+        //                                    rng = ReturnExcelColumn(c) + (r - rmod + 2).ToString();
+        //                                    rng = rng + ":" + rng;
+        //                                    _br = (System.Drawing.SolidBrush)_gridBackColorList[ccidx];
+        //                                    //sh.Range[rng]
+        //                                    sh.Range[rng].Interior.Color = Information.RGB(_br.Color.R, _br.Color.G, _br.Color.B);
+        //                                }
+        //                                c += 1;
+        //                            }
+        //                            r += 1;
+        //                        }
+        //                    }
+        //                    ccidx += 1;
+        //                }
+        //            }
+        //            else
+        //            {
+        //                r = 2;
+        //                if (ExcelUseAlternateRowColor)
+        //                {
+        //                    // 38 seconds to load 5000 lines of claims data same as previous loop
+        //                    while (r < rows)
+        //                    {
+        //                        rng = FirstColumn + r.ToString() + ":" + LastColumn + r.ToString();
+        //                        // there are 56 possible colors, Lonnie uses number 35 in the grid.  Maybe 57, I didn't try index# 0...
+        //                        sh.Range[rng].Interior.ColorIndex = 35;
+        //                        r += 2;
+        //                    }
+        //                }
+        //            }
 
-                            //sh.Range[rng].Borders(xlEdgeLeft).LineStyle = xlContinuous;
-                            //sh.Range[rng].Borders(xlEdgeLeft).Weight = xlThin;
-                            //sh.Range[rng].Borders(xlEdgeLeft).ColorIndex = xlAutomatic;
+        //            if (_excelIncludeColumnHeaders)
+        //            {
 
-                            //sh.Range[rng].Borders(xlEdgeTop).LineStyle = xlContinuous;
-                            //sh.Range[rng].Borders(xlEdgeTop).Weight = xlThin;
-                            //sh.Range[rng].Borders(xlEdgeTop).ColorIndex = xlAutomatic;
+        //                sh.Range["1:1"].Font.Bold = true;
+        //                sh.Range["1:1"].HorizontalAlignment = xlCenter;
+        //            }
 
-                            //sh.Range[rng].Borders(xlEdgeBottom).LineStyle = xlContinuous;
-                            //sh.Range[rng].Borders(xlEdgeBottom).Weight = xlThin;
-                            //sh.Range[rng].Borders(xlEdgeBottom).ColorIndex = xlAutomatic;
+        //            if (_excelShowBorders | _excelOutlineCells)
+        //            {
 
-                            //sh.Range[rng].Borders(xlInsideVertical).LineStyle = xlContinuous;
-                            //sh.Range[rng].Borders(xlInsideVertical).Weight = xlThin;
-                            //sh.Range[rng].Borders(xlInsideVertical).ColorIndex = xlAutomatic;
+        //                // try to catch errors here just in case someone is putting massive amounts of text into
+        //                // cells and the range selection diddys are breaking in excel versions less then 2007
 
-                            //sh.Range[rng].Borders(xlInsideHorizontal).LineStyle = xlContinuous;
-                            //sh.Range[rng].Borders(xlInsideHorizontal).Weight = xlThin;
-                            //sh.Range[rng].Borders(xlInsideHorizontal).ColorIndex = xlAutomatic;
-                        }
-                        catch (Exception ex)
-                        {
-                        }
-                    }
+        //                try
+        //                {
+        //                    FirstColumn = "A";
+        //                    LastColumn = ReturnExcelColumn(Cols - 1);
+        //                    rng = FirstColumn + "1:" + LastColumn + (rows + 1).ToString();
 
-                    if (_excelAutoFitColumn)
-                    {
-                        Excel.Range tRange = sh.Range[rng];
-                        tRange.EntireColumn.AutoFit();
-                        //sh.Range(rng).EntireColumn.Autofit();
-                    }
-                    if (_excelAutoFitRow)
-                    {
-                        Excel.Range tRange = sh.Range[rng];
-                        tRange.EntireRow.AutoFit();
-                        //sh.Range(rng).EntireRow.Autofit();
-                    }
+        //                    Excel.Range tRange = sh.Range[rng];
+
+        //                    tRange.Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
+        //                    tRange.Borders.Weight = Excel.XlBorderWeight.xlThin;
+        //                    tRange.Borders.ColorIndex = Excel.XlColorIndex.xlColorIndexAutomatic;
 
 
+        //                    //sh.Range[rng].Borders[xlEdgeRight].LineStyle = xlContinuous;
+        //                    //sh.Range[rng].Borders(xlEdgeRight).Weight = xlThin;
+        //                    //sh.Range[rng].Borders(xlEdgeRight).ColorIndex = xlAutomatic;
 
-                    // If Me._excelAutoFitColumn Then
-                    // sh.Range(rng).EntireColumn.Autofit()
-                    // End If
+        //                    //sh.Range[rng].Borders(xlEdgeLeft).LineStyle = xlContinuous;
+        //                    //sh.Range[rng].Borders(xlEdgeLeft).Weight = xlThin;
+        //                    //sh.Range[rng].Borders(xlEdgeLeft).ColorIndex = xlAutomatic;
 
-                    sh.PageSetup.Orientation = (Excel.XlPageOrientation)_excelPageOrientation;
+        //                    //sh.Range[rng].Borders(xlEdgeTop).LineStyle = xlContinuous;
+        //                    //sh.Range[rng].Borders(xlEdgeTop).Weight = xlThin;
+        //                    //sh.Range[rng].Borders(xlEdgeTop).ColorIndex = xlAutomatic;
 
-                    _excel.ActiveWindow.WindowState = Excel.XlWindowState.xlMaximized;
+        //                    //sh.Range[rng].Borders(xlEdgeBottom).LineStyle = xlContinuous;
+        //                    //sh.Range[rng].Borders(xlEdgeBottom).Weight = xlThin;
+        //                    //sh.Range[rng].Borders(xlEdgeBottom).ColorIndex = xlAutomatic;
 
-                    // save the spreadsheet
-                    _excel.AlertBeforeOverwriting = false;
-                    _excel.DisplayAlerts = false;
+        //                    //sh.Range[rng].Borders(xlInsideVertical).LineStyle = xlContinuous;
+        //                    //sh.Range[rng].Borders(xlInsideVertical).Weight = xlThin;
+        //                    //sh.Range[rng].Borders(xlInsideVertical).ColorIndex = xlAutomatic;
 
-                    _excel.ScreenUpdating = true;
+        //                    //sh.Range[rng].Borders(xlInsideHorizontal).LineStyle = xlContinuous;
+        //                    //sh.Range[rng].Borders(xlInsideHorizontal).Weight = xlThin;
+        //                    //sh.Range[rng].Borders(xlInsideHorizontal).ColorIndex = xlAutomatic;
+        //                }
+        //                catch (Exception ex)
+        //                {
+        //                }
+        //            }
 
-                    r = 0;
-                    idx -= 1;
-                    CurrentSHidx += 1;
-                    TotalRows -= 1; // this subtracts 1 row incase there is another worksheet that is needed.  WIthout this the first row will be skipped
-                }
+        //            if (_excelAutoFitColumn)
+        //            {
+        //                Excel.Range tRange = sh.Range[rng];
+        //                tRange.EntireColumn.AutoFit();
+        //                //sh.Range(rng).EntireColumn.Autofit();
+        //            }
+        //            if (_excelAutoFitRow)
+        //            {
+        //                Excel.Range tRange = sh.Range[rng];
+        //                tRange.EntireRow.AutoFit();
+        //                //sh.Range(rng).EntireRow.Autofit();
+        //            }
 
-                if (_ShowExcelExportMessage)
-                {
-                    frm.Hide();
-                    frm = null;
-                }
 
-                _excel.Visible = true;
-                _WorkBook = null;
-                sh = null;
-                _excel = null;
 
-                GC.Collect();
-                GC.WaitForPendingFinalizers();
-            }
-            catch (Exception ex)
-            {
-                if (_ShowExcelExportMessage)
-                {
-                    frm.Hide();
-                    frm = null;
-                }
+        //            // If Me._excelAutoFitColumn Then
+        //            // sh.Range(rng).EntireColumn.Autofit()
+        //            // End If
 
-                _WorkBook = null;
-                sh = null;
-                _excel = null;
+        //            sh.PageSetup.Orientation = (Excel.XlPageOrientation)_excelPageOrientation;
 
-                GC.Collect();
-                Interaction.MsgBox(ex.ToString(), (MsgBoxStyle)((int)MsgBoxStyle.Information + (int)MsgBoxStyle.OkOnly), "TAIGRiDControl.ExportToExcel Error...");
-            }
-        }
+        //            _excel.ActiveWindow.WindowState = Excel.XlWindowState.xlMaximized;
+
+        //            // save the spreadsheet
+        //            _excel.AlertBeforeOverwriting = false;
+        //            _excel.DisplayAlerts = false;
+
+        //            _excel.ScreenUpdating = true;
+
+        //            r = 0;
+        //            idx -= 1;
+        //            CurrentSHidx += 1;
+        //            TotalRows -= 1; // this subtracts 1 row incase there is another worksheet that is needed.  WIthout this the first row will be skipped
+        //        }
+
+        //        if (_ShowExcelExportMessage)
+        //        {
+        //            frm.Hide();
+        //            frm = null;
+        //        }
+
+        //        _excel.Visible = true;
+        //        _WorkBook = null;
+        //        sh = null;
+        //        _excel = null;
+
+        //        GC.Collect();
+        //        GC.WaitForPendingFinalizers();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        if (_ShowExcelExportMessage)
+        //        {
+        //            frm.Hide();
+        //            frm = null;
+        //        }
+
+        //        _WorkBook = null;
+        //        sh = null;
+        //        _excel = null;
+
+        //        GC.Collect();
+        //        Interaction.MsgBox(ex.ToString(), (MsgBoxStyle)((int)MsgBoxStyle.Information + (int)MsgBoxStyle.OkOnly), "TAIGRiDControl.ExportToExcel Error...");
+        //    }
+        //}
 
         /// <summary>
         /// Will open the internal export filename dialog querying the user for the filename to export to
