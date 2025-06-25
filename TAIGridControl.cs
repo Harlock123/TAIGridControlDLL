@@ -1,21 +1,22 @@
-﻿using System.Data;
-using System.Diagnostics;
-using Microsoft.VisualBasic;
-using System.Collections;
-using System;
-using System.ComponentModel;
-using System.Drawing;
-using System.Windows.Forms;
-using System.Text;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using Microsoft.VisualBasic.CompilerServices;
-//using Excel = Microsoft.Office.Interop.Excel;
+﻿//using Excel = Microsoft.Office.Interop.Excel;
 //using DocumentFormat;
 //using DocumentFormat.OpenXml;
 //using DocumentFormat.OpenXml.Packaging;
 
 using ClosedXML.Excel;
+using Microsoft.VisualBasic;
+using Microsoft.VisualBasic.CompilerServices;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Data.SqlClient;
+using System.Diagnostics;
+using System.Drawing;
+using System.Runtime.CompilerServices;
+using System.Text;
+using System.Windows.Forms;
 using System.Windows.Input;
 //using DocumentFormat.OpenXml.Spreadsheet;
 
@@ -8708,6 +8709,45 @@ namespace TAIGridControl2
             Refresh();
 
             NormalizeTearaways();
+        }
+
+        public void ExecuteQueryWithParameters(string connectionString, 
+                                                           string sqlQuery,
+                                                           List<TAIGridControlParameter> parameters)
+        {
+            var dataTable = new DataTable();
+
+            using (var connection = new SqlConnection(connectionString))
+            using (var command = new SqlCommand(sqlQuery, connection))
+            {
+                // Add parameters
+                foreach (var param in parameters)
+                {
+                    var sqlParam = new SqlParameter
+                    {
+                        ParameterName = param.ParameterName,
+                        Value = param.ParameterValue ?? DBNull.Value
+                    };
+
+                    // Set parameter type if specified
+                    if (!string.IsNullOrEmpty(param.ParameterType))
+                    {
+                        if (Enum.TryParse(param.ParameterType, out SqlDbType dbType))
+                        {
+                            sqlParam.SqlDbType = dbType;
+                        }
+                    }
+
+                    command.Parameters.Add(sqlParam);
+                }
+
+                using (var adapter = new SqlDataAdapter(command))
+                {
+                    adapter.Fill(dataTable);
+                }
+            }
+
+            PopulateGridWithADataTable(dataTable);
         }
 
         #endregion
@@ -20874,5 +20914,25 @@ namespace TAIGridControl2
         }
 
         #endregion
+    }
+
+    public class TAIGridControlParameter
+    {
+        public string ParameterType { get; set; } = "";
+        public string ParameterName { get; set; } = "";
+        public object ParameterValue { get; set; } = null;
+
+        // a more useful constructor
+        public TAIGridControlParameter(string type, string name, object value)
+        {
+            ParameterType = type;
+            ParameterName = name;
+            ParameterValue = value;
+        }
+
+        // default constructor
+        public TAIGridControlParameter() { }
+
+
     }
 }
