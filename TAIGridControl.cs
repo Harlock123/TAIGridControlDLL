@@ -8712,8 +8712,8 @@ namespace TAIGridControl2
         }
 
         public void ExecuteQueryWithParameters(string connectionString, 
-                                                           string sqlQuery,
-                                                           List<TAIGridControlParameter> parameters)
+                                               string sqlQuery,
+                                               List<TAIGridControlParameter> parameters)
         {
             var dataTable = new DataTable();
 
