@@ -15,6 +15,9 @@
  applications I have written for my workplace. Converted to C# like a decade ago...
 
 
+### Version 4.0.0.0
+- Assembly version (AssemblyInfo.cs) is now 4.0.0.0; the changes since 2.0.14.0 are not listed here
+
 ### Version 2.0.14.0
 - Fixed wordwrap bug 
 - removed the old sandcastle document subproject as its broken now for VS2019

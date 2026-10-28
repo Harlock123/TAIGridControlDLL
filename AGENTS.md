@@ -48,7 +48,8 @@ msbuild TAIGridControlDLL.sln /p:Configuration=Release
   Excel installed.
 - **New source files must be added to the `.csproj` by hand.** It is an old-style project with explicit
   `Compile` and `EmbeddedResource` items.
-- **The version** is in `AssemblyInfo.cs`; the README's version history uses its own numbering.
+- **The version** is in `AssemblyInfo.cs` (now 4.0.0.0). The README's version history skips from 2.0.14.0 to
+  4.0.0.0; the versions in between are not listed.
 
 ## Making a change
 
